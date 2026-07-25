@@ -117,10 +117,11 @@ const AppSetting = mongoose.model('AppSetting', settingSchema);
 const committeeSchema = new mongoose.Schema({
     role: { type: String, required: true, unique: true }, // e.g., 'president', 'treasurer'
     name: { type: String, required: true },
-    mobile: { type: String, required: true },
+    mobile: { type: String, default: '' },
     photoUrl: { type: String, default: '' },
     base64Data: { type: String, default: '' },
-    designation: { type: String, default: '' }
+    designation: { type: String, default: '' },
+    order: { type: Number, default: 99 }
 });
 const CommitteeMember = mongoose.model('CommitteeMember', committeeSchema);
 

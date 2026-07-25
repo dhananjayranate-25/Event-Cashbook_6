@@ -787,6 +787,7 @@
             if(siteFooter) siteFooter.style.display = 'block';
             if(mainContainer) mainContainer.style.display = 'block';
             if(committeeSection) committeeSection.style.display = 'block';
+            if(typeof loadCommitteeDataHome === 'function') loadCommitteeDataHome();
         } else if (tabName === 'contact') {
             if(siteFooter) siteFooter.style.display = 'block';
             if(mainContainer) mainContainer.style.display = 'block';
@@ -1133,7 +1134,7 @@
                         document.getElementById('contact-president-mobile').textContent = member.mobile ? `मो.नं ${member.mobile}` : '';
                         
                         let pPhoto = member.photoUrl;
-                        if (pPhoto && !pPhoto.startswith('data:')) pPhoto += '?t=' + new Date().getTime();
+                        if (pPhoto && !pPhoto.startsWith('data:')) pPhoto += '?t=' + new Date().getTime();
                         document.getElementById('contact-president-photo').src = pPhoto || defaultPhoto;
                         
                         const waLink = document.getElementById('contact-president-wa');
@@ -1166,36 +1167,26 @@
             });
         };
 
-        // 1. Try to load from localStorage cache first
+        // Always fetch fresh data directly from server first so admin inputs display immediately
         try {
-            const cachedData = localStorage.getItem('committeeCache');
-            if (cachedData) {
-                const parsedCache = JSON.parse(cachedData);
-                if (parsedCache && parsedCache.length > 0) {
-                    renderCommittee(parsedCache);
-                }
-            }
-        } catch (e) {
-            console.error('Failed to parse committee cache', e);
-        }
-
-        // 2. Fetch fresh data from API
-        try {
-            const response = await fetch('/api/committee');
+            const response = await fetch('/api/committee?t=' + Date.now(), { cache: 'no-store' });
             const result = await response.json();
-            if (result.success && result.data.length > 0) {
-                // Check if data changed
-                const newDataStr = JSON.stringify(result.data);
-                if (localStorage.getItem('committeeCache') !== newDataStr) {
-                    localStorage.setItem('committeeCache', newDataStr);
-                    renderCommittee(result.data); // re-render with new data
-                } else if (!localStorage.getItem('committeeCache')) {
-                    localStorage.setItem('committeeCache', newDataStr);
-                    renderCommittee(result.data);
-                }
+            if (result.success && result.data && result.data.length > 0) {
+                localStorage.setItem('committeeCache', JSON.stringify(result.data));
+                renderCommittee(result.data);
+                return;
             }
         } catch(e) {
-            console.error('Failed to load committee from API', e);
+            console.error('Failed to load committee from API, trying backup cache', e);
+            try {
+                const cachedData = localStorage.getItem('committeeCache');
+                if (cachedData) {
+                    const parsedCache = JSON.parse(cachedData);
+                    if (parsedCache && parsedCache.length > 0) {
+                        renderCommittee(parsedCache);
+                    }
+                }
+            } catch (ce) {}
         }
     }
 
