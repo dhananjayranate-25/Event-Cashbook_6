@@ -511,7 +511,7 @@ app.delete('/api/gallery/album/:id/photo/:photoId', async (req, res) => {
 
 app.get('/api/committee', async (req, res) => {
     try {
-        const members = await CommitteeMember.find().sort({ order: 1 });
+        const members = await CommitteeMember.find().sort({ order: 1, role: 1 });
         res.json({ success: true, data: members });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -528,11 +528,11 @@ app.post('/api/committee', (req, res, next) => {
 }, async (req, res) => {
     try {
         const { role, name, mobile, order, designation } = req.body;
-        if (!role || !name || !mobile) {
-            return res.status(400).json({ success: false, error: 'Role, Name, and Mobile are required' });
+        if (!role || !name) {
+            return res.status(400).json({ success: false, error: 'Role and Name are required' });
         }
         
-        let updateData = { name, mobile };
+        let updateData = { name, mobile: mobile || '' };
         if (order !== undefined) updateData.order = parseInt(order, 10);
         if (designation !== undefined) updateData.designation = designation;
         

@@ -2093,9 +2093,9 @@ table {
             const designation = designationElem ? designationElem.value.trim() : '';
             const photoInput = document.getElementById(role + 'PhotoInput');
             
-            if (!name || !mobile) {
+            if (!name) {
                 statusElem.style.color = '#ff6b6b';
-                statusElem.textContent = 'Name and Mobile are required!';
+                statusElem.textContent = 'Name is required!';
                 return;
             }
             
