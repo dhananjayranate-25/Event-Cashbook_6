@@ -450,35 +450,14 @@
             <div id="contactSection" style="display: none;" class="animate-fade-up">
                 <div class="contact-card-container glass-panel">
                     
-                    <!-- Top Section: Contact Form -->
-                    <div class="contact-form-section" style="max-width: 800px; margin: 0 auto 50px auto;">
-                        <div class="section-header">
+                    <!-- Top Section: WhatsApp Contacts / Main Office -->
+                    <div class="contact-whatsapp-section">
+                        <div class="section-header" style="margin-bottom: 15px;">
                             <div class="header-line"></div>
-                            <h2>संपर्क फॉर्म</h2>
+                            <h2>मुख्य कार्यालय</h2>
                             <div class="header-line"></div>
                         </div>
-                        <form class="contact-form-ui">
-                            <div class="form-row">
-                                <input type="text" placeholder="तुमचा नाव" class="form-input" required>
-                                <input type="email" placeholder="तुमचा ई-मेल आयडी" class="form-input">
-                            </div>
-                            <div class="form-row">
-                                <input type="tel" placeholder="तुमचा मोबाईल क्र" class="form-input" required>
-                                <input type="text" placeholder="विषय" class="form-input" required>
-                            </div>
-                            <div class="form-row">
-                                <textarea placeholder="तुमचा निरोप" class="form-textarea" required></textarea>
-                            </div>
-                            <button type="submit" class="form-submit-btn" style="width: 100%;">Submit</button>
-                        </form>
-                    </div>
-
-                    <hr style="border: 0; height: 1px; background: #e0e0e0; margin-bottom: 50px;">
-
-                    <!-- Bottom Section: WhatsApp Contacts -->
-                    <div class="contact-whatsapp-section">
-                        <h2 class="section-title" style="text-align: center; margin-bottom: 10px;">मुख्य कार्यालय</h2>
-                        <p class="contact-address" style="text-align: center; margin-bottom: 40px;">शिवसृष्टी कॉलनी राहाणे मळा गुंजाळवाडी संगमनेर</p>
+                        <p class="contact-address" style="text-align: center; margin-bottom: 40px; color: #ffffff !important; font-size: 1.15rem; font-weight: 500; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);">शिवसृष्टी कॉलनी राहाणे मळा गुंजाळवाडी संगमनेर</p>
                         
                         <div class="contact-grid">
                             <!-- President Contact -->
@@ -519,6 +498,30 @@
                         </div>
                     </div>
                     
+                    <hr style="border: 0; height: 1px; background: #e0e0e0; margin: 50px 0;">
+
+                    <!-- Bottom Section: Contact Form -->
+                    <div class="contact-form-section" style="max-width: 800px; margin: 0 auto;">
+                        <div class="section-header">
+                            <div class="header-line"></div>
+                            <h2>संपर्क फॉर्म</h2>
+                            <div class="header-line"></div>
+                        </div>
+                        <form class="contact-form-ui">
+                            <div class="form-row">
+                                <input type="text" placeholder="तुमचा नाव" class="form-input" required>
+                                <input type="email" placeholder="तुमचा ई-मेल आयडी" class="form-input">
+                            </div>
+                            <div class="form-row">
+                                <input type="tel" placeholder="तुमचा मोबाईल क्र" class="form-input" required>
+                                <input type="text" placeholder="विषय" class="form-input" required>
+                            </div>
+                            <div class="form-row">
+                                <textarea placeholder="तुमचा निरोप" class="form-textarea" required></textarea>
+                            </div>
+                            <button type="submit" class="form-submit-btn" style="width: 100%;">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -945,109 +948,114 @@
     }
 
     async function loadAppearanceSettingsHome() {
+        const renderSettings = (settings) => {
+            if (!settings) return;
+            window.appSettings = settings;
+            if (settings.estYear) document.getElementById('displayEstYear').textContent = settings.estYear;
+            const regNoElem = document.getElementById('displayRegNo');
+            if (settings.regNo && regNoElem) regNoElem.textContent = settings.regNo;
+            const navTitleElem = document.getElementById('displayNavbarTitle');
+            if (settings.navbarTitle && navTitleElem) navTitleElem.textContent = settings.navbarTitle;
 
+            const heroImg = document.getElementById('heroBannerImg');
+            if (settings.heroBannerImage) {
+                if (heroImg) {
+                    if (settings.heroBannerImage.startsWith('data:image') || settings.heroBannerImage.startsWith('http')) {
+                        heroImg.src = settings.heroBannerImage;
+                    } else {
+                        const newSrc = 'uploads/' + settings.heroBannerImage;
+                        if (settings.heroBannerImage !== 'hero_banner.png' && !heroImg.src.includes(newSrc)) {
+                            heroImg.src = newSrc;
+                        }
+                    }
+                    heroImg.style.display = 'block';
+                }
+            }
+            
+            // Populate Donation Details
+            if (settings.donateAccName) document.getElementById('bankAccName').textContent = settings.donateAccName;
+            if (settings.donateAccNo) document.getElementById('bankAccNo').textContent = settings.donateAccNo;
+            if (settings.donateIFSC) document.getElementById('bankIFSC').textContent = settings.donateIFSC;
+            if (settings.donateBranch) document.getElementById('bankBranch').textContent = settings.donateBranch;
+            
+            if (settings.donateQRCode) {
+                const qrImg = document.getElementById('donationQRImg');
+                if (qrImg) qrImg.src = settings.donateQRCode;
+                const footerQrImg = document.getElementById('footerDonationQRImg');
+                if (footerQrImg) footerQrImg.src = settings.donateQRCode;
+            }
+            
+            // Custom Posters Titles on Buttons
+            if (settings.varganiPosterBtnName) {
+                const vBtnText = document.getElementById('varganiBtnText');
+                if (vBtnText) vBtnText.textContent = settings.varganiPosterBtnName;
+            } else if (settings.varganiAabharTitle) {
+                const vBtnText = document.getElementById('varganiBtnText');
+                if (vBtnText) vBtnText.textContent = settings.varganiAabharTitle;
+            }
+            
+            if (settings.aagmanPosterBtnName) {
+                const aBtnText = document.getElementById('aagmanBtnText');
+                if (aBtnText) aBtnText.textContent = settings.aagmanPosterBtnName;
+            } else if (settings.aagmanSohalaTitle) {
+                const aBtnText = document.getElementById('aagmanBtnText');
+                if (aBtnText) aBtnText.textContent = settings.aagmanSohalaTitle;
+            }
+            
+            if (settings.mahaprasadPosterBtnName) {
+                const mBtnText = document.getElementById('mahaprasadBtnText');
+                if (mBtnText) mBtnText.textContent = settings.mahaprasadPosterBtnName;
+            } else if (settings.mahaprasadNimantranTitle) {
+                const mBtnText = document.getElementById('mahaprasadBtnText');
+                if (mBtnText) mBtnText.textContent = settings.mahaprasadNimantranTitle;
+            }
+            
+            // Donation buttons
+            if (settings.donationPosterBtnName) {
+                const donDownloadBtns = document.querySelectorAll('.donation-download-btn');
+                donDownloadBtns.forEach(btn => btn.innerHTML = '<i class="fas fa-download"></i> ' + settings.donationPosterBtnName);
+                const donShareBtns = document.querySelectorAll('.donation-share-btn');
+                donShareBtns.forEach(btn => btn.innerHTML = '<i class="fas fa-share-alt"></i> शेअर करा');
+            }
+            
+            // Load Aarti Media
+            const aartiMediaContainer = document.getElementById('aartiMediaContainer');
+            const aartiAudioWrapper = document.getElementById('aartiAudioWrapper');
+            const aartiAudioPlayer = document.getElementById('aartiAudioPlayer');
+            const aartiPdfWrapper = document.getElementById('aartiPdfWrapper');
+            const aartiPdfLink = document.getElementById('aartiPdfLink');
+            
+            let hasMedia = false;
+            if (settings.aartiAudioPath && aartiAudioPlayer) {
+                aartiAudioPlayer.src = settings.aartiAudioPath;
+                aartiAudioWrapper.style.display = 'flex';
+                hasMedia = true;
+            }
+            if (settings.aartiPdfPath && aartiPdfLink) {
+                aartiPdfLink.href = settings.aartiPdfPath;
+                aartiPdfWrapper.style.display = 'block';
+                hasMedia = true;
+            }
+            if (hasMedia && aartiMediaContainer) {
+                aartiMediaContainer.style.display = 'flex';
+            }
+        };
 
+        // 1. INSTANT LOAD from localStorage cache
+        try {
+            const cachedSettings = localStorage.getItem('settingsCache');
+            if (cachedSettings) {
+                renderSettings(JSON.parse(cachedSettings));
+            }
+        } catch(ce) {}
+
+        // 2. BACKGROUND UPDATE from API
         try {
             const response = await fetch('/api/settings');
             const result = await response.json();
             if (result.success) {
-                const settings = result.data;
-                window.appSettings = settings;
-                if (settings.estYear) document.getElementById('displayEstYear').textContent = settings.estYear;
-                const regNoElem = document.getElementById('displayRegNo');
-                if (settings.regNo && regNoElem) regNoElem.textContent = settings.regNo;
-                // if (settings.mainTitle) document.getElementById('displayMainTitle').textContent = settings.mainTitle;
-                const navTitleElem = document.getElementById('displayNavbarTitle');
-                if (settings.navbarTitle && navTitleElem) navTitleElem.textContent = settings.navbarTitle;
-                
-
-                
-                const heroImg = document.getElementById('heroBannerImg');
-                if (settings.heroBannerImage) {
-                    if (heroImg) {
-                        if (settings.heroBannerImage.startsWith('data:image') || settings.heroBannerImage.startsWith('http')) {
-                            heroImg.src = settings.heroBannerImage;
-                        } else {
-                            const newSrc = 'uploads/' + settings.heroBannerImage;
-                            if (settings.heroBannerImage !== 'hero_banner.png' && !heroImg.src.includes(newSrc)) {
-                                heroImg.src = newSrc;
-                            }
-                        }
-                        heroImg.style.display = 'block';
-                    }
-                }
-                
-                // Populate Donation Details
-                if (settings.donateAccName) document.getElementById('bankAccName').textContent = settings.donateAccName;
-                if (settings.donateAccNo) document.getElementById('bankAccNo').textContent = settings.donateAccNo;
-                if (settings.donateIFSC) document.getElementById('bankIFSC').textContent = settings.donateIFSC;
-                if (settings.donateBranch) document.getElementById('bankBranch').textContent = settings.donateBranch;
-                
-                if (settings.donateQRCode) {
-                    const qrImg = document.getElementById('donationQRImg');
-                    if (qrImg) qrImg.src = settings.donateQRCode;
-                    const footerQrImg = document.getElementById('footerDonationQRImg');
-                    if (footerQrImg) footerQrImg.src = settings.donateQRCode;
-                }
-                
-                // Custom Posters Titles on Buttons
-                if (settings.varganiPosterBtnName) {
-                    const vBtnText = document.getElementById('varganiBtnText');
-                    if (vBtnText) vBtnText.textContent = settings.varganiPosterBtnName;
-                } else if (settings.varganiAabharTitle) {
-                    const vBtnText = document.getElementById('varganiBtnText');
-                    if (vBtnText) vBtnText.textContent = settings.varganiAabharTitle;
-                }
-                
-                if (settings.aagmanPosterBtnName) {
-                    const aBtnText = document.getElementById('aagmanBtnText');
-                    if (aBtnText) aBtnText.textContent = settings.aagmanPosterBtnName;
-                } else if (settings.aagmanSohalaTitle) {
-                    const aBtnText = document.getElementById('aagmanBtnText');
-                    if (aBtnText) aBtnText.textContent = settings.aagmanSohalaTitle;
-                }
-                
-                if (settings.mahaprasadPosterBtnName) {
-                    const mBtnText = document.getElementById('mahaprasadBtnText');
-                    if (mBtnText) mBtnText.textContent = settings.mahaprasadPosterBtnName;
-                } else if (settings.mahaprasadNimantranTitle) {
-                    const mBtnText = document.getElementById('mahaprasadBtnText');
-                    if (mBtnText) mBtnText.textContent = settings.mahaprasadNimantranTitle;
-                }
-                
-                // Donation buttons
-                if (settings.donationPosterBtnName) {
-                    // First button (Download) gets the custom name
-                    const donDownloadBtns = document.querySelectorAll('.donation-download-btn');
-                    donDownloadBtns.forEach(btn => btn.innerHTML = '<i class="fas fa-download"></i> ' + settings.donationPosterBtnName);
-                    
-                    // Second button (Share) always stays "शेअर करा"
-                    const donShareBtns = document.querySelectorAll('.donation-share-btn');
-                    donShareBtns.forEach(btn => btn.innerHTML = '<i class="fas fa-share-alt"></i> शेअर करा');
-                }
-                
-                // Load Aarti Media
-                const aartiMediaContainer = document.getElementById('aartiMediaContainer');
-                const aartiAudioWrapper = document.getElementById('aartiAudioWrapper');
-                const aartiAudioPlayer = document.getElementById('aartiAudioPlayer');
-                const aartiPdfWrapper = document.getElementById('aartiPdfWrapper');
-                const aartiPdfLink = document.getElementById('aartiPdfLink');
-                
-                let hasMedia = false;
-                if (settings.aartiAudioPath) {
-                    aartiAudioPlayer.src = settings.aartiAudioPath;
-                    aartiAudioWrapper.style.display = 'flex';
-                    hasMedia = true;
-                }
-                if (settings.aartiPdfPath) {
-                    aartiPdfLink.href = settings.aartiPdfPath;
-                    aartiPdfWrapper.style.display = 'block';
-                    hasMedia = true;
-                }
-                if (hasMedia && aartiMediaContainer) {
-                    aartiMediaContainer.style.display = 'flex';
-                }
-
+                localStorage.setItem('settingsCache', JSON.stringify(result.data));
+                renderSettings(result.data);
             } else {
                 const heroImg = document.getElementById('heroBannerImg');
                 if (heroImg) heroImg.style.opacity = '1';
@@ -1132,10 +1140,7 @@
                         document.getElementById('contact-card-president').style.display = 'flex';
                         document.getElementById('contact-president-name').textContent = member.name || 'नाव टाका';
                         document.getElementById('contact-president-mobile').textContent = member.mobile ? `मो.नं ${member.mobile}` : '';
-                        
-                        let pPhoto = member.photoUrl;
-                        if (pPhoto && !pPhoto.startsWith('data:')) pPhoto += '?t=' + new Date().getTime();
-                        document.getElementById('contact-president-photo').src = pPhoto || defaultPhoto;
+                        document.getElementById('contact-president-photo').src = member.photoUrl || defaultPhoto;
                         
                         const waLink = document.getElementById('contact-president-wa');
                         if (member.mobile) {
@@ -1150,10 +1155,7 @@
                         document.getElementById('contact-card-treasurer').style.display = 'flex';
                         document.getElementById('contact-treasurer-name').textContent = member.name || 'नाव टाका';
                         document.getElementById('contact-treasurer-mobile').textContent = member.mobile ? `मो.नं ${member.mobile}` : '';
-                        
-                        let tPhoto = member.photoUrl;
-                        if (tPhoto && !tPhoto.startsWith('data:')) tPhoto += '?t=' + new Date().getTime();
-                        document.getElementById('contact-treasurer-photo').src = tPhoto || defaultPhoto;
+                        document.getElementById('contact-treasurer-photo').src = member.photoUrl || defaultPhoto;
                         
                         const waLink = document.getElementById('contact-treasurer-wa');
                         if (member.mobile) {
@@ -1167,26 +1169,27 @@
             });
         };
 
-        // Always fetch fresh data directly from server first so admin inputs display immediately
+        // 1. INSTANT LOAD: immediately render from localStorage cache without waiting for server network delay!
+        try {
+            const cachedData = localStorage.getItem('committeeCache');
+            if (cachedData) {
+                const parsedCache = JSON.parse(cachedData);
+                if (parsedCache && parsedCache.length > 0) {
+                    renderCommittee(parsedCache);
+                }
+            }
+        } catch (ce) {}
+
+        // 2. BACKGROUND UPDATE: fetch freshest updates silently and re-render if updated
         try {
             const response = await fetch('/api/committee?t=' + Date.now(), { cache: 'no-store' });
             const result = await response.json();
             if (result.success && result.data && result.data.length > 0) {
                 localStorage.setItem('committeeCache', JSON.stringify(result.data));
                 renderCommittee(result.data);
-                return;
             }
         } catch(e) {
-            console.error('Failed to load committee from API, trying backup cache', e);
-            try {
-                const cachedData = localStorage.getItem('committeeCache');
-                if (cachedData) {
-                    const parsedCache = JSON.parse(cachedData);
-                    if (parsedCache && parsedCache.length > 0) {
-                        renderCommittee(parsedCache);
-                    }
-                }
-            } catch (ce) {}
+            console.error('Failed to load committee from API', e);
         }
     }
 
@@ -2436,7 +2439,7 @@ table {
               if (type === 'vargani') {
                   customText = window.appSettings.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!\n\nआपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
               } else if (type === 'aagman') {
-                  customText = 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
+                  customText = window.appSettings.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
               } else {
                   customText = window.appSettings.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
               }
@@ -2684,7 +2687,7 @@ table {
               if (type === 'vargani') {
                   customText = window.appSettings.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!\n\nआपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
               } else if (type === 'aagman') {
-                  customText = 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
+                  customText = window.appSettings.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
               } else {
                   customText = window.appSettings.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
               }
