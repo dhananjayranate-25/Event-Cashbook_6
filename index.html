@@ -57,23 +57,41 @@
         }
     </style>
     <link rel="prefetch" href="login.html">
+    <link rel="prerender" href="login.html">
     <style> 
     a, button { touch-action: manipulation; } 
+    #nav-login, #nav-donate, .nav-donate-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 38px !important;
+        min-width: 85px !important;
+        padding: 0 16px !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+        font-size: 15px !important;
+        box-sizing: border-box !important;
+        vertical-align: middle !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+    }
+    #nav-donate {
+        background-color: #e53935 !important;
+        color: #ffffff !important;
+    }
+    #nav-login {
+        background-color: #3b82f6 !important;
+        color: #ffffff !important;
+    }
     @media (max-width: 768px) {
-        #nav-login {
-            margin-left: 0 !important;
-            margin-top: 5px !important;
-            width: 100%;
-        }
-        #nav-donate {
-            width: 100%;
-        }
         .nav-links {
-            align-items: center;
+            align-items: center !important;
         }
-        .nav-donate-btn {
+        #nav-login, #nav-donate, .nav-donate-btn {
             width: 90% !important;
-            margin: 5px auto !important;
+            margin: 6px auto !important;
+            height: 42px !important;
         }
     }
 </style>
@@ -105,8 +123,8 @@
                     <a href="javascript:void(0)" id="nav-aarti" onclick="switchTab('aarti'); navLinks.classList.remove('active'); return false;" style="display: block !important;">महाआरती</a>
                     <a href="javascript:void(0)" id="nav-gallery" onclick="navLinks.classList.remove('active'); window.location.href='gallery.html'; return false;" style="display: block !important;">गणपती छायाचित्रे</a>
                     <a href="javascript:void(0)" id="nav-contact" onclick="switchTab('contact'); navLinks.classList.remove('active'); return false;" style="display: block !important;">संपर्क</a>
-                    <a href="javascript:void(0)" id="nav-donate" class="nav-donate-btn" onclick="switchTab('donate'); navLinks.classList.remove('active'); return false;" style="display: block !important;">देणगी</a>
-                <a href="login.html" id="nav-login" class="nav-donate-btn" style="display: block !important; background-color: #3b82f6; margin-left: 10px;" onclick="this.innerHTML='Please wait...'; this.style.opacity='0.7';">Login</a>
+                    <a href="javascript:void(0)" id="nav-donate" class="nav-donate-btn" onclick="switchTab('donate'); navLinks.classList.remove('active'); return false;">देणगी</a>
+                    <a href="login.html" id="nav-login" class="nav-donate-btn">Login</a>
                 </div>
             </nav>
         </header>
@@ -148,6 +166,11 @@
     <div class="particles" id="particles"></div>
 
         <div class="container">
+            <div id="sectionBackButtonContainer" style="display: block; width: 100%; margin: 15px 0 10px 0; padding: 0 15px; text-align: left; box-sizing: border-box;">
+                <button onclick="switchTab('home'); return false;" style="background: linear-gradient(135deg, #ff8c00, #e52e71); color: white; border: none; padding: 8px 18px; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+                    <span style="font-size: 18px;">⬅</span> मागे जा
+                </button>
+            </div>
 
             <div id="donationSection" style="display: none;" class="animate-fade-up">
                 <div class="donation-card glass-panel">
@@ -293,15 +316,15 @@
                     </div>
                     
                     <!-- Aarti Media Container (Dynamic) -->
-                    <div id="aartiMediaContainer" style="display:none; align-items:center; justify-content:center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+                    <div id="aartiMediaContainer" style="display:flex; align-items:center; justify-content:center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
                         <!-- Audio Player will be injected here -->
-                        <div id="aartiAudioWrapper" style="display:none; background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(212, 175, 55, 0.5); align-items: center; gap: 10px;">
+                        <div id="aartiAudioWrapper" style="display:flex; background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(212, 175, 55, 0.5); align-items: center; gap: 10px;">
                             <i class="fas fa-music" style="color: #d4af37; font-size: 1.2rem;"></i>
                             <audio id="aartiAudioPlayer" controls style="height: 35px; outline: none; border-radius: 50px;"></audio>
                         </div>
                         
                         <!-- PDF Download Button will be injected here -->
-                        <div id="aartiPdfWrapper" style="display:none;">
+                        <div id="aartiPdfWrapper" style="display:block;">
                             <a id="aartiPdfLink" href="#" target="_blank" class="donate-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; padding: 10px 25px; border-radius: 50px; background: linear-gradient(135deg, #d4af37, #f3e5ab); color: #800000; font-weight: bold;">
                                 <i class="fas fa-book-open"></i> आरती पुस्तक
                             </a>
@@ -807,13 +830,18 @@
             
             if (tabName === 'home') {
                 if (!isCurrentlyHome) {
-                    window.history.pushState({ tab: 'home' }, '', window.location.pathname);
+                    if (window.history.state && window.history.state.pushed) {
+                        window.history.back();
+                        return;
+                    } else {
+                        window.history.replaceState({ tab: 'home' }, '', window.location.pathname);
+                    }
                 }
             } else {
                 if (isCurrentlyHome) {
-                    window.history.pushState({ tab: tabName }, '', '#' + tabName);
+                    window.history.pushState({ tab: tabName, pushed: true }, '', '#' + tabName);
                 } else {
-                    window.history.replaceState({ tab: tabName }, '', '#' + tabName);
+                    window.history.replaceState({ tab: tabName, pushed: true }, '', '#' + tabName);
                 }
             }
         }
@@ -1025,19 +1053,15 @@
             const aartiPdfWrapper = document.getElementById('aartiPdfWrapper');
             const aartiPdfLink = document.getElementById('aartiPdfLink');
             
-            let hasMedia = false;
+            if (aartiMediaContainer) aartiMediaContainer.style.display = 'flex';
+            if (aartiAudioWrapper) aartiAudioWrapper.style.display = 'flex';
+            if (aartiPdfWrapper) aartiPdfWrapper.style.display = 'block';
+
             if (settings.aartiAudioPath && aartiAudioPlayer) {
                 aartiAudioPlayer.src = settings.aartiAudioPath;
-                aartiAudioWrapper.style.display = 'flex';
-                hasMedia = true;
             }
             if (settings.aartiPdfPath && aartiPdfLink) {
                 aartiPdfLink.href = settings.aartiPdfPath;
-                aartiPdfWrapper.style.display = 'block';
-                hasMedia = true;
-            }
-            if (hasMedia && aartiMediaContainer) {
-                aartiMediaContainer.style.display = 'flex';
             }
         };
 

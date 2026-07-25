@@ -6,9 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Login - Shivsrushti Boyz</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=18">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=17">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
     <style>
         .role-selector {
             display: flex;
@@ -91,7 +92,7 @@
             <!-- Role Selection -->
             <div id="roleSelection" class="role-selector">
                 <div class="role-card" tabindex="0" onclick="showLoginForm('websiteadmin')" onkeydown="if(event.key === 'Enter') showLoginForm('websiteadmin')">
-                    <div class="role-icon"><i class="fas fa-globe"></i></div>
+                    <div class="role-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
                     <div class="role-info">
                         <h3>Website Admin</h3>
                         <p>Manage Homepage, Cashbook & Gallery</p>
@@ -99,7 +100,7 @@
                 </div>
                 
                 <div class="role-card" tabindex="0" onclick="showLoginForm('superadmin')" onkeydown="if(event.key === 'Enter') showLoginForm('superadmin')">
-                    <div class="role-icon"><i class="fas fa-crown"></i></div>
+                    <div class="role-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="#ff8c00" stroke="#ff8c00" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"></path><path d="M5 20h14v2H5z"></path></svg></div>
                     <div class="role-info">
                         <h3>Super Admin</h3>
                         <p>Manage Members, Tasks & Funds</p>
@@ -107,7 +108,7 @@
                 </div>
         
                 <div class="role-card" tabindex="0" onclick="showLoginForm('member')" onkeydown="if(event.key === 'Enter') showLoginForm('member')">
-                    <div class="role-icon"><i class="fas fa-user-friends"></i></div>
+                    <div class="role-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
                     <div class="role-info">
                         <h3>Member</h3>
                         <p>Update Tasks & Log Expenses</p>
@@ -115,7 +116,7 @@
                 </div>
                 
                 <div class="back-link">
-                    <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Website</a>
+                    <a href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>Back to Website</a>
                 </div>
             </div>
 
@@ -148,8 +149,8 @@
                     </button>
                     <div style="margin-top:12px;">
                         <button type="button" class="btn btn-secondary ripple" style="width:100%; justify-content:center; padding: 12px; font-size: 1rem; border-radius: 8px;" onclick="showRoleSelection()">
-                            <span class="btn-icon">
-                                <i class="fas fa-arrow-left"></i>
+                            <span class="btn-icon" style="margin-right: 6px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                             </span>
                             Back to Options
                         </button>

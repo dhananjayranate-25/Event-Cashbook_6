@@ -3233,15 +3233,39 @@ footer::after {
     color: #e53935;
 }
 
-.nav-donate-btn {
-    background-color: #e53935;
-    color: white !important;
-    padding: 6px 16px;
-    border-radius: 4px;
+.nav-donate-btn, #nav-donate, #nav-login {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 38px !important;
+    min-width: 85px !important;
+    padding: 0 16px !important;
+    border-radius: 6px !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    box-sizing: border-box !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
 }
 
-.nav-donate-btn:hover {
-    background-color: #b71c1c;
+#nav-donate {
+    background-color: #e53935 !important;
+    color: white !important;
+}
+
+#nav-login {
+    background-color: #3b82f6 !important;
+    color: white !important;
+}
+
+.nav-donate-btn:hover, #nav-donate:hover {
+    background-color: #b71c1c !important;
+}
+
+#nav-login:hover {
+    background-color: #2563eb !important;
 }
 
     .hero-section {
@@ -3395,6 +3419,34 @@ footer::after {
         width: 100%;
         text-align: left;
         border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .nav-links a.nav-donate-btn, #nav-donate, #nav-login {
+        width: 90% !important;
+        margin: 6px auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 42px !important;
+        padding: 0 15px !important;
+        border-radius: 6px !important;
+        border-bottom: none !important;
+        font-weight: 700 !important;
+        font-size: 15px !important;
+        box-sizing: border-box !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35) !important;
+        line-height: 1 !important;
+        vertical-align: middle !important;
+    }
+    
+    #nav-donate {
+        background-color: #e53935 !important;
+        color: #ffffff !important;
+    }
+    
+    #nav-login {
+        background-color: #3b82f6 !important;
+        color: #ffffff !important;
     }
 
     .hero-section {

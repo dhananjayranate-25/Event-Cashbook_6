@@ -198,19 +198,15 @@
                 const aartiPdfWrapper = document.getElementById('aartiPdfWrapper');
                 const aartiPdfLink = document.getElementById('aartiPdfLink');
                 
-                let hasMedia = false;
-                if (settings.aartiAudioPath) {
-                    aartiAudioPlayer.src = '/' + settings.aartiAudioPath;
-                    aartiAudioWrapper.style.display = 'flex';
-                    hasMedia = true;
+                if (aartiMediaContainer) aartiMediaContainer.style.display = 'flex';
+                if (aartiAudioWrapper) aartiAudioWrapper.style.display = 'flex';
+                if (aartiPdfWrapper) aartiPdfWrapper.style.display = 'block';
+
+                if (settings.aartiAudioPath && aartiAudioPlayer) {
+                    aartiAudioPlayer.src = settings.aartiAudioPath;
                 }
-                if (settings.aartiPdfPath) {
-                    aartiPdfLink.href = '/' + settings.aartiPdfPath;
-                    aartiPdfWrapper.style.display = 'block';
-                    hasMedia = true;
-                }
-                if (hasMedia && aartiMediaContainer) {
-                    aartiMediaContainer.style.display = 'flex';
+                if (settings.aartiPdfPath && aartiPdfLink) {
+                    aartiPdfLink.href = settings.aartiPdfPath;
                 }
 
             } else {
