@@ -3682,14 +3682,14 @@ footer::after {
 }
 
 .member-role {
-    font-size: 1rem;
+    font-size: 1.1rem;
     color: #b71c1c;
     margin: 0 0 5px 0;
     font-weight: 600;
 }
 
 .member-name {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     color: #333;
     margin: 0;
     font-weight: 700;
@@ -3736,10 +3736,10 @@ footer::after {
         aspect-ratio: 1 / 1;
     }
     .member-role {
-        font-size: 0.95rem;
+        font-size: 1.1rem;
     }
     .member-name {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
     }
     .member-phone {
         font-size: 0.85rem;
