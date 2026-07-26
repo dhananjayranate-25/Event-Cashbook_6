@@ -3739,7 +3739,7 @@ footer::after {
         font-size: 0.95rem;
     }
     .member-name {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
     .member-phone {
         font-size: 0.85rem;
@@ -4942,4 +4942,26 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
     .table-container { padding: 10px !important; }
     table { font-size: 14px !important; }
     table th, table td { padding: 8px 5px !important; }
+}
+
+/* Storage Widget Responsive Fix for Admin Panel */
+@media (max-width: 1024px) {
+    .storage-widget-container {
+        position: relative !important;
+        bottom: auto !important;
+        right: auto !important;
+        left: auto !important;
+        margin: 25px auto 10px auto !important;
+        width: 100% !important;
+        max-width: 320px !important;
+        z-index: 5 !important;
+    }
+    .storage-widget {
+        padding: 14px 16px !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5) !important;
+        margin: 0 auto !important;
+        border-radius: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
 }

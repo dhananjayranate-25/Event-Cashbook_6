@@ -349,7 +349,7 @@
 
             <div class="admin-card" style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-top:20px;">
                 <h2 style="color: #ffeb3b; text-align:center; margin-bottom: 20px;"><i class="fas fa-om"></i> महाआरती बुकिंग व्यवस्थापन</h2>
-                <form id="addAartiForm" onsubmit="handleAddAarti(event)" class="form-grid">
+                <form id="addAartiForm" onsubmit="handleAddAarti(event); return false;" class="form-grid">
                     <div class="form-group">
                         <label style="color:white; display:block; margin-bottom:5px;">संपूर्ण नाव *</label>
                         <input type="text" id="aartiName" required="" placeholder="उदा. श्री. रमेश पाटील" style="width:100%; padding:10px; border-radius:8px; border:none; outline:none;">
@@ -379,7 +379,7 @@
                     </div>
                     
                     <div style="grid-column: 1 / -1; text-align:center;">
-                        <button type="submit" id="aartiSubmitBtn" style="padding: 10px 25px; background: #ffeb3b; color: black; border:none; border-radius:8px; font-weight:bold; cursor:pointer;"><i class="fas fa-save"></i> माहिती सेव्ह करा</button>
+                        <button type="button" onclick="handleAddAarti(event)" id="aartiSubmitBtn" style="padding: 10px 25px; background: #ffeb3b; color: black; border:none; border-radius:8px; font-weight:bold; cursor:pointer;"><i class="fas fa-save"></i> माहिती सेव्ह करा</button>
                     </div>
                 </form>
             </div>
@@ -1754,7 +1754,7 @@ table {
                 <div class="form-container">
                     
 
-                    <form id="niyojanForm" onsubmit="addNiyojan(event)">
+                    <form id="niyojanForm" onsubmit="addNiyojan(event); return false;">
                         <div class="form-grid">
                             <div class="form-group floating-label">
                                 <input type="date" id="niyojanDate" required>
@@ -1777,7 +1777,7 @@ table {
                                 <div class="input-focus-line"></div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary ripple" style="width: 100%; margin-top: 15px;">
+                        <button type="button" onclick="addNiyojan(event)" class="btn btn-primary ripple" style="width: 100%; margin-top: 15px;">
                             <span class="btn-icon"><i class="fas fa-plus"></i></span> नियोजन ऍड करा
                         </button>
                     </form>
@@ -2101,6 +2101,9 @@ table {
             }
             if (tabId === 'tab-gallery' && typeof loadAdminAlbums === 'function') {
                 loadAdminAlbums();
+            }
+            if (tabId === 'tab-niyojan' && typeof loadNiyojanAdmin === 'function') {
+                loadNiyojanAdmin();
             }
         }
         
@@ -2472,7 +2475,16 @@ async function handleUploadAartiMedia(e) {
     }
 }
 async function handleAddAarti(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
+    if (e && e.stopPropagation) e.stopPropagation();
+
+    const nameVal = document.getElementById('aartiName').value;
+    const dateVal = document.getElementById('aartiDate').value;
+    const timeVal = document.getElementById('aartiTime').value;
+    if (!nameVal || !nameVal.trim() || !dateVal || !dateVal.trim() || !timeVal || !timeVal.trim()) {
+        alert('कृपया संपूर्ण नाव आणि तारीख भरणे आवश्यक आहे.');
+        return false;
+    }
     
     const btn = document.getElementById('aartiSubmitBtn');
     btn.disabled = true;
@@ -2558,7 +2570,17 @@ async function loadNiyojanAdmin() {
 }
 
 async function addNiyojan(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
+    if (e && e.stopPropagation) e.stopPropagation();
+
+    const dtVal = document.getElementById('niyojanDate').value;
+    const tmVal = document.getElementById('niyojanTime').value;
+    const ttVal = document.getElementById('niyojanTitle').value;
+    if (!dtVal || !dtVal.trim() || !tmVal || !tmVal.trim() || !ttVal || !ttVal.trim()) {
+        alert('कृपया तारीख, वेळ आणि कार्यक्रमाचे नाव भरणे आवश्यक आहे.');
+        return false;
+    }
+
     const payload = {
         date: document.getElementById('niyojanDate').value,
         time: document.getElementById('niyojanTime').value,
