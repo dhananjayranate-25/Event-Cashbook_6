@@ -512,6 +512,28 @@ app.delete('/api/gallery/album/:id/photo/:photoId', async (req, res) => {
 app.get('/api/committee', async (req, res) => {
     try {
         const members = await CommitteeMember.find().sort({ order: 1, role: 1 });
+        const users = await PortalUser.find({}, 'name username photoUrl');
+        const cleanStr = (s) => (s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+
+        for (let m of members) {
+            if (!m.name) continue;
+            const cName = cleanStr(m.name);
+            const matchedUser = users.find(u => {
+                const uName = cleanStr(u.name);
+                if (uName === cName && uName.length > 0) return true;
+                if (m.mobile && m.mobile.trim().length >= 10 && (u.username || '').includes(m.mobile.trim())) return true;
+                return false;
+            });
+            if (matchedUser && matchedUser.photoUrl !== undefined) {
+                const userPhoto = matchedUser.photoUrl || '';
+                if (m.photoUrl !== userPhoto) {
+                    m.photoUrl = userPhoto;
+                    m.base64Data = '';
+                    await CommitteeMember.findByIdAndUpdate(m._id, { photoUrl: userPhoto, base64Data: '' });
+                }
+            }
+        }
+
         res.json({ success: true, data: members });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
@@ -1114,15 +1136,43 @@ app.post('/api/users/:id/photo', uploadCloudinary.single('photo'), async (req, r
         const user = await PortalUser.findByIdAndUpdate(req.params.id, { photoUrl }, { new: true });
         if (!user) return res.status(404).json({ error: 'User not found' });
         
-        // Auto update CommitteeMember with the same name (case-insensitive)
-        const regexName = new RegExp(`^${user.name.trim()}$`, 'i');
-        const updateResult = await CommitteeMember.updateMany({ name: regexName }, { photoUrl, base64Data: '' });
-        console.log(`Updated ${updateResult.modifiedCount} committee members with photo for user ${user.name}`);
+        // Auto update CommitteeMember with flexible name and mobile matching
+        const allCommittee = await CommitteeMember.find();
+        const cleanStr = (s) => (s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+        const cleanUName = cleanStr(user.name);
+        for (let cm of allCommittee) {
+            const cleanMName = cleanStr(cm.name);
+            if ((cleanMName === cleanUName && cleanUName.length > 0) || (cm.mobile && cm.mobile.trim().length >= 10 && (user.username || '').includes(cm.mobile.trim()))) {
+                await CommitteeMember.findByIdAndUpdate(cm._id, { photoUrl, base64Data: '' });
+            }
+        }
         
         res.json({ success: true, photoUrl, user });
     } catch (e) {
         console.error(e);
         res.status(500).json({ error: 'Failed to update photo' });
+    }
+});
+
+app.delete('/api/users/:id/photo', async (req, res) => {
+    try {
+        const user = await PortalUser.findByIdAndUpdate(req.params.id, { photoUrl: '' }, { new: true });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+        
+        const allCommittee = await CommitteeMember.find();
+        const cleanStr = (s) => (s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+        const cleanUName = cleanStr(user.name);
+        for (let cm of allCommittee) {
+            const cleanMName = cleanStr(cm.name);
+            if ((cleanMName === cleanUName && cleanUName.length > 0) || (cm.mobile && cm.mobile.trim().length >= 10 && (user.username || '').includes(cm.mobile.trim()))) {
+                await CommitteeMember.findByIdAndUpdate(cm._id, { photoUrl: '', base64Data: '' });
+            }
+        }
+        
+        res.json({ success: true, user });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'Failed to delete photo' });
     }
 });
 

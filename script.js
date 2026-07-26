@@ -111,7 +111,7 @@ function getPDFSettings(year) {
     const defaults = {
         orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩',
         subtitle: 'गणेश उत्सव कॅशबुक',
-        tagline: 'Ganpati Festival Cashbook',
+        tagline: 'वर्ष : आठवे',
         headerOrgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ 🚩',
         headerSubtitle: ''
     };
@@ -1667,16 +1667,18 @@ function createPDFHTML(rows, yearLabel, totalCashIn, totalCashOut, finalBalance,
                 font-weight: 700;
                 color: #ff8c00;
                 text-align: center;
-                letter-spacing: 4px;
-                margin-bottom: 8px;
+                letter-spacing: 2px;
+                margin-bottom: 0;
                 text-shadow: 0 0 20px rgba(255,140,0,0.5);
             }
             .cover-tagline {
-                font-size: 15px;
-                color: #d4b896;
+                font-size: 24px;
+                font-weight: 700;
+                color: #ff8c00;
                 text-align: center;
-                letter-spacing: 1.5px;
-                font-weight: 500;
+                letter-spacing: 2px;
+                text-shadow: 0 0 20px rgba(255,140,0,0.5);
+                margin-bottom: 0;
             }
             .cover-year-box {
                 margin-top: 30px;
@@ -1688,11 +1690,14 @@ function createPDFHTML(rows, yearLabel, totalCashIn, totalCashOut, finalBalance,
                 box-shadow: 0 0 30px rgba(255,215,0,0.2);
             }
             .cover-year-label {
-                font-size: 14px;
-                color: #d4b896;
-                display: block;
-                margin-bottom: 5px;
+                font-size: 30px;
+                font-weight: 800;
+                color: #ffd700;
+                display: inline-block;
+                margin-right: 12px;
+                margin-bottom: 0;
                 letter-spacing: 1px;
+                text-shadow: 0 0 25px rgba(255,215,0,0.5);
             }
             .cover-year-val {
                 font-size: 30px;
@@ -1965,12 +1970,14 @@ function createPDFHTML(rows, yearLabel, totalCashIn, totalCashOut, finalBalance,
                     <div class="cover-logo-ring2"></div>
                     <img src="${logoSrc}" alt="Logo" class="cover-logo" onerror="this.style.display='none'">
                 </div>
-                <div class="cover-mandal-name">${getPDFSettings(yearLabel).orgName === 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩' ? '<div style="font-size:1.5em; color:#ffd700; text-shadow:0 0 25px rgba(255,140,0,1); line-height:1.2; margin-bottom:12px;">शिवसृष्टी</div><div style="font-size:0.9em; color:#ffcc00; margin-bottom:5px;">सार्वजनिक उत्सव मंडळ</div><div style="font-size:0.9em; color:#ffcc00;"><span style="color:transparent;user-select:none;">🚩 </span>संगमनेर 🚩</div>' : getPDFSettings(yearLabel).orgName}</div>
+                <div class="cover-mandal-name">${getPDFSettings(yearLabel).orgName === 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩' ? '<div style="font-size:1.5em; color:#ffd700; text-shadow:0 0 25px rgba(255,140,0,1); line-height:1.2; margin-bottom:12px;">शिवसृष्टी</div><div style="font-size:0.9em; color:#ffcc00; margin-bottom:5px;">सार्वजनिक उत्सव मंडळ</div><div style="font-size:0.9em; color:#ffcc00;"><span style="visibility:hidden;user-select:none;">🚩 </span>संगमनेर 🚩</div>' : getPDFSettings(yearLabel).orgName}</div>
                 <div class="cover-divider"></div>
-                <div class="cover-subtitle">${getPDFSettings(yearLabel).subtitle}</div>
-                <div class="cover-tagline">${getPDFSettings(yearLabel).tagline}</div>
+                <div style="display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:15px;margin-bottom:10px;text-align:center;">
+                    <span class="cover-subtitle" style="display:inline;">${getPDFSettings(yearLabel).subtitle}</span>
+                    <span class="cover-tagline" style="display:inline;">${getPDFSettings(yearLabel).tagline === 'Ganpati Festival Cashbook' ? 'वर्ष : आठवे' : getPDFSettings(yearLabel).tagline}</span>
+                </div>
                 <div class="cover-year-box">
-                    <span class="cover-year-label">वर्ष / Year</span>
+                    <span class="cover-year-label">सन</span>
                     <span class="cover-year-val">${yearLabel}</span>
                 </div>
             </div>
@@ -1984,7 +1991,7 @@ function createPDFHTML(rows, yearLabel, totalCashIn, totalCashOut, finalBalance,
             <div class="page-header-bar" style="position: relative; display: flex; align-items: center; justify-content: center;">
                 <div class="header-info" style="text-align: center;">
                     <h1>${getPDFSettings(yearLabel).headerOrgName || getPDFSettings(yearLabel).orgName}</h1>
-                    <p>${(getPDFSettings(yearLabel).headerSubtitle || getPDFSettings(yearLabel).subtitle)} — वर्ष: ${yearLabel}</p>
+                    <p>${(getPDFSettings(yearLabel).headerSubtitle || getPDFSettings(yearLabel).subtitle)} ${getPDFSettings(yearLabel).tagline === 'Ganpati Festival Cashbook' ? 'वर्ष : आठवे' : getPDFSettings(yearLabel).tagline}</p>
                 </div>
             </div>
 

@@ -404,9 +404,12 @@ table {
 
     <div class="navbar">
         <div style="display: flex; align-items: center; gap: 15px;">
-            <div style="position: relative; cursor: pointer;" onclick="document.getElementById('profilePhotoInput').click()">
-                <img id="profilePhotoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%23bdbdbd'/%3E%3Cpath d='M20,90 Q50,50 80,90' stroke='%23bdbdbd' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
-                <div style="position: absolute; bottom: -5px; right: -5px; background: var(--primary); color: #000; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px;"><i class="fas fa-camera"></i></div>
+            <div style="position: relative; cursor: pointer;" title="Change / Delete Profile Photo">
+                <div onclick="document.getElementById('profilePhotoInput').click()">
+                    <img id="profilePhotoPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%23bdbdbd'/%3E%3Cpath d='M20,90 Q50,50 80,90' stroke='%23bdbdbd' stroke-width='10' fill='none'/%3E%3C/svg%3E" alt="Profile" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);">
+                    <div style="position: absolute; bottom: -5px; right: -5px; background: var(--primary); color: #000; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 10px;"><i class="fas fa-camera"></i></div>
+                </div>
+                <div id="deleteProfilePhotoBtn" onclick="deleteProfilePhoto(event)" style="position: absolute; top: -5px; left: -5px; background: #f44336; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: none; align-items: center; justify-content: center; font-size: 10px; cursor: pointer;" title="Delete Profile Photo"><i class="fas fa-trash"></i></div>
             </div>
             <input type="file" id="profilePhotoInput" style="display: none;" accept="image/*" onchange="uploadProfilePhoto(this)">
             <h2><span id="welcomeName">Member</span></h2>
@@ -692,9 +695,7 @@ table {
             document.getElementById('welcomeName').innerText = currentUser.name;
             refreshData();
     
-            if(currentUser.photoUrl) {
-                document.getElementById('profilePhotoPreview').src = currentUser.photoUrl;
-            }
+            updateProfilePhotoUI(currentUser.photoUrl);
             loadMyData();
         };
 
@@ -779,8 +780,9 @@ table {
                         <div class="item-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
                             ${t.photoData ? `<div style="text-align: center;">
                                 <img src="${t.photoData}" style="max-height: 150px; border-radius: 8px; object-fit: contain; width: 100%;">
-                                <div style="margin-top: 5px;">
-                                    <a href="${t.photoData}" download="task_photo.jpg" class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem; width: 100%; box-sizing: border-box;"><i class="fas fa-download"></i> Download Photo</a>
+                                <div style="margin-top: 5px; display: flex; gap: 8px;">
+                                    <a href="${t.photoData}" download="task_photo.jpg" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.8rem; flex: 1; text-align: center; box-sizing: border-box;"><i class="fas fa-download"></i> Download</a>
+                                    <button type="button" class="btn btn-outline" onclick="deleteTaskPhoto('${t._id}')" style="padding: 6px 10px; font-size: 0.8rem; flex: 1; background: rgba(244, 67, 54, 0.1); color: #f44336; border-color: #f44336; box-sizing: border-box;"><i class="fas fa-trash"></i> Delete Photo</button>
                                 </div>
                             </div>` : ''}
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1011,7 +1013,7 @@ table {
                 if (data.success) {
                     currentUser.photoUrl = data.photoUrl;
                     localStorage.setItem('portalUser', JSON.stringify(currentUser));
-                    document.getElementById('profilePhotoPreview').src = data.photoUrl;
+                    updateProfilePhotoUI(data.photoUrl);
                 } else {
                     alert('फोटो अपडेट करताना त्रुटी: ' + data.error);
                 }
@@ -1021,6 +1023,55 @@ table {
             } finally {
                 document.getElementById('profilePhotoPreview').style.opacity = '1';
                 input.value = '';
+            }
+        }
+
+        function updateProfilePhotoUI(url) {
+            const preview = document.getElementById('profilePhotoPreview');
+            const delBtn = document.getElementById('deleteProfilePhotoBtn');
+            const defaultSvg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%23bdbdbd'/%3E%3Cpath d='M20,90 Q50,50 80,90' stroke='%23bdbdbd' stroke-width='10' fill='none'/%3E%3C/svg%3E";
+            if (url) {
+                if (preview) preview.src = url;
+                if (delBtn) delBtn.style.display = 'flex';
+            } else {
+                if (preview) preview.src = defaultSvg;
+                if (delBtn) delBtn.style.display = 'none';
+            }
+        }
+
+        async function deleteProfilePhoto(e) {
+            if (e) e.stopPropagation();
+            if (!confirm("तुम्हाला तुमचा प्रोफाइल फोटो डिलीट करायचा आहे का? (Are you sure you want to delete your profile photo?)")) return;
+            try {
+                const res = await fetch(`${API_URL}/api/users/${currentUser._id}/photo`, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    currentUser.photoUrl = '';
+                    localStorage.setItem('portalUser', JSON.stringify(currentUser));
+                    updateProfilePhotoUI('');
+                } else {
+                    alert('फोटो डिलीट करताना त्रुटी आली: ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Server Error');
+            }
+        }
+
+        async function deleteTaskPhoto(taskId) {
+            if (!confirm("तुम्हाला या टास्कामधून फोटो डिलीट करायचा आहे का? (Are you sure you want to remove the photo from this task?)")) return;
+            try {
+                const res = await fetch(API_URL + '/api/portal/tasks/' + taskId + '/photo', {
+                    method: 'DELETE'
+                });
+                const data = await res.json();
+                if (data.success) {
+                    refreshData();
+                } else {
+                    alert(data.message || 'Failed to remove photo');
+                }
+            } catch (err) {
+                alert('Error deleting photo');
             }
         }
 
