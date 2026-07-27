@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Ganpati Cashbook</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=17">
+    <link rel="stylesheet" href="style.css?v=21">
     <script>
     // Auto-wrap tables for mobile responsiveness
     document.addEventListener('DOMContentLoaded', function() {
@@ -588,7 +588,7 @@
                     </div>
                     <div>
                         <label style="color: var(--text-secondary); font-size: 12px; display: block; margin-bottom: 5px;">PDF File</label>
-                        <input type="file" id="pdfFileInput" accept=".pdf" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed var(--glass-border); color: var(--text-primary); cursor: pointer;">
+                        <input type="file" id="pdfFileInput" accept=".pdf" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed var(--glass-border); color: var(--text-primary); cursor: pointer; max-width: 100%; box-sizing: border-box;">
                     </div>
                 </div>
                 <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; margin-top: 12px;">
@@ -2312,16 +2312,16 @@ async function loadAdminAlbums() {
                 return;
             }
             container.innerHTML = data.albums.map(album => `
-                <div class="admin-card" style="margin-bottom: 20px; padding: 20px; background: rgba(0,0,0,0.4); border-radius: 12px; border: 1px solid rgba(212,175,55,0.3);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <h3 style="color: #ffeb3b; margin:0;">${album.title} <span style="font-size:14px; color:#ccc;">(Photos: ${album.photos.length})</span></h3>
-                        <button class="delete-btn" onclick="deleteAlbum('${album._id}')" style="background:#f44336; border:none; color:white; padding:5px 10px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i> Delete Album</button>
+                <div class="admin-card" style="margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 12px; border: 1px solid rgba(212,175,55,0.3); width: 100%; box-sizing: border-box; overflow: hidden;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+                        <h3 style="color: #ffeb3b; margin:0; word-break: break-word; font-size: 16px; flex: 1; min-width: 160px;">${album.title} <span style="font-size:13px; color:#ccc;">(Photos: ${album.photos.length})</span></h3>
+                        <button class="delete-btn" onclick="deleteAlbum('${album._id}')" style="background:#f44336; border:none; color:white; padding:6px 12px; border-radius:5px; cursor:pointer; font-size: 13px; white-space: nowrap;"><i class="fas fa-trash"></i> Delete Album</button>
                     </div>
                     
-                    <form onsubmit="handleUploadPhotos(event, '${album._id}')" style="display:flex; gap:10px; align-items:center; margin-bottom: 15px;">
-                        <input type="file" multiple accept="image/*" id="photos_${album._id}" required style="color: white;">
-                        <button type="submit" class="btn btn-primary" style="padding: 5px 15px; font-size:14px;"><i class="fas fa-upload"></i> Upload Photos</button>
-                        <span id="uploadStatus_${album._id}" style="color:#ffeb3b; font-size:14px;"></span>
+                    <form onsubmit="handleUploadPhotos(event, '${album._id}')" style="display:flex; flex-wrap: wrap; gap:10px; align-items:center; margin-bottom: 15px; width: 100%; box-sizing: border-box;">
+                        <input type="file" multiple accept="image/*" id="photos_${album._id}" required style="color: white; flex: 1; min-width: 180px; max-width: 100%; font-size: 13px; box-sizing: border-box; background: rgba(255,255,255,0.05); padding: 6px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);">
+                        <button type="submit" class="btn btn-primary" style="padding: 8px 16px; font-size:14px; white-space: nowrap;"><i class="fas fa-upload"></i> Upload Photos</button>
+                        <span id="uploadStatus_${album._id}" style="color:#ffeb3b; font-size:14px; width: 100%;"></span>
                     </form>
                     
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
