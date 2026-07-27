@@ -3298,7 +3298,7 @@ footer::after {
         background-color: transparent;
         position: relative;
         z-index: 3;
-        border: 2px solid rgba(255, 215, 0, 0.6);
+        border: 6px double #ffffff !important;
         box-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
     }
 
@@ -3467,7 +3467,7 @@ footer::after {
         width: 100% !important;
         margin: 0 !important;
         border-radius: 15px !important;
-        border: 3px solid rgba(255, 215, 0, 0.8) !important;
+        border: 6px double #ffffff !important;
         box-shadow: 0 0 40px rgba(255, 140, 0, 0.6) !important;
         position: relative;
         z-index: 3;
