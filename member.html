@@ -643,6 +643,41 @@ table {
         </div>
     </div>
 
+    <!-- Edit Aarti Modal -->
+    <div class="modal" id="editAartiModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('editAartiModal')">&times;</span>
+            <h3 class="modal-title">Edit Mahaaarti (महाआरती बदला)</h3>
+            <form onsubmit="updateAarti(event)">
+                <input type="hidden" id="editAartiId">
+                <div class="form-group">
+                    <label>नाव (Name)</label>
+                    <input type="text" id="editAartiName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>तारीख (Date)</label>
+                    <input type="date" id="editAartiDate" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>वेळ (सकाळ/संध्याकाळ)</label>
+                    <select id="editAartiTime" class="form-control" required>
+                        <option value="सकाळ">सकाळ</option>
+                        <option value="संध्याकाळ">संध्याकाळ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>फोन नंबर (Phone)</label>
+                    <input type="text" id="editAartiPhone" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>इतर माहिती (Details)</label>
+                    <textarea id="editAartiDetails" class="form-control" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn">Update Aarti (अपडेट करा)</button>
+            </form>
+        </div>
+    </div>
+
 
     <script>
         const API_URL = '';
@@ -1237,6 +1272,7 @@ table {
                 data = await res.json();
                 if(Array.isArray(data) || data.success) {
                     let aartiList = Array.isArray(data) ? data : data.aarti;
+                    window.allAarti = aartiList;
                     let myAarti = aartiList.filter(a => a.addedBy === currentUser.name);
                     let aartiHtml = '';
                     myAarti.forEach((a, index) => {
@@ -1253,7 +1289,7 @@ table {
                             ${a.pujaDetails ? `<div style="color: #ccc; font-size: 0.85rem; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">${a.pujaDetails}</div>` : ''}
                             
                             <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top:10px;">
-                                <button class="btn btn-outline btn-small" onclick="editAarti('${a._id}', '${a.name.replace(/'/g, "\'")}')"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn btn-outline btn-small" onclick="editAarti('${a._id}')"><i class="fas fa-edit"></i> Edit</button>
                                 <button class="btn btn-small" style="background:#ff4444; color:white; border:none;" onclick="deleteAarti('${a._id}')"><i class="fas fa-trash"></i> Delete</button>
                             </div>
                         </div>
@@ -1264,44 +1300,75 @@ table {
             } catch(e) { console.error(e); }
         }
 
+        function formatTimeForInput(timeStr) {
+            if (!timeStr) return '';
+            if (timeStr.match(/^\d{2}:\d{2}$/)) return timeStr;
+            let m = timeStr.match(/^(\d+):(\d+)\s*(AM|PM|am|pm)?$/i);
+            if (m) {
+                let h = parseInt(m[1], 10);
+                let min = m[2];
+                let ampm = m[3] ? m[3].toUpperCase() : '';
+                if (ampm === 'PM' && h < 12) h += 12;
+                if (ampm === 'AM' && h === 12) h = 0;
+                return (h < 10 ? '0' : '') + h + ':' + min;
+            }
+            return timeStr;
+        }
+
+        function formatDateForInput(dateStr) {
+            if (!dateStr) return '';
+            if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) return dateStr;
+            try { 
+                let d = new Date(dateStr);
+                if (!isNaN(d.getTime())) return d.toISOString().split('T')[0];
+            } catch(e) {}
+            return dateStr;
+        }
+
         async function deleteNiyojan(id) {
-            if(!confirm('Are you sure you want to delete this?')) return;
+            if(!confirm('तुम्हाला खात्री आहे का की तुम्हाला हे नियोजन डिलीट करायचे आहे? (Are you sure?)')) return;
             try {
                 const res = await fetch(API_URL + '/api/niyojan/' + id, { method: 'DELETE' });
                 const data = await res.json();
-                if(data.success) {
-                    alert('Deleted successfully');
-        
-            if(currentUser.photoUrl) {
-                document.getElementById('profilePhotoPreview').src = currentUser.photoUrl;
+                if(data.success || res.ok) {
+                    alert('Niyojan deleted successfully!');
+                    if(currentUser && currentUser.photoUrl) {
+                        document.getElementById('profilePhotoPreview').src = currentUser.photoUrl;
+                    }
+                    loadMyData();
+                } else {
+                    alert('Error deleting Niyojan');
+                }
+            } catch(e) { 
+                alert('Server error during delete'); 
             }
-            loadMyData();
-                } else alert('Error deleting');
-            } catch(e) { alert('Server error'); }
         }
 
         async function deleteAarti(id) {
-            if(!confirm('Are you sure you want to delete this?')) return;
+            if(!confirm('तुम्हाला खात्री आहे का की तुम्हाला ही महाआरती डिलीट करायची आहे? (Are you sure?)')) return;
             try {
                 const res = await fetch(API_URL + '/api/aarti/' + id, { method: 'DELETE' });
                 const data = await res.json();
-                if(data.success) {
-                    alert('Deleted successfully');
-        
-            if(currentUser.photoUrl) {
-                document.getElementById('profilePhotoPreview').src = currentUser.photoUrl;
+                if(data.success || res.ok) {
+                    alert('Aarti deleted successfully!');
+                    if(currentUser && currentUser.photoUrl) {
+                        document.getElementById('profilePhotoPreview').src = currentUser.photoUrl;
+                    }
+                    loadMyData();
+                } else {
+                    alert('Error deleting Aarti');
+                }
+            } catch(e) { 
+                alert('Server error during delete'); 
             }
-            loadMyData();
-                } else alert('Error deleting');
-            } catch(e) { alert('Server error'); }
         }
 
         function editNiyojan(id) {
-            const n = window.allNiyojan.find(x => x._id === id);
+            const n = window.allNiyojan ? window.allNiyojan.find(x => x._id === id) : null;
             if (!n) return;
             document.getElementById('editNiyojanId').value = n._id;
-            document.getElementById('editNiyojanDate').value = n.date || '';
-            document.getElementById('editNiyojanTime').value = n.time || '';
+            document.getElementById('editNiyojanDate').value = formatDateForInput(n.date || '');
+            document.getElementById('editNiyojanTime').value = formatTimeForInput(n.time || '');
             document.getElementById('editNiyojanTitle').value = n.title || '';
             document.getElementById('editNiyojanDesc').value = n.description || '';
             openModal('editNiyojanModal');
@@ -1324,34 +1391,56 @@ table {
                     body: JSON.stringify({ title, description, date, time })
                 });
                 const data = await res.json();
-                if(data.success) {
+                if(data.success || res.ok) {
                     alert('Updated successfully');
                     closeModal('editNiyojanModal');
                     loadMyData();
-                } else alert('Error updating');
+                } else {
+                    alert('Error updating');
+                }
             } catch(e) { alert('Server error'); }
             if (btn) btn.disabled = false;
         }
 
-        async function editAarti(id, oldName) {
-            const newName = prompt('Enter new name for Aarti:', oldName);
-            if(!newName || newName === oldName) return;
+        function editAarti(id) {
+            const a = window.allAarti ? window.allAarti.find(x => x._id === id) : null;
+            if (!a) return;
+            document.getElementById('editAartiId').value = a._id;
+            document.getElementById('editAartiName').value = a.name || '';
+            document.getElementById('editAartiDate').value = formatDateForInput(a.date || '');
+            document.getElementById('editAartiTime').value = a.timeOfDay || 'सकाळ';
+            document.getElementById('editAartiPhone').value = a.phone || '';
+            document.getElementById('editAartiDetails').value = a.pujaDetails || '';
+            openModal('editAartiModal');
+        }
+
+        async function updateAarti(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            if (btn) btn.disabled = true;
+            const id = document.getElementById('editAartiId').value;
+            const name = document.getElementById('editAartiName').value;
+            const date = document.getElementById('editAartiDate').value;
+            const timeOfDay = document.getElementById('editAartiTime').value;
+            const phone = document.getElementById('editAartiPhone').value;
+            const pujaDetails = document.getElementById('editAartiDetails').value;
+
             try {
                 const res = await fetch(API_URL + '/api/aarti/' + id, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ name: newName })
+                    body: JSON.stringify({ name, date, timeOfDay, phone, pujaDetails })
                 });
                 const data = await res.json();
-                if(data.success) {
+                if(data.success || res.ok) {
                     alert('Updated successfully');
-        
-            if(currentUser.photoUrl) {
-                document.getElementById('profilePhotoPreview').src = currentUser.photoUrl;
-            }
-            loadMyData();
-                } else alert('Error updating');
+                    closeModal('editAartiModal');
+                    loadMyData();
+                } else {
+                    alert('Error updating');
+                }
             } catch(e) { alert('Server error'); }
+            if (btn) btn.disabled = false;
         }
 
     

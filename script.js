@@ -345,8 +345,8 @@ window.createCustomYearPanel = function() {
     console.log('Year input:', year);
 
     const yearNum = parseInt(year);
-    if (!year || isNaN(yearNum) || yearNum < 2021 || yearNum > 2050) {
-        showNotification('Please enter a valid year between 2021 and 2050!', 'error');
+    if (!year || isNaN(yearNum) || yearNum < 1900 || yearNum > 9999) {
+        showNotification('Please enter a valid year!', 'error');
         return;
     }
 

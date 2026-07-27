@@ -757,9 +757,9 @@ app.put('/api/aarti/:id', async (req, res) => {
 app.delete('/api/aarti/:id', async (req, res) => {
     try {
         await Aarti.findByIdAndDelete(req.params.id);
-        res.json({ message: 'Aarti deleted successfully' });
+        res.json({ success: true, message: 'Aarti deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to delete aarti details' });
+        res.status(500).json({ success: false, error: 'Failed to delete aarti details' });
     }
 });
 
@@ -801,9 +801,9 @@ app.put('/api/niyojan/:id', async (req, res) => {
 app.delete('/api/niyojan/:id', async (req, res) => {
     try {
         await Niyojan.findByIdAndDelete(req.params.id);
-        res.json({ message: 'Niyojan deleted successfully' });
+        res.json({ success: true, message: 'Niyojan deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: 'Failed to delete niyojan' });
+        res.status(500).json({ success: false, error: 'Failed to delete niyojan' });
     }
 });
 
