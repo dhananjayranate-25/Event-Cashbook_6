@@ -147,6 +147,7 @@
             <button id="btn-tab-gallery" class="btn btn-tab" onclick="switchAdminTab('tab-gallery')">गणपती छायाचित्रे</button>
             <button id="btn-tab-niyojan" class="btn btn-tab" onclick="switchAdminTab('tab-niyojan')">नियोजन</button>
             <button class="btn btn-tab" onclick="window.location.replace('index.html')" style="background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; border: none;">🏠 Back to Home (मागे जा)</button>
+            <button class="btn btn-tab" onclick="adminLogout()" style="background: linear-gradient(135deg, #374151, #111827); color: #f87171; border: 1px solid #f87171; font-weight: bold;"><i class="fas fa-sign-out-alt"></i> Logout (लॉग आउट)</button>
         </div>
 
         <!-- HOME PAGE SETTINGS TAB -->
@@ -731,6 +732,11 @@
 
     <script src="script.js?v=4"></script>
     <script>
+        function adminLogout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            window.location.replace('index.html');
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             // Check session persistence (if logged in from login.html)
             if (sessionStorage.getItem('adminLoggedIn') === 'true') {
