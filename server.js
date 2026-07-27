@@ -56,6 +56,7 @@ const storage = new CloudinaryStorage({
   },
 });
 const uploadCloudinary = multer({ storage: storage, limits: { fileSize: 50 * 1024 * 1024 } });
+const uploadMemory = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
 
 
 
@@ -1212,10 +1213,10 @@ app.listen(PORT, () => {
 });
 
 
-app.post('/api/upload-pdf', uploadCloudinary.single('pdf'), async (req, res) => {
+app.post('/api/upload-pdf', uploadMemory.single('pdf'), async (req, res) => {
     try {
         const { year, subtitle, tagline, orgName } = req.body;
-        if (!year || !req.file) {
+        if (!year || !req.file || !req.file.buffer) {
             return res.status(400).json({ success: false, error: 'Year and PDF file required' });
         }
 
