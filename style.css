@@ -4971,9 +4971,19 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
         width: calc(100% - 10px) !important;
     }
     
-    button, .btn, select, input, textarea {
-        font-size: 16px !important; /* prevent iOS zoom */
-        min-height: 44px;
+    select, input, textarea {
+        font-size: 16px !important; /* prevent iOS zoom on inputs */
+        min-height: 42px;
+    }
+    .form-container button[type="submit"], .modal button[type="submit"] {
+        min-height: 42px;
+    }
+    .btn, button, .action-btn, .btn-outline {
+        min-height: auto !important;
+    }
+    .item-row .btn, .item-row button, .action-btn {
+        padding: 6px 10px !important;
+        font-size: 0.8rem !important;
     }
     
     h2 { font-size: 1.5rem !important; }
