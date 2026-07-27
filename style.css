@@ -3770,12 +3770,14 @@ footer::after {
         aspect-ratio: 1 / 1;
     }
     .member-role {
-        font-size: 0.85rem;
+        font-size: 0.75rem !important;
         font-weight: 600;
     }
     .member-name {
-        font-size: 1.1rem;
-        font-weight: 700;
+        font-size: 1.22rem !important;
+        font-weight: 800 !important;
+        line-height: 1.25 !important;
+        margin-top: 2px !important;
     }
     .member-phone {
         font-size: 0.85rem;
