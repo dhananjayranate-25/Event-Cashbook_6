@@ -1969,14 +1969,14 @@ table {
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 4, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
+                scale: 2, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
             });
             document.body.removeChild(iframe);
             const { jsPDF } = window.jspdf;
             const coverDoc = new jsPDF('p', 'mm', 'a4');
             const pgW = coverDoc.internal.pageSize.getWidth();
             const imgH = (canvas.height * pgW) / canvas.width;
-            coverDoc.addImage(canvas.toDataURL('image/png', 0.6), 'JPEG', 0, 0, pgW, imgH);
+            coverDoc.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, pgW, imgH);
             const coverBytes = coverDoc.output('arraybuffer');
             
             const resp = await fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + filename);
