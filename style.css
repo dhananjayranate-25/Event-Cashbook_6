@@ -3692,7 +3692,7 @@ footer::after {
     font-size: 1.1rem;
     color: #333;
     margin: 0;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .member-phone {
@@ -3736,10 +3736,12 @@ footer::after {
         aspect-ratio: 1 / 1;
     }
     .member-role {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
+        font-weight: 600;
     }
     .member-name {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
+        font-weight: 600;
     }
     .member-phone {
         font-size: 0.85rem;
