@@ -2701,11 +2701,8 @@ body > .container {
 
 /* Touch-friendly interactions */
 @media (hover: none) {
-    .btn,
-    .year-tab,
-    .btn-edit,
-    .btn-delete {
-        min-height: 44px;
+    .year-tab {
+        min-height: 40px;
     }
 
     input,
@@ -3736,12 +3733,12 @@ footer::after {
         aspect-ratio: 1 / 1;
     }
     .member-role {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         font-weight: 600;
     }
     .member-name {
-        font-size: 0.95rem;
-        font-weight: 600;
+        font-size: 1.1rem;
+        font-weight: 700;
     }
     .member-phone {
         font-size: 0.85rem;
@@ -4576,10 +4573,51 @@ footer::after {
         padding: 5px 8px !important;
         font-size: 9px !important;
         width: auto !important;
+        min-height: 26px !important;
+        border-radius: 6px !important;
     }
-    .section-actions .btn svg {
-        width: 10px !important;
-        height: 10px !important;
+    .btn-pdf-view svg, .btn-pdf-download svg, .section-actions .btn svg {
+        width: 11px !important;
+        height: 11px !important;
+        flex-shrink: 0 !important;
+    }
+    /* Cashbook Settings Mobile View Button & Icon Optimization */
+    #tab-cashbook .pdf-upload-section .btn,
+    #tab-cashbook .create-year-panel .btn,
+    #tab-cashbook .form-actions .btn {
+        padding: 10px 16px !important;
+        font-size: 0.88rem !important;
+        border-radius: 10px !important;
+        gap: 6px !important;
+        min-height: 38px !important;
+        width: 100% !important;
+        justify-content: center !important;
+        margin-top: 6px !important;
+    }
+    #tab-cashbook .pdf-upload-section .btn svg,
+    #tab-cashbook .create-year-panel .btn svg,
+    #tab-cashbook .form-actions .btn svg,
+    #tab-cashbook .btn-icon svg {
+        width: 16px !important;
+        height: 16px !important;
+        flex-shrink: 0 !important;
+    }
+    #tab-cashbook .create-year-panel .form-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    #tab-cashbook .btn-edit,
+    #tab-cashbook .btn-delete {
+        min-height: 28px !important;
+        padding: 4px 8px !important;
+        font-size: 0.75rem !important;
+        border-radius: 6px !important;
+    }
+    #tab-cashbook .pdf-item .btn {
+        min-height: 32px !important;
+        padding: 6px 12px !important;
+        font-size: 0.8rem !important;
+        border-radius: 8px !important;
     }
     /* Hide the duplicated buttons below cards */
     .section-actions.mobile-only {

@@ -581,6 +581,10 @@ table {
             <form onsubmit="addExpense(event)">
                 <input type="text" id="expItem" class="form-control-full" placeholder="Item Name (वस्तूचे नाव)" required>
                 <input type="number" id="expPrice" class="form-control-full" placeholder="Price / Amount (₹)" required min="1">
+                <div style="margin-top: 10px; text-align: left;">
+                    <label style="font-size: 0.85rem; color: var(--text-light, #ccc);">Upload Bill / Receipt Photo (फोटो / बिल जोडा - Optional):</label>
+                    <input type="file" id="expPhoto" class="form-control-full" accept="image/*" style="margin-top: 4px; padding: 6px;">
+                </div>
                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
                     <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
                     <button type="submit" class="btn">Save</button>
@@ -630,6 +634,10 @@ table {
                 <div class="form-group">
                     <label>Amount (₹ रक्कम)</label>
                     <input type="number" id="editExpensePrice" class="form-control" required min="1">
+                </div>
+                <div class="form-group">
+                    <label>Change / Add Photo (फोटो जोडा किंवा बदला)</label>
+                    <input type="file" id="editExpensePhoto" class="form-control" accept="image/*">
                 </div>
                 <button type="submit" class="btn">Update Expense (अपडेट करा)</button>
             </form>
@@ -779,10 +787,11 @@ table {
                     document.getElementById('tasksList').innerHTML = data.tasks.length ? data.tasks.map(t => `
                         <div class="item-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
                             ${t.photoData ? `<div style="text-align: center;">
-                                <img src="${t.photoData}" style="max-height: 150px; border-radius: 8px; object-fit: contain; width: 100%;">
-                                <div style="margin-top: 5px; display: flex; gap: 8px;">
-                                    <a href="${t.photoData}" download="task_photo.jpg" class="btn btn-outline" style="padding: 6px 10px; font-size: 0.8rem; flex: 1; text-align: center; box-sizing: border-box;"><i class="fas fa-download"></i> Download</a>
-                                    <button type="button" class="btn btn-outline" onclick="deleteTaskPhoto('${t._id}')" style="padding: 6px 10px; font-size: 0.8rem; flex: 1; background: rgba(244, 67, 54, 0.1); color: #f44336; border-color: #f44336; box-sizing: border-box;"><i class="fas fa-trash"></i> Delete Photo</button>
+                                <a href="${t.photoData}" target="_blank" title="Click to open full photo"><img src="${t.photoData}" style="max-height: 150px; border-radius: 8px; object-fit: contain; width: 100%;"></a>
+                                <div style="margin-top: 5px; display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <a href="${t.photoData}" target="_blank" class="btn btn-outline" style="padding: 5px 8px; font-size: 0.75rem; flex: 1; text-align: center; box-sizing: border-box;"><i class="fas fa-external-link-alt"></i> Open</a>
+                                    <a href="${t.photoData}" download="task_photo.jpg" class="btn btn-outline" style="padding: 5px 8px; font-size: 0.75rem; flex: 1; text-align: center; box-sizing: border-box;"><i class="fas fa-download"></i> Download</a>
+                                    <button type="button" class="btn btn-outline" onclick="deleteTaskPhoto('${t._id}')" style="padding: 5px 8px; font-size: 0.75rem; flex: 1; background: rgba(244, 67, 54, 0.1); color: #f44336; border-color: #f44336; box-sizing: border-box;"><i class="fas fa-trash"></i> Delete</button>
                                 </div>
                             </div>` : ''}
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -807,15 +816,26 @@ table {
                 data = await res.json();
                 if(data.success) {
                     document.getElementById('expensesList').innerHTML = data.expenses.length ? data.expenses.map(e => `
-                        <div class="item-row">
-                            <div>
-                                <div style="font-weight:500;">${e.item}</div>
-                                <div style="font-size:0.75rem; color:#888;">${new Date(e.date).toLocaleDateString()}</div>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <span style="color:var(--danger); font-weight:bold;">₹${e.price}</span>
-                                <button class="action-btn" style="color:var(--primary); padding:5px; border-radius:5px; background:rgba(255,204,0,0.1); border:none; cursor:pointer;" onclick="openEditExpense('${e._id}', '${e.item}', '${e.price}')" title="Edit"><i class="fas fa-edit"></i></button>
-                                <button class="action-btn" style="color:var(--danger); padding:5px; border-radius:5px; background:rgba(255,68,68,0.1); border:none; cursor:pointer;" onclick="deleteExpense('${e._id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                        <div class="item-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
+                            ${e.photoData ? `<div style="text-align: center;">
+                                <a href="${e.photoData}" target="_blank" title="Click to open full photo"><img src="${e.photoData}" style="max-height: 150px; border-radius: 8px; object-fit: contain; width: 100%;"></a>
+                                <div style="margin-top: 5px; display: flex; gap: 6px; flex-wrap: wrap;">
+                                    <a href="${e.photoData}" target="_blank" class="btn btn-outline" style="padding: 5px 8px; font-size: 0.75rem; flex: 1; text-align: center; box-sizing: border-box;"><i class="fas fa-external-link-alt"></i> Open</a>
+                                    <a href="${e.photoData}" download="expense_photo.jpg" class="btn btn-outline" style="padding: 5px 8px; font-size: 0.75rem; flex: 1; text-align: center; box-sizing: border-box;"><i class="fas fa-download"></i> Download</a>
+                                    <button type="button" class="btn btn-outline" onclick="deleteExpensePhoto('${e._id}')" style="padding: 5px 8px; font-size: 0.75rem; flex: 1; background: rgba(244, 67, 54, 0.1); color: #f44336; border-color: #f44336; box-sizing: border-box;"><i class="fas fa-trash"></i> Delete</button>
+                                </div>
+                            </div>` : ''}
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-weight:500;">${e.item}</div>
+                                    <div style="font-size:0.75rem; color:#888;">${new Date(e.date).toLocaleDateString()}</div>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span style="color:var(--danger); font-weight:bold;">₹${e.price}</span>
+                                    ${!e.photoData ? `<button class="action-btn" style="color: #10b981; padding:5px 8px; border-radius:5px; background:rgba(16,185,129,0.1); border:none; cursor:pointer; font-size:0.8rem; display:flex; align-items:center; gap:4px;" onclick="triggerUploadExpensePhoto('${e._id}')" title="Add Photo"><i class="fas fa-camera"></i>+ Photo</button>` : ''}
+                                    <button class="action-btn" style="color:var(--primary); padding:5px; border-radius:5px; background:rgba(255,204,0,0.1); border:none; cursor:pointer;" onclick="openEditExpense('${e._id}', '${e.item}', '${e.price}')" title="Edit"><i class="fas fa-edit"></i></button>
+                                    <button class="action-btn" style="color:var(--danger); padding:5px; border-radius:5px; background:rgba(255,68,68,0.1); border:none; cursor:pointer;" onclick="deleteExpense('${e._id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                                </div>
                             </div>
                         </div>
                     `).join('') : '<p class="empty-state">No expenses logged yet.</p>';
@@ -856,15 +876,23 @@ table {
             const price = document.getElementById('editExpensePrice').value;
             
             try {
+                const formData = new FormData();
+                formData.append('item', item);
+                formData.append('price', price);
+                const photoInput = document.getElementById('editExpensePhoto');
+                if (photoInput && photoInput.files[0]) {
+                    formData.append('photo', photoInput.files[0]);
+                }
+
                 const res = await fetch(API_URL + '/api/portal/expenses/' + id, {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ item, price })
+                    body: formData
                 });
                 const data = await res.json();
                 if(data.success) {
                     alert('Expense updated successfully!');
                     closeModal('editExpenseModal');
+                    if(photoInput) photoInput.value = '';
                     refreshData(); // update UI without reload
                 } else {
                     alert(data.error || 'Update failed');
@@ -899,21 +927,26 @@ table {
             const btn = e.target.querySelector('button[type="submit"]');
             btn.disabled = true;
             try {
+                const formData = new FormData();
+                formData.append('userId', currentUser._id);
+                formData.append('item', document.getElementById('expItem').value);
+                formData.append('price', document.getElementById('expPrice').value);
+                const photoInput = document.getElementById('expPhoto');
+                if (photoInput && photoInput.files[0]) {
+                    formData.append('photo', photoInput.files[0]);
+                }
+
                 const res = await fetch(API_URL + '/api/portal/expenses', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        userId: currentUser._id,
-                        item: document.getElementById('expItem').value,
-                        price: document.getElementById('expPrice').value
-                    })
+                    body: formData
                 });
                 const data = await res.json();
                 if(data.success) {
                     closeModals();
                     e.target.reset();
+                    if(photoInput) photoInput.value = '';
                     refreshData(); // updates the balance and list
-                } else alert(data.message);
+                } else alert(data.message || 'Failed to add expense');
             } catch(err) { 
                 console.error(err);
                 alert('Error logging expense'); 
@@ -1073,6 +1106,50 @@ table {
             } catch (err) {
                 alert('Error deleting photo');
             }
+        }
+
+        async function deleteExpensePhoto(expenseId) {
+            if (!confirm("तुम्हाला या खर्चामधून फोटो डिलीट करायचा आहे का? (Are you sure you want to remove the photo from this expense?)")) return;
+            try {
+                const res = await fetch(API_URL + '/api/portal/expenses/' + expenseId + '/photo', {
+                    method: 'DELETE'
+                });
+                const data = await res.json();
+                if (data.success) {
+                    refreshData();
+                } else {
+                    alert(data.message || 'Failed to remove photo');
+                }
+            } catch (err) {
+                alert('Error deleting photo');
+            }
+        }
+
+        function triggerUploadExpensePhoto(expenseId) {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const formData = new FormData();
+                formData.append('photo', file);
+                try {
+                    const res = await fetch(API_URL + '/api/portal/expenses/' + expenseId + '/photo', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        refreshData();
+                    } else {
+                        alert(data.error || 'Failed to upload photo');
+                    }
+                } catch (err) {
+                    alert('Error uploading photo');
+                }
+            };
+            fileInput.click();
         }
 
         function compressImage(file) {

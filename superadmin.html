@@ -902,7 +902,14 @@ table {
             if(tasksData.success) {
                 document.getElementById('tasksList').innerHTML = tasksData.tasks.length ? tasksData.tasks.map(t => `
                     <div class="item-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
-                        ${t.photoData ? `<div style="text-align: center;"><img src="${t.photoData}" style="max-height: 100px; border-radius: 5px; object-fit: contain;"></div>` : ''}
+                        ${t.photoData ? `<div style="text-align: center;">
+                            <a href="${t.photoData}" target="_blank" title="Click to view full photo"><img src="${t.photoData}" style="max-height: 120px; border-radius: 5px; object-fit: contain; width: 100%;"></a>
+                            <div style="margin-top: 5px; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;">
+                                <a href="${t.photoData}" target="_blank" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;"><i class="fas fa-external-link-alt"></i> Open</a>
+                                <a href="${t.photoData}" download="task_photo.jpg" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;"><i class="fas fa-download"></i> Download</a>
+                                <button type="button" class="btn btn-outline" onclick="deleteTaskPhoto('${t._id}')" style="padding: 4px 8px; font-size: 0.75rem; background: rgba(244, 67, 54, 0.1); color: #f44336; border-color: #f44336;"><i class="fas fa-trash"></i> Delete Photo</button>
+                            </div>
+                        </div>` : ''}
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div style="flex: 1;">
                                 <div style="font-weight:500;">${t.title}</div>
@@ -910,7 +917,6 @@ table {
                             </div>
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <span class="badge ${t.status === 'Pending' ? 'pending' : (t.status==='Done' ? 'done' : 'process')}">${t.status}</span>
-                                ${t.photoData ? `<button class="btn btn-outline" style="padding: 2px 5px; font-size: 0.7rem; color: #ff9800; border-color: #ff9800;" onclick="deleteTaskPhoto('${t._id}')" title="Remove Photo"><i class="fas fa-times-circle"></i></button>` : ''}
                                 <button class="btn btn-outline" style="padding: 2px 5px; font-size: 0.7rem;" onclick="editTask('${t._id}', '${t.title.replace(/'/g, "\'")}')" title="Edit"><i class="fas fa-edit"></i></button>
                                 <button class="btn btn-outline" style="padding: 2px 5px; font-size: 0.7rem; color: #ff4444; border-color: #ff4444;" onclick="deleteTask('${t._id}')" title="Delete"><i class="fas fa-trash"></i></button>
                             </div>
@@ -921,12 +927,24 @@ table {
 
             if(expensesData.success) {
                 document.getElementById('expensesList').innerHTML = expensesData.expenses.length ? expensesData.expenses.map(e => `
-                    <div class="item-row">
-                        <div>
-                            <div style="font-weight:500;">${e.item}</div>
-                            <div style="font-size:0.75rem; color:#888;">${new Date(e.date).toLocaleDateString()}</div>
+                    <div class="item-row" style="flex-direction: column; align-items: stretch; gap: 10px;">
+                        ${e.photoData ? `<div style="text-align: center;">
+                            <a href="${e.photoData}" target="_blank" title="Click to view full photo"><img src="${e.photoData}" style="max-height: 120px; border-radius: 5px; object-fit: contain; width: 100%;"></a>
+                            <div style="margin-top: 5px; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap;">
+                                <a href="${e.photoData}" target="_blank" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;"><i class="fas fa-external-link-alt"></i> Open</a>
+                                <a href="${e.photoData}" download="expense_photo.jpg" class="btn btn-outline" style="padding: 4px 8px; font-size: 0.75rem;"><i class="fas fa-download"></i> Download</a>
+                                <button type="button" class="btn btn-outline" onclick="deleteExpensePhoto('${e._id}')" style="padding: 4px 8px; font-size: 0.75rem; background: rgba(244, 67, 54, 0.1); color: #f44336; border-color: #f44336;"><i class="fas fa-trash"></i> Delete Photo</button>
+                            </div>
+                        </div>` : ''}
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-weight:500;">${e.item}</div>
+                                <div style="font-size:0.75rem; color:#888;">${new Date(e.date).toLocaleDateString()}</div>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="color:var(--danger); font-weight:bold;">₹${e.price}</span>
+                            </div>
                         </div>
-                        <span style="color:var(--danger); font-weight:bold;">₹${e.price}</span>
                     </div>
                 `).join('') : '<p class="empty-state">No expenses logged.</p>';
             }
@@ -1034,6 +1052,23 @@ table {
                     refreshMemberData();
                 } else {
                     alert(data.message);
+                }
+            } catch(err) {
+                alert('Error deleting photo');
+            }
+        }
+
+        async function deleteExpensePhoto(expenseId) {
+            if(!confirm("Are you sure you want to remove the photo from this expense?")) return;
+            try {
+                const res = await fetch(API_URL + '/api/portal/expenses/' + expenseId + '/photo', {
+                    method: 'DELETE'
+                });
+                const data = await res.json();
+                if(data.success) {
+                    refreshMemberData();
+                } else {
+                    alert(data.message || 'Failed to delete photo');
                 }
             } catch(err) {
                 alert('Error deleting photo');

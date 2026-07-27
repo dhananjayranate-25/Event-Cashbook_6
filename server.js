@@ -198,6 +198,7 @@ const portalExpenseSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'PortalUser', required: true },
     item: { type: String, required: true },
     price: { type: Number, required: true },
+    photoData: { type: String, default: null },
     date: { type: Date, default: Date.now }
 });
 const PortalExpense = mongoose.model('PortalExpense', portalExpenseSchema);
@@ -864,7 +865,7 @@ app.get('/api/portal/users', async (req, res) => {
 });
 
 // Update expense
-app.put('/api/portal/expenses/:id', async (req, res) => {
+app.put('/api/portal/expenses/:id', uploadCloudinary.single('photo'), async (req, res) => {
     try {
         const { item, price } = req.body;
         const numPrice = Number(price);
@@ -874,7 +875,12 @@ app.put('/api/portal/expenses/:id', async (req, res) => {
         
         const priceDiff = numPrice - oldExpense.price;
         
-        const updatedExpense = await PortalExpense.findByIdAndUpdate(req.params.id, { item, price: numPrice }, { new: true });
+        const updateData = { item, price: numPrice };
+        if (req.file) {
+            updateData.photoData = req.file.path;
+        }
+        
+        const updatedExpense = await PortalExpense.findByIdAndUpdate(req.params.id, updateData, { new: true });
         
         const user = await PortalUser.findById(oldExpense.userId);
         if (user) {
@@ -1096,7 +1102,7 @@ app.get('/api/portal/expenses/:userId', async (req, res) => {
 
 // Delete expense
 
-app.post('/api/portal/expenses', async (req, res) => {
+app.post('/api/portal/expenses', uploadCloudinary.single('photo'), async (req, res) => {
     try {
         const { userId, item, price } = req.body;
         const numPrice = Number(price);
@@ -1104,10 +1110,12 @@ app.post('/api/portal/expenses', async (req, res) => {
         const user = await PortalUser.findById(userId);
         if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
-
-
+        let photoData = null;
+        if (req.file) {
+            photoData = req.file.path;
+        }
         
-        const expense = new PortalExpense({ userId, item, price: numPrice });
+        const expense = new PortalExpense({ userId, item, price: numPrice, photoData });
         await expense.save();
         
         user.totalSpent += numPrice;
@@ -1115,6 +1123,27 @@ app.post('/api/portal/expenses', async (req, res) => {
         await user.save();
         
         res.json({ success: true, expense, user });
+    } catch(err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.post('/api/portal/expenses/:id/photo', uploadCloudinary.single('photo'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+        const photoData = req.file.path;
+        const expense = await PortalExpense.findByIdAndUpdate(req.params.id, { photoData }, { new: true });
+        res.json({ success: true, photoData, expense });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: 'Failed to upload expense photo' });
+    }
+});
+
+app.delete('/api/portal/expenses/:id/photo', async (req, res) => {
+    try {
+        const expense = await PortalExpense.findByIdAndUpdate(req.params.id, { photoData: null }, { new: true });
+        res.json({ success: true, expense });
     } catch(err) {
         res.status(500).json({ success: false, message: err.message });
     }
