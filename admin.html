@@ -253,6 +253,12 @@
                         </div>
                     </div>
                 
+                <div style="margin-top: 15px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.4);">
+                    <label style="color: #ffd700; font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px;"><i class="fas fa-heading"></i> Website Top Header Photo (वेबसाइटचा मुख्य हेडर व सर्व पोस्टर्ससाठी हेडर)</label>
+                    <p style="color: #ccc; font-size: 12px; margin-top: 0; margin-bottom: 10px;">येथून हेडर बदलल्यास होम पेजचा मुख्य हेडर तसेच देणगी, शेअर करा, वर्गणी आभार, महाप्रसाद निमंत्रण आणि आगमन सोहळा या सर्व पोस्टर्समधील हेडर बॅनर त्याच साईजमध्ये बदलला जाईल.</p>
+                    <input type="file" id="topHeaderBannerInput" accept="image/*" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed #ffd700; color: var(--text-primary); cursor: pointer; width: 100%;">
+                </div>
+
                 <div style="margin-top: 15px;">
                     <label style="color: var(--text-secondary); font-size: 12px; display: block; margin-bottom: 5px;">Home Page Photo (मुख्य फोटो)</label>
                     <input type="file" id="heroBannerInput" accept="image/*" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed var(--glass-border); color: var(--text-primary); cursor: pointer; width: 100%;">
@@ -960,6 +966,15 @@
                     const url = await uploadFile(file);
                     settingsToSave.push({ key: 'heroBannerImage', value: url });
                     fileInput.value = '';
+                }
+
+                // Upload Top Header Banner Image if selected
+                const topHeaderInput = document.getElementById('topHeaderBannerInput');
+                if (topHeaderInput && topHeaderInput.files && topHeaderInput.files.length > 0) {
+                    const file = topHeaderInput.files[0];
+                    const url = await uploadFile(file);
+                    settingsToSave.push({ key: 'topHeaderBannerImage', value: url });
+                    topHeaderInput.value = '';
                 }
 
                 for (const setting of settingsToSave) {

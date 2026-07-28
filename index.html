@@ -107,7 +107,7 @@
             <div class="main-banner" style="padding: 0;">
                 <div id="displayEstYear" style="background-color: #ff8c00; color: white; text-align: center; font-size: clamp(12px, 3vw, 16px); font-weight: bold; padding: 5px 0; margin: 0; width: 100%;">स्थापना - २०१९ वर्ष - ८ वे</div>
                 <!-- The new logo from uploads -->
-                <img src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img" fetchpriority="high" decoding="async">
+                <img id="mainTopHeaderImg" src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img" fetchpriority="high" decoding="async">
             </div>
             <nav class="custom-navbar">
                 <div class="hamburger" id="mobileMenuBtn" style="display: none; flex-direction: column; cursor: pointer; gap: 5px; padding: 10px;">
@@ -989,6 +989,12 @@
                     }
                     heroImg.style.display = 'block';
                 }
+            }
+            
+            const topHeaderElem = document.getElementById('mainTopHeaderImg');
+            if (topHeaderElem && (settings.topHeaderBannerImage || settings.headerBannerImage)) {
+                const hImg = settings.topHeaderBannerImage || settings.headerBannerImage;
+                topHeaderElem.src = (hImg.startsWith('data:image') || hImg.startsWith('http')) ? hImg : ('uploads/' + hImg);
             }
             
             // Populate Donation Details
@@ -2112,7 +2118,12 @@ table {
         await new Promise((resolve) => {
             mandalPoster.onload = resolve;
             mandalPoster.onerror = resolve;
-            mandalPoster.src = 'logo/Receipt.jpeg'; 
+            const customHeader = (window.appSettings && (window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
+            if (customHeader) {
+                mandalPoster.src = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
+            } else {
+                mandalPoster.src = 'logo/Receipt.jpeg'; 
+            }
             headerWrapper.appendChild(mandalPoster);
         });
         
@@ -2416,7 +2427,12 @@ table {
         await new Promise((resolve) => {
             mandalPoster.onload = resolve;
             mandalPoster.onerror = resolve;
-            mandalPoster.src = 'logo/Receipt.jpeg'; 
+            const customHeader = (window.appSettings && (window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
+            if (customHeader) {
+                mandalPoster.src = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
+            } else {
+                mandalPoster.src = 'logo/Receipt.jpeg'; 
+            }
             headerWrapper.appendChild(mandalPoster);
         });
         
