@@ -3205,6 +3205,11 @@ footer::after {
     }
     .mobile-header-only {
         display: block !important;
+        border: 2px solid #ffd700 !important;
+        border-radius: 6px;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.45);
+        margin: 4px auto !important;
+        width: calc(100% - 8px) !important;
     }
 }
 
@@ -3384,9 +3389,13 @@ footer::after {
     }
 
     .top-banner-img {
-        width: 100%;
+        width: calc(100% - 8px);
         height: 150px;
         object-fit: fill;
+        border: 2px solid #ffd700;
+        border-radius: 6px;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.45);
+        margin: 4px auto;
     }
     
     #displayEstYear {
