@@ -526,12 +526,14 @@ app.get('/api/committee', async (req, res) => {
                 if (m.mobile && m.mobile.trim().length >= 10 && (u.username || '').includes(m.mobile.trim())) return true;
                 return false;
             });
-            if (matchedUser && matchedUser.photoUrl !== undefined) {
+            if (matchedUser) {
                 const userPhoto = matchedUser.photoUrl || '';
-                if (m.photoUrl !== userPhoto) {
+                if (!m.photoUrl && userPhoto) {
                     m.photoUrl = userPhoto;
                     m.base64Data = '';
                     await CommitteeMember.findByIdAndUpdate(m._id, { photoUrl: userPhoto, base64Data: '' });
+                } else if (m.photoUrl && !userPhoto) {
+                    await PortalUser.findByIdAndUpdate(matchedUser._id, { photoUrl: m.photoUrl });
                 }
             }
         }
@@ -562,6 +564,19 @@ app.post('/api/committee', (req, res, next) => {
         
         if (req.file) {
             updateData.photoUrl = req.file.path;
+            try {
+                const users = await PortalUser.find({});
+                const cleanStr = (s) => (s || '').trim().toLowerCase().replace(/\s+/g, ' ');
+                const cName = cleanStr(name);
+                for (let u of users) {
+                    const uName = cleanStr(u.name);
+                    if ((uName === cName && uName.length > 0) || (mobile && mobile.trim().length >= 10 && (u.username || '').includes(mobile.trim()))) {
+                        await PortalUser.findByIdAndUpdate(u._id, { photoUrl: req.file.path });
+                    }
+                }
+            } catch (syncErr) {
+                console.error('Error syncing photo to PortalUser:', syncErr);
+            }
         }
 
         const member = await CommitteeMember.findOneAndUpdate(
