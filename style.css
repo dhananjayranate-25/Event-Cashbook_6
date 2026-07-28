@@ -3195,6 +3195,19 @@ footer::after {
     margin: 0;
 }
 
+.mobile-header-only {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .desktop-header-only {
+        display: none !important;
+    }
+    .mobile-header-only {
+        display: block !important;
+    }
+}
+
 @media (min-width: 769px) {
     .top-banner-img {
         height: 190px;

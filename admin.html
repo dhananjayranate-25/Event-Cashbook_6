@@ -253,10 +253,16 @@
                         </div>
                     </div>
                 
-                <div style="margin-top: 15px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.4);">
-                    <label style="color: #ffd700; font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px;"><i class="fas fa-heading"></i> Website Top Header Photo (वेबसाइटचा मुख्य हेडर व सर्व पोस्टर्ससाठी हेडर)</label>
-                    <p style="color: #ccc; font-size: 12px; margin-top: 0; margin-bottom: 10px;">येथून हेडर बदलल्यास होम पेजचा मुख्य हेडर तसेच देणगी, शेअर करा, वर्गणी आभार, महाप्रसाद निमंत्रण आणि आगमन सोहळा या सर्व पोस्टर्समधील हेडर बॅनर त्याच साईजमध्ये बदलला जाईल.</p>
-                    <input type="file" id="topHeaderBannerInput" accept="image/*" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed #ffd700; color: var(--text-primary); cursor: pointer; width: 100%;">
+                <div style="margin-top: 15px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.5);">
+                    <label style="color: #3b82f6; font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px;"><i class="fas fa-desktop"></i> 1. Website Header Photo (फक्त कम्प्युटर / डेस्कटॉप वेबसाइट व्ह्यूसाठी मुख्य हेडर)</label>
+                    <p style="color: #ccc; font-size: 12px; margin-top: 0; margin-bottom: 10px;">येथे अपलोड केलेला हेडर फोटो फक्त आणि फक्त वेबसाइटच्या (Desktop/PC) मुख्य हेडरला दिसेल.</p>
+                    <input type="file" id="websiteHeaderBannerInput" accept="image/*" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed #3b82f6; color: var(--text-primary); cursor: pointer; width: 100%;">
+                </div>
+
+                <div style="margin-top: 15px; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(255, 215, 0, 0.5);">
+                    <label style="color: #ffd700; font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px;"><i class="fas fa-mobile-alt"></i> 2. Mobile View Header & Posters Photo (मोबाईल हेडर व सर्व पोस्टर्ससाठी हेडर फोटो)</label>
+                    <p style="color: #ccc; font-size: 12px; margin-top: 0; margin-bottom: 10px;">येथे अपलोड केलेला हेडर फोटो मोबाईल व्ह्यूचा मुख्य हेडर तसेच देणगी, शेअर करा, वर्गणी आभार, महाप्रसाद निमंत्रण आणि आगमन सोहळा या सर्व ५ पोस्टर्समध्ये दिसेल आणि खाली 'अधिकृत वेबसाईट' पूर्वीसारखीच जशीच्या तशी येईल.</p>
+                    <input type="file" id="posterHeaderBannerInput" accept="image/*" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed #ffd700; color: var(--text-primary); cursor: pointer; width: 100%;">
                 </div>
 
                 <div style="margin-top: 15px;">
@@ -968,13 +974,20 @@
                     fileInput.value = '';
                 }
 
-                // Upload Top Header Banner Image if selected
-                const topHeaderInput = document.getElementById('topHeaderBannerInput');
-                if (topHeaderInput && topHeaderInput.files && topHeaderInput.files.length > 0) {
-                    const file = topHeaderInput.files[0];
-                    const url = await uploadFile(file);
-                    settingsToSave.push({ key: 'topHeaderBannerImage', value: url });
-                    topHeaderInput.value = '';
+                // Upload Website Header Banner Image if selected
+                const webHeaderInput = document.getElementById('websiteHeaderBannerInput');
+                if (webHeaderInput && webHeaderInput.files && webHeaderInput.files.length > 0) {
+                    const url = await uploadFile(webHeaderInput.files[0]);
+                    settingsToSave.push({ key: 'websiteHeaderImage', value: url });
+                    webHeaderInput.value = '';
+                }
+
+                // Upload Mobile View & Posters Header Image if selected
+                const posterHeaderInput = document.getElementById('posterHeaderBannerInput');
+                if (posterHeaderInput && posterHeaderInput.files && posterHeaderInput.files.length > 0) {
+                    const url = await uploadFile(posterHeaderInput.files[0]);
+                    settingsToSave.push({ key: 'posterHeaderImage', value: url });
+                    posterHeaderInput.value = '';
                 }
 
                 for (const setting of settingsToSave) {

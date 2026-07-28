@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://shivsrushti-boyz.onrender.com/">
 <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=26">
+    <link rel="stylesheet" href="style.css?v=27">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
@@ -106,8 +106,10 @@
         <header class="custom-header">
             <div class="main-banner" style="padding: 0;">
                 <div id="displayEstYear" style="background-color: #ff8c00; color: white; text-align: center; font-size: clamp(12px, 3vw, 16px); font-weight: bold; padding: 5px 0; margin: 0; width: 100%;">स्थापना - २०१९ वर्ष - ८ वे</div>
-                <!-- The new logo from uploads -->
-                <img id="mainTopHeaderImg" src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img" fetchpriority="high" decoding="async">
+                <!-- Desktop Website Header Image -->
+                <img id="desktopTopHeaderImg" src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img desktop-header-only" fetchpriority="high" decoding="async">
+                <!-- Mobile View Header Image -->
+                <img id="mobileTopHeaderImg" src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img mobile-header-only" fetchpriority="high" decoding="async">
             </div>
             <nav class="custom-navbar">
                 <div class="hamburger" id="mobileMenuBtn" style="display: none; flex-direction: column; cursor: pointer; gap: 5px; padding: 10px;">
@@ -991,10 +993,19 @@
                 }
             }
             
-            const topHeaderElem = document.getElementById('mainTopHeaderImg');
-            if (topHeaderElem && (settings.topHeaderBannerImage || settings.headerBannerImage)) {
-                const hImg = settings.topHeaderBannerImage || settings.headerBannerImage;
-                topHeaderElem.src = (hImg.startsWith('data:image') || hImg.startsWith('http')) ? hImg : ('uploads/' + hImg);
+            const desktopElem = document.getElementById('desktopTopHeaderImg');
+            if (desktopElem) {
+                const deskImg = settings.websiteHeaderImage || settings.topHeaderBannerImage || settings.headerBannerImage;
+                if (deskImg) {
+                    desktopElem.src = (deskImg.startsWith('data:image') || deskImg.startsWith('http')) ? deskImg : ('uploads/' + deskImg);
+                }
+            }
+            const mobileElem = document.getElementById('mobileTopHeaderImg');
+            if (mobileElem) {
+                const mobImg = settings.posterHeaderImage || settings.topHeaderBannerImage || settings.websiteHeaderImage || settings.headerBannerImage;
+                if (mobImg) {
+                    mobileElem.src = (mobImg.startsWith('data:image') || mobImg.startsWith('http')) ? mobImg : ('uploads/' + mobImg);
+                }
             }
             
             // Populate Donation Details
@@ -2118,7 +2129,7 @@ table {
         await new Promise((resolve) => {
             mandalPoster.onload = resolve;
             mandalPoster.onerror = resolve;
-            const customHeader = (window.appSettings && (window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
+            const customHeader = (window.appSettings && (window.appSettings.posterHeaderImage || window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
             if (customHeader) {
                 mandalPoster.src = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
             } else {
@@ -2427,7 +2438,7 @@ table {
         await new Promise((resolve) => {
             mandalPoster.onload = resolve;
             mandalPoster.onerror = resolve;
-            const customHeader = (window.appSettings && (window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
+            const customHeader = (window.appSettings && (window.appSettings.posterHeaderImage || window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
             if (customHeader) {
                 mandalPoster.src = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
             } else {
