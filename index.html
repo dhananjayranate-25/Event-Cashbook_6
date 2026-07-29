@@ -2059,7 +2059,34 @@ table {
     let cachedDonationCanvas = null;
     let cachedCustomCanvases = { vargani: null, mahaprasad: null, aagman: null };
 
+    function isInAppBrowser() {
+        const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+        return /WhatsApp|Instagram|FBAN|FBAV|LinkedIn|Line|Twitter|Telegram/i.test(ua);
+    }
+
+    async function fetchImageAsBase64(url) {
+        if (!url) return '';
+        if (url.startsWith('data:image')) return url;
+        try {
+            const separator = url.includes('?') ? '&' : '?';
+            const cacheBusterUrl = url + separator + 'cors_ignore_cache=' + Date.now();
+            const res = await fetch(cacheBusterUrl, { mode: 'cors', credentials: 'omit' });
+            if (!res.ok) throw new Error('Network res not ok');
+            const blob = await res.blob();
+            return await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = () => resolve(url);
+                reader.readAsDataURL(blob);
+            });
+        } catch (err) {
+            console.warn('Failed to fetch image as base64, falling back to raw url:', url, err);
+            return url;
+        }
+    }
+
     async function captureDonationPoster() {
+        cachedDonationCanvas = null;
         if (cachedDonationCanvas) return cachedDonationCanvas;
         
         if (typeof html2canvas === 'undefined') {
@@ -2121,6 +2148,7 @@ table {
         headerWrapper.style.zIndex = '10';
         
         const mandalPoster = document.createElement('img');
+        mandalPoster.crossOrigin = 'anonymous';
         mandalPoster.style.width = '100%';
         mandalPoster.style.height = '100%';
         mandalPoster.style.objectFit = 'fill';
@@ -2130,15 +2158,17 @@ table {
         mandalPoster.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.45)';
         mandalPoster.style.boxSizing = 'border-box';
 
+        let headerUrl = 'logo/Receipt.jpeg';
+        const customHeader = (window.appSettings && (window.appSettings.posterHeaderImage || window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
+        if (customHeader) {
+            headerUrl = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
+        }
+        const headerBase64 = await fetchImageAsBase64(headerUrl);
+
         await new Promise((resolve) => {
             mandalPoster.onload = resolve;
             mandalPoster.onerror = resolve;
-            const customHeader = (window.appSettings && (window.appSettings.posterHeaderImage || window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
-            if (customHeader) {
-                mandalPoster.src = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
-            } else {
-                mandalPoster.src = 'logo/Receipt.jpeg'; 
-            }
+            mandalPoster.src = headerBase64 || headerUrl;
             headerWrapper.appendChild(mandalPoster);
         });
         
@@ -2191,7 +2221,12 @@ table {
         if (qrImgDOM && qrImgDOM.src) {
             qrDataUrl = qrImgDOM.src;
         }
-        qrDataUrl = qrDataUrl + (qrDataUrl.includes('?') ? '&' : '?') + 'not-from-cache-please';
+        const qrBase64 = await fetchImageAsBase64(qrDataUrl);
+        if (qrBase64) {
+            qrDataUrl = qrBase64;
+        } else {
+            qrDataUrl = qrDataUrl + (qrDataUrl.includes('?') ? '&' : '?') + 'not-from-cache-please=' + Date.now();
+        }
 
         const columnsWrapper = document.createElement('div');
         columnsWrapper.style.display = 'flex';
@@ -2435,6 +2470,7 @@ table {
         headerWrapper.style.zIndex = '10';
         
         const mandalPoster = document.createElement('img');
+        mandalPoster.crossOrigin = 'anonymous';
         mandalPoster.style.width = '100%';
         mandalPoster.style.height = '100%';
         mandalPoster.style.objectFit = 'fill';
@@ -2444,15 +2480,17 @@ table {
         mandalPoster.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.45)';
         mandalPoster.style.boxSizing = 'border-box';
 
+        let headerUrl = 'logo/Receipt.jpeg';
+        const customHeader = (window.appSettings && (window.appSettings.posterHeaderImage || window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
+        if (customHeader) {
+            headerUrl = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
+        }
+        const headerBase64 = await fetchImageAsBase64(headerUrl);
+
         await new Promise((resolve) => {
             mandalPoster.onload = resolve;
             mandalPoster.onerror = resolve;
-            const customHeader = (window.appSettings && (window.appSettings.posterHeaderImage || window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
-            if (customHeader) {
-                mandalPoster.src = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
-            } else {
-                mandalPoster.src = 'logo/Receipt.jpeg'; 
-            }
+            mandalPoster.src = headerBase64 || headerUrl;
             headerWrapper.appendChild(mandalPoster);
         });
         
@@ -2624,26 +2662,42 @@ table {
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         
         try {
-            let blob;
+            try {
+                const res = await fetch('/api/settings?_=' + Date.now(), { cache: 'no-store' });
+                const result = await res.json();
+                if (result.success && result.data) { window.appSettings = result.data; try { appSettings = result.data; } catch(e){} }
+            } catch(e) {}
+
+            let blob, dataUrl;
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
                 try {
-                    blob = dataURItoBlob(window.appSettings.donationPosterImage);
+                    dataUrl = window.appSettings.donationPosterImage;
+                    blob = dataURItoBlob(dataUrl);
                 } catch(e) {
                     console.error("Blob conversion error", e);
                     const canvas = await captureDonationPoster();
+                    dataUrl = canvas.toDataURL('image/png', 1.0);
                     blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
                 }
             } else {
                 const canvas = await captureDonationPoster();
+                dataUrl = canvas.toDataURL('image/png', 1.0);
                 blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
             }
             const link = document.createElement('a');
             link.download = 'Donation_Poster.png';
             link.href = URL.createObjectURL(blob);
+            document.body.appendChild(link);
             link.click();
+            document.body.removeChild(link);
+
+            if (isInAppBrowser()) {
+                openLightbox(dataUrl || URL.createObjectURL(blob));
+                alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. जर डायरेक्ट डाउनलोड झाले नसेल, तर स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि Save Image निवडा! किंवा वरच्या 3 डॉट्स (⋮) वरून Open in Chrome करा.');
+            }
         } catch (error) {
             console.error('Error downloading image:', error);
-            alert('पोस्टर तयार करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
+            alert('पोस्टर तयार करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा किंवा Google Chrome ब्राउझरमध्ये उघडा.');
         } finally {
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
         }
@@ -2654,7 +2708,13 @@ table {
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         
         try {
-            let file;
+            try {
+                const res = await fetch('/api/settings?_=' + Date.now(), { cache: 'no-store' });
+                const result = await res.json();
+                if (result.success && result.data) { window.appSettings = result.data; try { appSettings = result.data; } catch(e){} }
+            } catch(e) {}
+
+            let file, dataUrl;
             const orgName = (typeof appSettings !== 'undefined' && appSettings.pdfCustomSettings && appSettings.pdfCustomSettings.orgName) ? appSettings.pdfCustomSettings.orgName : 'मंडळ';
             let customText = (typeof appSettings !== 'undefined' && appSettings.donationPosterText) ? appSettings.donationPosterText : `🌺 श्री गणेशाय नमः 🌺\n\nश्री गणेशोत्सव हा आपल्या सर्वांचा उत्सव आहे. या उत्सवाचे आयोजन अधिक भव्य, दिव्य आणि यशस्वी करण्यासाठी आपल्या सहकार्याची आम्हाला मनापासून अपेक्षा आहे.\n\nकृपया आपल्या सार्वजनिक गणेश उत्सव मंडळासाठी किमान ₹1111/- (एक हजार एकशे अकरा रुपये) वर्गणी/देणगी देऊन सहकार्य करा.\nआपण वर दिलेल्या QR कोड स्कॅन करून / UPI ID किंवा फोन नंबर द्वारे सहज देणगी देऊ शकता.\n\nआपले प्रत्येक योगदान आपल्या मंडळाचा गणेशोत्सव अधिक उत्साहाने, भक्तिभावाने आणि दिमाखात साजरा करण्यासाठी मोलाचे ठरेल. 🙏🌸\n\n॥ गणपती बाप्पा मोरया ॥\n॥ मंगलमूर्ती मोरया ॥\n॥ हर हर महादेव ॥`;
             
@@ -2679,16 +2739,19 @@ table {
 
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
                 try {
-                    const blob = dataURItoBlob(window.appSettings.donationPosterImage);
+                    dataUrl = window.appSettings.donationPosterImage;
+                    const blob = dataURItoBlob(dataUrl);
                     file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
                 } catch(e) {
                     console.error("Blob conversion error", e);
                     const canvas = await captureDonationPoster();
+                    dataUrl = canvas.toDataURL('image/png', 1.0);
                     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
                     file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
                 }
             } else {
                 const canvas = await captureDonationPoster();
+                dataUrl = canvas.toDataURL('image/png', 1.0);
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
                 file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
             }
@@ -2702,17 +2765,27 @@ table {
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share(shareData);
             } else {
-                // Download fallback
+                // Download fallback and open lightbox for in-app browser workaround
                 const link = document.createElement('a');
                 link.download = 'Donation_Poster.png';
-                link.href = URL.createObjectURL(file);
+                link.href = dataUrl || URL.createObjectURL(file);
+                document.body.appendChild(link);
                 link.click();
-                alert('तुमच्या डिव्हाइसवर डायरेक्ट इमेज शेअरिंग सपोर्टेड नाही. इमेज डाउनलोड झाली आहे, ती तुम्ही स्वतः शेअर करू शकता.');
+                document.body.removeChild(link);
+                if (dataUrl) openLightbox(dataUrl);
+                alert('तुमच्या डिव्हाइसवर (किंवा इन-ॲप ब्राउझरमध्ये) डायरेक्ट इमेज शेअरिंग सपोर्टेड नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस (दाबून धरून) थेट Save किंवा Share करू शकता!');
             }
         } catch (shareErr) {
             console.log('Share action was cancelled or failed:', shareErr);
             if (shareErr.name !== 'AbortError') {
-                alert('तुमच्या डिव्हाइसवर डायरेक्ट शेअरिंगमध्ये तांत्रिक अडचण आली. कृपया डाउनलोड बटण वापरा.');
+                const link = document.createElement('a');
+                link.download = 'Donation_Poster.png';
+                link.href = dataUrl || URL.createObjectURL(file);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                if (dataUrl) openLightbox(dataUrl);
+                alert('तुमच्या डिव्हाइसवर डायरेक्ट शेअरिंगमध्ये अडचण आली. स्क्रीनवर पोस्टर उघडले आहे, त्यावर लॉंग-प्रेस करून थेट Share Image करा!');
             }
         } finally {
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
@@ -2740,6 +2813,7 @@ table {
             }
 
             const canvas = await captureCustomPoster(type);
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
             canvas.toBlob(async (blob) => {
                 try {
                     const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
@@ -2783,12 +2857,15 @@ table {
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share(shareData);
                     } else {
-                        // Download fallback
+                        // Download fallback and lightbox preview
                         const link = document.createElement('a');
                         link.download = filename;
-                        link.href = canvas.toDataURL('image/png', 1.0);
+                        link.href = dataUrl;
+                        document.body.appendChild(link);
                         link.click();
-                        alert('तुमच्या डिव्हाइसवर डायरेक्ट इमेज शेअरिंग सपोर्टेड नाही. इमेज डाउनलोड झाली आहे, ती तुम्ही स्वतः शेअर करू शकता.');
+                        document.body.removeChild(link);
+                        openLightbox(dataUrl);
+                        alert('तुमच्या डिव्हाइसवर (किंवा इन-ॲप ब्राउझरमध्ये) डायरेक्ट इमेज शेअरिंग सपोर्टेड नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस (दाबून धरून) थेट Save किंवा Share करू शकता!');
                     }
                 } catch (shareErr) {
                     console.log('Share action was cancelled or failed:', shareErr);
@@ -2796,9 +2873,12 @@ table {
                         const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
                         const link = document.createElement('a');
                         link.download = filename;
-                        link.href = canvas.toDataURL('image/png', 1.0);
+                        link.href = dataUrl;
+                        document.body.appendChild(link);
                         link.click();
-                        alert('तुमच्या डिव्हाइसवर डायरेक्ट शेअरिंगमध्ये तांत्रिक अडचण आली. इमेज डाउनलोड झाली आहे, ती तुम्ही मॅन्युअली शेअर करू शकता.');
+                        document.body.removeChild(link);
+                        openLightbox(dataUrl);
+                        alert('तुमच्या डिव्हाइसवर डायरेक्ट शेअरिंगमध्ये अडचण आली. स्क्रीनवर पोस्टर उघडले आहे, त्यावर लॉंग-प्रेस करून थेट Share Image करा!');
                     }
                 } finally {
                     if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
@@ -2807,7 +2887,7 @@ table {
         } catch (err) {
             console.error('Error sharing image:', err);
             if (err.name === 'SecurityError' || (err.message && err.message.includes('Tainted'))) {
-                alert('सिक्युरिटी एरर: तुम्ही ही फाईल थेट फोल्डरमधून उघडली आहे, त्यामुळे ब्राउझर पोस्टर तयार करू शकत नाही. कृपया होस्ट केलेल्या लिंकवरून उघडा.');
+                alert('सिक्युरिटी एरर: तुम्ही ही फाईल थेट फोल्डरमधून उघडली आहे किंवा क्रॉस-डोमेन फोटो कॅच झाला आहे. कृपया पेज रीफ्रेश करा आणि पुन्हा प्रयत्न करा.');
             } else {
                 alert('शेअर करताना त्रुटी आली: ' + (err.message || err));
             }
