@@ -3469,12 +3469,14 @@ footer::after {
     }
     
     .nav-links a {
-        font-size: 14px;
-        padding: 12px;
+        font-size: 18px !important;
+        color: #ffffff !important;
+        padding: 14px 15px;
         display: block;
         width: 100%;
         text-align: left;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-weight: 600 !important;
     }
 
     .nav-links a.nav-donate-btn, #nav-donate, #nav-login {
@@ -4969,14 +4971,15 @@ body.mobile-hishob-navbar .nav-links.active {
 }
 
 body.mobile-hishob-navbar .nav-links.active a {
-    color: #cccccc !important;
-    font-size: 20px !important;
+    color: #ffffff !important;
+    font-size: 22px !important;
     padding: 18px 15px !important;
     text-decoration: none !important;
     width: 100% !important;
     text-align: left !important;
-    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
     display: block !important;
+    font-weight: 600 !important;
 }
 
 body.mobile-hishob-navbar .nav-links.active a:last-child {
