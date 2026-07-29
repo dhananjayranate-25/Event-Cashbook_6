@@ -2063,6 +2063,7 @@ table {
     <script>
     let cachedDonationCanvas = null;
     let cachedCustomCanvases = { vargani: null, mahaprasad: null, aagman: null };
+    let preFetchedImageCache = {};
 
     function isInAppBrowser() {
         const ua = navigator.userAgent || navigator.vendor || window.opera || '';
@@ -2072,27 +2073,49 @@ table {
     async function fetchImageAsBase64(url) {
         if (!url) return '';
         if (url.startsWith('data:image')) return url;
+        if (preFetchedImageCache[url]) return preFetchedImageCache[url];
         try {
             const separator = url.includes('?') ? '&' : '?';
             const cacheBusterUrl = url + separator + 'cors_ignore_cache=' + Date.now();
             const res = await fetch(cacheBusterUrl, { mode: 'cors', credentials: 'omit' });
             if (!res.ok) throw new Error('Network res not ok');
             const blob = await res.blob();
-            return await new Promise((resolve) => {
+            const base64 = await new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result);
                 reader.onerror = () => resolve(url);
                 reader.readAsDataURL(blob);
             });
+            preFetchedImageCache[url] = base64;
+            return base64;
         } catch (err) {
             console.warn('Failed to fetch image as base64, falling back to raw url:', url, err);
             return url;
         }
     }
 
-    async function captureDonationPoster() {
-        cachedDonationCanvas = null;
-        if (cachedDonationCanvas) return cachedDonationCanvas;
+    // Automatically pre-render canvases silently after page load to prevent mobile browser User Gesture timeout errors during share/download!
+    window.addEventListener('load', () => {
+        setTimeout(async () => {
+            try {
+                if (typeof loadPDFLibraries === 'function') await loadPDFLibraries();
+                const s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : {}) || {};
+                if (s && s.pdfCustomSettings && s.pdfCustomSettings.headerLogoUrl) {
+                    await fetchImageAsBase64(s.pdfCustomSettings.headerLogoUrl);
+                }
+                await captureDonationPoster();
+                await captureCustomPoster('vargani');
+                await captureCustomPoster('mahaprasad');
+                await captureCustomPoster('aagman');
+                console.log('All posters pre-rendered in background for zero-latency mobile sharing!');
+            } catch(e) {
+                console.log('Background poster pre-render info:', e);
+            }
+        }, 2000);
+    });
+
+    async function captureDonationPoster(forceRefresh = false) {
+        if (!forceRefresh && cachedDonationCanvas) return cachedDonationCanvas;
         
         if (typeof html2canvas === 'undefined') {
             await loadPDFLibraries();
@@ -2413,8 +2436,8 @@ table {
         return canvas;
     }
 
-    async function captureCustomPoster(type) {
-        // Always generate a fresh canvas to reflect latest saved settings
+    async function captureCustomPoster(type, forceRefresh = false) {
+        if (!forceRefresh && cachedCustomCanvases[type]) return cachedCustomCanvases[type];
         
         if (typeof html2canvas === 'undefined') {
             await loadPDFLibraries();
@@ -2667,27 +2690,20 @@ table {
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         
         try {
-            try {
-                const res = await fetch('/api/settings?_=' + Date.now(), { cache: 'no-store' });
-                const result = await res.json();
-                if (result.success && result.data) { window.appSettings = result.data; try { appSettings = result.data; } catch(e){} }
-            } catch(e) {}
-
             let blob, dataUrl;
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
                 try {
                     dataUrl = window.appSettings.donationPosterImage;
                     blob = dataURItoBlob(dataUrl);
                 } catch(e) {
-                    console.error("Blob conversion error", e);
                     const canvas = await captureDonationPoster();
                     dataUrl = canvas.toDataURL('image/png', 1.0);
-                    blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                    blob = dataURItoBlob(dataUrl);
                 }
             } else {
                 const canvas = await captureDonationPoster();
                 dataUrl = canvas.toDataURL('image/png', 1.0);
-                blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                blob = dataURItoBlob(dataUrl);
             }
             const link = document.createElement('a');
             link.download = 'Donation_Poster.png';
@@ -2698,11 +2714,11 @@ table {
 
             if (isInAppBrowser()) {
                 openLightbox(dataUrl || URL.createObjectURL(blob));
-                alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. जर डायरेक्ट डाउनलोड झाले नसेल, तर स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि Save Image निवडा! किंवा वरच्या 3 डॉट्स (⋮) वरून Open in Chrome करा.');
+                alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. जर डायरेक्ट डाउनलोड झाले नसेल, तर स्क्रीनवर आलेला फोटो लॉंग-प्रेस करा (दाबून धरा) आणि Save Image निवडा! किंवा वरच्या 3 डॉट्स (⋮) वरून Open in Chrome करा.');
             }
         } catch (error) {
             console.error('Error downloading image:', error);
-            alert('पोस्टर तयार करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा किंवा Google Chrome ब्राउझरमध्ये उघडा.');
+            alert('पोस्टर डाउनलोड करताना त्रुटी आली. कृपया Google Chrome ब्राउझरमध्ये उघडा आणि पुन्हा प्रयत्न करा.');
         } finally {
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
         }
@@ -2713,12 +2729,6 @@ table {
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         
         try {
-            try {
-                const res = await fetch('/api/settings?_=' + Date.now(), { cache: 'no-store' });
-                const result = await res.json();
-                if (result.success && result.data) { window.appSettings = result.data; try { appSettings = result.data; } catch(e){} }
-            } catch(e) {}
-
             let file, dataUrl;
             const orgName = (typeof appSettings !== 'undefined' && appSettings.pdfCustomSettings && appSettings.pdfCustomSettings.orgName) ? appSettings.pdfCustomSettings.orgName : 'मंडळ';
             let customText = (typeof appSettings !== 'undefined' && appSettings.donationPosterText) ? appSettings.donationPosterText : `🌺 श्री गणेशाय नमः 🌺\n\nश्री गणेशोत्सव हा आपल्या सर्वांचा उत्सव आहे. या उत्सवाचे आयोजन अधिक भव्य, दिव्य आणि यशस्वी करण्यासाठी आपल्या सहकार्याची आम्हाला मनापासून अपेक्षा आहे.\n\nकृपया आपल्या सार्वजनिक गणेश उत्सव मंडळासाठी किमान ₹1111/- (एक हजार एकशे अकरा रुपये) वर्गणी/देणगी देऊन सहकार्य करा.\nआपण वर दिलेल्या QR कोड स्कॅन करून / UPI ID किंवा फोन नंबर द्वारे सहज देणगी देऊ शकता.\n\nआपले प्रत्येक योगदान आपल्या मंडळाचा गणेशोत्सव अधिक उत्साहाने, भक्तिभावाने आणि दिमाखात साजरा करण्यासाठी मोलाचे ठरेल. 🙏🌸\n\n॥ गणपती बाप्पा मोरया ॥\n॥ मंगलमूर्ती मोरया ॥\n॥ हर हर महादेव ॥`;
@@ -2740,7 +2750,7 @@ table {
 तेजस वर्पे - प्रसिद्धी प्रमुख
 वैभव सांगळे - कार्यकारी सदस्य
 निलेश कदम - कार्यकारी सदस्य
-शुभम पेटकर - कार्यकारी सदस्य`
+शुभम पेटकर - कार्यकारी सदस्य`;
 
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
                 try {
@@ -2748,16 +2758,15 @@ table {
                     const blob = dataURItoBlob(dataUrl);
                     file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
                 } catch(e) {
-                    console.error("Blob conversion error", e);
                     const canvas = await captureDonationPoster();
                     dataUrl = canvas.toDataURL('image/png', 1.0);
-                    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                    const blob = dataURItoBlob(dataUrl);
                     file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
                 }
             } else {
                 const canvas = await captureDonationPoster();
                 dataUrl = canvas.toDataURL('image/png', 1.0);
-                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png', 1.0));
+                const blob = dataURItoBlob(dataUrl);
                 file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
             }
 
@@ -2778,67 +2787,61 @@ table {
                 link.click();
                 document.body.removeChild(link);
                 if (dataUrl) openLightbox(dataUrl);
-                alert('तुमच्या डिव्हाइसवर (किंवा इन-ॲप ब्राउझरमध्ये) डायरेक्ट इमेज शेअरिंग सपोर्टेड नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस (दाबून धरून) थेट Save किंवा Share करू शकता!');
+                if (isInAppBrowser()) {
+                    alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
+                } else {
+                    alert('तुमच्या डिव्हाइसवर डायरेक्ट इमेज शेअरिंग उपलब्ध नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस करून थेट Share करू शकता.');
+                }
             }
         } catch (shareErr) {
             console.log('Share action was cancelled or failed:', shareErr);
-            if (shareErr.name !== 'AbortError') {
+            if (shareErr.name !== 'AbortError' && !String(shareErr).includes('AbortError') && !String(shareErr).toLowerCase().includes('cancel') && !String(shareErr).toLowerCase().includes('abort')) {
                 const link = document.createElement('a');
                 link.download = 'Donation_Poster.png';
-                link.href = dataUrl || URL.createObjectURL(file);
+                link.href = dataUrl || (file ? URL.createObjectURL(file) : '');
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 if (dataUrl) openLightbox(dataUrl);
-                alert('तुमच्या डिव्हाइसवर डायरेक्ट शेअरिंगमध्ये अडचण आली. स्क्रीनवर पोस्टर उघडले आहे, त्यावर लॉंग-प्रेस करून थेट Share Image करा!');
+                if (isInAppBrowser()) {
+                    alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
+                } else {
+                    alert('डायरेक्ट शेअरिंगऐवजी पोस्टर स्क्रीनवर उघडले आहे आणि डाउनलोडही झाले आहे! फोटोवर लॉंग-प्रेस करून तुम्ही थेट Share करू शकता.');
+                }
             }
         } finally {
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
         }
     }
 
-
-    
     async function shareCustomPoster(type, btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         
+        let dataUrl = '';
+        let file = null;
         try {
-            // Guarantee fresh settings are loaded directly from backend before generating and sharing poster
-            try {
-                const res = await fetch('/api/settings?_=' + Date.now(), { cache: 'no-store' });
-                const result = await res.json();
-                if (result.success && result.data) {
-                    window.appSettings = result.data;
-                    try { appSettings = result.data; } catch(e){}
-                    localStorage.setItem('settingsCache', JSON.stringify(result.data));
-                }
-            } catch(e) {
-                console.log('Using local settings due to offline or network error:', e);
+            const canvas = await captureCustomPoster(type);
+            dataUrl = canvas.toDataURL('image/png', 1.0);
+            const blob = dataURItoBlob(dataUrl);
+            const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
+            file = new File([blob], filename, { type: 'image/png' });
+            
+            const s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : {}) || {};
+            const orgName = (s.pdfCustomSettings && s.pdfCustomSettings.orgName) ? s.pdfCustomSettings.orgName : 'मंडळ';
+            const titleStr = type === 'vargani' ? (s.varganiAabharTitle || 'वर्गणी आभार') : (type === 'mahaprasad' ? (s.mahaprasadNimantranTitle || 'महाप्रसाद निमंत्रण') : (s.aagmanSohalaTitle || 'आगमन सोहळा'));
+            let customText = '';
+            if (type === 'vargani') {
+                customText = s.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!\n\nआपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
+            } else if (type === 'aagman') {
+                customText = s.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
+            } else {
+                customText = s.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
             }
 
-            const canvas = await captureCustomPoster(type);
-            const dataUrl = canvas.toDataURL('image/png', 1.0);
-            canvas.toBlob(async (blob) => {
-                try {
-                    const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
-                    const file = new File([blob], filename, { type: 'image/png' });
-                    
-                    const s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : {}) || {};
-                    const orgName = (s.pdfCustomSettings && s.pdfCustomSettings.orgName) ? s.pdfCustomSettings.orgName : 'मंडळ';
-                    const titleStr = type === 'vargani' ? (s.varganiAabharTitle || 'वर्गणी आभार') : (type === 'mahaprasad' ? (s.mahaprasadNimantranTitle || 'महाप्रसाद निमंत्रण') : (s.aagmanSohalaTitle || 'आगमन सोहळा'));
-                    let customText = '';
-                    if (type === 'vargani') {
-                        customText = s.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!\n\nआपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
-                    } else if (type === 'aagman') {
-                        customText = s.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
-                    } else {
-                        customText = s.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
-                    }
-
-                      const shareData = {
-                        title: orgName + ' - ' + titleStr,
-                        text: customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
+            const shareData = {
+                title: orgName + ' - ' + titleStr,
+                text: customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
 
 🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com
 
@@ -2856,46 +2859,50 @@ table {
 वैभव सांगळे - कार्यकारी सदस्य
 निलेश कदम - कार्यकारी सदस्य
 शुभम पेटकर - कार्यकारी सदस्य`,
-                        files: [file]
-                    };
+                files: [file]
+            };
 
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                        await navigator.share(shareData);
-                    } else {
-                        // Download fallback and lightbox preview
-                        const link = document.createElement('a');
-                        link.download = filename;
-                        link.href = dataUrl;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        openLightbox(dataUrl);
-                        alert('तुमच्या डिव्हाइसवर (किंवा इन-ॲप ब्राउझरमध्ये) डायरेक्ट इमेज शेअरिंग सपोर्टेड नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस (दाबून धरून) थेट Save किंवा Share करू शकता!');
-                    }
-                } catch (shareErr) {
-                    console.log('Share action was cancelled or failed:', shareErr);
-                    if (shareErr.name !== 'AbortError') {
-                        const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
-                        const link = document.createElement('a');
-                        link.download = filename;
-                        link.href = dataUrl;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                        openLightbox(dataUrl);
-                        alert('तुमच्या डिव्हाइसवर डायरेक्ट शेअरिंगमध्ये अडचण आली. स्क्रीनवर पोस्टर उघडले आहे, त्यावर लॉंग-प्रेस करून थेट Share Image करा!');
-                    }
-                } finally {
-                    if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
-                }
-            }, 'image/png', 1.0);
-        } catch (err) {
-            console.error('Error sharing image:', err);
-            if (err.name === 'SecurityError' || (err.message && err.message.includes('Tainted'))) {
-                alert('सिक्युरिटी एरर: तुम्ही ही फाईल थेट फोल्डरमधून उघडली आहे किंवा क्रॉस-डोमेन फोटो कॅच झाला आहे. कृपया पेज रीफ्रेश करा आणि पुन्हा प्रयत्न करा.');
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share(shareData);
             } else {
-                alert('शेअर करताना त्रुटी आली: ' + (err.message || err));
+                // Download fallback and lightbox preview
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                openLightbox(dataUrl);
+                if (isInAppBrowser()) {
+                    alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
+                } else {
+                    alert('तुमच्या डिव्हाइसवर डायरेक्ट इमेज शेअरिंग उपलब्ध नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस करून थेट Share करू शकता.');
+                }
             }
+        } catch (shareErr) {
+            console.log('Share action was cancelled or failed:', shareErr);
+            if (shareErr.name !== 'AbortError' && !String(shareErr).includes('AbortError') && !String(shareErr).toLowerCase().includes('cancel') && !String(shareErr).toLowerCase().includes('abort')) {
+                const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
+                if (dataUrl) {
+                    const link = document.createElement('a');
+                    link.download = filename;
+                    link.href = dataUrl;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    openLightbox(dataUrl);
+                    if (isInAppBrowser()) {
+                        alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
+                    } else {
+                        alert('डायरेक्ट शेअरिंगऐवजी पोस्टर स्क्रीनवर उघडले आहे आणि डाउनलोडही झाले आहे! फोटोवर लॉंग-प्रेस करून तुम्ही थेट Share करू शकता.');
+                    }
+                } else if (shareErr.name === 'SecurityError' || (shareErr.message && shareErr.message.includes('Tainted'))) {
+                    alert('सिक्युरिटी एरर: क्रॉस-डोमेन फोटो लोड होण्यात अडचण आली. कृपया पेज रीफ्रेश करा आणि पुन्हा प्रयत्न करा.');
+                } else {
+                    alert('शेअर करताना त्रुटी आली: ' + (shareErr.message || shareErr));
+                }
+            }
+        } finally {
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
         }
     }
