@@ -189,7 +189,51 @@
                         <div class="header-line"></div>
                     </div>
                     
-                    <p style="color: #aaa; font-size: 14px; margin-bottom: 15px;">Configure whether to use the system generated posters or upload your own custom photo posters. You can also configure the Share Text and Button Names here.</p>
+                    <p style="color: #aaa; font-size: 14px; margin-bottom: 15px;">Configure whether to use the system generated posters or upload your own custom photo posters. You can also configure the Share Text, Titles, and Visibility Switches here.</p>
+
+                    <!-- Master Toggle Switches for Niyojan Posters -->
+                    <div style="background: linear-gradient(135deg, rgba(255, 204, 0, 0.15), rgba(168, 85, 247, 0.15)); padding: 20px; border-radius: 14px; border: 1px solid rgba(255,215,0,0.5); margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.3);">
+                        <h4 style="color: #ffeb3b; margin-bottom: 8px; margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 8px;"><i class="fas fa-toggle-on"></i> उत्सव पोस्टर्स ऑन / ऑफ नियंत्रणे (Niyojan Tab Visibility)</h4>
+                        <p style="color: #cbd5e1; font-size: 13.5px; margin-top: 0; margin-bottom: 18px; line-height: 1.5;">येथून तुम्ही नियोजन टॅबमधील कोणती पोस्टर्स दाखवायची किंवा लपवायची हे ठरवू शकता. <b style="color: #ffcc00;">सर्व बटणे OFF केल्यास नियोजन टॅबमधील संपूर्ण पोस्टर्स सेक्शन दिसेनासा होईल व 'कार्यक्रम व उत्सव रूपरेषा' बरोबर वरती दिसेल.</b></p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                            <div style="background: rgba(0,0,0,0.5); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);">
+                                <label style="color: #34d399; font-weight: bold; font-size: 13.5px; display: block; margin-bottom: 6px;">🙏 १. वर्गणी आभार पोस्टर</label>
+                                <select id="showVarganiPoster" class="form-control" style="width: 100%; padding: 8px 12px; background: #111827; color: white; border-radius: 8px; border: 1px solid #374151; font-weight: 600;">
+                                    <option value="true">🟢 ON (दाखवा)</option>
+                                    <option value="false">🔴 OFF (लपवा)</option>
+                                </select>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);">
+                                <label style="color: #fbbf24; font-weight: bold; font-size: 13.5px; display: block; margin-bottom: 6px;">🍽️ २. महाप्रसाद निमंत्रण</label>
+                                <select id="showMahaprasadPoster" class="form-control" style="width: 100%; padding: 8px 12px; background: #111827; color: white; border-radius: 8px; border: 1px solid #374151; font-weight: 600;">
+                                    <option value="true">🟢 ON (दाखवा)</option>
+                                    <option value="false">🔴 OFF (लपवा)</option>
+                                </select>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);">
+                                <label style="color: #60a5fa; font-weight: bold; font-size: 13.5px; display: block; margin-bottom: 6px;">🥁 ३. आगमन सोहळा पोस्टर</label>
+                                <select id="showAagmanPoster" class="form-control" style="width: 100%; padding: 8px 12px; background: #111827; color: white; border-radius: 8px; border: 1px solid #374151; font-weight: 600;">
+                                    <option value="true">🟢 ON (दाखवा)</option>
+                                    <option value="false">🔴 OFF (लपवा)</option>
+                                </select>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);">
+                                <label style="color: #fb7185; font-weight: bold; font-size: 13.5px; display: block; margin-bottom: 6px;">🌺 ४. गणपती विसर्जन सोहळा</label>
+                                <select id="showVisarjanPoster" class="form-control" style="width: 100%; padding: 8px 12px; background: #111827; color: white; border-radius: 8px; border: 1px solid #374151; font-weight: 600;">
+                                    <option value="true">🟢 ON (दाखवा)</option>
+                                    <option value="false">🔴 OFF (लपवा)</option>
+                                </select>
+                            </div>
+                            <div style="background: rgba(0,0,0,0.5); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);">
+                                <label style="color: #c084fc; font-weight: bold; font-size: 13.5px; display: block; margin-bottom: 6px;">📢 ५. विशेष कार्यक्रम व सूचना</label>
+                                <select id="showCustomEventPoster" class="form-control" style="width: 100%; padding: 8px 12px; background: #111827; color: white; border-radius: 8px; border: 1px solid #374151; font-weight: 600;">
+                                    <option value="true">🟢 ON (दाखवा)</option>
+                                    <option value="false">🔴 OFF (लपवा)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Donation Poster Config -->
                     <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.3); margin-bottom: 20px;">
@@ -215,14 +259,18 @@
                     </div>
 
                     <!-- Vargani Poster Config -->
-                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.3); margin-bottom: 20px;">
-                        <h4 style="color: #ff8c00; margin-bottom: 10px; margin-top: 0;">2. Vargani Aabhar Poster (वर्गणी आभार)</h4>
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(16, 185, 129, 0.4); margin-bottom: 20px;">
+                        <h4 style="color: #34d399; margin-bottom: 10px; margin-top: 0;">2. Vargani Aabhar Poster (वर्गणी आभार)</h4>
                         
                         <div class="form-group">
-                            
-                            
-                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Generated Poster Title (used only if mode is Generated)</label>
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Badge Text (कार्डावरील टॅग / बॅज)</label>
+                            <input type="text" id="varganiCardBadge" class="form-control" placeholder="उदा. ✨ कृतज्ञता व आभार" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Generated Poster & Card Title (शीर्षक)</label>
                             <input type="text" id="varganiAabharTitle" class="form-control" placeholder="उदा. वर्गणी आभार" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Description Text (कार्डावरील माहिती / वर्णन)</label>
+                            <textarea id="varganiCardDesc" class="form-control" rows="2" placeholder="उदा. देणगीदारांचे आभार व कृतज्ञता व्यक्त करणारे विशेष डिजिटल पोस्टर." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></textarea>
                             
                             <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">WhatsApp Share Text (Caption)</label>
                             <textarea id="varganiAabharText" class="form-control" rows="3" placeholder="येथे वर्गणी आभार संदेश टाईप करा..." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"></textarea>
@@ -230,26 +278,75 @@
                     </div>
 
                     <!-- Mahaprasad Poster Config -->
-                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(255,215,0,0.3); margin-bottom: 20px;">
-                        <h4 style="color: #ff8c00; margin-bottom: 10px; margin-top: 0;">3. Mahaprasad Nimantran Poster (महाप्रसाद)</h4>
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(245, 158, 11, 0.4); margin-bottom: 20px;">
+                        <h4 style="color: #fbbf24; margin-bottom: 10px; margin-top: 0;">3. Mahaprasad Nimantran Poster (महाप्रसाद)</h4>
                         
                         <div class="form-group">
-                            
-                            
-                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Generated Poster Title (used only if mode is Generated)</label>
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Badge Text (कार्डावरील टॅग / बॅज)</label>
+                            <input type="text" id="mahaprasadCardBadge" class="form-control" placeholder="उदा. 🙏 भव्य आमंत्रण" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Generated Poster & Card Title (शीर्षक)</label>
                             <input type="text" id="mahaprasadNimantranTitle" class="form-control" placeholder="उदा. महाप्रसाद निमंत्रण" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Description Text (कार्डावरील माहिती / वर्णन)</label>
+                            <textarea id="mahaprasadCardDesc" class="form-control" rows="2" placeholder="उदा. भाविकांसाठी महाप्रसाद आमंत्रण व वेळ-स्थळ माहितीचे आकर्षक पोस्टर." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></textarea>
 
                             <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">WhatsApp Share Text (Caption)</label>
                             <textarea id="mahaprasadNimantranText" class="form-control" rows="3" placeholder="येथे महाप्रसाद निमंत्रण संदेश टाईप करा..." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"></textarea>
                         </div>
-                        
-                        <div class="form-group" style="margin-top: 20px;">
-                            <h4 style="color: #3b82f6; margin-bottom: 10px;"><i class="fas fa-file-image"></i> Aagman Sohala Poster Settings</h4>
-                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Aagman Sohala Poster Title</label>
+                    </div>
+
+                    <!-- Aagman Sohala Poster Config -->
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(59, 130, 246, 0.4); margin-bottom: 20px;">
+                        <h4 style="color: #60a5fa; margin-bottom: 10px; margin-top: 0;"><i class="fas fa-drum"></i> 4. Aagman Sohala Poster (आगमन सोहळा)</h4>
+                        <div class="form-group">
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Badge Text (कार्डावरील टॅग / बॅज)</label>
+                            <input type="text" id="aagmanCardBadge" class="form-control" placeholder="उदा. 🚩 दिमाखदार सोहळा" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Generated Poster & Card Title (शीर्षक)</label>
                             <input type="text" id="aagmanSohalaTitle" class="form-control" placeholder="उदा. आगमन सोहळा" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Description Text (कार्डावरील माहिती / वर्णन)</label>
+                            <textarea id="aagmanCardDesc" class="form-control" rows="2" placeholder="उदा. श्री गणरायाच्या दिमाखदार आगमन सोहळ्याचे भव्य निमंत्रण पोस्टर." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></textarea>
 
                             <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">WhatsApp Share Text (Caption)</label>
                             <textarea id="aagmanSohalaText" class="form-control" rows="3" placeholder="येथे आगमन सोहळा निमंत्रण संबंधी मेसेज लिहा..." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Ganpati Visarjan Poster Config -->
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(244, 63, 94, 0.4); margin-bottom: 20px;">
+                        <h4 style="color: #fb7185; margin-bottom: 10px; margin-top: 0;"><i class="fas fa-seedling"></i> 5. Ganpati Visarjan Poster (गणपती विसर्जन सोहळा)</h4>
+                        <div class="form-group">
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Badge Text (कार्डावरील टॅग / बॅज)</label>
+                            <input type="text" id="visarjanCardBadge" class="form-control" placeholder="उदा. ✨ निरोप समारोह" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Generated Poster & Card Title (शीर्षक)</label>
+                            <input type="text" id="visarjanSohalaTitle" class="form-control" placeholder="उदा. गणपती विसर्जन सोहळा" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Description Text (कार्डावरील माहिती / वर्णन)</label>
+                            <textarea id="visarjanCardDesc" class="form-control" rows="2" placeholder="उदा. बाप्पाच्या भव्य विसर्जन मिरवणूक सोहळ्याचे भावपूर्ण निमंत्रण पोस्टर." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></textarea>
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">WhatsApp Share Text (Caption)</label>
+                            <textarea id="visarjanSohalaText" class="form-control" rows="3" placeholder="येथे विसर्जन मिरवणूक सोहळा संदेश टाईप करा..." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Custom Event / Notice Poster Config -->
+                    <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; border: 1px solid rgba(168, 85, 247, 0.4); margin-bottom: 20px;">
+                        <h4 style="color: #c084fc; margin-bottom: 10px; margin-top: 0;"><i class="fas fa-bullhorn"></i> 6. Custom Event & Notice Poster (विशेष धार्मिक कार्यक्रम व सूचना)</h4>
+                        <div class="form-group">
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Badge Text (कार्डावरील टॅग / बॅज)</label>
+                            <input type="text" id="customEventCardBadge" class="form-control" placeholder="उदा. 🌟 विशेष कार्यक्रम व माहिती" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Generated Poster & Card Title (शीर्षक)</label>
+                            <input type="text" id="customEventTitle" class="form-control" placeholder="उदा. विशेष धार्मिक कार्यक्रम व सूचना" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">Card Description Text (कार्डावरील माहिती / वर्णन)</label>
+                            <textarea id="customEventCardDesc" class="form-control" rows="2" placeholder="उदा. मंडळाचे विविध धार्मिक उपक्रम व विशेष कार्यक्रम भाविकांपर्यंत पोहोचवणारे पोस्टर." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;"></textarea>
+
+                            <label style="color: var(--text-primary); margin-bottom: 5px; display: block;">WhatsApp Share Text (Caption)</label>
+                            <textarea id="customEventText" class="form-control" rows="3" placeholder="येथे विशेष कार्यक्रम व इतर उपक्रम माहिती टाईप करा..." style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); color: white; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);"></textarea>
                         </div>
                     </div>
                 
@@ -885,6 +982,44 @@
                     if (document.getElementById('aagmanSohalaTitle')) {
                         document.getElementById('aagmanSohalaTitle').value = settings.aagmanSohalaTitle || '';
                     }
+                    if (document.getElementById('visarjanSohalaText')) {
+                        document.getElementById('visarjanSohalaText').value = settings.visarjanSohalaText || '';
+                    }
+                    if (document.getElementById('visarjanSohalaTitle')) {
+                        document.getElementById('visarjanSohalaTitle').value = settings.visarjanSohalaTitle || '';
+                    }
+                    if (document.getElementById('customEventText')) {
+                        document.getElementById('customEventText').value = settings.customEventText || '';
+                    }
+                    if (document.getElementById('customEventTitle')) {
+                        document.getElementById('customEventTitle').value = settings.customEventTitle || '';
+                    }
+                    if (document.getElementById('varganiCardBadge')) document.getElementById('varganiCardBadge').value = settings.varganiCardBadge || '';
+                    if (document.getElementById('varganiCardDesc')) document.getElementById('varganiCardDesc').value = settings.varganiCardDesc || '';
+                    if (document.getElementById('mahaprasadCardBadge')) document.getElementById('mahaprasadCardBadge').value = settings.mahaprasadCardBadge || '';
+                    if (document.getElementById('mahaprasadCardDesc')) document.getElementById('mahaprasadCardDesc').value = settings.mahaprasadCardDesc || '';
+                    if (document.getElementById('aagmanCardBadge')) document.getElementById('aagmanCardBadge').value = settings.aagmanCardBadge || '';
+                    if (document.getElementById('aagmanCardDesc')) document.getElementById('aagmanCardDesc').value = settings.aagmanCardDesc || '';
+                    if (document.getElementById('visarjanCardBadge')) document.getElementById('visarjanCardBadge').value = settings.visarjanCardBadge || '';
+                    if (document.getElementById('visarjanCardDesc')) document.getElementById('visarjanCardDesc').value = settings.visarjanCardDesc || '';
+                    if (document.getElementById('customEventCardBadge')) document.getElementById('customEventCardBadge').value = settings.customEventCardBadge || '';
+                    if (document.getElementById('customEventCardDesc')) document.getElementById('customEventCardDesc').value = settings.customEventCardDesc || '';
+                    const getToggleStr = (val) => (val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off') ? 'false' : 'true';
+                    if (document.getElementById('showVarganiPoster')) {
+                        document.getElementById('showVarganiPoster').value = getToggleStr(settings.showVarganiPoster);
+                    }
+                    if (document.getElementById('showMahaprasadPoster')) {
+                        document.getElementById('showMahaprasadPoster').value = getToggleStr(settings.showMahaprasadPoster);
+                    }
+                    if (document.getElementById('showAagmanPoster')) {
+                        document.getElementById('showAagmanPoster').value = getToggleStr(settings.showAagmanPoster);
+                    }
+                    if (document.getElementById('showVisarjanPoster')) {
+                        document.getElementById('showVisarjanPoster').value = getToggleStr(settings.showVisarjanPoster);
+                    }
+                    if (document.getElementById('showCustomEventPoster')) {
+                        document.getElementById('showCustomEventPoster').value = getToggleStr(settings.showCustomEventPoster);
+                    }
                     if (document.getElementById('donationPosterMode')) {
                         document.getElementById('donationPosterMode').value = settings.donationPosterMode || 'generated';
                     }
@@ -914,13 +1049,33 @@
             const mahaprasadNimantranText = document.getElementById('mahaprasadNimantranText').value;
             const aagmanSohalaTitle = document.getElementById('aagmanSohalaTitle').value;
             const aagmanSohalaText = document.getElementById('aagmanSohalaText').value;
-            
+            const visarjanSohalaTitle = document.getElementById('visarjanSohalaTitle') ? document.getElementById('visarjanSohalaTitle').value : '';
+            const visarjanSohalaText = document.getElementById('visarjanSohalaText') ? document.getElementById('visarjanSohalaText').value : '';
+            const customEventTitle = document.getElementById('customEventTitle') ? document.getElementById('customEventTitle').value : '';
+            const customEventText = document.getElementById('customEventText') ? document.getElementById('customEventText').value : '';
+            const varganiCardBadge = document.getElementById('varganiCardBadge') ? document.getElementById('varganiCardBadge').value : '';
+            const varganiCardDesc = document.getElementById('varganiCardDesc') ? document.getElementById('varganiCardDesc').value : '';
+            const mahaprasadCardBadge = document.getElementById('mahaprasadCardBadge') ? document.getElementById('mahaprasadCardBadge').value : '';
+            const mahaprasadCardDesc = document.getElementById('mahaprasadCardDesc') ? document.getElementById('mahaprasadCardDesc').value : '';
+            const aagmanCardBadge = document.getElementById('aagmanCardBadge') ? document.getElementById('aagmanCardBadge').value : '';
+            const aagmanCardDesc = document.getElementById('aagmanCardDesc') ? document.getElementById('aagmanCardDesc').value : '';
+            const visarjanCardBadge = document.getElementById('visarjanCardBadge') ? document.getElementById('visarjanCardBadge').value : '';
+            const visarjanCardDesc = document.getElementById('visarjanCardDesc') ? document.getElementById('visarjanCardDesc').value : '';
+            const customEventCardBadge = document.getElementById('customEventCardBadge') ? document.getElementById('customEventCardBadge').value : '';
+            const customEventCardDesc = document.getElementById('customEventCardDesc') ? document.getElementById('customEventCardDesc').value : '';
+
+            const showVarganiPoster = document.getElementById('showVarganiPoster') ? document.getElementById('showVarganiPoster').value : 'true';
+            const showMahaprasadPoster = document.getElementById('showMahaprasadPoster') ? document.getElementById('showMahaprasadPoster').value : 'true';
+            const showAagmanPoster = document.getElementById('showAagmanPoster') ? document.getElementById('showAagmanPoster').value : 'true';
+            const showVisarjanPoster = document.getElementById('showVisarjanPoster') ? document.getElementById('showVisarjanPoster').value : 'true';
+            const showCustomEventPoster = document.getElementById('showCustomEventPoster') ? document.getElementById('showCustomEventPoster').value : 'true';
+
             const donationPosterMode = document.getElementById('donationPosterMode').value;
             const donationPosterBtnName = document.getElementById('donationPosterBtnName').value;
             const donationPosterText = document.getElementById('donationPosterText').value;
-            
-            
-            
+
+
+
             try {
                 // Save texts
                 const settingsToSave = [
@@ -930,10 +1085,29 @@
                     { key: 'navbarTitle', value: navbarTitle },
                     { key: 'varganiAabharTitle', value: varganiAabharTitle },
                     { key: 'varganiAabharText', value: varganiAabharText },
-                                        { key: 'mahaprasadNimantranTitle', value: mahaprasadNimantranTitle },
+                    { key: 'varganiCardBadge', value: varganiCardBadge },
+                    { key: 'varganiCardDesc', value: varganiCardDesc },
+                    { key: 'mahaprasadNimantranTitle', value: mahaprasadNimantranTitle },
                     { key: 'mahaprasadNimantranText', value: mahaprasadNimantranText },
+                    { key: 'mahaprasadCardBadge', value: mahaprasadCardBadge },
+                    { key: 'mahaprasadCardDesc', value: mahaprasadCardDesc },
                     { key: 'aagmanSohalaTitle', value: aagmanSohalaTitle },
                     { key: 'aagmanSohalaText', value: aagmanSohalaText },
+                    { key: 'aagmanCardBadge', value: aagmanCardBadge },
+                    { key: 'aagmanCardDesc', value: aagmanCardDesc },
+                    { key: 'visarjanSohalaTitle', value: visarjanSohalaTitle },
+                    { key: 'visarjanSohalaText', value: visarjanSohalaText },
+                    { key: 'visarjanCardBadge', value: visarjanCardBadge },
+                    { key: 'visarjanCardDesc', value: visarjanCardDesc },
+                    { key: 'customEventTitle', value: customEventTitle },
+                    { key: 'customEventText', value: customEventText },
+                    { key: 'customEventCardBadge', value: customEventCardBadge },
+                    { key: 'customEventCardDesc', value: customEventCardDesc },
+                    { key: 'showVarganiPoster', value: showVarganiPoster },
+                    { key: 'showMahaprasadPoster', value: showMahaprasadPoster },
+                    { key: 'showAagmanPoster', value: showAagmanPoster },
+                    { key: 'showVisarjanPoster', value: showVisarjanPoster },
+                    { key: 'showCustomEventPoster', value: showCustomEventPoster },
                     { key: 'donationPosterMode', value: donationPosterMode },
                     { key: 'donationPosterBtnName', value: donationPosterBtnName },
                     { key: 'donationPosterText', value: donationPosterText },

@@ -247,17 +247,6 @@
                             <i class="fas fa-share-alt"></i> शेअर करा
                         </button>
                     </div>
-                    <div class="donation-actions" id="customPosterActions" style="margin-top: 15px;">
-                                                <button id="varganiBtn" onclick="shareCustomPoster('vargani', this)" class="donation-action-btn" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
-                            <i class="fas fa-share-alt"></i> <span id="varganiBtnText">वर्गणी आभार</span>
-                        </button>
-                        <button id="mahaprasadBtn" onclick="shareCustomPoster('mahaprasad', this)" class="donation-action-btn" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
-                            <i class="fas fa-share-alt"></i> <span id="mahaprasadBtnText">महाप्रसाद निमंत्रण</span>
-                        </button>
-                        <button id="aagmanBtn" onclick="shareCustomPoster('aagman', this)" class="donation-action-btn" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;">
-                            <i class="fas fa-share-alt"></i> <span id="aagmanBtnText">आगमन सोहळा पोस्टर</span>
-                        </button>
-                    </div>
                     
                 </div>
             </div>
@@ -463,6 +452,311 @@
                 <div class="header-line"></div>
             </div>
             
+            <style>
+                .utsav-poster-deck {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    max-width: 850px;
+                    margin: 0 auto 40px auto;
+                }
+                .utsav-poster-card {
+                    position: relative;
+                    border-radius: 20px;
+                    padding: 24px 28px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 24px;
+                    overflow: hidden;
+                    backdrop-filter: blur(16px);
+                    -webkit-backdrop-filter: blur(16px);
+                    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                }
+                .utsav-poster-card:hover {
+                    transform: translateY(-5px) scale(1.01);
+                }
+                /* Card Themes */
+                .card-vargani {
+                    background: linear-gradient(135deg, rgba(16, 185, 129, 0.22) 0%, rgba(6, 78, 59, 0.35) 100%);
+                    border: 1px solid rgba(16, 185, 129, 0.45);
+                    box-shadow: 0 10px 30px -5px rgba(16, 185, 129, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                }
+                .card-vargani:hover {
+                    box-shadow: 0 15px 40px -5px rgba(16, 185, 129, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+                    border-color: rgba(16, 185, 129, 0.8);
+                }
+                .card-mahaprasad {
+                    background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(120, 53, 15, 0.35) 100%);
+                    border: 1px solid rgba(245, 158, 11, 0.45);
+                    box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                }
+                .card-mahaprasad:hover {
+                    box-shadow: 0 15px 40px -5px rgba(245, 158, 11, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+                    border-color: rgba(245, 158, 11, 0.8);
+                }
+                .card-aagman {
+                    background: linear-gradient(135deg, rgba(59, 130, 246, 0.22) 0%, rgba(30, 58, 138, 0.35) 100%);
+                    border: 1px solid rgba(59, 130, 246, 0.45);
+                    box-shadow: 0 10px 30px -5px rgba(59, 130, 246, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                }
+                .card-aagman:hover {
+                    box-shadow: 0 15px 40px -5px rgba(59, 130, 246, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+                    border-color: rgba(59, 130, 246, 0.8);
+                }
+                .card-visarjan {
+                    background: linear-gradient(135deg, rgba(244, 63, 94, 0.22) 0%, rgba(136, 19, 55, 0.35) 100%);
+                    border: 1px solid rgba(244, 63, 94, 0.45);
+                    box-shadow: 0 10px 30px -5px rgba(244, 63, 94, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                }
+                .card-visarjan:hover {
+                    box-shadow: 0 15px 40px -5px rgba(244, 63, 94, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+                    border-color: rgba(244, 63, 94, 0.8);
+                }
+                .card-custom {
+                    background: linear-gradient(135deg, rgba(168, 85, 247, 0.22) 0%, rgba(88, 28, 135, 0.35) 100%);
+                    border: 1px solid rgba(168, 85, 247, 0.45);
+                    box-shadow: 0 10px 30px -5px rgba(168, 85, 247, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                }
+                .card-custom:hover {
+                    box-shadow: 0 15px 40px -5px rgba(168, 85, 247, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.3);
+                    border-color: rgba(168, 85, 247, 0.8);
+                }
+
+                .utsav-card-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 20px;
+                    flex: 1;
+                }
+                .utsav-card-icon-wrapper {
+                    width: 70px;
+                    height: 70px;
+                    min-width: 70px;
+                    border-radius: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 34px;
+                    background: rgba(255, 255, 255, 0.12);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.1), 0 5px 15px rgba(0,0,0,0.2);
+                    position: relative;
+                }
+                .utsav-card-info {
+                    text-align: left;
+                }
+                .utsav-card-badge {
+                    display: inline-block;
+                    font-size: 11px;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
+                    text-transform: uppercase;
+                    padding: 3px 10px;
+                    border-radius: 12px;
+                    margin-bottom: 6px;
+                }
+                .badge-vargani { background: rgba(16, 185, 129, 0.3); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); }
+                .badge-mahaprasad { background: rgba(245, 158, 11, 0.3); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.5); }
+                .badge-aagman { background: rgba(59, 130, 246, 0.3); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.5); }
+                .badge-visarjan { background: rgba(244, 63, 94, 0.3); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.5); }
+                .badge-custom { background: rgba(168, 85, 247, 0.3); color: #e9d5ff; border: 1px solid rgba(168, 85, 247, 0.5); }
+
+                .utsav-card-title {
+                    font-size: 22px;
+                    font-weight: 800;
+                    margin: 0 0 6px 0;
+                    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+                }
+                .title-vargani { color: #34d399; }
+                .title-mahaprasad { color: #fbbf24; }
+                .title-aagman { color: #60a5fa; }
+                .title-visarjan { color: #fb7185; }
+                .title-custom { color: #c084fc; }
+
+                .utsav-card-desc {
+                    font-size: 13.5px;
+                    color: #e2e8f0;
+                    margin: 0;
+                    line-height: 1.4;
+                    opacity: 0.9;
+                }
+
+                .utsav-card-actions {
+                    display: flex;
+                    gap: 12px;
+                    align-items: center;
+                    flex-shrink: 0;
+                }
+                .btn-utsav-view {
+                    padding: 11px 22px;
+                    border-radius: 50px;
+                    background: rgba(255, 255, 255, 0.12);
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    color: #ffffff;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    white-space: nowrap;
+                }
+                .btn-utsav-view:hover {
+                    background: rgba(255, 255, 255, 0.25);
+                    transform: translateY(-2px);
+                }
+                .btn-utsav-share {
+                    padding: 12px 26px;
+                    border-radius: 50px;
+                    border: none;
+                    color: #ffffff;
+                    font-size: 14px;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    white-space: nowrap;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .btn-vargani { background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+                .btn-mahaprasad { background: linear-gradient(135deg, #b45309 0%, #f59e0b 50%, #fbbf24 100%); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+                .btn-aagman { background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #60a5fa 100%); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+                .btn-visarjan { background: linear-gradient(135deg, #be123c 0%, #e11d48 50%, #fb7185 100%); box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4); }
+                .btn-custom { background: linear-gradient(135deg, #7e22ce 0%, #9333ea 50%, #c084fc 100%); box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4); }
+
+                .btn-utsav-share:hover {
+                    transform: translateY(-2px) scale(1.05);
+                    filter: brightness(1.1);
+                }
+
+                /* Mobile View Responsive Enhancements */
+                @media (max-width: 768px) {
+                    .utsav-poster-card {
+                        flex-direction: column;
+                        text-align: center;
+                        padding: 22px 18px;
+                        gap: 20px;
+                    }
+                    .utsav-card-left {
+                        flex-direction: column;
+                        text-align: center;
+                        gap: 14px;
+                    }
+                    .utsav-card-info {
+                        text-align: center;
+                    }
+                    .utsav-card-actions {
+                        width: 100%;
+                        justify-content: center;
+                        display: grid;
+                        grid-template-columns: 1fr 1.3fr;
+                        gap: 12px;
+                    }
+                    .btn-utsav-view, .btn-utsav-share {
+                        justify-content: center;
+                        padding: 12px 16px;
+                        font-size: 14px;
+                    }
+                }
+            </style>
+            <div class="container" style="max-width: 1000px; padding: 0 15px; margin-bottom: 20px;" id="posterShowcaseContainer">
+                <!-- Special Posters & Invitations Showcase in Niyojan -->
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <span style="background: linear-gradient(135deg, rgba(232, 121, 249, 0.2), rgba(255, 204, 0, 0.2)); color: #ffcc00; padding: 6px 18px; border-radius: 20px; font-size: 14px; font-weight: 700; border: 1px solid rgba(255, 204, 0, 0.4); display: inline-block; box-shadow: 0 4px 15px rgba(255, 204, 0, 0.15); letter-spacing: 0.5px;">✨ उत्सव विशेष निमंत्रण व आभार पोस्टर्स ✨</span>
+                    <p style="color: #cbd5e1; font-size: 15px; margin-top: 12px; opacity: 0.95;">येथून तुम्ही विविध धार्मिक कार्यक्रमांची व वर्गणी आभाराची डिजिटल पोस्टर्स थेट पाहू आणि शेअर करू शकता!</p>
+                </div>
+                
+                <div class="utsav-poster-deck" id="customPosterActions">
+                    <!-- Vargani Aabhar Card -->
+                    <div class="utsav-poster-card card-vargani" id="varganiPosterCard">
+                        <div class="utsav-card-left">
+                            <div class="utsav-card-icon-wrapper" style="color: #34d399; text-shadow: 0 0 12px rgba(52,211,153,0.6);">🙏</div>
+                            <div class="utsav-card-info">
+                                <span class="utsav-card-badge badge-vargani" id="varganiBadgeDisplay">✨ कृतज्ञता व आभार</span>
+                                <h3 class="utsav-card-title title-vargani" id="varganiBtnText">वर्गणी आभार</h3>
+                                <p class="utsav-card-desc" id="varganiDescDisplay">देणगीदारांचे आभार व कृतज्ञता व्यक्त करणारे विशेष डिजिटल पोस्टर.</p>
+                            </div>
+                        </div>
+                        <div class="utsav-card-actions">
+                            <button onclick="viewCustomPoster('vargani', this)" class="btn-utsav-view"><i class="fas fa-eye"></i> पहा</button>
+                            <button id="varganiBtn" onclick="shareCustomPoster('vargani', this)" class="btn-utsav-share btn-vargani"><i class="fas fa-share-alt"></i> शेअर करा</button>
+                        </div>
+                    </div>
+
+                    <!-- Mahaprasad Nimantran Card -->
+                    <div class="utsav-poster-card card-mahaprasad" id="mahaprasadPosterCard">
+                        <div class="utsav-card-left">
+                            <div class="utsav-card-icon-wrapper" style="color: #fbbf24; text-shadow: 0 0 12px rgba(251,191,36,0.6);">🍽️</div>
+                            <div class="utsav-card-info">
+                                <span class="utsav-card-badge badge-mahaprasad" id="mahaprasadBadgeDisplay">🙏 भव्य आमंत्रण</span>
+                                <h3 class="utsav-card-title title-mahaprasad" id="mahaprasadBtnText">महाप्रसाद निमंत्रण</h3>
+                                <p class="utsav-card-desc" id="mahaprasadDescDisplay">भाविकांसाठी महाप्रसाद आमंत्रण व वेळ-स्थळ माहितीचे आकर्षक पोस्टर.</p>
+                            </div>
+                        </div>
+                        <div class="utsav-card-actions">
+                            <button onclick="viewCustomPoster('mahaprasad', this)" class="btn-utsav-view"><i class="fas fa-eye"></i> पहा</button>
+                            <button id="mahaprasadBtn" onclick="shareCustomPoster('mahaprasad', this)" class="btn-utsav-share btn-mahaprasad"><i class="fas fa-share-alt"></i> शेअर करा</button>
+                        </div>
+                    </div>
+
+                    <!-- Aagman Sohala Card -->
+                    <div class="utsav-poster-card card-aagman" id="aagmanPosterCard">
+                        <div class="utsav-card-left">
+                            <div class="utsav-card-icon-wrapper" style="color: #60a5fa; text-shadow: 0 0 12px rgba(96,165,250,0.6);">🥁</div>
+                            <div class="utsav-card-info">
+                                <span class="utsav-card-badge badge-aagman" id="aagmanBadgeDisplay">🚩 दिमाखदार सोहळा</span>
+                                <h3 class="utsav-card-title title-aagman" id="aagmanBtnText">आगमन सोहळा</h3>
+                                <p class="utsav-card-desc" id="aagmanDescDisplay">श्री गणरायाच्या दिमाखदार आगमन सोहळ्याचे भव्य निमंत्रण पोस्टर.</p>
+                            </div>
+                        </div>
+                        <div class="utsav-card-actions">
+                            <button onclick="viewCustomPoster('aagman', this)" class="btn-utsav-view"><i class="fas fa-eye"></i> पहा</button>
+                            <button id="aagmanBtn" onclick="shareCustomPoster('aagman', this)" class="btn-utsav-share btn-aagman"><i class="fas fa-share-alt"></i> शेअर करा</button>
+                        </div>
+                    </div>
+
+                    <!-- Ganpati Visarjan Card -->
+                    <div class="utsav-poster-card card-visarjan" id="visarjanPosterCard">
+                        <div class="utsav-card-left">
+                            <div class="utsav-card-icon-wrapper" style="color: #fb7185; text-shadow: 0 0 12px rgba(251,113,133,0.6);">🌺</div>
+                            <div class="utsav-card-info">
+                                <span class="utsav-card-badge badge-visarjan" id="visarjanBadgeDisplay">✨ निरोप समारोह</span>
+                                <h3 class="utsav-card-title title-visarjan" id="visarjanBtnText">गणपती विसर्जन सोहळा</h3>
+                                <p class="utsav-card-desc" id="visarjanDescDisplay">बाप्पाच्या भव्य विसर्जन मिरवणूक सोहळ्याचे भावपूर्ण निमंत्रण पोस्टर.</p>
+                            </div>
+                        </div>
+                        <div class="utsav-card-actions">
+                            <button onclick="viewCustomPoster('visarjan', this)" class="btn-utsav-view"><i class="fas fa-eye"></i> पहा</button>
+                            <button id="visarjanBtn" onclick="shareCustomPoster('visarjan', this)" class="btn-utsav-share btn-visarjan"><i class="fas fa-share-alt"></i> शेअर करा</button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Event / Random Notice Card -->
+                    <div class="utsav-poster-card card-custom" id="customEventPosterCard">
+                        <div class="utsav-card-left">
+                            <div class="utsav-card-icon-wrapper" style="color: #c084fc; text-shadow: 0 0 12px rgba(192,132,252,0.6);">📢</div>
+                            <div class="utsav-card-info">
+                                <span class="utsav-card-badge badge-custom" id="customEventBadgeDisplay">🌟 विशेष कार्यक्रम व माहिती</span>
+                                <h3 class="utsav-card-title title-custom" id="customEventBtnText">विशेष कार्यक्रम व सूचना</h3>
+                                <p class="utsav-card-desc" id="customEventDescDisplay">मंडळाचे विविध धार्मिक उपक्रम व विशेष कार्यक्रम भाविकांपर्यंत पोहोचवणारे पोस्टर.</p>
+                            </div>
+                        </div>
+                        <div class="utsav-card-actions">
+                            <button onclick="viewCustomPoster('custom', this)" class="btn-utsav-view"><i class="fas fa-eye"></i> पहा</button>
+                            <button id="customEventBtn" onclick="shareCustomPoster('custom', this)" class="btn-utsav-share btn-custom"><i class="fas fa-share-alt"></i> शेअर करा</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="height: 1px; background: linear-gradient(90deg, transparent, rgba(255,204,0,0.5), transparent); margin: 35px 0;"></div>
+            </div>
+            <h3 style="text-align: center; color: #ffcc00; font-size: 24px; margin-bottom: 25px; text-shadow: 0 2px 10px rgba(255,204,0,0.3);">🗓️ कार्यक्रम व उत्सव रूपरेषा</h3>
+
             <div class="container" style="max-width: 800px; padding: 0 15px;">
                 <div class="niyojan-container" style="position: relative;">
                     <!-- Timeline vertical line -->
@@ -1049,6 +1343,84 @@
             } else if (settings.mahaprasadNimantranTitle) {
                 const mBtnText = document.getElementById('mahaprasadBtnText');
                 if (mBtnText) mBtnText.textContent = settings.mahaprasadNimantranTitle;
+            }
+            
+            if (settings.visarjanSohalaTitle) {
+                const visBtnText = document.getElementById('visarjanBtnText');
+                if (visBtnText) visBtnText.textContent = settings.visarjanSohalaTitle;
+            }
+            
+            if (settings.customEventTitle) {
+                const custBtnText = document.getElementById('customEventBtnText');
+                if (custBtnText) custBtnText.textContent = settings.customEventTitle;
+            }
+
+            // Card Badges & Descriptions
+            if (settings.varganiCardBadge) {
+                const el = document.getElementById('varganiBadgeDisplay');
+                if (el) el.textContent = settings.varganiCardBadge;
+            }
+            if (settings.varganiCardDesc) {
+                const el = document.getElementById('varganiDescDisplay');
+                if (el) el.textContent = settings.varganiCardDesc;
+            }
+            if (settings.mahaprasadCardBadge) {
+                const el = document.getElementById('mahaprasadBadgeDisplay');
+                if (el) el.textContent = settings.mahaprasadCardBadge;
+            }
+            if (settings.mahaprasadCardDesc) {
+                const el = document.getElementById('mahaprasadDescDisplay');
+                if (el) el.textContent = settings.mahaprasadCardDesc;
+            }
+            if (settings.aagmanCardBadge) {
+                const el = document.getElementById('aagmanBadgeDisplay');
+                if (el) el.textContent = settings.aagmanCardBadge;
+            }
+            if (settings.aagmanCardDesc) {
+                const el = document.getElementById('aagmanDescDisplay');
+                if (el) el.textContent = settings.aagmanCardDesc;
+            }
+            if (settings.visarjanCardBadge) {
+                const el = document.getElementById('visarjanBadgeDisplay');
+                if (el) el.textContent = settings.visarjanCardBadge;
+            }
+            if (settings.visarjanCardDesc) {
+                const el = document.getElementById('visarjanDescDisplay');
+                if (el) el.textContent = settings.visarjanCardDesc;
+            }
+            if (settings.customEventCardBadge) {
+                const el = document.getElementById('customEventBadgeDisplay');
+                if (el) el.textContent = settings.customEventCardBadge;
+            }
+            if (settings.customEventCardDesc) {
+                const el = document.getElementById('customEventDescDisplay');
+                if (el) el.textContent = settings.customEventCardDesc;
+            }
+
+            // Poster Visibility Toggles
+            const isPosterOn = (val) => !(val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off');
+            const showVargani = isPosterOn(settings.showVarganiPoster);
+            const showMahaprasad = isPosterOn(settings.showMahaprasadPoster);
+            const showAagman = isPosterOn(settings.showAagmanPoster);
+            const showVisarjan = isPosterOn(settings.showVisarjanPoster);
+            const showCustomEvent = isPosterOn(settings.showCustomEventPoster);
+
+            const vCard = document.getElementById('varganiPosterCard');
+            const mCard = document.getElementById('mahaprasadPosterCard');
+            const aCard = document.getElementById('aagmanPosterCard');
+            const visCard = document.getElementById('visarjanPosterCard');
+            const cCard = document.getElementById('customEventPosterCard');
+
+            if (vCard) vCard.style.display = showVargani ? 'flex' : 'none';
+            if (mCard) mCard.style.display = showMahaprasad ? 'flex' : 'none';
+            if (aCard) aCard.style.display = showAagman ? 'flex' : 'none';
+            if (visCard) visCard.style.display = showVisarjan ? 'flex' : 'none';
+            if (cCard) cCard.style.display = showCustomEvent ? 'flex' : 'none';
+
+            const anyPosterVisible = showVargani || showMahaprasad || showAagman || showVisarjan || showCustomEvent;
+            const showcaseBox = document.getElementById('posterShowcaseContainer');
+            if (showcaseBox) {
+                showcaseBox.style.display = anyPosterVisible ? 'block' : 'none';
             }
             
             // Donation buttons
@@ -2539,13 +2911,17 @@ table {
         clone.appendChild(tempWebsiteUrl);
 
         // 2. Custom Title with Inline Lines
-        const defaultTitle = type === 'vargani' ? 'वर्गणी आभार' : (type === 'mahaprasad' ? 'महाप्रसाद निमंत्रण' : 'आगमन सोहळा');
+        const defaultTitle = type === 'vargani' ? 'वर्गणी आभार' : (type === 'mahaprasad' ? 'महाप्रसाद निमंत्रण' : (type === 'visarjan' ? 'गणपती विसर्जन सोहळा' : (type === 'custom' ? 'विशेष कार्यक्रम व सूचना' : 'आगमन सोहळा')));
         const s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : {}) || {};
         let userTitle = defaultTitle;
         if (type === 'vargani') {
             userTitle = s.varganiAabharTitle || defaultTitle;
         } else if (type === 'mahaprasad') {
             userTitle = s.mahaprasadNimantranTitle || defaultTitle;
+        } else if (type === 'visarjan') {
+            userTitle = s.visarjanSohalaTitle || defaultTitle;
+        } else if (type === 'custom') {
+            userTitle = s.customEventTitle || defaultTitle;
         } else {
             userTitle = s.aagmanSohalaTitle || defaultTitle;
         }
@@ -2567,6 +2943,10 @@ table {
             customText = s.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!\n\nआपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
         } else if (type === 'aagman') {
             customText = s.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
+        } else if (type === 'visarjan') {
+            customText = s.visarjanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवातील गणपती विसर्जन मिरवणूक सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण!\n\nबाप्पाच्या निरोप समारंभात सामील होऊन विसर्जनाच्या जयघोषात सहभागी व्हावे ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया! पुढच्या वर्षी लवकर या! 🌺';
+        } else if (type === 'custom') {
+            customText = s.customEventText || 'श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या वतीने सर्व भाविकांना कळविण्यात येते की मंडळाच्या गणेशोत्सवामध्ये आयोजित विशेष धार्मिक कार्यक्रम व विविध उपक्रमात सर्वांनी आवर्जून सहभागी व्हावे.\n\nआपले सहकार्य आणि उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
         } else {
             customText = s.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
         }
@@ -2814,6 +3194,21 @@ table {
         }
     }
 
+    async function viewCustomPoster(type, btn) {
+        let originalText = btn ? btn.innerHTML : '';
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true; }
+        try {
+            const canvas = await captureCustomPoster(type);
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
+            openLightbox(dataUrl);
+        } catch (error) {
+            console.error('Error viewing poster:', error);
+            alert('पोस्टर लोड होण्यास अडचण आली.');
+        } finally {
+            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+        }
+    }
+
     async function shareCustomPoster(type, btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
@@ -2824,17 +3219,21 @@ table {
             const canvas = await captureCustomPoster(type);
             dataUrl = canvas.toDataURL('image/png', 1.0);
             const blob = dataURItoBlob(dataUrl);
-            const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
+            const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : (type === 'visarjan' ? 'Ganpati_Visarjan.png' : (type === 'custom' ? 'Vishesh_Karyakram.png' : 'Aagman_Sohala.png')));
             file = new File([blob], filename, { type: 'image/png' });
             
             const s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : {}) || {};
             const orgName = (s.pdfCustomSettings && s.pdfCustomSettings.orgName) ? s.pdfCustomSettings.orgName : 'मंडळ';
-            const titleStr = type === 'vargani' ? (s.varganiAabharTitle || 'वर्गणी आभार') : (type === 'mahaprasad' ? (s.mahaprasadNimantranTitle || 'महाप्रसाद निमंत्रण') : (s.aagmanSohalaTitle || 'आगमन सोहळा'));
+            const titleStr = type === 'vargani' ? (s.varganiAabharTitle || 'वर्गणी आभार') : (type === 'mahaprasad' ? (s.mahaprasadNimantranTitle || 'महाप्रसाद निमंत्रण') : (type === 'visarjan' ? (s.visarjanSohalaTitle || 'गणपती विसर्जन सोहळा') : (type === 'custom' ? (s.customEventTitle || 'विशेष कार्यक्रम व सूचना') : (s.aagmanSohalaTitle || 'आगमन सोहळा'))));
             let customText = '';
             if (type === 'vargani') {
                 customText = s.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!\n\nआपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
             } else if (type === 'aagman') {
                 customText = s.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
+            } else if (type === 'visarjan') {
+                customText = s.visarjanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवातील गणपती विसर्जन मिरवणूक सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण!\n\nबाप्पाच्या निरोप समारंभात सामील होऊन विसर्जनाच्या जयघोषात सहभागी व्हावे ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया! पुढच्या वर्षी लवकर या! 🌺';
+            } else if (type === 'custom') {
+                customText = s.customEventText || 'श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या वतीने सर्व भाविकांना कळविण्यात येते की मंडळाच्या गणेशोत्सवामध्ये आयोजित विशेष धार्मिक कार्यक्रम व विविध उपक्रमात सर्वांनी आवर्जून सहभागी व्हावे.\n\nआपले सहकार्य आणि उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
             } else {
                 customText = s.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
             }
