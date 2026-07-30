@@ -640,6 +640,7 @@
                         display: grid;
                         grid-template-columns: repeat(2, 1fr);
                         gap: 12px;
+                        align-items: start;
                         max-width: 100%;
                         margin: 0 auto 25px auto;
                     }
@@ -760,7 +761,7 @@
                             <div class="utsav-card-info">
                                 <span class="utsav-card-badge badge-vargani" id="varganiBadgeDisplay">✨ कृतज्ञता व आभार</span>
                                 <h3 class="utsav-card-title title-vargani" id="varganiBtnText">वर्गणी आभार</h3>
-                                <p class="utsav-card-desc" id="varganiDescDisplay">देणगीदारांचे आभार व कृतज्ञता व्यक्त करणारे विशेष डिजिटल पोस्टर.</p>
+                                <p class="utsav-card-desc" id="varganiDescDisplay" style="display: none;"></p>
                             </div>
                         </div>
                         <div class="utsav-card-actions">
@@ -776,7 +777,7 @@
                             <div class="utsav-card-info">
                                 <span class="utsav-card-badge badge-mahaprasad" id="mahaprasadBadgeDisplay">🙏 भव्य आमंत्रण</span>
                                 <h3 class="utsav-card-title title-mahaprasad" id="mahaprasadBtnText">महाप्रसाद निमंत्रण</h3>
-                                <p class="utsav-card-desc" id="mahaprasadDescDisplay">भाविकांसाठी महाप्रसाद आमंत्रण व वेळ-स्थळ माहितीचे आकर्षक पोस्टर.</p>
+                                <p class="utsav-card-desc" id="mahaprasadDescDisplay" style="display: none;"></p>
                             </div>
                         </div>
                         <div class="utsav-card-actions">
@@ -792,7 +793,7 @@
                             <div class="utsav-card-info">
                                 <span class="utsav-card-badge badge-aagman" id="aagmanBadgeDisplay">🚩 दिमाखदार सोहळा</span>
                                 <h3 class="utsav-card-title title-aagman" id="aagmanBtnText">आगमन सोहळा</h3>
-                                <p class="utsav-card-desc" id="aagmanDescDisplay">श्री गणरायाच्या दिमाखदार आगमन सोहळ्याचे भव्य निमंत्रण पोस्टर.</p>
+                                <p class="utsav-card-desc" id="aagmanDescDisplay" style="display: none;"></p>
                             </div>
                         </div>
                         <div class="utsav-card-actions">
@@ -808,7 +809,7 @@
                             <div class="utsav-card-info">
                                 <span class="utsav-card-badge badge-visarjan" id="visarjanBadgeDisplay">✨ निरोप समारोह</span>
                                 <h3 class="utsav-card-title title-visarjan" id="visarjanBtnText">गणपती विसर्जन सोहळा</h3>
-                                <p class="utsav-card-desc" id="visarjanDescDisplay">बाप्पाच्या भव्य विसर्जन मिरवणूक सोहळ्याचे भावपूर्ण निमंत्रण पोस्टर.</p>
+                                <p class="utsav-card-desc" id="visarjanDescDisplay" style="display: none;"></p>
                             </div>
                         </div>
                         <div class="utsav-card-actions">
@@ -824,7 +825,7 @@
                             <div class="utsav-card-info">
                                 <span class="utsav-card-badge badge-custom" id="customEventBadgeDisplay">🌟 विशेष कार्यक्रम व माहिती</span>
                                 <h3 class="utsav-card-title title-custom" id="customEventBtnText">विशेष कार्यक्रम व सूचना</h3>
-                                <p class="utsav-card-desc" id="customEventDescDisplay">मंडळाचे विविध धार्मिक उपक्रम व विशेष कार्यक्रम भाविकांपर्यंत पोहोचवणारे पोस्टर.</p>
+                                <p class="utsav-card-desc" id="customEventDescDisplay" style="display: none;"></p>
                             </div>
                         </div>
                         <div class="utsav-card-actions">
@@ -1426,42 +1427,40 @@
                 const el = document.getElementById('varganiBadgeDisplay');
                 if (el) el.textContent = settings.varganiCardBadge;
             }
-            if (settings.varganiCardDesc) {
-                const el = document.getElementById('varganiDescDisplay');
-                if (el) el.textContent = settings.varganiCardDesc;
-            }
             if (settings.mahaprasadCardBadge) {
                 const el = document.getElementById('mahaprasadBadgeDisplay');
                 if (el) el.textContent = settings.mahaprasadCardBadge;
-            }
-            if (settings.mahaprasadCardDesc) {
-                const el = document.getElementById('mahaprasadDescDisplay');
-                if (el) el.textContent = settings.mahaprasadCardDesc;
             }
             if (settings.aagmanCardBadge) {
                 const el = document.getElementById('aagmanBadgeDisplay');
                 if (el) el.textContent = settings.aagmanCardBadge;
             }
-            if (settings.aagmanCardDesc) {
-                const el = document.getElementById('aagmanDescDisplay');
-                if (el) el.textContent = settings.aagmanCardDesc;
-            }
             if (settings.visarjanCardBadge) {
                 const el = document.getElementById('visarjanBadgeDisplay');
                 if (el) el.textContent = settings.visarjanCardBadge;
-            }
-            if (settings.visarjanCardDesc) {
-                const el = document.getElementById('visarjanDescDisplay');
-                if (el) el.textContent = settings.visarjanCardDesc;
             }
             if (settings.customEventCardBadge) {
                 const el = document.getElementById('customEventBadgeDisplay');
                 if (el) el.textContent = settings.customEventCardBadge;
             }
-            if (settings.customEventCardDesc) {
-                const el = document.getElementById('customEventDescDisplay');
-                if (el) el.textContent = settings.customEventCardDesc;
-            }
+
+            const updateDescDisplay = (id, text) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (text && String(text).trim() !== '') {
+                    el.textContent = String(text).trim();
+                    el.style.display = 'block';
+                } else {
+                    el.textContent = '';
+                    el.style.display = 'none';
+                }
+            };
+
+            updateDescDisplay('varganiDescDisplay', settings.varganiCardDesc);
+            updateDescDisplay('mahaprasadDescDisplay', settings.mahaprasadCardDesc);
+            updateDescDisplay('aagmanDescDisplay', settings.aagmanCardDesc);
+            updateDescDisplay('visarjanDescDisplay', settings.visarjanCardDesc);
+            updateDescDisplay('customEventDescDisplay', settings.customEventCardDesc);
 
             // Poster Visibility Toggles
             const isPosterOn = (val) => !(val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off');
