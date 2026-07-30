@@ -3469,7 +3469,7 @@ footer::after {
     }
     
     .nav-links a {
-        font-size: 18px !important;
+        font-size: 15px !important;
         color: #ffffff !important;
         padding: 14px 15px;
         display: block;
@@ -4972,7 +4972,7 @@ body.mobile-hishob-navbar .nav-links.active {
 
 body.mobile-hishob-navbar .nav-links.active a {
     color: #ffffff !important;
-    font-size: 22px !important;
+    font-size: 18px !important;
     padding: 18px 15px !important;
     text-decoration: none !important;
     width: 100% !important;
