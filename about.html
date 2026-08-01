@@ -209,7 +209,25 @@
                     <div class="about-col-left">
                         <div class="about-photo-card">
                             <div style="position: relative; overflow: hidden; border-radius: 14px; background: #000;">
-                                <img id="aboutGanpatiPhoto" src="uploads/hero_banner.jpg" alt="गणपती बाप्पा" style="width: 100%; height: clamp(280px, 30vw, 380px); display: block; object-fit: cover; object-position: center; border-radius: 14px; transition: transform 0.5s ease;" onerror="this.onerror=null; this.src='logo/logo1.jpeg';">
+                                <img id="aboutGanpatiPhoto" src="https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816361/shivsrushti_boyz_migration/vna1qxssl6nw7asg9nc4.jpg" alt="गणपती बाप्पा" style="width: 100%; height: clamp(280px, 30vw, 380px); display: block; object-fit: cover; object-position: center; border-radius: 14px; transition: transform 0.5s ease;" onerror="this.onerror=null; this.src='logo/logo.jpeg';">
+                                <script>
+                                    (function() {
+                                        try {
+                                            const cached = localStorage.getItem('settingsCache');
+                                            if (cached) {
+                                                const s = JSON.parse(cached);
+                                                const photoElem = document.getElementById('aboutGanpatiPhoto');
+                                                if (photoElem) {
+                                                    if (s.aboutMandalPhoto) {
+                                                        photoElem.src = s.aboutMandalPhoto;
+                                                    } else if (s.heroBannerImage) {
+                                                        photoElem.src = s.heroBannerImage.startsWith('data:') || s.heroBannerImage.startsWith('http') ? s.heroBannerImage : (s.heroBannerImage.startsWith('uploads/') ? s.heroBannerImage : 'uploads/' + s.heroBannerImage);
+                                                    }
+                                                }
+                                            }
+                                        } catch(e) {}
+                                    })();
+                                </script>
                             </div>
                             <div style="text-align: center; margin-top: 15px;">
                                 <div style="font-weight: 800; color: #ffd700; font-size: 1.25rem; font-family: 'Khand', sans-serif; letter-spacing: 1.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
