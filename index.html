@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://shivsrushti-boyz.onrender.com/">
 <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=705">
+    <link rel="stylesheet" href="style.css?v=706">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
@@ -192,7 +192,7 @@
         
         
 
-    <div id="heroSectionContainer" class="animate-fade-up" style="max-width: 1400px; margin: 25px auto 40px auto; padding: 20px; position: relative; z-index: 1; display: block;">
+    <div id="heroSectionContainer" class="animate-fade-up" style="max-width: 1400px; margin: clamp(4px, 2vw, 25px) auto 40px auto; padding: clamp(4px, 2vw, 20px); position: relative; z-index: 1; display: block;">
         <style>
             .about-photo-card {
                 background: rgba(0, 0, 0, 0.45);
@@ -262,6 +262,13 @@
                 width: 100%;
             }
             @media (max-width: 768px) {
+                #heroSectionContainer {
+                    margin-top: 4px !important;
+                    padding-top: 4px !important;
+                }
+                .custom-header {
+                    margin-bottom: 0 !important;
+                }
                 .about-flex-container {
                     flex-direction: column;
                     align-items: center;
@@ -277,7 +284,7 @@
             }
         </style>
         <div class="glass-panel" style="padding: clamp(14px, 4vw, 45px); border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid rgba(255, 215, 0, 0.35);">
-            <div class="section-header" style="margin-bottom: 30px;">
+            <div class="section-header" style="margin-bottom: clamp(15px, 3vw, 30px);">
                 <div class="header-line"></div>
                 <h2>शिवसृष्टीचा राजा</h2>
                 <div class="header-line"></div>
