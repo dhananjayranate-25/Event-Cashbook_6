@@ -3517,8 +3517,8 @@ footer::after {
     }
 
     .hero-section {
-        height: 115vh !important;
-        min-height: 115vh !important;
+        height: auto !important;
+        min-height: unset !important;
         padding: 3% !important;
         margin: 0 !important;
         box-sizing: border-box !important;
@@ -3531,11 +3531,13 @@ footer::after {
     }
 
     #heroBannerImg, .hero-banner-img {
-        object-fit: cover !important;
+        object-fit: contain !important;
         object-position: center !important;
-        height: 100% !important;
+        height: auto !important;
+        max-height: none !important;
         width: 100% !important;
-        margin: 0 !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
         border-radius: 15px !important;
         border: 3px solid #ffd700 !important;
         box-shadow: 0 0 40px rgba(255, 215, 0, 0.5), 0 0 25px rgba(255, 140, 0, 0.7) !important;
