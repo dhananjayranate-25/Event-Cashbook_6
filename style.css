@@ -5129,3 +5129,30 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
         box-sizing: border-box !important;
     }
 }
+
+/* Guarantee identical font size across all three Aarthik Ahawal headings */
+#ganeshotsavHeader .section-header h2,
+#visibleYearsContainer .section-header h2,
+#previousYearsContainer .section-header h2 {
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+}
+
+@media (max-width: 768px) {
+    #ganeshotsavHeader .section-header h2,
+    #visibleYearsContainer .section-header h2,
+    #previousYearsContainer .section-header h2 {
+        font-size: 1.2rem !important;
+        font-weight: 700 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    #ganeshotsavHeader .section-header h2,
+    #visibleYearsContainer .section-header h2,
+    #previousYearsContainer .section-header h2 {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+    }
+}
