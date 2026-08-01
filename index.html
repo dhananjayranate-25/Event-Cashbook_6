@@ -84,7 +84,16 @@
         background-color: #3b82f6 !important;
         color: #ffffff !important;
     }
+    .mobile-header-only {
+        display: none !important;
+    }
     @media (max-width: 768px) {
+        .desktop-header-only {
+            display: none !important;
+        }
+        .mobile-header-only {
+            display: block !important;
+        }
         .nav-links {
             align-items: center !important;
         }
@@ -114,7 +123,7 @@
                 <!-- Desktop Website Header Image -->
                 <img id="desktopTopHeaderImg" src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img desktop-header-only" fetchpriority="high" decoding="async">
                 <!-- Mobile View Header Image -->
-                <img id="mobileTopHeaderImg" src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img mobile-header-only" fetchpriority="high" decoding="async">
+                <img id="mobileTopHeaderImg" src="uploads/title_logo.png" alt="Shivsrushti Logo" class="top-banner-img mobile-header-only" fetchpriority="high" decoding="async" onerror="this.onerror=null; this.src='logo/logo1.jpeg';">
             </div>
             <nav class="custom-navbar">
                 <div class="hamburger" id="mobileMenuBtn" style="display: none; flex-direction: column; cursor: pointer; gap: 5px; padding: 10px;">
@@ -136,6 +145,22 @@
                 </div>
             </nav>
         </header>
+        <script>
+            (function() {
+                try {
+                    const cached = localStorage.getItem('settingsCache');
+                    if (cached) {
+                        const s = JSON.parse(cached);
+                        const deskImg = s.websiteHeaderImage || s.topHeaderBannerImage || s.headerBannerImage;
+                        const mobImg = s.posterHeaderImage || s.topHeaderBannerImage || s.websiteHeaderImage || s.headerBannerImage;
+                        const dElem = document.getElementById('desktopTopHeaderImg');
+                        const mElem = document.getElementById('mobileTopHeaderImg');
+                        if (dElem && deskImg) dElem.src = (deskImg.startsWith('data:image') || deskImg.startsWith('http')) ? deskImg : ('uploads/' + deskImg);
+                        if (mElem && mobImg) mElem.src = (mobImg.startsWith('data:image') || mobImg.startsWith('http')) ? mobImg : ('uploads/' + mobImg);
+                    }
+                } catch(e) {}
+            })();
+        </script>
         
         <script>
             document.addEventListener('DOMContentLoaded', () => {
