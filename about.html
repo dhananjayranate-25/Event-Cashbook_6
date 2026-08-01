@@ -101,6 +101,17 @@
                 flex: 1 1 100%;
             }
         }
+        .mobile-header-only {
+            display: none !important;
+        }
+        @media (max-width: 768px) {
+            .desktop-header-only {
+                display: none !important;
+            }
+            .mobile-header-only {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
@@ -115,7 +126,10 @@
         <header class="custom-header animate-fade-down">
             <div class="main-banner" style="padding: 0;">
                 <div id="displayEstYear" style="background-color: #ff8c00; color: white; text-align: center; font-size: clamp(12px, 3vw, 16px); font-weight: bold; padding: 5px 0; margin: 0; width: 100%;">स्थापना - २०१९ वर्ष - ८ वे</div>
-                <img src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img" fetchpriority="high" decoding="async">
+                <!-- Desktop Website Header Image -->
+                <img id="desktopTopHeaderImg" src="logo/logo1.jpeg" alt="Shivsrushti Logo" class="top-banner-img desktop-header-only" fetchpriority="high" decoding="async">
+                <!-- Mobile View Header Image -->
+                <img id="mobileTopHeaderImg" src="uploads/title_logo.png" alt="Shivsrushti Logo" class="top-banner-img mobile-header-only" fetchpriority="high" decoding="async" onerror="this.onerror=null; this.src='logo/logo1.jpeg';">
             </div>
             <nav class="custom-navbar">
                 <div class="hamburger" id="mobileMenuBtn" style="display: none; flex-direction: column; cursor: pointer; gap: 5px; padding: 10px;">
@@ -137,6 +151,22 @@
                 </div>
             </nav>
         </header>
+        <script>
+            (function() {
+                try {
+                    const cached = localStorage.getItem('settingsCache');
+                    if (cached) {
+                        const s = JSON.parse(cached);
+                        const deskImg = s.websiteHeaderImage || s.topHeaderBannerImage || s.headerBannerImage;
+                        const mobImg = s.posterHeaderImage || s.topHeaderBannerImage || s.websiteHeaderImage || s.headerBannerImage;
+                        const dElem = document.getElementById('desktopTopHeaderImg');
+                        const mElem = document.getElementById('mobileTopHeaderImg');
+                        if (dElem && deskImg) dElem.src = (deskImg.startsWith('data:image') || deskImg.startsWith('http')) ? deskImg : ('uploads/' + deskImg);
+                        if (mElem && mobImg) mElem.src = (mobImg.startsWith('data:image') || mobImg.startsWith('http')) ? mobImg : ('uploads/' + mobImg);
+                    }
+                } catch(e) {}
+            })();
+        </script>
         
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -196,7 +226,7 @@
                     <div class="about-col-right">
                         <div class="about-details-card">
                             <div style="text-align: left;">
-                                <span class="badge-pill"><i class="fas fa-om" style="color: #ffd700; margin-right: 6px;"></i> भक्ती, संस्कृती आणि सामाजिक कार्याची परंपरा</span>
+                                <span class="badge-pill" id="aboutSubtitleText">भक्ती, संस्कृती आणि सामाजिक कार्याची परंपरा</span>
                             </div>
                             <div id="aboutDetailsContainer" class="about-text-content">
                                 <p><strong>शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर</strong> हे धार्मिक, सांस्कृतिक आणि सामाजिक कार्यासाठी ओळखले जाणारे परिसरातील एक अग्रणी आणि सन्माननीय मंडळ आहे.</p>
@@ -318,6 +348,13 @@
                 const result = await res.json();
                 if (result.success && result.data) {
                     const s = result.data;
+                    try { localStorage.setItem('settingsCache', JSON.stringify(s)); } catch(ce){}
+                    const dElem = document.getElementById('desktopTopHeaderImg');
+                    const mElem = document.getElementById('mobileTopHeaderImg');
+                    const deskImg = s.websiteHeaderImage || s.topHeaderBannerImage || s.headerBannerImage;
+                    const mobImg = s.posterHeaderImage || s.topHeaderBannerImage || s.websiteHeaderImage || s.headerBannerImage;
+                    if (dElem && deskImg) dElem.src = (deskImg.startsWith('data:image') || deskImg.startsWith('http')) ? deskImg : ('uploads/' + deskImg);
+                    if (mElem && mobImg) mElem.src = (mobImg.startsWith('data:image') || mobImg.startsWith('http')) ? mobImg : ('uploads/' + mobImg);
                     
                     // Set Photo
                     const photoElem = document.getElementById('aboutGanpatiPhoto');
@@ -333,6 +370,12 @@
                     if (s.aboutMandalTitle) {
                         const titleElem = document.getElementById('aboutTitleText');
                         if (titleElem) titleElem.textContent = s.aboutMandalTitle;
+                    }
+
+                    // Set Subtitle
+                    if (s.aboutMandalSubtitle) {
+                        const subElem = document.getElementById('aboutSubtitleText');
+                        if (subElem) subElem.textContent = s.aboutMandalSubtitle;
                     }
 
                     // Set Details

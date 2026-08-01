@@ -157,6 +157,14 @@
             const result = await response.json();
             if (result.success) {
                 const settings = result.data;
+                try { localStorage.setItem('settingsCache', JSON.stringify(settings)); } catch(ce){}
+                const dElem = document.getElementById('desktopTopHeaderImg');
+                const mElem = document.getElementById('mobileTopHeaderImg');
+                const deskImg = settings.websiteHeaderImage || settings.topHeaderBannerImage || settings.headerBannerImage;
+                const mobImg = settings.posterHeaderImage || settings.topHeaderBannerImage || settings.websiteHeaderImage || settings.headerBannerImage;
+                if (dElem && deskImg) dElem.src = (deskImg.startsWith('data:image') || deskImg.startsWith('http')) ? deskImg : ('uploads/' + deskImg);
+                if (mElem && mobImg) mElem.src = (mobImg.startsWith('data:image') || mobImg.startsWith('http')) ? mobImg : ('uploads/' + mobImg);
+
                 if (settings.estYear) document.getElementById('displayEstYear').textContent = settings.estYear;
                 const regNoElem = document.getElementById('displayRegNo');
                 if (settings.regNo && regNoElem) regNoElem.textContent = settings.regNo;
