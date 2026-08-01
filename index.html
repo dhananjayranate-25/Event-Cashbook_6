@@ -288,7 +288,7 @@
             <div id="visibleYearsContainer" style="display: none;" class="uploaded-pdfs-section animate-fade-up reveal">
                 <div class="section-header">
                     <div class="header-line"></div>
-                    <h2>चालू वर्षाचा आर्थिक हिशोब</h2>
+                    <h2>चालू वर्षाचा आर्थिक अहवाल</h2>
                     <div class="header-line"></div>
                 </div>
                 <div class="year-selector-container" style="justify-content:center;margin-bottom:20px; display:flex;">
@@ -913,10 +913,10 @@
                 </div>
             </div>
 
-            <div class="uploaded-pdfs-section animate-fade-up reveal" id="previousYearsContainer" style="display: none; animation-delay: 0.25s;">
+            <div class="uploaded-pdfs-section animate-fade-up visible" id="previousYearsContainer" style="display: none; animation-delay: 0.25s;">
                 <div class="section-header">
                     <div class="header-line"></div>
-                    <h2>मागील वर्षांचे आर्थिक हिशोब</h2>
+                    <h2>मागील वर्षांचे आर्थिक अहवाल</h2>
                     <div class="header-line"></div>
                 </div>
                 <div class="pdf-grid" id="uploadedPdfsGrid">
@@ -1170,7 +1170,10 @@
         } else if (tabName === 'ganeshotsav') {
             if(ganeshotsavHeader) ganeshotsavHeader.style.display = 'block';
             if(cashbookContainer) cashbookContainer.style.display = 'block';
-            if(prevYearsContainer) prevYearsContainer.style.display = 'block';
+            if(prevYearsContainer) {
+                prevYearsContainer.style.display = 'block';
+                prevYearsContainer.classList.add('visible');
+            }
             if(siteFooter) siteFooter.style.display = 'block';
             if(mainContainer) mainContainer.style.display = 'block';
             if(typeof renderVisibleYearSections === 'function') renderVisibleYearSections();
@@ -2136,14 +2139,22 @@ table {
 
     async function loadUploadedPDFsHome() {
         const grid = document.getElementById('uploadedPdfsGrid');
-        if (!grid) return;
+        if (!grid) { console.warn('[PDF] uploadedPdfsGrid not found'); return; }
+        const prevContainer = document.getElementById('previousYearsContainer');
+        if (prevContainer) prevContainer.classList.add('visible');
 
         try {
+            console.log('[PDF] Fetching /api/uploaded-pdfs...');
             const response = await fetch(API_URL + '/api/uploaded-pdfs');
             const result = await response.json();
+            console.log('[PDF] API Response:', JSON.stringify({ success: result.success, dataCount: result.data ? result.data.length : 0 }));
+            if (result.data && result.data.length > 0) {
+                console.log('[PDF] All PDFs:', result.data.map(p => ({ filename: p.filename, year: p.year, showOnHome: p.showOnHome })));
+            }
 
             if (result.success && result.data && result.data.length > 0) {
                 uploadedPDFsData = result.data.filter(pdf => pdf.showOnHome !== false && pdf.showOnHome !== 'false' && pdf.showOnHome !== 0 && pdf.showOnHome !== '0');
+                console.log('[PDF] After showOnHome filter:', uploadedPDFsData.length, 'PDFs visible');
                 if (uploadedPDFsData.length === 0) {
                     grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                     return;
@@ -2152,10 +2163,13 @@ table {
                 const perPage = getPDFsPerPage();
                 const to = Math.min(perPage, uploadedPDFsData.length);
                 grid.innerHTML = renderPDFCards(0, to) + renderPagination();
+                console.log('[PDF] Rendered', to, 'PDF cards');
             } else {
+                console.warn('[PDF] No data or success=false');
                 grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
             }
         } catch (error) {
+            console.error('[PDF] Error loading PDFs:', error);
             grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
         }
     }
