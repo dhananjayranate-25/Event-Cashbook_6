@@ -3329,19 +3329,19 @@ footer::after {
     background-color: #2563eb !important;
 }
 
-    .hero-section.divine-portal-section {
+    .hero-section {
         width: 100%;
         margin: 0;
-        padding: 40px 20px 60px 20px !important;
+        padding: 2% !important;
         box-sizing: border-box;
-        display: flex !important;
-        flex-direction: column !important;
+        flex-grow: 1;
+        display: flex;
         justify-content: center;
         align-items: center;
-        min-height: calc(100vh - 80px);
-        background: radial-gradient(circle at center, rgba(180, 50, 0, 0.35) 0%, rgba(45, 8, 2, 0.92) 55%, #080100 100%) !important;
+        flex-direction: column;
+        min-height: 0;
+        background: radial-gradient(circle at center, rgba(255, 140, 0, 0.3) 0%, rgba(100, 0, 0, 0.9) 50%, #110000 100%) !important;
         position: relative;
-        overflow: hidden;
     }
     
     .hero-section::before {
@@ -3353,121 +3353,17 @@ footer::after {
         z-index: 0;
     }
 
-    /* Standalone Divine Gabhara Temple Shrine Showcase */
-    .gabhara-shrine-box {
-        position: relative;
+    #heroBannerImg {
         width: 100%;
-        max-width: 900px;
-        background: linear-gradient(145deg, rgba(35, 10, 5, 0.95), rgba(12, 3, 2, 0.98));
-        border: 2px solid rgba(255, 215, 0, 0.6);
-        border-radius: 28px;
-        padding: 22px;
-        box-shadow: 0 0 60px rgba(255, 140, 0, 0.4), 0 20px 80px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 215, 0, 0.2);
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 18px;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        display: block;
+        background-color: transparent;
+        position: relative;
         z-index: 3;
-    }
-
-    .shrine-header-banner {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        padding: 8px 24px;
-        background: linear-gradient(90deg, rgba(139, 0, 0, 0.6), rgba(255, 180, 0, 0.25), rgba(139, 0, 0, 0.6));
-        border-radius: 16px;
-        border: 1px solid rgba(255, 215, 0, 0.4);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        box-sizing: border-box;
-    }
-
-    .lamp-icon {
-        font-size: 26px;
-        filter: drop-shadow(0 0 10px #ff8c00);
-        animation: lampGlow 2s infinite alternate ease-in-out;
-    }
-
-    @keyframes lampGlow {
-        0% { transform: scale(0.95); filter: drop-shadow(0 0 5px #ff8c00); }
-        100% { transform: scale(1.1); filter: drop-shadow(0 0 16px #ffd700); }
-    }
-
-    .mantra-line {
-        font-size: 22px;
-        font-weight: 800;
-        color: #ffd700;
-        font-family: 'Yatra One', 'Amita', 'Noto Sans Devanagari', serif;
-        text-shadow: 0 0 12px rgba(255, 215, 0, 0.7);
-        letter-spacing: 2px;
-    }
-
-    .shrine-image-viewport {
-        width: 100%;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: radial-gradient(circle at center, #1f0802 0%, #080100 100%);
-        border-radius: 20px;
-        overflow: hidden;
-        border: 3px solid #ffd700;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 25px rgba(255,215,0,0.3);
-    }
-
-    .inner-golden-border {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #heroBannerImg, .hero-banner-img.gabhara-photo {
-        width: 100% !important;
-        height: auto !important;
-        max-height: 70vh;
-        object-fit: contain !important;
-        display: block !important;
-        margin: 0 auto !important;
-        border: none !important;
-        box-shadow: none !important;
-        border-radius: 16px;
-        transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    #heroBannerImg:hover, .hero-banner-img.gabhara-photo:hover {
-        transform: scale(1.015);
-    }
-
-    .shrine-footer-ribbon {
-        width: 100%;
-        background: linear-gradient(90deg, #500000, #a82e00, #500000);
-        padding: 14px 20px;
-        border-radius: 16px;
-        text-align: center;
-        border: 1px solid rgba(255, 215, 0, 0.45);
-        box-shadow: 0 5px 25px rgba(0,0,0,0.7), inset 0 0 15px rgba(255,140,0,0.3);
-        box-sizing: border-box;
-    }
-
-    .mandal-pro-title {
-        font-size: 22px;
-        font-weight: 800;
-        color: #ffffff;
-        font-family: 'Amita', 'Noto Sans Devanagari', serif;
-        text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 15px rgba(255,215,0,0.5);
-        margin-bottom: 6px;
-    }
-
-    .chant-subline {
-        font-size: 16px;
-        font-weight: 700;
-        color: #ffd700;
-        font-family: 'Noto Sans Devanagari', sans-serif;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-        letter-spacing: 1px;
+        border: 3px solid #ffd700 !important;
+        box-shadow: 0 0 35px rgba(255, 215, 0, 0.4), 0 0 20px rgba(255, 140, 0, 0.6);
     }
 
 @media (max-width: 768px) {
@@ -3620,14 +3516,13 @@ footer::after {
         color: #ffffff !important;
     }
 
-    .hero-section, .hero-section.divine-portal-section {
-        height: auto !important;
-        min-height: calc(100vh - 65px) !important;
-        padding: 15px 12px 30px 12px !important;
+    .hero-section {
+        height: 85vh !important;
+        min-height: unset !important;
+        padding: 3% !important;
         margin: 0 !important;
         box-sizing: border-box !important;
-        display: flex !important;
-        flex-direction: column !important;
+        display: flex;
         justify-content: center !important;
         align-items: center !important;
     }
@@ -3635,63 +3530,17 @@ footer::after {
         display: none !important;
     }
 
-    /* Professional Mobile Divine Shrine Overrides */
-    .gabhara-shrine-box {
-        padding: 12px 10px !important;
-        border-radius: 22px !important;
-        gap: 12px !important;
-        box-shadow: 0 5px 40px rgba(255, 140, 0, 0.45), 0 0 55px rgba(255, 215, 0, 0.25) !important;
-        border: 2px solid rgba(255, 215, 0, 0.7) !important;
-    }
-
-    .shrine-header-banner {
-        padding: 6px 12px !important;
-        border-radius: 12px !important;
-    }
-
-    .lamp-icon {
-        font-size: 20px !important;
-    }
-
-    .mantra-line {
-        font-size: 17px !important;
-        letter-spacing: 1px !important;
-    }
-
-    .shrine-image-viewport {
-        border-radius: 16px !important;
-        border-width: 2px !important;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.9), inset 0 0 15px rgba(255,215,0,0.3) !important;
-    }
-
-    #heroBannerImg, .hero-banner-img, .hero-banner-img.gabhara-photo {
-        object-fit: contain !important;
+    .hero-banner-img {
+        object-fit: cover !important;
         object-position: center !important;
-        height: auto !important;
-        max-height: 66vh !important;
+        height: 100% !important;
         width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 auto !important;
-        border-radius: 13px !important;
-        border: none !important;
-        box-shadow: none !important;
-        display: block !important;
-    }
-
-    .shrine-footer-ribbon {
-        padding: 10px 12px !important;
-        border-radius: 12px !important;
-    }
-
-    .mandal-pro-title {
-        font-size: 16px !important;
-        margin-bottom: 4px !important;
-        line-height: 1.25 !important;
-    }
-
-    .chant-subline {
-        font-size: 12.5px !important;
-        letter-spacing: 0.5px !important;
+        margin: 0 !important;
+        border-radius: 15px !important;
+        border: 3px solid #ffd700 !important;
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.5), 0 0 25px rgba(255, 140, 0, 0.7) !important;
+        position: relative;
+        z-index: 3;
     }
 }
 
