@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://shivsrushti-boyz.onrender.com/">
 <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=704">
+    <link rel="stylesheet" href="style.css?v=705">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
@@ -252,12 +252,13 @@
                 margin-top: 10px;
             }
             .about-col-left {
-                flex: 1.3 1 420px;
-                max-width: 620px;
+                flex: 1 1 340px;
+                max-width: 450px;
                 width: 100%;
+                margin: 0 auto;
             }
             .about-col-right {
-                flex: 1.7 1 420px;
+                flex: 2 1 420px;
                 width: 100%;
             }
             @media (max-width: 768px) {
@@ -265,7 +266,11 @@
                     flex-direction: column;
                     align-items: center;
                 }
-                .about-col-left, .about-col-right {
+                .about-col-left {
+                    max-width: 88%;
+                    flex: 1 1 100%;
+                }
+                .about-col-right {
                     max-width: 100%;
                     flex: 1 1 100%;
                 }
