@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://shivsrushti-boyz.onrender.com/">
 <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=600">
+    <link rel="stylesheet" href="style.css?v=700">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
@@ -132,8 +132,7 @@
                     <div style="width: 25px; height: 3px; background-color: white;"></div>
                 </div>
                 <div class="nav-links" id="navLinks">
-                    <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); navLinks.classList.remove('active'); return false;" style="display: block !important;">मुखपृष्ठ</a>
-                    <a href="about.html" id="nav-about" style="display: block !important;">मंडळाचा परिचय</a>
+                    <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); navLinks.classList.remove('active'); return false;" style="display: block !important;">मंडळाचा परिचय</a>
                     <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); navLinks.classList.remove('active'); return false;" style="display: block !important;">आर्थिक अहवाल</a>
                     <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव कमिटी</a>
                     <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव नियोजन</a>
@@ -193,9 +192,148 @@
         
         
 
-    <div id="heroSectionContainer" class="hero-section" style="background-image: url('https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816361/shivsrushti_boyz_migration/vna1qxssl6nw7asg9nc4.jpg');">
-            <img id="heroBannerImg" src="https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816361/shivsrushti_boyz_migration/vna1qxssl6nw7asg9nc4.jpg" alt="Ganpati Banner" class="hero-banner-img" style="display: block;" onerror="this.src='images/default-banner.png'" fetchpriority="high" decoding="async">
+    <div id="heroSectionContainer" class="container animate-fade-up" style="margin-top: 25px; margin-bottom: 40px; display: block;">
+        <style>
+            .about-photo-card {
+                background: rgba(0, 0, 0, 0.45);
+                border: 2px solid rgba(255, 215, 0, 0.5);
+                border-radius: 20px;
+                padding: 15px;
+                box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 140, 0, 0.15);
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                position: relative;
+                overflow: hidden;
+            }
+            .about-photo-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.3);
+                border-color: rgba(255, 215, 0, 0.9);
+            }
+            .about-details-card {
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                border-left: 5px solid #ff8c00;
+                border-radius: 20px;
+                padding: clamp(20px, 3.5vw, 38px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(10px);
+                position: relative;
+            }
+            .about-text-content {
+                color: #f1f5f9;
+                font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+                line-height: 1.85;
+                font-family: 'Noto Sans Devanagari', sans-serif;
+                text-align: justify;
+                word-break: break-word;
+            }
+            .about-text-content p {
+                margin-bottom: 18px;
+                text-indent: 10px;
+            }
+            .badge-pill {
+                display: inline-block;
+                background: linear-gradient(135deg, #ff8c00, #e52e71);
+                color: white;
+                padding: 6px 18px;
+                border-radius: 30px;
+                font-size: 0.95rem;
+                font-weight: 700;
+                margin-bottom: 15px;
+                box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+                letter-spacing: 0.5px;
+            }
+            .about-flex-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: clamp(25px, 4vw, 40px);
+                align-items: flex-start;
+                justify-content: center;
+                margin-top: 10px;
+            }
+            .about-col-left {
+                flex: 1 1 360px;
+                max-width: 520px;
+                width: 100%;
+            }
+            .about-col-right {
+                flex: 2 1 420px;
+                width: 100%;
+            }
+            @media (max-width: 768px) {
+                .about-flex-container {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .about-col-left, .about-col-right {
+                    max-width: 100%;
+                    flex: 1 1 100%;
+                }
+            }
+        </style>
+        <div class="glass-panel" style="padding: clamp(25px, 4vw, 45px); border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid rgba(255, 215, 0, 0.35);">
+            <div class="section-header" style="margin-bottom: 30px;">
+                <div class="header-line"></div>
+                <h2 id="aboutTitleText">मंडळाचा परिचय</h2>
+                <div class="header-line"></div>
+            </div>
+            
+            <div class="about-flex-container">
+                <!-- Photo Box (Left Column) -->
+                <div class="about-col-left">
+                    <div class="about-photo-card">
+                        <div style="position: relative; overflow: hidden; border-radius: 14px; background: #000;">
+                            <img id="aboutGanpatiPhoto" src="https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816361/shivsrushti_boyz_migration/vna1qxssl6nw7asg9nc4.jpg" alt="गणपती बाप्पा" style="width: 100%; height: clamp(280px, 30vw, 380px); display: block; object-fit: cover; object-position: center; border-radius: 14px; transition: transform 0.5s ease;" onerror="this.onerror=null; this.src='logo/logo.jpeg';">
+                            <script>
+                                (function() {
+                                    try {
+                                        const cached = localStorage.getItem('settingsCache');
+                                        if (cached) {
+                                            const s = JSON.parse(cached);
+                                            const photoElem = document.getElementById('aboutGanpatiPhoto');
+                                            if (photoElem) {
+                                                if (s.aboutMandalPhoto) {
+                                                    photoElem.src = s.aboutMandalPhoto;
+                                                } else if (s.heroBannerImage) {
+                                                    photoElem.src = s.heroBannerImage.startsWith('data:') || s.heroBannerImage.startsWith('http') ? s.heroBannerImage : (s.heroBannerImage.startsWith('uploads/') ? s.heroBannerImage : 'uploads/' + s.heroBannerImage);
+                                                }
+                                            }
+                                        }
+                                    } catch(e) {}
+                                })();
+                            </script>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <div style="font-weight: 800; color: #ffd700; font-size: 1.25rem; font-family: 'Khand', sans-serif; letter-spacing: 1.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">
+                                ॥ गणपती बाप्पा मोरया ॥
+                            </div>
+                            <div style="color: #cbd5e1; font-size: 0.9rem; margin-top: 4px; font-weight: 500;">
+                                शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details Box (Right Column) -->
+                <div class="about-col-right">
+                    <div class="about-details-card">
+                        <div style="text-align: left;">
+                            <span class="badge-pill" id="aboutSubtitleText">भक्ती, संस्कृती आणि सामाजिक कार्याची परंपरा</span>
+                        </div>
+                        <div id="aboutDetailsContainer" class="about-text-content">
+                            <p><strong>शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर</strong> हे धार्मिक, सांस्कृतिक आणि सामाजिक कार्यासाठी ओळखले जाणारे परिसरातील एक अग्रणी आणि सन्माननीय मंडळ आहे.</p>
+                            <p>मंडळाची स्थापना सन <strong>२०१९</strong> मध्ये झाली असून, यंदाचे मंडळाचे दिमाखदार <strong>८ वे वर्ष</strong> आहे. श्री गणेशोत्सवाच्या माध्यमातून समाजात एकोपा निर्माण करणे, विविध सामाजिक, शैक्षणिक व आरोग्य उपक्रम राबवणे आणि पर्यावरणपूरक उत्सवाचा वसा पुढे चालवणे हे आमच्या मंडळाचे मुख्य ध्येय आहे.</p>
+                            <p>मंडळाच्या वतीने दरवर्षी महाआरती, सामाजिक शिबिरे, भव्य व मंगलमय आगमन आणि विसर्जन मिरवणूक तसेच अन्नदान (महाप्रसाद) अशा विविध उपक्रमांचे अतिशय शिस्तबद्ध व शानदार आयोजन केले जाते.</p>
+                            <p>सर्व भाविक भक्तांचे, देणगीदारांचे, गावकऱ्यांचे आणि मंडळातील सर्व अभ्यासू व जिद्दी कार्यकर्त्यांचे मोलाचे सहकार्य हीच आमच्या मंडळाची खरी ताकद व प्रेरणा आहे.</p>
+                            <p style="text-align: center; color: #ffeb3b; font-weight: 700; margin-top: 25px; font-size: 1.3rem; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 18px;">
+                                ॥ अनंत कोटी ब्रह्मांड नायक राजाधिराज श्री गणेशाय नमः ॥ 🚩
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
     <div class="particles" id="particles"></div>
 
         <div class="container">
@@ -937,8 +1075,7 @@
                     <h3>महत्वाच्या लिंक</h3>
                     <div class="nav-links-v6-wrapper" style="display: flex; justify-content: center; gap: 30px; text-align: left; margin: 0 auto; flex-wrap: nowrap;">
                         <div class="nav-links-v6" style="display: flex !important; flex-direction: column !important; gap: 12px !important; align-items: flex-start !important; justify-items: start !important; margin: 0 !important;">
-                            <a href="javascript:void(0)" onclick="switchTab('home'); window.scrollTo({top:0, behavior:'smooth'}); return false;">मुखपृष्ठ</a>
-                            <a href="about.html">मंडळाचा परिचय</a>
+                            <a href="javascript:void(0)" onclick="switchTab('home'); window.scrollTo({top:0, behavior:'smooth'}); return false;">मंडळाचा परिचय</a>
                             <a href="javascript:void(0)" onclick="switchTab('ganeshotsav'); window.scrollTo({top:0, behavior:'smooth'}); return false;">आर्थिक अहवाल</a>
                             <a href="javascript:void(0)" onclick="switchTab('committee'); window.scrollTo({top:0, behavior:'smooth'}); return false;">उत्सव कमिटी</a>
                             <a href="javascript:void(0)" onclick="switchTab('niyojan'); window.scrollTo({top:0, behavior:'smooth'}); return false;">उत्सव नियोजन</a>
