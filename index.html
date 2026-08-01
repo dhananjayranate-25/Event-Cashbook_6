@@ -134,7 +134,7 @@
                 <div class="nav-links" id="navLinks">
                     <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); navLinks.classList.remove('active'); return false;" style="display: block !important;">मुखपृष्ठ</a>
                     <a href="about.html" id="nav-about" style="display: block !important;">मंडळाचा परिचय</a>
-                    <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); navLinks.classList.remove('active'); return false;" style="display: block !important;">गणेशोत्सव हिशोब</a>
+                    <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); navLinks.classList.remove('active'); return false;" style="display: block !important;">आर्थिक अहवाल</a>
                     <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव कमिटी</a>
                     <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव नियोजन</a>
                     <a href="javascript:void(0)" id="nav-aarti" onclick="switchTab('aarti'); navLinks.classList.remove('active'); return false;" style="display: block !important;">महाआरती</a>
@@ -277,37 +277,13 @@
                 </div>
             </div>
 
-            <header class="" id="ganeshotsavHeader" style="display: none;">
-                <div class="header-glow-orb a"></div>
-                <div class="header-glow-orb b"></div>
-                <div class="header-glow-orb c"></div>
-                <div class="header-pattern"></div>
-                <div class="header-decoration">
-                    <div class="decoration-line left"></div>
-                    <div class="decoration-line right"></div>
+            <div id="ganeshotsavHeader" style="display: none;" class="animate-fade-up">
+                <div class="section-header" style="margin: 25px auto 10px auto;">
+                    <div class="header-line"></div>
+                    <h2>आर्थिक अहवाल</h2>
+                    <div class="header-line"></div>
                 </div>
-                <div class="header-content">
-                    <div class="ganpati-image-container">
-                        <div class="image-glow"></div>
-                        <img src="logo/logo.jpeg" id="secretAdminLogo" alt="Shivsrushti Logo" class="ganpati-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🙏%3C/text%3E%3C/svg%3E';this.classList.add('fallback-icon')" fetchpriority="high" decoding="async">
-                    </div>
-                    <div class="section-header" style="margin: 5px auto 12px auto; width: 100%; max-width: 1050px; justify-content: center;">
-                        <div class="header-line"></div>
-                        <span class="section-header-star">✦</span>
-                        <h1 class="title-gradient" style="font-size:clamp(0.95rem, 4vw, 1.9rem); margin: 0; line-height: 1.3; text-align: center; display: inline-block; transform: translateZ(0); -webkit-transform: translateZ(0); padding: 0 6px;">शिवसृष्टी सार्वजनिक उत्सव मंडळ</h1>
-                        <span class="section-header-star">✦</span>
-                        <div class="header-line"></div>
-                    </div>
-                    <div class="subtitle-wrapper">
-                        <span class="subtitle-badge" style="margin-top:8px;font-size:0.95rem;">शिवसृष्टी उत्सव कॅशबुक</span>
-                    </div>
-                </div>
-                <div class="wave-divider">
-                    <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
-                        <path d="M0,50 C360,100 720,0 1080,50 C1260,75 1380,60 1440,50 L1440,100 L0,100 Z" fill="var(--bg-primary)"></path>
-                    </svg>
-                </div>
-            </header>
+            </div>
 
             <div id="visibleYearsContainer" style="display: none;" class="uploaded-pdfs-section animate-fade-up reveal">
                 <div class="section-header">
@@ -963,7 +939,7 @@
                         <div class="nav-links-v6" style="display: flex !important; flex-direction: column !important; gap: 12px !important; align-items: flex-start !important; justify-items: start !important; margin: 0 !important;">
                             <a href="javascript:void(0)" onclick="switchTab('home'); window.scrollTo({top:0, behavior:'smooth'}); return false;">मुखपृष्ठ</a>
                             <a href="about.html">मंडळाचा परिचय</a>
-                            <a href="javascript:void(0)" onclick="switchTab('ganeshotsav'); window.scrollTo({top:0, behavior:'smooth'}); return false;">गणेशोत्सव हिशोब</a>
+                            <a href="javascript:void(0)" onclick="switchTab('ganeshotsav'); window.scrollTo({top:0, behavior:'smooth'}); return false;">आर्थिक अहवाल</a>
                             <a href="javascript:void(0)" onclick="switchTab('committee'); window.scrollTo({top:0, behavior:'smooth'}); return false;">उत्सव कमिटी</a>
                             <a href="javascript:void(0)" onclick="switchTab('niyojan'); window.scrollTo({top:0, behavior:'smooth'}); return false;">उत्सव नियोजन</a>
                         </div>
@@ -1135,20 +1111,27 @@
         // Secret Admin Login
         let logoClickCount = 0;
         let logoClickTimer;
-        const secretAdminLogo = document.getElementById('secretAdminLogo');
-        if (secretAdminLogo) {
-            secretAdminLogo.addEventListener('click', () => {
-                logoClickCount++;
-                clearTimeout(logoClickTimer);
-                if (logoClickCount >= 5) {
-                    window.location.href = 'admin.html?v=fixed';
-                }
-                // Reset count after 2 seconds of inactivity
-                logoClickTimer = setTimeout(() => {
-                    logoClickCount = 0;
-                }, 2000);
-            });
-        }
+        const secretAdminLogos = [
+            document.getElementById('secretAdminLogo'),
+            document.getElementById('desktopTopHeaderImg'),
+            document.getElementById('mobileTopHeaderImg'),
+            document.querySelector('.footer-mandal-name-img')
+        ];
+        secretAdminLogos.forEach(logo => {
+            if (logo) {
+                logo.addEventListener('click', () => {
+                    logoClickCount++;
+                    clearTimeout(logoClickTimer);
+                    if (logoClickCount >= 5) {
+                        window.location.href = 'admin.html?v=fixed';
+                    }
+                    // Reset count after 2 seconds of inactivity
+                    logoClickTimer = setTimeout(() => {
+                        logoClickCount = 0;
+                    }, 2000);
+                });
+            }
+        });
     });
 
     function switchTab(tabName, pushState = true) {
