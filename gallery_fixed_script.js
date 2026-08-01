@@ -415,11 +415,13 @@
             let panelYears = appSettings['customYearPanels'] || [];
             if (!Array.isArray(panelYears)) panelYears = [];
 
-            const allYears = [...new Set([...apiYears, ...panelYears])].sort().reverse();
+            const allYears = [...new Set([...apiYears, ...panelYears])].filter(y => isYearVisible(y)).sort().reverse();
 
             select.style.display = allYears.length ? '' : 'none';
+            const selContainer = select.closest('.year-selector-container');
+            if (selContainer) selContainer.style.display = allYears.length ? '' : 'none';
             const prevValue = select.value;
-            select.innerHTML = '<option value="">Select Year</option>';
+            select.innerHTML = '<option value="">वर्ष निवडा</option>';
             allYears.forEach(y => {
                 const opt = document.createElement('option');
                 opt.value = y;
@@ -431,10 +433,12 @@
             select.value = selectedYear;
             select.setAttribute('value', selectedYear);
 
-            if (selectedYear) {
+            if (allYears.length === 0) {
+                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
+            } else if (selectedYear) {
                 await loadVisibleYearData(selectedYear, container);
             } else {
-                container.innerHTML = '<div class="empty-state"><p>Select a year above to view its transaction records.</p></div>';
+                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
             }
 
             select.onchange = async function() {
@@ -442,12 +446,12 @@
                 if (this.value) {
                     await loadVisibleYearData(this.value, container);
                 } else {
-                    container.innerHTML = '<div class="empty-state"><p>Select a year above to view its transaction records.</p></div>';
+                    container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                 }
             };
         } catch (e) {
             console.error('Error loading years:', e);
-            container.innerHTML = '<div class="empty-state"><p>Error loading years. Make sure server is running!</p></div>';
+            container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
         }
     }
 
@@ -455,17 +459,12 @@
         try {
             const r = await fetch(API_URL + '/api/entries?year=' + year);
             const d = await r.json();
-            if (!d.success || !d.data.length) {
-                container.innerHTML = '<div class="empty-state"><p>No entries found for ' + year + '.</p></div>';
+            const visible = isYearVisible(year);
+            if (!visible || !d.success || !d.data.length) {
+                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                 return;
             }
             const entries = d.data;
-            const visible = isYearVisible(year);
-
-            if (!visible) {
-                container.innerHTML = '';
-                return;
-            }
 
             currentYearEntries = entries;
             currentSelectedYear = year;
@@ -473,7 +472,7 @@
             renderVisibleYearData(container);
         } catch (e) {
             console.error('Error loading year ' + year, e);
-            container.innerHTML = '<div class="empty-state"><p>Error loading data for ' + year + '</p></div>';
+            container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
         }
     }
 
@@ -750,16 +749,20 @@
             const result = await response.json();
 
             if (result.success && result.data.length > 0) {
-                uploadedPDFsData = result.data;
+                uploadedPDFsData = result.data.filter(pdf => pdf.showOnHome !== false);
+                if (uploadedPDFsData.length === 0) {
+                    grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
+                    return;
+                }
                 uploadedPDFsPage = 0;
                 const perPage = getPDFsPerPage();
                 const to = Math.min(perPage, uploadedPDFsData.length);
                 grid.innerHTML = renderPDFCards(0, to) + renderPagination();
             } else {
-                grid.innerHTML = '<div class="pdf-loading">No previous year PDFs uploaded yet.</div>';
+                grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
             }
         } catch (error) {
-            grid.innerHTML = '<div class="pdf-loading" style="color: var(--red);">Error: Server not running! Start server with: node server.js</div>';
+            grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
         }
     }
 

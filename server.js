@@ -163,6 +163,7 @@ const pdfSchema = new mongoose.Schema({
     subtitle: { type: String },
     tagline: { type: String },
     orgName: { type: String },
+    showOnHome: { type: Boolean, default: true },
     uploadedAt: { type: Date, default: Date.now },
     pdfData: { type: String, default: '' }
 });
@@ -1289,6 +1290,7 @@ app.get('/api/uploaded-pdfs', async (req, res) => {
                 subtitle: p.subtitle || '',
                 tagline: p.tagline || '',
                 orgName: p.orgName || '',
+                showOnHome: p.showOnHome !== false,
                 uploadedAt: p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString('en-IN', {
                     day: '2-digit', month: 'short', year: 'numeric',
                     hour: '2-digit', minute: '2-digit'
@@ -1375,6 +1377,17 @@ app.put('/api/uploaded-pdfs/:filename/cover', async (req, res) => {
         
         await UploadedPDF.findOneAndUpdate({ filename }, update);
         res.json({ success: true, message: 'Cover settings updated' });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+app.put('/api/uploaded-pdfs/:filename/visibility', async (req, res) => {
+    try {
+        const { filename } = req.params;
+        const { showOnHome } = req.body;
+        await UploadedPDF.findOneAndUpdate({ filename }, { showOnHome });
+        res.json({ success: true, message: 'Visibility updated' });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }

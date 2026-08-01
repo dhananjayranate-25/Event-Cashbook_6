@@ -124,6 +124,7 @@
                 </div>
                 <div class="nav-links" id="navLinks">
                     <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); navLinks.classList.remove('active'); return false;" style="display: block !important;">मुखपृष्ठ</a>
+                    <a href="about.html" id="nav-about" style="display: block !important;">मंडळाचा परिचय</a>
                     <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); navLinks.classList.remove('active'); return false;" style="display: block !important;">गणेशोत्सव हिशोब</a>
                     <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव कमिटी</a>
                     <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव नियोजन</a>
@@ -265,19 +266,15 @@
                         <div class="image-glow"></div>
                         <img src="logo/logo.jpeg" id="secretAdminLogo" alt="Shivsrushti Logo" class="ganpati-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E🙏%3C/text%3E%3C/svg%3E';this.classList.add('fallback-icon')" fetchpriority="high" decoding="async">
                     </div>
-                    <h1 class="title-gradient" style="font-size:clamp(1.2rem, 8vw, 2.8rem); margin: 0 auto 10px auto; line-height: 1.3; width: fit-content; display: inline-block; transform: translateZ(0); -webkit-transform: translateZ(0);">शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩</h1>
+                    <div class="section-header" style="margin: 5px auto 12px auto; width: 100%; max-width: 1050px; justify-content: center;">
+                        <div class="header-line"></div>
+                        <span class="section-header-star">✦</span>
+                        <h1 class="title-gradient" style="font-size:clamp(0.95rem, 4vw, 1.9rem); margin: 0; line-height: 1.3; text-align: center; display: inline-block; transform: translateZ(0); -webkit-transform: translateZ(0); padding: 0 6px;">शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩</h1>
+                        <span class="section-header-star">✦</span>
+                        <div class="header-line"></div>
+                    </div>
                     <div class="subtitle-wrapper">
                         <span class="subtitle-badge" style="margin-top:8px;font-size:0.95rem;">शिवसृष्टी उत्सव कॅशबुक</span>
-                    </div>
-                    <div class="header-info">
-                        <div class="info-item-header">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                            <span>Established with Devotion</span>
-                        </div>
-                        <div class="info-item-header">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                            <span>Managing Festivities Since 2019</span>
-                        </div>
                     </div>
                 </div>
                 <div class="wave-divider">
@@ -290,12 +287,12 @@
             <div id="visibleYearsContainer" style="display: none;" class="reveal">
                 <div class="section-header">
                     <div class="header-line"></div>
-                    <h2>Year-wise Cashbook</h2>
+                    <h2>चालू वर्षाचा आर्थिक हिशोब</h2>
                     <div class="header-line"></div>
                 </div>
                 <div class="year-selector-container" style="justify-content:center;margin-bottom:20px; display:flex;">
                     <select id="visibleYearSelect" style="padding: 12px 20px; font-size: 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5); color: white; outline: none; cursor: pointer; min-width: 200px;">
-                        <option value="">Select Year</option>
+                        <option value="">वर्ष निवडा</option>
                     </select>
                 </div>
                 <div id="visibleYearsContent"></div>
@@ -918,11 +915,11 @@
             <div class="uploaded-pdfs-section animate-fade-up reveal" id="previousYearsContainer" style="display: none; animation-delay: 0.25s;">
                 <div class="section-header">
                     <div class="header-line"></div>
-                    <h2>Previous Year Cashbooks</h2>
+                    <h2>मागील वर्षांचे आर्थिक हिशोब</h2>
                     <div class="header-line"></div>
                 </div>
                 <div class="pdf-grid" id="uploadedPdfsGrid">
-                    <div class="pdf-loading">Loading PDFs...</div>
+                    <div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>
                 </div>
             </div>
             </div>
@@ -940,6 +937,7 @@
                     <div class="nav-links-v6-wrapper" style="display: flex; justify-content: center; gap: 30px; text-align: left; margin: 0 auto; flex-wrap: nowrap;">
                         <div class="nav-links-v6" style="display: flex !important; flex-direction: column !important; gap: 12px !important; align-items: flex-start !important; justify-items: start !important; margin: 0 !important;">
                             <a href="javascript:void(0)" onclick="switchTab('home'); window.scrollTo({top:0, behavior:'smooth'}); return false;">मुखपृष्ठ</a>
+                            <a href="about.html">मंडळाचा परिचय</a>
                             <a href="javascript:void(0)" onclick="switchTab('ganeshotsav'); window.scrollTo({top:0, behavior:'smooth'}); return false;">गणेशोत्सव हिशोब</a>
                             <a href="javascript:void(0)" onclick="switchTab('committee'); window.scrollTo({top:0, behavior:'smooth'}); return false;">उत्सव कमिटी</a>
                             <a href="javascript:void(0)" onclick="switchTab('niyojan'); window.scrollTo({top:0, behavior:'smooth'}); return false;">उत्सव नियोजन</a>
@@ -1707,8 +1705,10 @@
             const allYears = [...new Set([...apiYears, ...panelYears])].filter(y => isYearVisible(y)).sort().reverse();
 
             select.style.display = allYears.length ? '' : 'none';
+            const selContainer = select.closest('.year-selector-container');
+            if (selContainer) selContainer.style.display = allYears.length ? '' : 'none';
             const prevValue = select.value;
-            select.innerHTML = '<option value="">Select Year</option>';
+            select.innerHTML = '<option value="">वर्ष निवडा</option>';
             allYears.forEach(y => {
                 const opt = document.createElement('option');
                 opt.value = y;
@@ -1720,10 +1720,12 @@
             select.value = selectedYear;
             select.setAttribute('value', selectedYear);
 
-            if (selectedYear) {
+            if (allYears.length === 0) {
+                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
+            } else if (selectedYear) {
                 await loadVisibleYearData(selectedYear, container);
             } else {
-                container.innerHTML = '<div class="empty-state"><p>Select a year above to view its transaction records.</p></div>';
+                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
             }
 
             if (currentTab === 'ganeshotsav') {
@@ -1737,12 +1739,12 @@
                 if (this.value) {
                     await loadVisibleYearData(this.value, container);
                 } else {
-                    container.innerHTML = '<div class="empty-state"><p>Select a year above to view its transaction records.</p></div>';
+                    container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                 }
             };
         } catch (e) {
             console.error('Error loading years:', e);
-            container.innerHTML = '<div class="empty-state"><p>Error loading years. Make sure server is running!</p></div>';
+            container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
             if (currentTab === 'ganeshotsav') {
                 outer.style.display = 'block';
             } else {
@@ -1755,17 +1757,12 @@
         try {
             const r = await fetch(API_URL + '/api/entries?year=' + year);
             const d = await r.json();
-            if (!d.success || !d.data.length) {
-                container.innerHTML = `<div class="empty-state"><p>No entries found for ${year}.</p></div>`;
+            const visible = isYearVisible(year);
+            if (!visible || !d.success || !d.data.length) {
+                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                 return;
             }
             const entries = d.data;
-            const visible = isYearVisible(year);
-
-            if (!visible) {
-                container.innerHTML = '';
-                return;
-            }
 
             currentYearEntries = entries;
             currentSelectedYear = year;
@@ -1773,7 +1770,7 @@
             renderVisibleYearData(container);
         } catch (e) {
             console.error('Error loading year ' + year, e);
-            container.innerHTML = `<div class="empty-state"><p>Error loading data for ${year}.</p></div>`;
+            container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
         }
     }
 
@@ -2130,16 +2127,20 @@ table {
             const result = await response.json();
 
             if (result.success && result.data.length > 0) {
-                uploadedPDFsData = result.data;
+                uploadedPDFsData = result.data.filter(pdf => pdf.showOnHome !== false);
+                if (uploadedPDFsData.length === 0) {
+                    grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
+                    return;
+                }
                 uploadedPDFsPage = 0;
                 const perPage = getPDFsPerPage();
                 const to = Math.min(perPage, uploadedPDFsData.length);
                 grid.innerHTML = renderPDFCards(0, to) + renderPagination();
             } else {
-                grid.innerHTML = '<div class="pdf-loading">No previous year PDFs uploaded yet.</div>';
+                grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
             }
         } catch (error) {
-            grid.innerHTML = '<div class="pdf-loading" style="color: var(--red);">Error: Server not running! Start server with: node server.js</div>';
+            grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
         }
     }
 

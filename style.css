@@ -640,6 +640,14 @@ header::after {
 .section-header h2::before { left: -16px; }
 .section-header h2::after { right: -16px; }
 
+.section-header-star {
+    color: var(--gold, #d4af37);
+    font-size: 14px;
+    opacity: 0.8;
+    margin: 0 4px;
+    flex-shrink: 0;
+}
+
 .toggle-visibility {
     display: inline-flex;
     align-items: center;
@@ -1631,7 +1639,8 @@ footer[style*="text-align: left"] {
         min-width: 12px !important;
     }
     .section-header h2::before,
-    .section-header h2::after {
+    .section-header h2::after,
+    .section-header-star {
         display: none !important;
     }
     .admin-card, .upload-container, .pdf-upload-section, .appearance-settings-section {
