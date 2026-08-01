@@ -109,10 +109,10 @@ async function toggleHomeVisibility(year) {
 // PDF custom title settings (per-year)
 function getPDFSettings(year) {
     const defaults = {
-        orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩',
+        orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ',
         subtitle: 'गणेश उत्सव कॅशबुक',
         tagline: 'वर्ष : आठवे',
-        headerOrgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ 🚩',
+        headerOrgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ',
         headerSubtitle: ''
     };
     try {
@@ -1970,7 +1970,7 @@ function createPDFHTML(rows, yearLabel, totalCashIn, totalCashOut, finalBalance,
                     <div class="cover-logo-ring2"></div>
                     <img src="${logoSrc}" alt="Logo" class="cover-logo" onerror="this.style.display='none'">
                 </div>
-                <div class="cover-mandal-name">${getPDFSettings(yearLabel).orgName === 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩' ? '<div style="font-size:1.5em; color:#ffd700; text-shadow:0 0 25px rgba(255,140,0,1); line-height:1.2; margin-bottom:12px;">शिवसृष्टी</div><div style="font-size:0.9em; color:#ffcc00; margin-bottom:5px;">सार्वजनिक उत्सव मंडळ</div><div style="font-size:0.9em; color:#ffcc00;"><span style="visibility:hidden;user-select:none;">🚩 </span>संगमनेर 🚩</div>' : getPDFSettings(yearLabel).orgName}</div>
+                <div class="cover-mandal-name">${getPDFSettings(yearLabel).orgName.includes('शिवसृष्टी') ? '<div style="font-size:1.5em; color:#ffd700; text-shadow:0 0 25px rgba(255,140,0,1); line-height:1.2; margin-bottom:12px;">शिवसृष्टी</div><div style="font-size:0.9em; color:#ffcc00; margin-bottom:5px;">सार्वजनिक उत्सव मंडळ</div>' : getPDFSettings(yearLabel).orgName}</div>
                 <div class="cover-divider"></div>
                 <div style="display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:15px;margin-bottom:10px;text-align:center;">
                     <span class="cover-subtitle" style="display:inline;">${getPDFSettings(yearLabel).subtitle}</span>
