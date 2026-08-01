@@ -808,7 +808,7 @@
                 resolve(canvas.toDataURL('image/jpeg'));
             };
             img.onerror = () => resolve('');
-            img.src = 'logo/logo.jpeg';
+            img.src = 'logo/pdf_logo.jpeg';
         });
     }
 

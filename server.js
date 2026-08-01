@@ -1454,7 +1454,7 @@ async function generateMergedPdf(filename, year, subtitle, tagline, orgName) {
         page.drawRectangle({ x: c.x, y: c.y, width: cornerSize, height: cornerSize, borderColor: gold, borderWidth: 1 });
     });
 
-    const logoPath = path.join(__dirname, 'logo', 'logo.jpeg');
+    const logoPath = path.join(__dirname, 'logo', 'pdf_logo.jpeg');
     const logoSize = 180;
     const logoY = 560;
     const logoX = cx - logoSize / 2;

@@ -46,7 +46,7 @@ function loadLogo() {
             resolve(cachedLogoDataURL);
         };
         img.onerror = () => reject(new Error('Failed to load logo'));
-        img.src = 'logo/logo.jpeg';
+        img.src = 'logo/pdf_logo.jpeg';
     });
 }
 
