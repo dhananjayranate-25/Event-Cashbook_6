@@ -437,7 +437,7 @@
                 select.appendChild(opt);
             });
 
-            const selectedYear = prevValue && allYears.includes(prevValue) ? prevValue : '';
+            const selectedYear = (prevValue && allYears.includes(prevValue)) ? prevValue : (allYears.length ? allYears[0] : '');
             select.value = selectedYear;
             select.setAttribute('value', selectedYear);
 
@@ -446,7 +446,7 @@
             } else if (selectedYear) {
                 await loadVisibleYearData(selectedYear, container);
             } else {
-                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
+                container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">कृपया वरील यादीतून वर्ष निवडा.</p></div>';
             }
 
             select.onchange = async function() {
@@ -454,7 +454,7 @@
                 if (this.value) {
                     await loadVisibleYearData(this.value, container);
                 } else {
-                    container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
+                    container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">कृपया वरील यादीतून वर्ष निवडा.</p></div>';
                 }
             };
         } catch (e) {
@@ -465,14 +465,14 @@
 
     async function loadVisibleYearData(year, container) {
         try {
-            const r = await fetch(API_URL + '/api/entries?year=' + year);
-            const d = await r.json();
             const visible = isYearVisible(year);
-            if (!visible || !d.success || !d.data.length) {
+            if (!visible) {
                 container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                 return;
             }
-            const entries = d.data;
+            const r = await fetch(API_URL + '/api/entries?year=' + year);
+            const d = await r.json();
+            const entries = (d && d.success && Array.isArray(d.data)) ? d.data : [];
 
             currentYearEntries = entries;
             currentSelectedYear = year;
@@ -480,7 +480,10 @@
             renderVisibleYearData(container);
         } catch (e) {
             console.error('Error loading year ' + year, e);
-            container.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
+            currentYearEntries = [];
+            currentSelectedYear = year;
+            currentYearPage = 1;
+            renderVisibleYearData(container);
         }
     }
 
@@ -511,6 +514,9 @@
             runningBalance += ci - co;
             const modeClass = e.mode === 'Online' ? 'online' : 'cash';
             rows += '<tr><td>' + (i + 1) + '</td><td class="remark">' + e.name + '</td><td class="date">' + formatDate(e.date) + '</td><td><span class="mode-badge ' + modeClass + '">' + e.mode + '</span></td><td class="cash-in-cell">' + (ci ? '\u20B9' + ci.toFixed(2) : '-') + '</td><td class="cash-out-cell">' + (co ? '\u20B9' + co.toFixed(2) : '-') + '</td><td class="balance-cell">\u20B9' + runningBalance.toFixed(2) + '</td></tr>';
+        }
+        if (entries.length === 0) {
+            rows = '<tr><td colspan="7" style="text-align:center; padding: 25px 20px; color:#ffffff; font-weight:600;">कोणतीही नोंद उपलब्ध नाही</td></tr>';
         }
 
         let html = '<div class="year-section">';
@@ -756,8 +762,8 @@
             const response = await fetch(API_URL + '/api/uploaded-pdfs');
             const result = await response.json();
 
-            if (result.success && result.data.length > 0) {
-                uploadedPDFsData = result.data.filter(pdf => pdf.showOnHome !== false);
+            if (result.success && result.data && result.data.length > 0) {
+                uploadedPDFsData = result.data.filter(pdf => pdf.showOnHome !== false && pdf.showOnHome !== 'false' && pdf.showOnHome !== 0 && pdf.showOnHome !== '0');
                 if (uploadedPDFsData.length === 0) {
                     grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                     return;
