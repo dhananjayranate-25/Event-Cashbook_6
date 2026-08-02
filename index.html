@@ -49,7 +49,6 @@
     <!-- Preload critical top images for faster loading -->
     <link rel="preload" as="image" href="logo/logo1.jpeg">
     <link rel="preload" as="image" href="https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816361/shivsrushti_boyz_migration/vna1qxssl6nw7asg9nc4.jpg">
-    <link rel="preload" as="image" href="logo/logo.jpeg">
 
     <style>
         * {
@@ -2532,8 +2531,8 @@ table {
             }
 
             if (result.success && result.data && result.data.length > 0) {
-                uploadedPDFsData = result.data.filter(pdf => pdf.showOnHome !== false && pdf.showOnHome !== 'false' && pdf.showOnHome !== 0 && pdf.showOnHome !== '0');
-                console.log('[PDF] After showOnHome filter:', uploadedPDFsData.length, 'PDFs visible');
+                uploadedPDFsData = result.data;
+                console.log('[PDF] Displaying all uploaded PDFs:', uploadedPDFsData.length, 'PDFs visible');
                 if (uploadedPDFsData.length === 0) {
                     grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
                     return;
