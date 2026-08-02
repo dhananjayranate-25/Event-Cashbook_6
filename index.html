@@ -533,7 +533,7 @@
     </div>
     <div class="particles" id="particles"></div>
 
-        <div class="container">
+        <div class="container" id="mainTabContainer">
             <div id="sectionBackButtonContainer" style="display: block; width: 100%; margin: 15px 0 10px 0; padding: 0 15px; text-align: left; box-sizing: border-box;">
                 <button onclick="switchTab('home'); return false;" style="background: linear-gradient(135deg, #ff8c00, #e52e71); color: white; border: none; padding: 8px 18px; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
                     <span style="font-size: 18px;">⬅</span> मागे जा
@@ -1479,11 +1479,27 @@
         const cashbookContainer = document.getElementById('visibleYearsContainer');
         const prevYearsContainer = document.getElementById('previousYearsContainer');
         const siteFooter = document.getElementById('siteFooter');
-        const mainContainer = document.querySelector('.container');
+        const mainContainer = document.getElementById('mainTabContainer') || document.querySelector('.container');
         const donationSection = document.getElementById('donationSection');
         const committeeSection = document.getElementById('committeeSection');
         const contactSection = document.getElementById('contactSection');
         const niyojanSection = document.getElementById('niyojanSection');
+        const aartiSection = document.getElementById('aartiSection');
+
+        const showEl = (el) => {
+            if (!el) return;
+            el.style.display = 'block';
+            el.style.opacity = '1';
+            el.classList.add('visible');
+            if (el.querySelectorAll) {
+                el.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .animate-fade-up').forEach(child => {
+                    child.classList.add('visible');
+                    child.style.opacity = '1';
+                    child.style.transform = 'none';
+                    child.style.animation = 'none';
+                });
+            }
+        };
 
         // Hide everything first
         if(heroContainer) heroContainer.style.display = 'none';
@@ -1494,49 +1510,43 @@
         if(mainContainer) mainContainer.style.display = 'none';
         if(donationSection) donationSection.style.display = 'none';
         if(committeeSection) committeeSection.style.display = 'none';
-        const aartiSection = document.getElementById('aartiSection');
         if(aartiSection) aartiSection.style.display = 'none';
         if(contactSection) contactSection.style.display = 'none';
         if(niyojanSection) niyojanSection.style.display = 'none';
 
         // Show based on tabName
         if (tabName === 'home') {
-            if(heroContainer) heroContainer.style.display = 'block';
-            if(siteFooter) siteFooter.style.display = 'block';
+            showEl(heroContainer);
+            showEl(siteFooter);
         } else if (tabName === 'ganeshotsav') {
-            if(ganeshotsavHeader) ganeshotsavHeader.style.display = 'block';
-            if(cashbookContainer) cashbookContainer.style.display = 'block';
-            if(prevYearsContainer) {
-                prevYearsContainer.style.display = 'block';
-                prevYearsContainer.classList.add('visible');
-            }
-            if(siteFooter) siteFooter.style.display = 'block';
-            if(mainContainer) mainContainer.style.display = 'block';
+            showEl(ganeshotsavHeader);
+            showEl(cashbookContainer);
+            showEl(prevYearsContainer);
+            showEl(siteFooter);
+            showEl(mainContainer);
             if(typeof renderVisibleYearSections === 'function') renderVisibleYearSections();
             if(typeof loadUploadedPDFsHome === 'function') loadUploadedPDFsHome();
         } else if (tabName === 'donate') {
-            if(siteFooter) siteFooter.style.display = 'block';
-            if(mainContainer) mainContainer.style.display = 'block';
-            if(donationSection) donationSection.style.display = 'block';
+            showEl(siteFooter);
+            showEl(mainContainer);
+            showEl(donationSection);
         } else if (tabName === 'aarti') {
-            if(siteFooter) siteFooter.style.display = 'block';
-            if(mainContainer) mainContainer.style.display = 'block';
-            const aartiSection = document.getElementById('aartiSection');
-            if(aartiSection) aartiSection.style.display = 'block';
-            
+            showEl(siteFooter);
+            showEl(mainContainer);
+            showEl(aartiSection);
         } else if (tabName === 'committee') {
-            if(siteFooter) siteFooter.style.display = 'block';
-            if(mainContainer) mainContainer.style.display = 'block';
-            if(committeeSection) committeeSection.style.display = 'block';
+            showEl(siteFooter);
+            showEl(mainContainer);
+            showEl(committeeSection);
             if(typeof loadCommitteeDataHome === 'function') loadCommitteeDataHome();
         } else if (tabName === 'contact') {
-            if(siteFooter) siteFooter.style.display = 'block';
-            if(mainContainer) mainContainer.style.display = 'block';
-            if(contactSection) contactSection.style.display = 'block';
+            showEl(siteFooter);
+            showEl(mainContainer);
+            showEl(contactSection);
         } else if (tabName === 'niyojan') {
-            if(siteFooter) siteFooter.style.display = 'block';
-            if(mainContainer) mainContainer.style.display = 'block';
-            if(niyojanSection) niyojanSection.style.display = 'block';
+            showEl(siteFooter);
+            showEl(mainContainer);
+            showEl(niyojanSection);
         }
         
         if (pushState) {
