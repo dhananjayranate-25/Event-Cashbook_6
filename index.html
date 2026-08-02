@@ -107,22 +107,24 @@
             height: 42px !important;
         }
     }
-    /* SPA Navigation Tab Visibility & Animation Override to prevent blank rendering */
-    #mainTabContainer * {
-        visibility: visible !important;
-    }
-    #mainTabContainer .reveal,
-    #mainTabContainer .reveal-left,
-    #mainTabContainer .reveal-right,
-    #mainTabContainer .reveal-scale,
-    #mainTabContainer .animate-fade-up,
-    #mainTabContainer .pdf-card-home,
-    #mainTabContainer .committee-member,
-    #mainTabContainer .utsav-card,
-    #mainTabContainer .donation-card,
+    /* SPA Navigation Tab & Home Page Visibility Override to prevent blank rendering */
+    .custom-header,
+    #heroSectionContainer,
+    #mainTabContainer,
+    .reveal,
+    .reveal-left,
+    .reveal-right,
+    .reveal-scale,
+    .animate-fade-up,
+    .animate-fade-down,
+    .pdf-card-home,
+    .committee-member,
+    .utsav-card,
+    .donation-card,
     #visibleYearsContainer,
     #previousYearsContainer {
         opacity: 1 !important;
+        visibility: visible !important;
         transform: none !important;
         animation: none !important;
     }
