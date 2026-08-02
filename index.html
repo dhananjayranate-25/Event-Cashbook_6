@@ -107,6 +107,25 @@
             height: 42px !important;
         }
     }
+    /* SPA Navigation Tab Visibility & Animation Override to prevent blank rendering */
+    #mainTabContainer * {
+        visibility: visible !important;
+    }
+    #mainTabContainer .reveal,
+    #mainTabContainer .reveal-left,
+    #mainTabContainer .reveal-right,
+    #mainTabContainer .reveal-scale,
+    #mainTabContainer .animate-fade-up,
+    #mainTabContainer .pdf-card-home,
+    #mainTabContainer .committee-member,
+    #mainTabContainer .utsav-card,
+    #mainTabContainer .donation-card,
+    #visibleYearsContainer,
+    #previousYearsContainer {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
 </style>
 </head>
 <body>
@@ -530,9 +549,10 @@
             </script>
         </div>
     </div>
+    </div> <!-- /heroSectionContainer -->
     <div class="particles" id="particles"></div>
 
-        <div class="container" id="mainTabContainer">
+    <div class="container" id="mainTabContainer">
             <div id="sectionBackButtonContainer" style="display: block; width: 100%; margin: 15px 0 10px 0; padding: 0 15px; text-align: left; box-sizing: border-box;">
                 <button onclick="switchTab('home'); return false;" style="background: linear-gradient(135deg, #ff8c00, #e52e71); color: white; border: none; padding: 8px 18px; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
                     <span style="font-size: 18px;">⬅</span> मागे जा
@@ -1257,7 +1277,6 @@
                     <div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>
                 </div>
             </div>
-            </div>
         </div>
         <footer class="new-site-footer-v6" id="siteFooter" style="display: none;">
             <div class="footer-v6-content">
@@ -1487,15 +1506,17 @@
 
         const showEl = (el) => {
             if (!el) return;
-            el.style.display = 'block';
-            el.style.opacity = '1';
+            el.style.setProperty('display', 'block', 'important');
+            el.style.setProperty('opacity', '1', 'important');
+            el.style.setProperty('visibility', 'visible', 'important');
             el.classList.add('visible');
             if (el.querySelectorAll) {
-                el.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .animate-fade-up').forEach(child => {
+                el.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .animate-fade-up, .pdf-card-home, .committee-member, .utsav-card, .donation-card').forEach(child => {
                     child.classList.add('visible');
-                    child.style.opacity = '1';
-                    child.style.transform = 'none';
-                    child.style.animation = 'none';
+                    child.style.setProperty('opacity', '1', 'important');
+                    child.style.setProperty('transform', 'none', 'important');
+                    child.style.setProperty('animation', 'none', 'important');
+                    child.style.setProperty('visibility', 'visible', 'important');
                 });
             }
         };
@@ -1518,11 +1539,11 @@
             showEl(heroContainer);
             showEl(siteFooter);
         } else if (tabName === 'ganeshotsav') {
+            showEl(mainContainer);
             showEl(ganeshotsavHeader);
             showEl(cashbookContainer);
             showEl(prevYearsContainer);
             showEl(siteFooter);
-            showEl(mainContainer);
             if(typeof renderVisibleYearSections === 'function') renderVisibleYearSections();
             if(typeof loadUploadedPDFsHome === 'function') loadUploadedPDFsHome();
         } else if (tabName === 'donate') {
