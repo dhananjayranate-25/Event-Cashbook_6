@@ -994,6 +994,19 @@
             loadAppearanceSettings();
         });
 
+        // Global Function to upload file and get URL
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            const response = await fetch('/api/upload-image', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (!result.success) throw new Error(result.error);
+            return result.url;
+        }
+
         async function loadAppearanceSettings() {
             try {
                 const response = await fetch('/api/settings');
@@ -1172,19 +1185,6 @@
                     
                     
                 ];
-                
-                // Function to upload file and get URL
-                const uploadFile = async (file) => {
-                    const formData = new FormData();
-                    formData.append('image', file);
-                    const response = await fetch('/api/upload-image', {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const result = await response.json();
-                    if (!result.success) throw new Error(result.error);
-                    return result.url;
-                };
 
                 // Upload Custom Posters as Base64 if selected
                 const donInput = document.getElementById('donationPosterInput');
@@ -1310,6 +1310,15 @@
                         body: JSON.stringify(setting)
                     });
                 }
+                
+                try {
+                    let cached = localStorage.getItem('settingsCache');
+                    let s = cached ? JSON.parse(cached) : {};
+                    for (const item of settingsToSave) {
+                        s[item.key] = item.value;
+                    }
+                    localStorage.setItem('settingsCache', JSON.stringify(s));
+                } catch(ce) {}
                 
                 status.innerHTML = '<span style="color: #10b981;">Mandal Parichay settings saved successfully!</span>';
                 setTimeout(() => { status.innerHTML = ''; }, 3000);
