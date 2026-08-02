@@ -132,14 +132,14 @@
                     <div style="width: 25px; height: 3px; background-color: white;"></div>
                 </div>
                 <div class="nav-links" id="navLinks">
-                    <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); navLinks.classList.remove('active'); return false;" style="display: block !important;">मुखपृष्ठ</a>
-                    <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); navLinks.classList.remove('active'); return false;" style="display: block !important;">आर्थिक अहवाल</a>
-                    <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव कमिटी</a>
-                    <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); navLinks.classList.remove('active'); return false;" style="display: block !important;">उत्सव नियोजन</a>
-                    <a href="javascript:void(0)" id="nav-aarti" onclick="switchTab('aarti'); navLinks.classList.remove('active'); return false;" style="display: block !important;">महाआरती</a>
-                    <a href="javascript:void(0)" id="nav-gallery" onclick="navLinks.classList.remove('active'); window.location.href='gallery.html'; return false;" style="display: block !important;">गणपती छायाचित्रे</a>
-                    <a href="javascript:void(0)" id="nav-contact" onclick="switchTab('contact'); navLinks.classList.remove('active'); return false;" style="display: block !important;">संपर्क</a>
-                    <a href="javascript:void(0)" id="nav-donate" class="nav-donate-btn" onclick="switchTab('donate'); navLinks.classList.remove('active'); return false;">देणगी</a>
+                    <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); return false;" style="display: block !important;">मुखपृष्ठ</a>
+                    <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); return false;" style="display: block !important;">आर्थिक अहवाल</a>
+                    <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); return false;" style="display: block !important;">उत्सव कमिटी</a>
+                    <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); return false;" style="display: block !important;">उत्सव नियोजन</a>
+                    <a href="javascript:void(0)" id="nav-aarti" onclick="switchTab('aarti'); return false;" style="display: block !important;">महाआरती</a>
+                    <a href="javascript:void(0)" id="nav-gallery" onclick="window.location.href='gallery.html'; return false;" style="display: block !important;">गणपती छायाचित्रे</a>
+                    <a href="javascript:void(0)" id="nav-contact" onclick="switchTab('contact'); return false;" style="display: block !important;">संपर्क</a>
+                    <a href="javascript:void(0)" id="nav-donate" class="nav-donate-btn" onclick="switchTab('donate'); return false;">देणगी</a>
                     <a href="login.html" id="nav-login" class="nav-donate-btn">Login</a>
                 </div>
             </nav>
@@ -213,8 +213,10 @@
                 50% { opacity: 1; transform: scale(1.03); filter: drop-shadow(0 0 20px rgba(255, 245, 100, 1)); }
             }
             @keyframes sweepBeam {
-                0%, 75% { transform: translateX(-220%) rotate(35deg); }
-                100% { transform: translateX(220%) rotate(35deg); }
+                0% { transform: translateX(-220%) rotate(35deg); opacity: 0; }
+                10% { opacity: 1; }
+                80% { transform: translateX(220%) rotate(35deg); opacity: 1; }
+                100% { transform: translateX(220%) rotate(35deg); opacity: 0; }
             }
             @keyframes liquidGoldText {
                 0% { background-position: 0% 50%; filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.4)); }
@@ -249,7 +251,7 @@
                 height: 200%;
                 background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.25), rgba(255, 255, 255, 0.5), rgba(255, 215, 0, 0.25), transparent);
                 transform: translateX(-220%) rotate(35deg);
-                animation: sweepBeam 6.5s infinite ease-in-out;
+                animation: sweepBeam 2s infinite linear;
                 pointer-events: none;
                 z-index: 2;
             }
@@ -1454,6 +1456,8 @@
     function switchTab(tabName, pushState = true) {
         currentTab = tabName;
         window.scrollTo(0, 0);
+        const navMenu = document.getElementById('navLinks');
+        if (navMenu) navMenu.classList.remove('active');
         
         const heroContainer = document.getElementById('heroSectionContainer');
         const ganeshotsavHeader = document.getElementById('ganeshotsavHeader');

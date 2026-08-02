@@ -44,8 +44,10 @@
             50% { opacity: 1; transform: scale(1.03); filter: drop-shadow(0 0 20px rgba(255, 245, 100, 1)); }
         }
         @keyframes sweepBeam {
-            0%, 75% { transform: translateX(-220%) rotate(35deg); }
-            100% { transform: translateX(220%) rotate(35deg); }
+            0% { transform: translateX(-220%) rotate(35deg); opacity: 0; }
+            10% { opacity: 1; }
+            80% { transform: translateX(220%) rotate(35deg); opacity: 1; }
+            100% { transform: translateX(220%) rotate(35deg); opacity: 0; }
         }
         @keyframes liquidGoldText {
             0% { background-position: 0% 50%; filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.4)); }
@@ -80,7 +82,7 @@
             height: 200%;
             background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.25), rgba(255, 255, 255, 0.5), rgba(255, 215, 0, 0.25), transparent);
             transform: translateX(-220%) rotate(35deg);
-            animation: sweepBeam 6.5s infinite ease-in-out;
+            animation: sweepBeam 2s infinite linear;
             pointer-events: none;
             z-index: 2;
         }
