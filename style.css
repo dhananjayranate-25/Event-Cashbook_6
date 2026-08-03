@@ -602,7 +602,7 @@ header::after {
 .header-line:last-child::before { left: -4px; }
 
 .section-header h2, .niyojan-same-heading {
-    font-size: 1.4rem;
+    font-size: 1.85rem;
     font-weight: 700;
     color: var(--gold);
     white-space: normal;
@@ -1629,7 +1629,7 @@ footer[style*="text-align: left"] {
         overflow: hidden !important;
     }
     .section-header h2, .niyojan-same-heading {
-        font-size: 1.1rem !important;
+        font-size: 1.45rem !important;
         white-space: normal !important;
         line-height: 1.3 !important;
         padding: 0 4px !important;
@@ -2709,7 +2709,7 @@ body > .container {
         gap: 6px !important;
     }
     .section-header h2, .niyojan-same-heading {
-        font-size: 0.95rem !important;
+        font-size: 1.3rem !important;
         white-space: normal !important;
     }
     .header-line {
@@ -5146,7 +5146,7 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
 #ganeshotsavHeader .section-header h2,
 #visibleYearsContainer .section-header h2,
 #previousYearsContainer .section-header h2 {
-    font-size: 1.4rem !important;
+    font-size: 1.85rem !important;
     font-weight: 700 !important;
     letter-spacing: 0.5px !important;
 }
@@ -5155,7 +5155,7 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
     #ganeshotsavHeader .section-header h2,
     #visibleYearsContainer .section-header h2,
     #previousYearsContainer .section-header h2 {
-        font-size: 1.2rem !important;
+        font-size: 1.45rem !important;
         font-weight: 700 !important;
     }
 }
@@ -5164,7 +5164,7 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
     #ganeshotsavHeader .section-header h2,
     #visibleYearsContainer .section-header h2,
     #previousYearsContainer .section-header h2 {
-        font-size: 1.1rem !important;
+        font-size: 1.3rem !important;
         font-weight: 700 !important;
     }
 }
