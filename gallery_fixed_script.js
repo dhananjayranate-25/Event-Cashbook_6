@@ -976,15 +976,9 @@ table {
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 2, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
+                scale: 1.1, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
             });
             document.body.removeChild(iframe);
-            const { jsPDF } = window.jspdf;
-            const coverDoc = new jsPDF('p', 'mm', 'a4');
-            const pgW = coverDoc.internal.pageSize.getWidth();
-            const imgH = (canvas.height * pgW) / canvas.width;
-            coverDoc.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, pgW, imgH);
-            const coverBytes = coverDoc.output('arraybuffer');
             
             const resp = await fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/uploads/' + filename);
             const uploadBytes = await resp.arrayBuffer();
@@ -992,16 +986,16 @@ table {
             const { PDFDocument } = window.PDFLib;
             const mergedPdf = await PDFDocument.create();
             
-            const coverPdf = await PDFDocument.load(coverBytes);
-            const cPgs = await mergedPdf.copyPages(coverPdf, coverPdf.getPageIndices());
-            cPgs.forEach(p => mergedPdf.addPage(p));
+            const coverPage = mergedPdf.addPage([595.28, 841.89]);
+            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.65));
+            coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
             
             const existingPdf = await PDFDocument.load(uploadBytes);
             const indices = existingPdf.getPageIndices();
             const uPgs = await mergedPdf.copyPages(existingPdf, indices);
             uPgs.forEach(p => mergedPdf.addPage(p));
             
-            const mergedBytes = await mergedPdf.save();
+            const mergedBytes = await mergedPdf.save({ useObjectStreams: false });
             const blob = new Blob([mergedBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
             

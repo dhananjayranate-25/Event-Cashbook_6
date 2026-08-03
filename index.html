@@ -334,34 +334,17 @@
                 text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
                 position: relative;
                 z-index: 1;
+                border-left: 5px solid #ff9900;
+                padding-left: 22px;
             }
             .about-text-content p {
-                margin-bottom: 26px;
+                margin-bottom: 8px;
                 position: relative;
-                padding: 16px 22px;
-                background: linear-gradient(135deg, rgba(255, 215, 0, 0.06) 0%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 120, 0, 0.04) 100%);
-                border-left: 5px solid #ff9900;
-                border-radius: 12px 20px 20px 12px;
-                border-top: 1px solid rgba(255, 215, 0, 0.2);
-                border-right: 1px solid rgba(255, 215, 0, 0.1);
-                border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 160, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-                transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
                 z-index: 1;
             }
-            .about-text-content p:hover {
-                border-left: 6px solid #ffea00;
-                background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 100, 0, 0.12) 100%);
-                transform: scale(1.025) translateX(12px);
-                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 200, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.15);
-                border-color: rgba(255, 215, 0, 0.5);
-            }
             .about-text-content p:last-child {
-                border: none !important;
-                padding: 10px 0 !important;
-                background: transparent !important;
-                box-shadow: none !important;
-                margin-top: 35px !important;
+                margin-top: 30px;
+                margin-bottom: 0;
                 animation: mantraPulsate 3.5s infinite ease-in-out;
                 letter-spacing: 1px;
             }
@@ -630,14 +613,6 @@
                         </button>
                     </div>
                     
-                </div>
-            </div>
-
-            <div id="ganeshotsavHeader" style="display: none;" class="animate-fade-up">
-                <div class="section-header" style="margin: 25px auto 10px auto;">
-                    <div class="header-line"></div>
-                    <h2>आर्थिक अहवाल</h2>
-                    <div class="header-line"></div>
                 </div>
             </div>
 
@@ -2889,15 +2864,9 @@ table {
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 2, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
+                scale: 1.1, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
             });
             document.body.removeChild(iframe);
-            const { jsPDF } = window.jspdf;
-            const coverDoc = new jsPDF('p', 'mm', 'a4');
-            const pgW = coverDoc.internal.pageSize.getWidth();
-            const imgH = (canvas.height * pgW) / canvas.width;
-            coverDoc.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 0, 0, pgW, imgH);
-            const coverBytes = coverDoc.output('arraybuffer');
             
             const resp = await fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + filename);
             const uploadBytes = await resp.arrayBuffer();
@@ -2905,16 +2874,16 @@ table {
             const { PDFDocument } = window.PDFLib;
             const mergedPdf = await PDFDocument.create();
             
-            const coverPdf = await PDFDocument.load(coverBytes);
-            const cPgs = await mergedPdf.copyPages(coverPdf, coverPdf.getPageIndices());
-            cPgs.forEach(p => mergedPdf.addPage(p));
+            const coverPage = mergedPdf.addPage([595.28, 841.89]);
+            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.65));
+            coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
             
             const existingPdf = await PDFDocument.load(uploadBytes);
             const indices = existingPdf.getPageIndices();
             const uPgs = await mergedPdf.copyPages(existingPdf, indices);
             uPgs.forEach(p => mergedPdf.addPage(p));
             
-            const mergedBytes = await mergedPdf.save();
+            const mergedBytes = await mergedPdf.save({ useObjectStreams: false });
             const blob = new Blob([mergedBytes], { type: 'application/pdf' });
             const url = URL.createObjectURL(blob);
             

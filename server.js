@@ -1567,7 +1567,7 @@ async function generateMergedPdf(filename, year, subtitle, tagline, orgName) {
         copiedPages.forEach(p => mergedPdf.addPage(p));
     }
 
-    return await mergedPdf.save();
+    return await mergedPdf.save({ useObjectStreams: false });
 }
 
 app.get('/api/merged-pdf/:filename/:year', async (req, res) => {
