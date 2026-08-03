@@ -165,23 +165,8 @@
                         <label for="appEstYear">Establishment Year (e.g., १९२०)</label>
                         <div class="input-focus-line"></div>
                     </div>
-                    <div class="form-group floating-label">
-                        <input type="text" id="appRegNo" placeholder=" ">
-                        <label for="appRegNo">Registration No. (e.g., नोंदणी क्र. : ई ७१६५/७९)</label>
-                        <div class="input-focus-line"></div>
-                    </div>
-                    <div class="form-group floating-label">
-                        <input type="text" id="appMainTitle" placeholder=" ">
-                        <label for="appMainTitle">Main Title (Red Banner)</label>
-                        <div class="input-focus-line"></div>
-                    </div>
-                    <div class="form-group floating-label">
-                        <input type="text" id="appNavbarTitle" placeholder=" ">
-                        <label for="appNavbarTitle">Navbar Title</label>
-                        <div class="input-focus-line"></div>
-                    </div>
 
-                    </div>
+                </div>
                     
                     <div class="section-header" style="margin-top: 35px;">
                         <div class="header-line"></div>
@@ -874,14 +859,6 @@
                 </span>
                 PDF Settings
             </button>
-            <button class="btn btn-primary ripple" onclick="openNotepadModal()" style="background: linear-gradient(135deg, #10b981, #059669);">
-                <span class="btn-icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                    </svg>
-                </span>
-                Notepad
-            </button>
         </div>
     </div>
 
@@ -1014,9 +991,6 @@
                 if (result.success) {
                     const settings = result.data;
                     document.getElementById('appEstYear').value = settings.estYear || '';
-                    document.getElementById('appRegNo').value = settings.regNo || '';
-                    document.getElementById('appMainTitle').value = settings.mainTitle || '';
-                    document.getElementById('appNavbarTitle').value = settings.navbarTitle || '';
                     
                     document.getElementById('donateAccName').value = settings.donateAccName || 'Dhananjay Sachin Ranate';
                     document.getElementById('donateAccNo').value = settings.donateAccNo || '322502010043655';
@@ -1109,9 +1083,6 @@
             status.innerHTML = '<span style="color: #3b82f6;">Saving...</span>';
             
             const estYear = document.getElementById('appEstYear').value;
-            const regNo = document.getElementById('appRegNo').value;
-            const mainTitle = document.getElementById('appMainTitle').value;
-            const navbarTitle = document.getElementById('appNavbarTitle').value;
             const varganiAabharTitle = document.getElementById('varganiAabharTitle').value;
             const varganiAabharText = document.getElementById('varganiAabharText').value;
                         const mahaprasadNimantranTitle = document.getElementById('mahaprasadNimantranTitle').value;
@@ -1149,9 +1120,6 @@
                 // Save texts
                 const settingsToSave = [
                     { key: 'estYear', value: estYear },
-                    { key: 'regNo', value: regNo },
-                    { key: 'mainTitle', value: mainTitle },
-                    { key: 'navbarTitle', value: navbarTitle },
                     { key: 'varganiAabharTitle', value: varganiAabharTitle },
                     { key: 'varganiAabharText', value: varganiAabharText },
                     { key: 'varganiCardBadge', value: varganiCardBadge },
@@ -1952,39 +1920,6 @@ table {
         </div>
     </div>
 
-    <!-- Notepad Modal -->
-    <div id="notepadModal" class="edit-modal-overlay">
-        <div class="edit-modal" style="max-width: 750px;">
-            <div class="edit-modal-header">
-                <h3>Notepad</h3>
-                <button class="edit-modal-close" onclick="closeNotepadModal()">✕</button>
-            </div>
-            <div style="padding: 10px 15px 5px;">
-                <div id="notepadTabs" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;"></div>
-            </div>
-            <div style="padding: 0 15px 15px;">
-                <div style="display:flex;gap:10px;margin-bottom:8px;align-items:center;">
-                    <input type="text" id="notepadTitle" placeholder="Note title..." style="flex:1;padding:10px 14px;border-radius:8px;background:var(--bg-card);border:1px solid var(--glass-border);color:var(--text-primary);font-size:14px;font-family:'Poppins','Noto Sans Devanagari',sans-serif;outline:none;">
-                    <span style="font-size:12px;color:var(--text-secondary);">Title</span>
-                </div>
-                <textarea id="notepadContent" style="width:100%;min-height:320px;padding:12px;border-radius:10px;background:var(--bg-card);border:1px solid var(--glass-border);color:var(--text-primary);font-size:14px;font-family:'Poppins','Noto Sans Devanagari',sans-serif;resize:vertical;line-height:1.6;" placeholder="Write your notes here... Auto-saves every 2 seconds."></textarea>
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
-                    <span id="notepadSaveStatus" style="font-size:12px;color:var(--text-secondary);">Auto-save enabled</span>
-                    <div style="display:flex;gap:8px;">
-                        <button class="btn btn-primary ripple" onclick="viewNotepadPDF()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);padding:7px 14px;font-size:13px;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            View PDF
-                        </button>
-                        <button class="btn btn-primary ripple" onclick="downloadNotepadPDF()" style="padding:7px 14px;font-size:13px;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            Download PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- PDF Settings Modal -->
     <div id="pdfSettingsModal" class="edit-modal-overlay">
         <div class="edit-modal">
@@ -2199,211 +2134,6 @@ table {
             setTimeout(closePDFSettingsModal, 1200);
         }
 
-        // ===== Multi-note Notepad =====
-        let notepadNotes = [];
-        let notepadActiveId = null;
-        let notepadNextId = 1;
-        let notepadAutoSaveTimer = null;
-
-        function getNotepadNotes() {
-            try { return appSettings['adminNotepadNotes'] || []; } catch (e) { return []; }
-        }
-        function saveNotepadNotes() {
-            if (typeof saveSettingToDB === 'function') {
-                saveSettingToDB('adminNotepadNotes', notepadNotes);
-            }
-        }
-        function renderNotepadTabs() {
-            const container = document.getElementById('notepadTabs');
-            container.innerHTML = '';
-            notepadNotes.forEach(n => {
-                const wrapper = document.createElement('span');
-                wrapper.style.cssText = 'display:inline-flex;align-items:center;gap:4px;padding:5px 8px 5px 14px;border-radius:8px;border:2px solid var(--glass-border);background:' + (n.id === notepadActiveId ? 'var(--primary-gradient-start)' : 'var(--bg-card)') + ';color:' + (n.id === notepadActiveId ? '#fff' : 'var(--text-primary)') + ';font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;';
-                wrapper.onclick = () => switchNotepadNote(n.id);
-                const label = document.createElement('span');
-                label.textContent = n.title;
-                wrapper.appendChild(label);
-                const delBtn = document.createElement('button');
-                delBtn.innerHTML = '✕';
-                delBtn.title = 'Delete this note';
-                delBtn.style.cssText = 'background:rgba(239,68,68,0.2);border:none;border-radius:4px;color:' + (n.id === notepadActiveId ? '#fff' : '#ef4444') + ';font-size:14px;font-weight:700;cursor:pointer;line-height:1;padding:3px 6px;opacity:0.85;transition:all 0.2s;margin-left:2px;';
-                delBtn.onmouseover = () => delBtn.style.opacity = '1';
-                delBtn.onmouseout = () => delBtn.style.opacity = '0.85';
-                delBtn.onclick = (e) => { e.stopPropagation(); deleteNotepadNote(n.id); };
-                wrapper.appendChild(delBtn);
-                container.appendChild(wrapper);
-            });
-            const addBtn = document.createElement('button');
-            addBtn.innerHTML = '+';
-            addBtn.title = 'Add new note';
-            addBtn.style.cssText = 'padding:5px 14px;border-radius:8px;border:2px dashed var(--glass-border);background:var(--bg-card);color:var(--text-primary);font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;line-height:1;';
-            addBtn.onclick = addNotepadNote;
-            container.appendChild(addBtn);
-        }
-        function switchNotepadNote(id) {
-            const textarea = document.getElementById('notepadContent');
-            const titleInput = document.getElementById('notepadTitle');
-            const note = notepadNotes.find(n => n.id === notepadActiveId);
-            if (note) {
-                note.content = textarea.value;
-                note.title = titleInput.value.trim() || note.title;
-            }
-            notepadActiveId = id;
-            const active = notepadNotes.find(n => n.id === id);
-            textarea.value = active ? active.content : '';
-            titleInput.value = active ? active.title : '';
-            document.getElementById('notepadSaveStatus').textContent = 'Auto-save enabled';
-            renderNotepadTabs();
-        }
-        function addNotepadNote() {
-            const title = prompt('Enter note title:', '');
-            if (!title || !title.trim()) return;
-            const id = notepadNextId++;
-            const newNote = { id, title: title.trim(), content: '' };
-            notepadNotes.push(newNote);
-            saveNotepadNotes();
-            switchNotepadNote(newNote.id);
-        }
-        function deleteNotepadNote(id) {
-            if (!confirm('Delete this note?')) return;
-            const idx = notepadNotes.findIndex(n => n.id === id);
-            if (idx === -1) return;
-            notepadNotes.splice(idx, 1);
-            if (notepadNotes.length === 0) {
-                const newId = notepadNextId++;
-                notepadNotes.push({ id: newId, title: 'Note ' + newId, content: '' });
-            }
-            if (notepadActiveId === id) {
-                notepadActiveId = notepadNotes[0].id;
-            }
-            saveNotepadNotes();
-            const textarea = document.getElementById('notepadContent');
-            const active = notepadNotes.find(n => n.id === notepadActiveId);
-            textarea.value = active ? active.content : '';
-            renderNotepadTabs();
-        }
-        function openNotepadModal() {
-            notepadNotes = getNotepadNotes();
-            if (notepadNotes.length === 0) {
-                notepadNextId = 1;
-                const title = prompt('Enter note title:', '');
-                const firstTitle = (title && title.trim()) ? title.trim() : 'Note 1';
-                notepadNotes = [{ id: notepadNextId++, title: firstTitle, content: '' }];
-                saveNotepadNotes();
-            }
-            notepadActiveId = notepadNotes[0].id;
-            document.getElementById('notepadContent').value = notepadNotes[0].content;
-            document.getElementById('notepadTitle').value = notepadNotes[0].title;
-            document.getElementById('notepadModal').style.display = 'flex';
-            document.getElementById('notepadSaveStatus').textContent = 'Auto-save enabled';
-            renderNotepadTabs();
-
-            const textarea = document.getElementById('notepadContent');
-            const titleInput = document.getElementById('notepadTitle');
-            function saveCurrentNote() {
-                const n = notepadNotes.find(x => x.id === notepadActiveId);
-                if (n) {
-                    n.content = textarea.value;
-                    n.title = titleInput.value.trim() || n.title;
-                }
-                saveNotepadNotes();
-            }
-            textarea.oninput = function() {
-                document.getElementById('notepadSaveStatus').textContent = 'Unsaved changes...';
-                if (notepadAutoSaveTimer) clearTimeout(notepadAutoSaveTimer);
-                notepadAutoSaveTimer = setTimeout(() => {
-                    saveCurrentNote();
-                    renderNotepadTabs();
-                    document.getElementById('notepadSaveStatus').textContent = 'Auto-saved at ' + new Date().toLocaleTimeString();
-                }, 2000);
-            };
-            titleInput.oninput = function() {
-                saveCurrentNote();
-                renderNotepadTabs();
-                document.getElementById('notepadSaveStatus').textContent = 'Title saved';
-            };
-        }
-        function closeNotepadModal() {
-            const textarea = document.getElementById('notepadContent');
-            const note = notepadNotes.find(n => n.id === notepadActiveId);
-            if (note) note.content = textarea.value;
-            saveNotepadNotes();
-            if (notepadAutoSaveTimer) clearTimeout(notepadAutoSaveTimer);
-            document.getElementById('notepadModal').style.display = 'none';
-        }
-
-        async function generateNotepadPDFBlob() {
-            const notes = getNotepadNotes().filter(n => n.content.trim());
-            if (notes.length === 0) return null;
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-            const mg = 15;
-            const pw = doc.internal.pageSize.getWidth() - mg * 2;
-            const pageH = doc.internal.pageSize.getHeight();
-
-            for (let ni = 0; ni < notes.length; ni++) {
-                if (ni > 0) doc.addPage();
-                // Header
-                doc.setFontSize(20);
-                doc.setFont('helvetica', 'bold');
-                doc.text('ShivSrushti Boyz Notepad', pw / 2 + mg, 18, { align: 'center' });
-                // Note title
-                doc.setFontSize(13);
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(200, 150, 50);
-                doc.text(notes[ni].title, mg, 30);
-                doc.setTextColor(0);
-                // Divider
-                doc.setDrawColor(200, 150, 50);
-                doc.line(mg, 34, mg + pw, 34);
-                // Content
-                doc.setFontSize(11);
-                doc.setFont('helvetica', 'normal');
-                const lines = doc.splitTextToSize(notes[ni].content, pw);
-                let y = 42;
-                for (let i = 0; i < lines.length; i++) {
-                    if (y > pageH - 20) {
-                        doc.addPage();
-                        y = 15;
-                    }
-                    doc.text(lines[i], mg, y);
-                    y += 6;
-                }
-            }
-            // Footer on all pages
-            const totalPages = doc.internal.getNumberOfPages();
-            for (let p = 1; p <= totalPages; p++) {
-                doc.setPage(p);
-                doc.setFontSize(8);
-                doc.setFont('helvetica', 'italic');
-                doc.setTextColor(150);
-                doc.text('ShivSrushti Boyz Notepad | ' + formatDate(new Date()), mg, pageH - 8);
-                doc.text('Page ' + p + ' of ' + totalPages, pw / 2 + mg, pageH - 8, { align: 'center' });
-                doc.setTextColor(0);
-            }
-            return doc.output('arraybuffer');
-        }
-        async function downloadNotepadPDF() {
-            const bytes = await generateNotepadPDFBlob();
-            if (!bytes) { alert('All notes are empty! Write something first.'); return; }
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'ShivSrushti_Boyz_Notepad.pdf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 10000);
-        }
-        async function viewNotepadPDF() {
-            const bytes = await generateNotepadPDFBlob();
-            if (!bytes) { alert('All notes are empty! Write something first.'); return; }
-            const blob = new Blob([bytes], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            window.open(url, '_blank');
-        }
-
         window.switchAdminTab = switchAdminTab;
         function switchAdminTab(tabId, pushState = true) {
             if (pushState) {
@@ -2582,8 +2312,6 @@ table {
         document.addEventListener('click', function(e) {
             const pm = document.getElementById('pdfSettingsModal');
             if (e.target === pm) closePDFSettingsModal();
-            const nm = document.getElementById('notepadModal');
-            if (e.target === nm) closeNotepadModal();
             const cm = document.getElementById('editCoverModal');
             if (e.target === cm) closeEditCoverModal();
         });
