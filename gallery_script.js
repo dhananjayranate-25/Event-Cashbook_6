@@ -769,76 +769,45 @@
             tagline: pdfTagline || fb.tagline
         };
         return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-@page{margin:0;size:A4;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Poppins','Noto Sans Devanagari',sans-serif;background:#f5f0eb;color:#1a1a2e;font-size:10px;line-height:1.4;}
-.cover-page{width:210mm;height:297mm;background:linear-gradient(160deg,#1a0800 0%,#3d1508 25%,#5a2010 50%,#3d1508 75%,#1a0800 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.cover-page::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,140,0,0.15) 0%,transparent 50%),radial-gradient(ellipse at 70% 80%,rgba(255,215,0,0.1) 0%,transparent 50%);pointer-events:none;}
-.cover-outer-border{position:absolute;top:8mm;left:8mm;right:8mm;bottom:8mm;border:5px solid #ff8c00;border-radius:25px;box-shadow:0 0 30px rgba(255,140,0,0.3),inset 0 0 30px rgba(255,140,0,0.1);}
-.cover-inner-border{position:absolute;top:11mm;left:11mm;right:11mm;bottom:11mm;border:3px solid rgba(255,215,0,0.4);border-radius:20px;}
-.cover-corner{position:absolute;width:60px;height:60px;border:5px solid #ffd700;}
-.cover-corner.tl{top:14mm;left:14mm;border-right:none;border-bottom:none;border-radius:15px 0 0 0;}
-.cover-corner.tr{top:14mm;right:14mm;border-left:none;border-bottom:none;border-radius:0 15px 0 0;}
-.cover-corner.bl{bottom:14mm;left:14mm;border-right:none;border-top:none;border-radius:0 0 0 15px;}
-.cover-corner.br{bottom:14mm;right:14mm;border-left:none;border-top:none;border-radius:0 0 15px 0;}
-.cover-content{position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;padding:30px;margin-top:-40px;}
-.cover-logo-wrap{width:350px;max-width:90vw;height:350px;max-height:90vw;position:relative;margin-bottom:25px;}
-.cover-logo-glow{position:absolute;top:-30px;left:-30px;right:-30px;bottom:-30px;background:radial-gradient(circle,rgba(255,140,0,0.7) 0%,rgba(255,140,0,0.3) 40%,transparent 70%);border-radius:50%;}
-.cover-logo-ring{position:absolute;top:-15px;left:-15px;right:-15px;bottom:-15px;border:6px solid rgba(255,215,0,0.7);border-radius:50%;}
-.cover-logo-ring2{position:absolute;top:-25px;left:-25px;right:-25px;bottom:-25px;border:4px solid rgba(255,215,0,0.3);border-radius:50%;}
-.cover-logo{width:100%;height:100%;object-fit:contain;border-radius:50%;border:8px solid #ffd700;background:rgba(255,255,255,0.98);padding:12px;box-shadow:0 0 100px rgba(255,140,0,1),0 0 200px rgba(255,140,0,0.4),0 20px 60px rgba(0,0,0,0.8);position:relative;z-index:2;}
-.cover-mandal-name{font-size:36px;font-weight:900;color:#ffd700;text-align:center;letter-spacing:2px;text-shadow:0 0 30px rgba(255,215,0,0.6),0 3px 10px rgba(0,0,0,0.7);line-height:1.4;border-left:6px solid #dc2626;border-right:6px solid #dc2626;padding:10px 35px;margin-top:10px;}
-.cover-divider{width:350px;max-width:80vw;height:4px;background:linear-gradient(90deg,transparent,#ffd700,#ff8c00,#ffd700,transparent);margin:18px auto;border-radius:3px;box-shadow:0 0 15px rgba(255,215,0,0.4);}
-.cover-subtitle{font-size:24px;font-weight:700;color:#ff8c00;text-align:center;letter-spacing:2px;margin-bottom:0;text-shadow:0 0 20px rgba(255,140,0,0.5);}
-.cover-tagline{font-size:24px;font-weight:700;color:#ff8c00;text-align:center;letter-spacing:2px;text-shadow:0 0 20px rgba(255,140,0,0.5);margin-bottom:0;}
-.cover-year-box{margin-top:30px;padding:15px 50px;border:3px solid #ffd700;border-radius:35px;background:linear-gradient(135deg,rgba(255,140,0,0.15),rgba(255,215,0,0.1));text-align:center;box-shadow:0 0 30px rgba(255,215,0,0.2);}
-.cover-year-label{font-size:30px;font-weight:800;color:#ffd700;display:inline-block;margin-right:12px;margin-bottom:0;letter-spacing:1px;text-shadow:0 0 25px rgba(255,215,0,0.5);}
-.cover-year-val{font-size:30px;font-weight:800;color:#ffd700;text-shadow:0 0 25px rgba(255,215,0,0.5);}
-.cover-footer{position:absolute;bottom:15mm;left:0;right:0;text-align:center;z-index:10;}
-.cover-footer-om{font-size:20px;color:#ffd700;margin-bottom:8px;letter-spacing:3px;}
-.cover-footer p{font-size:10px;color:#8b7355;letter-spacing:1.5px;line-height:1.6;}
-
-/* Premium Aesthetic Enhancements */
-.card, .list-container, .event-card, .committee-card, .expense-card {
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+@media print {
+  @page { margin: 0 !important; size: A4 portrait !important; }
+  html, body { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; background: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .cover-page { width: 100% !important; max-width: 100% !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; overflow: hidden !important; }
 }
-.card:hover, .list-container:hover, .event-card:hover, .committee-card:hover, .expense-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255, 204, 0, 0.15);
-    border-color: var(--primary);
+@media screen and (max-width: 768px) {
+  body { background: #1a0800 !important; margin: 0 !important; padding: 0 !important; }
+  .cover-page { width: 100% !important; max-width: 100% !important; min-height: 100vh !important; height: auto !important; margin: 0 !important; box-shadow: none !important; }
 }
-.btn, .btn-outline, .action-btn {
-    transition: all 0.2s ease;
-}
-.btn:active, .btn-outline:active, .action-btn:active {
-    transform: scale(0.95);
-}
-.item-row {
-    transition: background 0.2s;
-}
-.item-row:hover {
-    background: rgba(255, 204, 0, 0.1);
-}
-/* Responsive Tables */
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-}
-table {
-    width: 100%;
-    min-width: 500px; /* Ensures table doesn't squish too much on mobile */
-}
-/* Form Grid Mobile Fix */
-@media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr !important;
-    }
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #f5f0eb; color: #1a1a2e; font-size: 10px; line-height: 1.4; }
+.cover-page { width: 210mm; height: 297mm; margin: 0 auto; background: linear-gradient(160deg, #1a0800 0%, #3d1508 25%, #5a2010 50%, #3d1508 75%, #1a0800 100%); position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; page-break-after: always; box-shadow: 0 0 20px rgba(0,0,0,0.15); }
+.cover-page::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse at 30% 20%, rgba(255,140,0,0.15) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(255,215,0,0.1) 0%, transparent 50%); pointer-events: none; }
+.cover-outer-border { position: absolute; top: 8mm; left: 8mm; right: 8mm; bottom: 8mm; border: 5px solid #ff8c00; border-radius: 25px; box-shadow: 0 0 30px rgba(255,140,0,0.3), inset 0 0 30px rgba(255,140,0,0.1); }
+.cover-inner-border { position: absolute; top: 11mm; left: 11mm; right: 11mm; bottom: 11mm; border: 3px solid rgba(255,215,0,0.4); border-radius: 20px; }
+.cover-corner { position: absolute; width: 60px; height: 60px; border: 5px solid #ffd700; }
+.cover-corner.tl { top: 14mm; left: 14mm; border-right: none; border-bottom: none; border-radius: 15px 0 0 0; }
+.cover-corner.tr { top: 14mm; right: 14mm; border-left: none; border-bottom: none; border-radius: 0 15px 0 0; }
+.cover-corner.bl { bottom: 14mm; left: 14mm; border-right: none; border-top: none; border-radius: 0 0 0 15px; }
+.cover-corner.br { bottom: 14mm; right: 14mm; border-left: none; border-top: none; border-radius: 0 0 15px 0; }
+.cover-content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; padding: 30px; margin-top: -40px; }
+.cover-logo-wrap { width: 350px; max-width: 85vw; height: 350px; max-height: 85vw; position: relative; margin-bottom: 25px; }
+.cover-logo-glow { position: absolute; top: -30px; left: -30px; right: -30px; bottom: -30px; background: radial-gradient(circle, rgba(255,140,0,0.7) 0%, rgba(255,140,0,0.3) 40%, transparent 70%); border-radius: 50%; }
+.cover-logo-ring { position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; border: 6px solid rgba(255,215,0,0.7); border-radius: 50%; }
+.cover-logo-ring2 { position: absolute; top: -25px; left: -25px; right: -25px; bottom: -25px; border: 4px solid rgba(255,215,0,0.3); border-radius: 50%; }
+.cover-logo { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; border: 8px solid #ffd700; background: rgba(255,255,255,0.98); padding: 12px; box-shadow: 0 0 100px rgba(255,140,0,1), 0 0 200px rgba(255,140,0,0.4), 0 20px 60px rgba(0,0,0,0.8); position: relative; z-index: 2; }
+.cover-mandal-name { font-size: 36px; font-weight: 900; color: #ffd700; text-align: center; letter-spacing: 2px; text-shadow: 0 0 30px rgba(255,215,0,0.6), 0 3px 10px rgba(0,0,0,0.7); line-height: 1.4; border-left: 6px solid #dc2626; border-right: 6px solid #dc2626; padding: 10px 35px; margin-top: 10px; }
+.cover-divider { width: 350px; max-width: 80vw; height: 4px; background: linear-gradient(90deg, transparent, #ffd700, #ff8c00, #ffd700, transparent); margin: 18px auto; border-radius: 3px; box-shadow: 0 0 15px rgba(255,215,0,0.4); }
+.cover-subtitle { font-size: 24px; font-weight: 700; color: #ff8c00; text-align: center; letter-spacing: 2px; margin-bottom: 0; text-shadow: 0 0 20px rgba(255,140,0,0.5); }
+.cover-tagline { font-size: 24px; font-weight: 700; color: #ff8c00; text-align: center; letter-spacing: 2px; text-shadow: 0 0 20px rgba(255,140,0,0.5); margin-bottom: 0; }
+.cover-year-box { margin-top: 30px; padding: 15px 50px; border: 3px solid #ffd700; border-radius: 35px; background: linear-gradient(135deg, rgba(255,140,0,0.15), rgba(255,215,0,0.1)); text-align: center; box-shadow: 0 0 30px rgba(255,215,0,0.2); }
+.cover-year-label { font-size: 30px; font-weight: 800; color: #ffd700; display: inline-block; margin-right: 12px; margin-bottom: 0; letter-spacing: 1px; text-shadow: 0 0 25px rgba(255,215,0,0.5); }
+.cover-year-val { font-size: 30px; font-weight: 800; color: #ffd700; text-shadow: 0 0 25px rgba(255,215,0,0.5); }
+.cover-footer { position: absolute; bottom: 15mm; left: 0; right: 0; text-align: center; z-index: 10; }
+.cover-footer-om { font-size: 20px; color: #ffd700; margin-bottom: 8px; letter-spacing: 3px; }
+.cover-footer p { font-size: 10px; color: #8b7355; letter-spacing: 1.5px; line-height: 1.6; }
 </style></head><body>
 <div class="cover-page">
   <div class="cover-outer-border"></div>
