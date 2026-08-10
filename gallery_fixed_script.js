@@ -1030,7 +1030,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     async function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         const originalText = btn ? btn.innerHTML : 'View';
-        if (btn) { btn.innerHTML = 'Wait...'; btn.disabled = true; }
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         await new Promise(r => setTimeout(r, 50));
         await generateAndOpenMergedPDF(filename, year, false, subtitle, tagline, orgName);
         if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
@@ -1038,7 +1038,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     async function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         const originalText = btn ? btn.innerHTML : 'Download';
-        if (btn) { btn.innerHTML = 'Wait...'; btn.disabled = true; }
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         await new Promise(r => setTimeout(r, 50));
         await generateAndOpenMergedPDF(filename, year, true, subtitle, tagline, orgName);
         if (btn) btn.innerHTML = originalText;
