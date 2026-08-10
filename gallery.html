@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
@@ -149,7 +149,7 @@
                         <!-- QR Code Section -->
                         <div class="qr-section">
                             <div class="qr-frame">
-                                <img src="uploads/donate_qr.jpg" alt="Donate QR Code" id="donationQRImg" loading="lazy">
+                                <img src="uploads/donate_qr.jpg" alt="Donate QR Code" id="donationQRImg" decoding="async" fetchpriority="high">
                             </div>
                             <p class="scan-text">UPI द्वारे स्कॅन करून देणगी द्या</p>
                         </div>
@@ -319,17 +319,17 @@
                             <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 10px;">
                                 <div class="payment-logos-main" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
                                     <div style="background: white; padding: 5px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe" style="height: 18px; width: auto;" loading="lazy">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg" alt="PhonePe" style="height: 18px; width: auto;" decoding="async" fetchpriority="high">
                                     </div>
                                     <div style="background: white; padding: 5px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" alt="Paytm" style="height: 12px; width: auto;" loading="lazy">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg" alt="Paytm" style="height: 12px; width: auto;" decoding="async" fetchpriority="high">
                                     </div>
                                     <div style="background: white; padding: 5px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="GPay" style="height: 18px; width: auto;" loading="lazy">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg" alt="GPay" style="height: 18px; width: auto;" decoding="async" fetchpriority="high">
                                     </div>
                                 </div>
                                 <div style="background: white; padding: 5px 12px; border-radius: 6px; display: flex; justify-content: center; align-items: center;">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" style="height: 20px; width: auto;" loading="lazy">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI" style="height: 20px; width: auto;" decoding="async" fetchpriority="high">
                                 </div>
                             </div>
                         </div>
@@ -385,7 +385,7 @@
                     return `
                         <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
                             <div style="width: 100%; padding-top: 75%; position: relative;">
-                                <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
                             </div>
                             <div style="padding: 15px; text-align: center;">
                                 <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem;">${album.title}</h3>
@@ -426,7 +426,7 @@
                 
                 photosGrid.innerHTML = data.photos.map(photo => `
                     <div style="width: 100%; padding-top: 100%; position: relative; border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openLightbox('${photo.photoData}')">
-                        <img src="${photo.photoData}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                        <img src="${photo.photoData}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
                     </div>
                 `).join('');
             } else {

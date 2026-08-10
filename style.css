@@ -5171,3 +5171,21 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
         font-weight: 700 !important;
     }
 }
+
+/* FAST LOAD OVERRIDES */
+.reveal, .reveal-left, .reveal-right, .reveal-scale, .pdf-card-home {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+}
+.hero-banner-img {
+    opacity: 1 !important;
+    transition: none !important;
+}
+.ganpati-image {
+    animation: none !important;
+}
+img {
+    opacity: 1 !important;
+}
+

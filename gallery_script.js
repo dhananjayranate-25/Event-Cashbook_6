@@ -255,7 +255,7 @@
                     return `
                         <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
                             <div style="width: 100%; padding-top: 75%; position: relative;">
-                                <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                                <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
                             </div>
                             <div style="padding: 15px; text-align: center;">
                                 <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem;">${album.title}</h3>
@@ -289,7 +289,7 @@
 
         photosGrid.innerHTML = album.photos.map(photo => `
             <div style="width: 100%; padding-top: 100%; position: relative; border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openLightbox('/${photo}')">
-                <img src="/${photo}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                <img src="/${photo}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
             </div>
         `).join('');
     }
