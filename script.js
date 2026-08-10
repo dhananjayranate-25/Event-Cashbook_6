@@ -1,4 +1,4 @@
-
+﻿
 async function loadPDFLibraries() {
     const scripts = [
         'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
@@ -1997,7 +1997,7 @@ function createPDFHTML(rows, yearLabel, totalCashIn, totalCashOut, finalBalance,
 
             <div class="page-body">
                 <div class="summary-section">
-                    <div class="summary-title">Financial Summary</div>
+                    <div class="summary-title">आर्थिक अहवाल</div>
                     <div class="summary-row">
                         <div class="sum-card green">
                             <h4>Total Cash In</h4>
