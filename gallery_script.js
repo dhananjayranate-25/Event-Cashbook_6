@@ -860,7 +860,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 2, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
+                scale: 1.1, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
             });
             document.body.removeChild(iframe);
             
