@@ -562,7 +562,7 @@
         iframe.style.height = Math.max(1123, iframe.contentDocument.body.scrollHeight) + 'px';
         
         const canvas = await html2canvas(iframe.contentDocument.body, {
-            scale: 1.1, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff'
+            scale: 1.5, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff'
         });
         
         document.body.removeChild(iframe);
@@ -587,7 +587,7 @@
             ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
             
-            const imgData = pageCanvas.toDataURL('image/jpeg', 0.85);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.92);
             const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
             
             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight);
@@ -905,7 +905,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 1.1, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
+                scale: 1.5, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
             });
             document.body.removeChild(iframe);
             
@@ -916,7 +916,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             const mergedPdf = await PDFDocument.create();
             
             const coverPage = mergedPdf.addPage([595.28, 841.89]);
-            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.65));
+            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.92));
             coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
             
             const existingPdf = await PDFDocument.load(uploadBytes);
