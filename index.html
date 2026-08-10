@@ -3408,6 +3408,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
     async function shareDonationImage(btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
+        await new Promise(r => setTimeout(r, 50));
         
         try {
             let file, dataUrl;
