@@ -850,7 +850,7 @@
             tagline: pdfTagline || fb.tagline
         };
         return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8">
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=794">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 @media print {
@@ -928,8 +928,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             iframe.style.position = 'absolute';
             iframe.style.left = '-9999px';
             iframe.style.top = '-9999px';
-            iframe.style.width = '210mm';
-            iframe.style.height = '297mm';
+            iframe.style.width = '794px';
+            iframe.style.height = '1123px';
             iframe.style.border = 'none';
             document.body.appendChild(iframe);
             iframe.contentDocument.write(coverHTML);
@@ -941,7 +941,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 1.1, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
+                scale: 2, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
             });
             document.body.removeChild(iframe);
             
