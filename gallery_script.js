@@ -532,23 +532,68 @@
     }
 
     async function generatePDFFromHTML(htmlContent, download, filename) {
-        const newWindow = window.open('', '_blank');
-        if (!newWindow) {
-            alert('Please allow popups for this website to view/download PDFs.');
+        if (!download) {
+            const newWindow = window.open('', '_blank');
+            if (!newWindow) {
+                alert('Please allow popups for this website to view/download PDFs.');
+                return;
+            }
+            newWindow.document.write(htmlContent);
+            newWindow.document.close();
+            setTimeout(() => { newWindow.document.title = 'View Cashbook'; }, 500);
             return;
         }
-        
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
 
-        setTimeout(() => {
-            if (download) {
-                newWindow.document.title = filename || 'Cashbook.pdf';
-                newWindow.print();
-            } else {
-                newWindow.document.title = 'View Cashbook';
-            }
-        }, 500);
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.width = '794px';
+        iframe.style.height = '1123px';
+        iframe.style.left = '-9999px';
+        iframe.style.top = '-9999px';
+        document.body.appendChild(iframe);
+        
+        iframe.contentDocument.open();
+        iframe.contentDocument.write(htmlContent);
+        iframe.contentDocument.close();
+        
+        try { await iframe.contentDocument.fonts.ready; } catch(e){}
+        await new Promise(r => setTimeout(r, 1000));
+        
+        iframe.style.height = Math.max(1123, iframe.contentDocument.body.scrollHeight) + 'px';
+        
+        const canvas = await html2canvas(iframe.contentDocument.body, {
+            scale: 1.1, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff'
+        });
+        
+        document.body.removeChild(iframe);
+        
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
+        
+        const pageHeightInPx = (canvas.width * pdfHeight) / pdfWidth;
+        const totalPages = Math.ceil(canvas.height / pageHeightInPx);
+        
+        for (let i = 0; i < totalPages; i++) {
+            if (i > 0) pdf.addPage();
+            
+            const pageCanvas = document.createElement('canvas');
+            pageCanvas.width = canvas.width;
+            pageCanvas.height = Math.min(pageHeightInPx, canvas.height - i * pageHeightInPx);
+            
+            const ctx = pageCanvas.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+            ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
+            
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.85);
+            const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
+            
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight);
+        }
+        
+        pdf.save(filename || 'Cashbook.pdf');
     }
 
     async function viewPDFYear(year, btn) {
