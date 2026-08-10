@@ -1156,17 +1156,13 @@
             tagline: pdfTagline || fb.tagline
         };
         return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<html><head><meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 @media print {
   @page { margin: 0 !important; size: A4 portrait !important; }
   html, body { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; background: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   .cover-page { width: 100% !important; max-width: 100% !important; margin: 0 !important; box-sizing: border-box !important; page-break-after: always; overflow: hidden !important; }
-}
-@media screen and (max-width: 768px) {
-  body { background: #1a0800 !important; margin: 0 !important; padding: 0 !important; }
-  .cover-page { width: 100% !important; max-width: 100% !important; min-height: 100vh !important; height: auto !important; margin: 0 !important; box-shadow: none !important; }
 }
 * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
 body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #f5f0eb; color: #1a1a2e; font-size: 10px; line-height: 1.4; }
