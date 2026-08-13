@@ -34,7 +34,7 @@ html {
 }
 
 html, body {
-    overflow-x: hidden;
+    overflow-x: clip;
 }
 
 body {
@@ -42,7 +42,7 @@ body {
     background: var(--bg-primary);
     color: var(--text-primary);
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow-x: clip;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1646,7 +1646,7 @@ footer[style*="text-align: left"] {
     .admin-card, .upload-container, .pdf-upload-section, .appearance-settings-section {
         max-width: 100% !important;
         box-sizing: border-box !important;
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
     }
 }
 
@@ -3373,8 +3373,10 @@ footer::after {
 
 @media (max-width: 768px) {
     .custom-header {
-        position: relative !important;
-        top: 0;
+        position: sticky !important;
+        top: -1px;
+        border-bottom: 2px solid rgba(255, 215, 0, 0.4) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9) !important;
         left: 0;
         right: 0;
         background: #0d0118 !important;
@@ -4628,14 +4630,14 @@ footer::after {
 @media (max-width: 768px) {
     /* Force container to never exceed viewport */
     html, body {
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
         width: 100% !important;
     }
     .container, .glass-panel {
         max-width: 100% !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
     }
     /* Let the table scale down to fit exactly on screen like laptop */
     .table-scroll {
@@ -4754,7 +4756,7 @@ footer::after {
 
     /* Force Table to strictly fit screen width without horizontal scroll */
     .table-scroll {
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
         width: 100% !important;
     }
     .year-section table, .cashbook-card table {
@@ -5092,7 +5094,7 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
 /* COMPREHENSIVE MOBILE OPTIMIZATIONS */
 @media (max-width: 768px) {
     *, *::before, *::after { box-sizing: border-box !important; }
-    html, body { width: 100vw !important; overflow-x: hidden !important; }
+    html, body { width: 100vw !important; overflow-x: clip !important; }
     body { word-wrap: break-word !important; overflow-wrap: break-word !important; }
     
     .glass-panel, .donation-card, .committee-card, .form-container, .contact-card {
@@ -5218,7 +5220,7 @@ img {
     
     /* Ensure no scroll and strict one line */
     .table-scroll {
-        overflow-x: hidden !important;
+        overflow-x: clip !important;
         width: 100% !important;
         padding: 0 !important;
     }
