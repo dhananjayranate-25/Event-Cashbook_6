@@ -608,14 +608,14 @@
             } else {
                 const r = await fetch(API_URL + '/api/entries?year=' + year);
                 const d = await r.json();
-                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) btn.innerHTML = originalText; return; }
+                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
                 entries = d.data;
             }
             const logoDataURL = await loadLogoForCover();
             const html = await generatePDFHTML(entries, year, logoDataURL);
             await generatePDFFromHTML(html, false);
         } catch(e) { alert('Error: ' + e.message); }
-        if (btn) btn.innerHTML = originalText;
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
     async function downloadPDFYear(year, btn) {
@@ -630,14 +630,14 @@
             } else {
                 const r = await fetch(API_URL + '/api/entries?year=' + year);
                 const d = await r.json();
-                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) btn.innerHTML = originalText; return; }
+                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
                 entries = d.data;
             }
             const logoDataURL = await loadLogoForCover();
             const html = await generatePDFHTML(entries, year, logoDataURL);
             await generatePDFFromHTML(html, true, 'Cashbook_' + year + '.pdf');
         } catch(e) { alert('Error: ' + e.message); }
-        if (btn) btn.innerHTML = originalText;
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
     function formatPDFCurrency(amount) {
@@ -1032,6 +1032,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         await new Promise(r => setTimeout(r, 50));
         await generateAndOpenMergedPDF(filename, year, true, subtitle, tagline, orgName);
-        if (btn) btn.innerHTML = originalText;
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
     

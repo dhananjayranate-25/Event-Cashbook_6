@@ -721,14 +721,14 @@
             } else {
                 const r = await fetch(API_URL + '/api/entries?year=' + year);
                 const d = await r.json();
-                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) btn.innerHTML = originalText; return; }
+                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
                 entries = d.data;
             }
             const logoDataURL = await loadLogoForCover();
             const html = await generatePDFHTML(entries, year, logoDataURL);
             await generatePDFFromHTML(html, false);
         } catch(e) { alert('Error: ' + e.message); }
-        if (btn) btn.innerHTML = originalText;
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
     async function downloadPDFYear(year, btn) {
@@ -742,14 +742,14 @@
             } else {
                 const r = await fetch(API_URL + '/api/entries?year=' + year);
                 const d = await r.json();
-                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) btn.innerHTML = originalText; return; }
+                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
                 entries = d.data;
             }
             const logoDataURL = await loadLogoForCover();
             const html = await generatePDFHTML(entries, year, logoDataURL);
             await generatePDFFromHTML(html, true, 'Cashbook_${year}.pdf');
         } catch(e) { alert('Error: ' + e.message); }
-        if (btn) btn.innerHTML = originalText;
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
     function formatPDFCurrency(amount) {
@@ -1101,13 +1101,13 @@ body{font-family:'Poppins','Noto Sans Devanagari',sans-serif;background:#f5f0eb;
         const originalText = btn ? btn.innerHTML : 'View';
         if (btn) btn.innerHTML = 'Wait...';
         await generateAndOpenMergedPDF(filename, year, false, subtitle, tagline, orgName);
-        if (btn) btn.innerHTML = originalText;
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
     async function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         const originalText = btn ? btn.innerHTML : 'Download';
         if (btn) btn.innerHTML = 'Wait...';
         await generateAndOpenMergedPDF(filename, year, true, subtitle, tagline, orgName);
-        if (btn) btn.innerHTML = originalText;
+        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
     
