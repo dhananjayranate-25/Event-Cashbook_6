@@ -4752,40 +4752,41 @@ footer::after {
         display: none !important;
     }
 
-    /* Force Table to strictly fit screen width without horizontal scroll */
+    /* Allow horizontal scrolling on mobile to prevent overlapping */
     .table-scroll {
-        overflow-x: hidden !important;
+        overflow-x: auto !important;
         width: 100% !important;
+        -webkit-overflow-scrolling: touch;
     }
     .year-section table, .cashbook-card table {
         width: 100% !important;
-        min-width: unset !important;
-        table-layout: fixed !important;
+        min-width: 500px !important;
+        table-layout: auto !important;
     }
-    /* Headers keep on one line, font size reduced to fit */
+    /* Make headers readable */
     .year-section table th, .cashbook-card table th {
-        padding: 4px 1px !important;
-        font-size: 8px !important;
+        padding: 8px 5px !important;
+        font-size: 10px !important;
         white-space: nowrap !important;
         text-align: left !important;
     }
-    /* Cells wrap text naturally to fit */
+    /* Let cells size themselves */
     .year-section table td, .cashbook-card table td {
-        padding: 4px 1px !important;
-        font-size: 9px !important;
+        padding: 8px 5px !important;
+        font-size: 11px !important;
         white-space: normal !important;
         word-wrap: break-word !important;
         text-align: left !important;
     }
     
-    /* Explicit mobile column widths to minimize gaps and fit exactly 100% */
-    .year-section th:nth-child(1), .year-section td:nth-child(1) { width: 5% !important; text-align: center !important; }
-    .year-section th:nth-child(2), .year-section td:nth-child(2) { width: 28% !important; min-width: unset !important; }
-    .year-section th:nth-child(3), .year-section td:nth-child(3) { width: 12% !important; text-align: center !important; }
-    .year-section th:nth-child(4), .year-section td:nth-child(4) { width: 10% !important; text-align: center !important; }
-    .year-section th:nth-child(5), .year-section td:nth-child(5) { width: 15% !important; text-align: right !important; white-space: nowrap !important; }
-    .year-section th:nth-child(6), .year-section td:nth-child(6) { width: 15% !important; text-align: right !important; white-space: nowrap !important; }
-    .year-section th:nth-child(7), .year-section td:nth-child(7) { width: 15% !important; text-align: right !important; white-space: nowrap !important; }
+    /* Remove explicit fixed percentages to allow flex sizing */
+    .year-section th:nth-child(1), .year-section td:nth-child(1) { width: auto !important; text-align: center !important; }
+    .year-section th:nth-child(2), .year-section td:nth-child(2) { width: auto !important; }
+    .year-section th:nth-child(3), .year-section td:nth-child(3) { width: auto !important; text-align: center !important; }
+    .year-section th:nth-child(4), .year-section td:nth-child(4) { width: auto !important; text-align: center !important; }
+    .year-section th:nth-child(5), .year-section td:nth-child(5) { width: auto !important; text-align: right !important; white-space: nowrap !important; }
+    .year-section th:nth-child(6), .year-section td:nth-child(6) { width: auto !important; text-align: right !important; white-space: nowrap !important; }
+    .year-section th:nth-child(7), .year-section td:nth-child(7) { width: auto !important; text-align: right !important; white-space: nowrap !important; }
 
     .date-dm { white-space: nowrap !important; }
     .date-y { display: block !important; margin-top: 1px; }
