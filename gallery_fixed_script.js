@@ -747,7 +747,7 @@
                         else if (m.role === 'treasurer') d = 'खजिनदार';
                         else d = 'सदस्य';
                     }
-                    committeeHtml += '<div style="text-align:center; flex: 0 0 23%; max-width: 25%; padding: 0 5px; margin-bottom:5px;">' +
+                    committeeHtml += '<div style="text-align:center; flex: 0 1 140px; max-width: 150px; padding: 0 2px; margin-bottom:5px;">' +
                         '<div style="font-weight:700; font-size:15px; color:#1a1a2e; margin-bottom:3px;">' + (m.name || '') + '</div>' +
                         '<div style="font-weight:600; font-size:12px; color:#5a2010;">' + d + '</div>' +
                     '</div>';
