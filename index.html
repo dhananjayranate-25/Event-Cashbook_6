@@ -2450,18 +2450,27 @@
                     return indexA - indexB;
                 });
                 
+                let count = 0;
                 orderedData.forEach(m => {
-
                     let d = m.designation || '';
                     if (!d) {
                         if (m.role === 'president') d = 'अध्यक्ष';
                         else if (m.role === 'treasurer') d = 'खजिनदार';
                         else d = 'सदस्य';
                     }
-                    committeeHtml += '<div style="text-align:center; flex: 0 1 140px; max-width: 150px; padding: 0 2px; margin-bottom:5px;">' +
+                    
+                    // Force row break every 4 items to maintain exactly 4-4-3 structure
+                    if (count > 0 && count % 4 === 0) {
+                        committeeHtml += '<div style="flex-basis:100%; height:0; margin:0; padding:0;"></div>';
+                    }
+                    
+                    // Use flex: 0 1 auto; to shrink-wrap the text perfectly, removing extra gap
+                    committeeHtml += '<div style="text-align:center; flex: 0 1 auto; max-width:145px; padding: 0 10px; margin-bottom:5px;">' +
                         '<div style="font-weight:700; font-size:15px; color:#1a1a2e; margin-bottom:3px;">' + (m.name || '') + '</div>' +
                         '<div style="font-weight:600; font-size:12px; color:#5a2010;">' + d + '</div>' +
                     '</div>';
+                    
+                    count++;
                 });
                 committeeHtml += '</div></div>';
             }
