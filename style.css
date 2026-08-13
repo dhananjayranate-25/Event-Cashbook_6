@@ -3373,7 +3373,7 @@ footer::after {
 
 @media (max-width: 768px) {
     .custom-header {
-        position: sticky !important;
+        position: relative !important;
         top: 0;
         left: 0;
         right: 0;
