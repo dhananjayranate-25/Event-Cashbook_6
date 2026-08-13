@@ -3405,9 +3405,12 @@ footer::after {
     .top-banner-img {
         width: calc(100% - 12px) !important;
         height: auto !important;
-        max-height: 180px !important;
-        min-height: 80px !important;
-        object-fit: contain !important;
+        aspect-ratio: 16 / 5 !important;
+        object-fit: cover !important;
+        background-color: #1a0b2e !important;
+        background-image: linear-gradient(90deg, #1a0b2e, #3d1c5d, #1a0b2e) !important;
+        background-size: 200% 100% !important;
+        animation: shimmerHeader 2s infinite linear !important;
         border: 2px solid #ffd700 !important;
         border-radius: 8px !important;
         box-shadow: 0 4px 15px rgba(255, 215, 0, 0.45) !important;
