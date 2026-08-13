@@ -563,7 +563,39 @@
         try { await iframe.contentDocument.fonts.ready; } catch(e){}
         await new Promise(r => setTimeout(r, 1000));
         
+        
+        // --- PAGE BREAK AVOIDANCE LOGIC ---
+        const pageHeightInDOM = (794 * 297) / 210;
+        const elementsToAvoidBreak = iframe.contentDocument.querySelectorAll('tr, .pdf-page-break-avoid');
+        for (let i = 0; i < elementsToAvoidBreak.length; i++) {
+            const el = elementsToAvoidBreak[i];
+            const rect = el.getBoundingClientRect();
+            const absTop = rect.top + iframe.contentWindow.scrollY;
+            const absBottom = rect.bottom + iframe.contentWindow.scrollY;
+            
+            // Allow 2px tolerance
+            const startPage = Math.floor((absTop + 2) / pageHeightInDOM);
+            const endPage = Math.floor((absBottom - 2) / pageHeightInDOM);
+            
+            if (startPage !== endPage) {
+                const nextPageTop = (startPage + 1) * pageHeightInDOM;
+                const pushAmount = Math.ceil(nextPageTop - absTop) + 1; // 1px safe margin
+                
+                if (el.tagName.toLowerCase() === 'tr') {
+                    const spacer = iframe.contentDocument.createElement('tr');
+                    spacer.style.height = pushAmount + 'px';
+                    spacer.innerHTML = '<td colspan="100%" style="border:none; padding:0; margin:0; height:' + pushAmount + 'px;"></td>';
+                    el.parentNode.insertBefore(spacer, el);
+                } else {
+                    const currentMargin = parseFloat(iframe.contentWindow.getComputedStyle(el).marginTop) || 0;
+                    el.style.marginTop = (currentMargin + pushAmount) + 'px';
+                }
+            }
+        }
+        // --- END PAGE BREAK AVOIDANCE LOGIC ---
+        
         iframe.style.height = Math.max(1123, iframe.contentDocument.body.scrollHeight) + 'px';
+
         
         const canvas = await html2canvas(iframe.contentDocument.body, {
             scale: 2, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff'
@@ -706,7 +738,7 @@
             const comRes = await fetch('/api/committee');
             const comData = await comRes.json();
             if (comData.success && comData.data && comData.data.length > 0) {
-                committeeHtml = '<div style="page-break-inside:avoid; width:100%; margin-top:20px;">' +
+                committeeHtml = '<div class="pdf-page-break-avoid" style="page-break-inside:avoid; width:100%; margin-top:20px;">' +
                     '<div style="text-align:center; margin-bottom:15px;">' +
                         '<span style="color:#ff8c00; font-size:14px; margin-right:8px;">❖</span>' +
                         '<span style="font-size:17px; font-weight:800; color:#5a2010; letter-spacing:1px; text-shadow:0 1px 2px rgba(0,0,0,0.1);">उत्सव कार्यकारिणी</span>' +
