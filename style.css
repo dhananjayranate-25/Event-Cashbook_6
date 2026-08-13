@@ -5204,6 +5204,8 @@ img {
 
 
 
+
+
 /* User Requested Mobile Table Fixes - 1 Line, No Scroll, Edge-to-Edge */
 @media (max-width: 480px) {
     /* ONLY affect table container, not the whole page */
@@ -5228,11 +5230,11 @@ img {
         border-collapse: collapse !important;
     }
     
-    /* Force one line, reduce font and padding. NO ellipsis here, we want full text */
+    /* Force one line, reduce font and padding to ensure NO overlap */
     .year-section table th, .cashbook-card table th,
     .year-section table td, .cashbook-card table td {
-        padding: 6px 2px !important;
-        font-size: 8.5px !important;
+        padding: 6px 1px !important; /* very small horizontal padding */
+        font-size: 7.5px !important; /* reduced font size to fit full text */
         white-space: nowrap !important;
         word-wrap: normal !important;
         vertical-align: middle !important;
@@ -5244,16 +5246,16 @@ img {
         text-overflow: ellipsis !important;
     }
     
-    /* Adjust specific column widths to fit all 7 columns perfectly */
+    /* Adjust specific column widths to fit all 7 columns perfectly and avoid overlap */
     /* 1:#, 2:NAME, 3:DATE, 4:MODE, 5:CASH IN, 6:CASH OUT, 7:BALANCE */
-    .year-section th:nth-child(1), .year-section td:nth-child(1) { width: 5% !important; text-align: center !important; }
-    .year-section th:nth-child(2), .year-section td:nth-child(2) { width: 23% !important; text-align: left !important; }
+    .year-section th:nth-child(1), .year-section td:nth-child(1) { width: 4% !important; text-align: center !important; }
+    .year-section th:nth-child(2), .year-section td:nth-child(2) { width: 22% !important; text-align: left !important; }
     /* Left align Date to reduce gap between Name and Date */
-    .year-section th:nth-child(3), .year-section td:nth-child(3) { width: 14% !important; text-align: left !important; padding-left: 5px !important; }
-    .year-section th:nth-child(4), .year-section td:nth-child(4) { width: 9% !important; text-align: center !important; }
+    .year-section th:nth-child(3), .year-section td:nth-child(3) { width: 14% !important; text-align: left !important; padding-left: 2px !important; }
+    .year-section th:nth-child(4), .year-section td:nth-child(4) { width: 10% !important; text-align: center !important; }
     .year-section th:nth-child(5), .year-section td:nth-child(5) { width: 16% !important; text-align: right !important; }
     .year-section th:nth-child(6), .year-section td:nth-child(6) { width: 16% !important; text-align: right !important; }
-    .year-section th:nth-child(7), .year-section td:nth-child(7) { width: 17% !important; text-align: right !important; }
+    .year-section th:nth-child(7), .year-section td:nth-child(7) { width: 18% !important; text-align: right !important; }
     
     .mode-badge {
         padding: 1px 3px !important;
