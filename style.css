@@ -5198,16 +5198,15 @@ img {
 
 
 
+
+
 /* User Requested Mobile Table Fixes - 1 Line, No Scroll, Edge-to-Edge */
 @media (max-width: 480px) {
-    /* Make container use full width by removing padding */
-    .container {
-        padding: 5px !important;
-    }
-    
+    /* ONLY affect table container, not the whole page */
     .table-container {
-        padding: 8px !important;
-        margin: 0 !important;
+        padding: 5px !important;
+        margin-left: -10px !important; /* expand into the container's padding */
+        margin-right: -10px !important;
         border-radius: 8px !important;
     }
     
