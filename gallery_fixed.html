@@ -26,7 +26,7 @@
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     
     <!-- Preload critical top images for faster loading -->
-    <link rel="preload" as="image" href="logo/pdf_header_banner.png">
+    <link rel="preload" as="image" href="logo/pdf_header_banner_opt.jpg">
     <link rel="preload" as="image" href="uploads/hero_banner.jpg">
 
     <style>
@@ -59,9 +59,9 @@
             <div class="main-banner" style="padding: 0;">
                 <div id="displayEstYear" style="background-color: #ff8c00; color: white; text-align: center; font-size: clamp(12px, 3vw, 16px); font-weight: bold; padding: 5px 0; margin: 0; width: 100%;">स्थापना - २०१९ वर्ष - ८ वे</div>
                 <!-- Desktop Website Header Image -->
-                <img id="desktopTopHeaderImg" src="logo/pdf_header_banner.png?v=2" alt="Shivsrushti Logo" class="top-banner-img desktop-header-only" fetchpriority="high" decoding="async">
+                <img id="desktopTopHeaderImg" src="logo/pdf_header_banner_opt.jpg?v=2" alt="Shivsrushti Logo" class="top-banner-img desktop-header-only" fetchpriority="high" decoding="async">
                 <!-- Mobile View Header Image -->
-                <img id="mobileTopHeaderImg" src="logo/pdf_header_banner.png?v=2" alt="Shivsrushti Logo" class="top-banner-img mobile-header-only" fetchpriority="high" decoding="async">
+                <img id="mobileTopHeaderImg" src="logo/pdf_header_banner_opt.jpg?v=2" alt="Shivsrushti Logo" class="top-banner-img mobile-header-only" fetchpriority="high" decoding="async">
             </div>
             <nav class="custom-navbar">
                 <div class="hamburger" id="mobileMenuBtn" style="display: none; flex-direction: column; cursor: pointer; gap: 5px; padding: 10px;">
@@ -1002,7 +1002,7 @@
         const finalBalance = totalCashIn - totalCashOut;
         const logoSrc = logoDataURL || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>\uD83D\uDE4F</text></svg>';
         const s = getPDFSettings(year);
-        let pdfHeaderImg = 'logo/pdf_header_banner.png?v=' + Date.now();
+        let pdfHeaderImg = 'logo/pdf_header_banner_opt.jpg?v=' + Date.now();
         try {
             let cachedObj = null;
             if (typeof appSettings !== 'undefined' && appSettings && (appSettings.posterHeaderImage || appSettings.topHeaderBannerImage || appSettings.websiteHeaderImage || appSettings.headerBannerImage)) {
@@ -1022,9 +1022,9 @@
                     }
                 }
             }
-            if (pdfHeaderImg.startsWith('logo/pdf_header_banner.png') && typeof document !== 'undefined') {
+            if (pdfHeaderImg.startsWith('logo/pdf_header_banner_opt.jpg') && typeof document !== 'undefined') {
                 const mobElem = document.getElementById('mobileTopHeaderImg');
-                if (mobElem && mobElem.src && !mobElem.src.includes('pdf_header_banner.png')) {
+                if (mobElem && mobElem.src && !mobElem.src.includes('pdf_header_banner_opt.jpg')) {
                     pdfHeaderImg = mobElem.src;
                     if (!pdfHeaderImg.startsWith('data:image') && !pdfHeaderImg.includes('v=')) {
                         pdfHeaderImg += (pdfHeaderImg.includes('?') ? '&' : '?') + 'v=' + Date.now();

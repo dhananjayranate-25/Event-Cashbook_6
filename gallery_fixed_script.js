@@ -702,7 +702,7 @@
         const finalBalance = totalCashIn - totalCashOut;
         const logoSrc = logoDataURL || 'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>\uD83D\uDE4F</text></svg>';
         const s = getPDFSettings(year);
-        let pdfHeaderImg = 'logo/pdf_header_banner.png?v=' + Date.now();
+        let pdfHeaderImg = 'logo/pdf_header_banner_opt.jpg?v=' + Date.now();
         try {
             let cachedObj = null;
             if (typeof appSettings !== 'undefined' && appSettings && (appSettings.posterHeaderImage || appSettings.topHeaderBannerImage || appSettings.websiteHeaderImage || appSettings.headerBannerImage)) {
@@ -722,9 +722,9 @@
                     }
                 }
             }
-            if (pdfHeaderImg.startsWith('logo/pdf_header_banner.png') && typeof document !== 'undefined') {
+            if (pdfHeaderImg.startsWith('logo/pdf_header_banner_opt.jpg') && typeof document !== 'undefined') {
                 const mobElem = document.getElementById('mobileTopHeaderImg');
-                if (mobElem && mobElem.src && !mobElem.src.includes('pdf_header_banner.png')) {
+                if (mobElem && mobElem.src && !mobElem.src.includes('pdf_header_banner_opt.jpg')) {
                     pdfHeaderImg = mobElem.src;
                     if (!pdfHeaderImg.startsWith('data:image') && !pdfHeaderImg.includes('v=')) {
                         pdfHeaderImg += (pdfHeaderImg.includes('?') ? '&' : '?') + 'v=' + Date.now();
