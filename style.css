@@ -577,7 +577,7 @@ header::after {
     position: relative;
     width: 100%;
     box-sizing: border-box;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .header-line {
@@ -1626,13 +1626,13 @@ footer[style*="text-align: left"] {
         gap: 8px !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        overflow: visible !important;
+        overflow: hidden !important;
     }
     .section-header h2, .niyojan-same-heading {
-        font-size: 1.25rem !important;
-        white-space: nowrap !important;
+        font-size: 1.35rem !important;
+        white-space: normal !important;
         line-height: 1.5 !important;
-        padding: 0 4px !important;
+        padding: 10px 4px 5px 4px !important;
     }
     .header-line {
         flex: 1 1 12px !important;
