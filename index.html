@@ -1304,10 +1304,11 @@
     let currentSelectedYear = '';
 
     function initScrollReveal() {
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
+                    obs.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
@@ -1319,7 +1320,7 @@
         if (!container) return;
         const colors = ['gold', 'purple'];
         const sizes = ['tiny', '', 'big'];
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 15; i++) {
             const el = document.createElement('div');
             el.className = 'sparkle ' + colors[i % 2] + ' ' + sizes[i % 3];
             el.style.left = Math.random() * 100 + '%';
@@ -1328,7 +1329,7 @@
             el.style.setProperty('--max-opacity', (0.4 + Math.random() * 0.5));
             container.appendChild(el);
         }
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < 10; i++) {
             const el = document.createElement('div');
             el.className = 'sparkle-star';
             el.style.left = Math.random() * 100 + '%';
@@ -2421,9 +2422,9 @@
                 });
                 
                 let rowsData = [];
-                rowsData.push(orderedData.slice(0, 4));
-                rowsData.push(orderedData.slice(4, 8));
-                rowsData.push(orderedData.slice(8, 11));
+                for (let i = 0; i < orderedData.length; i += 4) {
+                    rowsData.push(orderedData.slice(i, i + 4));
+                }
 
                 // Clear any gap on the main container since we are creating row divs
                 committeeHtml = committeeHtml.replace('gap:15px 0px;', 'gap:0px; flex-direction:column; align-items:center;');
@@ -3066,15 +3067,48 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         committeeListBlock.style.position = 'relative';
         committeeListBlock.style.zIndex = '10';
         
-        committeeListBlock.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; padding: 2px 0; position: relative; z-index: 10; gap: 10px; white-space: nowrap;">
-                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
-                  <div style="color: #ffd700; font-size: 20px;">✧</div>
-                  <div style="color: #ffd700; font-size: 30px; font-weight: bold; font-family: 'Mukta', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0; line-height: 1;">उत्सव कार्यकारिणी</div>
-                  <div style="color: #ffd700; font-size: 20px;">✧</div>
-                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
-              </div>
-              <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 0; padding: 0 10px;">
-                  
+        let dynamicMembersHTML = '';
+        if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
+            const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
+            let orderedData = [...window.currentCommitteeData];
+            orderedData.sort((a, b) => {
+                let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
+                let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
+                if (indexA === -1) indexA = 999;
+                if (indexB === -1) indexB = 999;
+                return indexA - indexB;
+            });
+            
+            let rows = [];
+            for (let i = 0; i < orderedData.length; i += 4) {
+                rows.push(orderedData.slice(i, i + 4));
+            }
+            
+            rows.forEach(row => {
+                dynamicMembersHTML += '<div style="display: flex; flex-wrap: wrap; justify-content: center; width: 100%; margin-bottom: 20px;">';
+                row.forEach(m => {
+                    let d = m.designation || '';
+                    if (!d) {
+                        if (m.role === 'president') d = 'अध्यक्ष';
+                        else if (m.role === 'vicePresident') d = 'उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख';
+                        else if (m.role === 'secretary') d = 'सचिव / डेकोरेशन प्रमुख';
+                        else if (m.role === 'jointSecretary') d = 'सहसचिव / सहसमन्वयक';
+                        else if (m.role === 'treasurer') d = 'खजिनदार / समन्वयक';
+                        else if (m.role === 'jointTreasurer') d = 'सहखजिनदार';
+                        else if (m.role === 'socialMediaHead') d = 'सोशल मीडिया प्रमुख';
+                        else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
+                        else d = 'कार्यकारी सदस्य';
+                    }
+                    dynamicMembersHTML += `
+                    <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
+                        <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">${m.name || ''}</span>
+                        <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">${d}</span>
+                    </div>`;
+                });
+                dynamicMembersHTML += '</div>';
+            });
+        } else {
+            dynamicMembersHTML = `
                   <!-- Row 1: 4 Names -->
                   <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
                       <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस फटांगरे</span>
@@ -3124,7 +3158,18 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                       <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">शुभम पेटकर</span>
                       <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
                   </div>
+            `;
+        }
 
+        committeeListBlock.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; padding: 2px 0; position: relative; z-index: 10; gap: 10px; white-space: nowrap;">
+                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
+                  <div style="color: #ffd700; font-size: 20px;">✧</div>
+                  <div style="color: #ffd700; font-size: 30px; font-weight: bold; font-family: 'Mukta', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0; line-height: 1;">उत्सव कार्यकारिणी</div>
+                  <div style="color: #ffd700; font-size: 20px;">✧</div>
+                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 0; padding: 0 10px;">
+                  ${dynamicMembersHTML}
               </div>`;
         clone.appendChild(committeeListBlock);
 
@@ -3324,15 +3369,48 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         committeeListBlockCustom.style.position = 'relative';
         committeeListBlockCustom.style.zIndex = '10';
         
-        committeeListBlockCustom.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; padding: 2px 0; position: relative; z-index: 10; gap: 10px; white-space: nowrap;">
-                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
-                  <div style="color: #ffd700; font-size: 20px;">✧</div>
-                  <div style="color: #ffd700; font-size: 30px; font-weight: bold; font-family: 'Mukta', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0; line-height: 1;">उत्सव कार्यकारिणी</div>
-                  <div style="color: #ffd700; font-size: 20px;">✧</div>
-                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
-              </div>
-              <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 0; padding: 0 10px;">
-                  
+        let dynamicMembersHTML = '';
+        if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
+            const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
+            let orderedData = [...window.currentCommitteeData];
+            orderedData.sort((a, b) => {
+                let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
+                let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
+                if (indexA === -1) indexA = 999;
+                if (indexB === -1) indexB = 999;
+                return indexA - indexB;
+            });
+            
+            let rows = [];
+            for (let i = 0; i < orderedData.length; i += 4) {
+                rows.push(orderedData.slice(i, i + 4));
+            }
+            
+            rows.forEach(row => {
+                dynamicMembersHTML += '<div style="display: flex; flex-wrap: wrap; justify-content: center; width: 100%; margin-bottom: 20px;">';
+                row.forEach(m => {
+                    let d = m.designation || '';
+                    if (!d) {
+                        if (m.role === 'president') d = 'अध्यक्ष';
+                        else if (m.role === 'vicePresident') d = 'उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख';
+                        else if (m.role === 'secretary') d = 'सचिव / डेकोरेशन प्रमुख';
+                        else if (m.role === 'jointSecretary') d = 'सहसचिव / सहसमन्वयक';
+                        else if (m.role === 'treasurer') d = 'खजिनदार / समन्वयक';
+                        else if (m.role === 'jointTreasurer') d = 'सहखजिनदार';
+                        else if (m.role === 'socialMediaHead') d = 'सोशल मीडिया प्रमुख';
+                        else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
+                        else d = 'कार्यकारी सदस्य';
+                    }
+                    dynamicMembersHTML += `
+                    <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
+                        <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">${m.name || ''}</span>
+                        <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">${d}</span>
+                    </div>`;
+                });
+                dynamicMembersHTML += '</div>';
+            });
+        } else {
+            dynamicMembersHTML = `
                   <!-- Row 1: 4 Names -->
                   <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
                       <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस फटांगरे</span>
@@ -3382,7 +3460,18 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                       <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">शुभम पेटकर</span>
                       <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
                   </div>
+            `;
+        }
 
+        committeeListBlockCustom.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; padding: 2px 0; position: relative; z-index: 10; gap: 10px; white-space: nowrap;">
+                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
+                  <div style="color: #ffd700; font-size: 20px;">✧</div>
+                  <div style="color: #ffd700; font-size: 30px; font-weight: bold; font-family: 'Mukta', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0; line-height: 1;">उत्सव कार्यकारिणी</div>
+                  <div style="color: #ffd700; font-size: 20px;">✧</div>
+                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 0; padding: 0 10px;">
+                  ${dynamicMembersHTML}
               </div>`;
         clone.appendChild(committeeListBlockCustom);
 
@@ -3461,24 +3550,37 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             const orgName = (typeof appSettings !== 'undefined' && appSettings.pdfCustomSettings && appSettings.pdfCustomSettings.orgName) ? appSettings.pdfCustomSettings.orgName : 'मंडळ';
             let customText = (typeof appSettings !== 'undefined' && appSettings.donationPosterText) ? appSettings.donationPosterText : `🌺 श्री गणेशाय नमः 🌺\n\nश्री गणेशोत्सव हा आपल्या सर्वांचा उत्सव आहे. या उत्सवाचे आयोजन अधिक भव्य, दिव्य आणि यशस्वी करण्यासाठी आपल्या सहकार्याची आम्हाला मनापासून अपेक्षा आहे.\n\nकृपया आपल्या सार्वजनिक गणेश उत्सव मंडळासाठी किमान ₹1111/- (एक हजार एकशे अकरा रुपये) वर्गणी/देणगी देऊन सहकार्य करा.\nआपण वर दिलेल्या QR कोड स्कॅन करून / UPI ID किंवा फोन नंबर द्वारे सहज देणगी देऊ शकता.\n\nआपले प्रत्येक योगदान आपल्या मंडळाचा गणेशोत्सव अधिक उत्साहाने, भक्तिभावाने आणि दिमाखात साजरा करण्यासाठी मोलाचे ठरेल. 🙏🌸\n\n॥ गणपती बाप्पा मोरया ॥\n॥ मंगलमूर्ती मोरया ॥\n॥ हर हर महादेव ॥`;
             
-            customText = customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
-
-🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com
-
-===================
-उत्सव कार्यकारिणी
-===================
-तेजस फटांगरे - अध्यक्ष
-धीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख
-आदित्य मते - सचिव / डेकोरेशन प्रमुख
-सार्थक माताडे - सहसचिव / सहसमन्वयक
-धनंजय रणाते - खजिनदार / समन्वयक
-ओंकार वर्पे - सहखजिनदार
-तेजस देशमुख - सोशल मीडिया प्रमुख
-तेजस वर्पे - प्रसिद्धी प्रमुख
-वैभव सांगळे - कार्यकारी सदस्य
-निलेश कदम - कार्यकारी सदस्य
-शुभम पेटकर - कार्यकारी सदस्य`;
+            let shareTextBase = customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर \n\n🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com\n\n===================\nउत्सव कार्यकारिणी\n===================\n`;
+            if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
+                const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
+                let orderedData = [...window.currentCommitteeData];
+                orderedData.sort((a, b) => {
+                    let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
+                    let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
+                    if (indexA === -1) indexA = 999;
+                    if (indexB === -1) indexB = 999;
+                    return indexA - indexB;
+                });
+                orderedData.forEach(m => {
+                    let d = m.designation || '';
+                    if (!d) {
+                        if (m.role === 'president') d = 'अध्यक्ष';
+                        else if (m.role === 'vicePresident') d = 'उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख';
+                        else if (m.role === 'secretary') d = 'सचिव / डेकोरेशन प्रमुख';
+                        else if (m.role === 'jointSecretary') d = 'सहसचिव / सहसमन्वयक';
+                        else if (m.role === 'treasurer') d = 'खजिनदार / समन्वयक';
+                        else if (m.role === 'jointTreasurer') d = 'सहखजिनदार';
+                        else if (m.role === 'socialMediaHead') d = 'सोशल मीडिया प्रमुख';
+                        else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
+                        else d = 'कार्यकारी सदस्य';
+                    }
+                    shareTextBase += (m.name || '') + ' - ' + d + '\n';
+                });
+            } else {
+                shareTextBase += 'तेजस फटांगरे - अध्यक्ष\nधीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख\nआदित्य मते - सचिव / डेकोरेशन प्रमुख\nसार्थक माताडे - सहसचिव / सहसमन्वयक\nधनंजय रणाते - खजिनदार / समन्वयक\nओंकार वर्पे - सहखजिनदार\nतेजस देशमुख - सोशल मीडिया प्रमुख\nतेजस वर्पे - प्रसिद्धी प्रमुख\nवैभव सांगळे - कार्यकारी सदस्य\nनिलेश कदम - कार्यकारी सदस्य\nशुभम पेटकर - कार्यकारी सदस्य\n';
+            }
+            
+            // Note: shareData is built below after file is generated in shareDonationImage
 
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
                 try {
@@ -3500,7 +3602,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
             const shareData = {
                 title: orgName + ' - देणगी',
-                text: customText,
+                text: shareTextBase.trim(),
                 files: [file]
             };
 
@@ -3586,26 +3688,39 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 customText = s.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
             }
 
+            let shareTextBase = customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर \n\n🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com\n\n===================\nउत्सव कार्यकारिणी\n===================\n`;
+            if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
+                const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
+                let orderedData = [...window.currentCommitteeData];
+                orderedData.sort((a, b) => {
+                    let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
+                    let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
+                    if (indexA === -1) indexA = 999;
+                    if (indexB === -1) indexB = 999;
+                    return indexA - indexB;
+                });
+                orderedData.forEach(m => {
+                    let d = m.designation || '';
+                    if (!d) {
+                        if (m.role === 'president') d = 'अध्यक्ष';
+                        else if (m.role === 'vicePresident') d = 'उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख';
+                        else if (m.role === 'secretary') d = 'सचिव / डेकोरेशन प्रमुख';
+                        else if (m.role === 'jointSecretary') d = 'सहसचिव / सहसमन्वयक';
+                        else if (m.role === 'treasurer') d = 'खजिनदार / समन्वयक';
+                        else if (m.role === 'jointTreasurer') d = 'सहखजिनदार';
+                        else if (m.role === 'socialMediaHead') d = 'सोशल मीडिया प्रमुख';
+                        else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
+                        else d = 'कार्यकारी सदस्य';
+                    }
+                    shareTextBase += (m.name || '') + ' - ' + d + '\n';
+                });
+            } else {
+                shareTextBase += 'तेजस फटांगरे - अध्यक्ष\nधीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख\nआदित्य मते - सचिव / डेकोरेशन प्रमुख\nसार्थक माताडे - सहसचिव / सहसमन्वयक\nधनंजय रणाते - खजिनदार / समन्वयक\nओंकार वर्पे - सहखजिनदार\nतेजस देशमुख - सोशल मीडिया प्रमुख\nतेजस वर्पे - प्रसिद्धी प्रमुख\nवैभव सांगळे - कार्यकारी सदस्य\nनिलेश कदम - कार्यकारी सदस्य\nशुभम पेटकर - कार्यकारी सदस्य\n';
+            }
+            
             const shareData = {
                 title: orgName + ' - ' + titleStr,
-                text: customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
-
-🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com
-
-===================
-उत्सव कार्यकारिणी
-===================
-तेजस फटांगरे - अध्यक्ष
-धीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख
-आदित्य मते - सचिव / डेकोरेशन प्रमुख
-सार्थक माताडे - सहसचिव / सहसमन्वयक
-धनंजय रणाते - खजिनदार / समन्वयक
-ओंकार वर्पे - सहखजिनदार
-तेजस देशमुख - सोशल मीडिया प्रमुख
-तेजस वर्पे - प्रसिद्धी प्रमुख
-वैभव सांगळे - कार्यकारी सदस्य
-निलेश कदम - कार्यकारी सदस्य
-शुभम पेटकर - कार्यकारी सदस्य`,
+                text: shareTextBase.trim(),
                 files: [file]
             };
 
