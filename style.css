@@ -1629,14 +1629,7 @@ footer[style*="text-align: left"] {
         overflow: hidden !important;
     }
     #heroSectionContainer > .glass-panel > .section-header:first-of-type {
-        position: sticky !important;
-        top: 138px !important; /* height of header */
-        z-index: 990 !important;
-        background: var(--glass-bg) !important;
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        padding: 10px 0 !important;
-        margin-top: -10px !important;
+        /* No longer sticky */
     }
     .section-header h2, .niyojan-same-heading {
         font-size: 1.35rem !important;
@@ -3383,8 +3376,8 @@ footer::after {
 
 @media (max-width: 768px) {
     .custom-header {
-        position: sticky !important;
-        top: -1px;
+        position: relative !important;
+        top: 0;
         border-bottom: 2px solid rgba(255, 215, 0, 0.4) !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9) !important;
         left: 0;
