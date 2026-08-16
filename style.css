@@ -1628,6 +1628,16 @@ footer[style*="text-align: left"] {
         box-sizing: border-box !important;
         overflow: hidden !important;
     }
+    #heroSectionContainer > .glass-panel > .section-header:first-of-type {
+        position: sticky !important;
+        top: 138px !important; /* height of header */
+        z-index: 990 !important;
+        background: var(--glass-bg) !important;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 10px 0 !important;
+        margin-top: -10px !important;
+    }
     .section-header h2, .niyojan-same-heading {
         font-size: 1.35rem !important;
         white-space: normal !important;
@@ -2710,7 +2720,7 @@ body > .container {
     }
     .section-header h2, .niyojan-same-heading {
         font-size: 1.25rem !important;
-        white-space: nowrap !important;
+        white-space: normal !important;
     }
     .header-line {
         flex: 1 1 8px !important;
