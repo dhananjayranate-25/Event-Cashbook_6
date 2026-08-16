@@ -1968,6 +1968,7 @@
             if (cachedData) {
                 const parsedCache = JSON.parse(cachedData);
                 if (parsedCache && parsedCache.length > 0) {
+                    window.currentCommitteeData = parsedCache;
                     renderCommittee(parsedCache);
                 }
             }
@@ -1978,6 +1979,7 @@
             const response = await fetch('/api/committee?t=' + Date.now(), { cache: 'no-store', headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' } });
             const result = await response.json();
             if (result.success && Array.isArray(result.data)) {
+                window.currentCommitteeData = result.data;
                 localStorage.setItem('committeeCache', JSON.stringify(result.data));
                 renderCommittee(result.data);
             }
