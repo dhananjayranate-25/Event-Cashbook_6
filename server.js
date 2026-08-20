@@ -332,6 +332,15 @@ app.post('/api/upload-image', uploadCloudinary.single('image'), async (req, res)
         res.status(500).json({ success: false, error: err.message });
     }
 });
+
+app.post('/api/upload-audio', uploadCloudinary.single('audio'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ success: false, error: 'No audio uploaded' });
+        res.json({ success: true, url: req.file.path });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
 app.post('/api/settings', async (req, res) => {
     try {
         const { key, value } = req.body;

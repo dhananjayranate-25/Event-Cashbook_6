@@ -1250,6 +1250,14 @@
             </div>
             
             <div class="footer-v6-bottom">
+<div class="footer-audio-toggle" style="margin-right: auto; padding-right: 15px; display: none;" id="footerAudioContainer">
+<button id="bgAudioToggleBtn" onclick="toggleBgAudio()" style="background: rgba(255,215,0,0.1); border: 1px solid #ffd700; color: #ffd700; border-radius: 20px; padding: 5px 12px; font-size: 12px; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+<svg id="audioIconPlay" style="display:none;" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+<svg id="audioIconPause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+<span id="audioBtnText">Play Mantra</span>
+</button>
+<audio id="bgAudioElement" loop></audio>
+</div>
                 <div class="footer-copyright">
                     © 2026 शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर. सर्व हक्क राखीव.
                 </div>
@@ -1606,12 +1614,55 @@
         }
     }
 
-    async function loadAppearanceSettingsHome() {
+    function toggleBgAudio() {
+    const audioElem = document.getElementById('bgAudioElement');
+    if (!audioElem) return;
+    const playIcon = document.getElementById('audioIconPlay');
+    const pauseIcon = document.getElementById('audioIconPause');
+    const btnText = document.getElementById('audioBtnText');
+    
+    if (audioElem.paused) {
+        audioElem.play().then(() => {
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'inline-block';
+            btnText.innerText = 'Pause Mantra';
+        }).catch(e => console.error('Audio play failed', e));
+    } else {
+        audioElem.pause();
+        playIcon.style.display = 'inline-block';
+        pauseIcon.style.display = 'none';
+        btnText.innerText = 'Play Mantra';
+    }
+}
+async function loadAppearanceSettingsHome() {
         const renderSettings = (settings) => {
             if (!settings) return;
             window.appSettings = settings;
             try { appSettings = settings; } catch(e) {}
             if (settings.estYear) document.getElementById('displayEstYear').textContent = settings.estYear;
+if (settings.bgAudioUrl) {
+    const audioElem = document.getElementById('bgAudioElement');
+    const container = document.getElementById('footerAudioContainer');
+    if (audioElem && container) {
+        audioElem.src = settings.bgAudioUrl;
+        audioElem.volume = settings.bgAudioVolume !== undefined ? settings.bgAudioVolume : 0.5;
+        container.style.display = 'flex';
+        // Try autoplaying on first user interaction if not already playing
+        const playAudioOnInteract = () => {
+            if (audioElem.paused) {
+                audioElem.play().then(() => {
+                    document.getElementById('audioIconPlay').style.display = 'none';
+                    document.getElementById('audioIconPause').style.display = 'inline-block';
+                    document.getElementById('audioBtnText').innerText = 'Pause Mantra';
+                }).catch(e => {});
+            }
+            document.removeEventListener('click', playAudioOnInteract);
+            document.removeEventListener('touchstart', playAudioOnInteract);
+        };
+        document.addEventListener('click', playAudioOnInteract);
+        document.addEventListener('touchstart', playAudioOnInteract);
+    }
+}
             const regNoElem = document.getElementById('displayRegNo');
             if (settings.regNo && regNoElem) regNoElem.textContent = settings.regNo;
             const navTitleElem = document.getElementById('displayNavbarTitle');
