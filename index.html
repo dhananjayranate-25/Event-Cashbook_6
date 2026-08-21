@@ -1256,7 +1256,7 @@
 <svg id="audioIconPause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
 <span id="audioBtnText">Play Mantra</span>
 </button>
-<audio id="bgAudioElement" loop></audio>
+<audio id="bgAudioElement" crossorigin="anonymous" loop></audio>
 </div>
                 <div class="footer-copyright">
                     © 2026 शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर. सर्व हक्क राखीव.
@@ -1614,27 +1614,71 @@
         }
     }
 
+    window.audioCtx = null;
+    window.audioGainNode = null;
+    function initWebAudio(audioElem) {
+        if (!window.audioCtx) {
+            try {
+                window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                window.audioGainNode = window.audioCtx.createGain();
+                const source = window.audioCtx.createMediaElementSource(audioElem);
+                source.connect(window.audioGainNode);
+                window.audioGainNode.connect(window.audioCtx.destination);
+            } catch(e) {
+                console.error('Web Audio API init failed', e);
+            }
+        }
+        if (window.audioCtx && window.audioCtx.state === 'suspended') {
+            window.audioCtx.resume();
+        }
+        if (window.audioGainNode && window.appSettings && window.appSettings.bgAudioVolume !== undefined) {
+            window.audioGainNode.gain.value = window.appSettings.bgAudioVolume;
+        }
+    }
+
     function toggleBgAudio() {
     const audioElem = document.getElementById('bgAudioElement');
     if (!audioElem) return;
+    initWebAudio(audioElem);
     const playIcon = document.getElementById('audioIconPlay');
     const pauseIcon = document.getElementById('audioIconPause');
     const btnText = document.getElementById('audioBtnText');
     
     if (audioElem.paused) {
         audioElem.play().then(() => {
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'inline-block';
-            btnText.innerText = 'Pause Mantra';
+            if(playIcon) playIcon.style.display = 'none';
+            if(pauseIcon) pauseIcon.style.display = 'inline-block';
+            if(btnText) btnText.innerText = 'Pause Mantra';
         }).catch(e => console.error('Audio play failed', e));
     } else {
         audioElem.pause();
-        playIcon.style.display = 'inline-block';
-        pauseIcon.style.display = 'none';
-        btnText.innerText = 'Play Mantra';
+        if(playIcon) playIcon.style.display = 'inline-block';
+        if(pauseIcon) pauseIcon.style.display = 'none';
+        if(btnText) btnText.innerText = 'Play Mantra';
     }
 }
-async function loadAppearanceSettingsHome() {
+window.userHasInteracted = false;
+const globalInteractionHandler = () => {
+    window.userHasInteracted = true;
+    const audioElem = document.getElementById('bgAudioElement');
+    if (audioElem && audioElem.src && audioElem.paused && window.bgAudioEnabled) {
+        initWebAudio(audioElem);
+        audioElem.play().then(() => {
+            const playIcon = document.getElementById('audioIconPlay');
+            const pauseIcon = document.getElementById('audioIconPause');
+            const btnText = document.getElementById('audioBtnText');
+            if(playIcon) playIcon.style.display = 'none';
+            if(pauseIcon) pauseIcon.style.display = 'inline-block';
+            if(btnText) btnText.innerText = 'Pause Mantra';
+        }).catch(e => {});
+    }
+    document.removeEventListener('click', globalInteractionHandler);
+    document.removeEventListener('touchstart', globalInteractionHandler);
+};
+document.addEventListener('click', globalInteractionHandler);
+document.addEventListener('touchstart', globalInteractionHandler);
+
+    async function loadAppearanceSettingsHome() {
         const renderSettings = (settings) => {
             if (!settings) return;
             window.appSettings = settings;
@@ -1647,20 +1691,17 @@ if (settings.bgAudioUrl) {
         audioElem.src = settings.bgAudioUrl;
         audioElem.volume = settings.bgAudioVolume !== undefined ? settings.bgAudioVolume : 0.5;
         container.style.display = 'flex';
-        // Try autoplaying on first user interaction if not already playing
-        const playAudioOnInteract = () => {
-            if (audioElem.paused) {
-                audioElem.play().then(() => {
-                    document.getElementById('audioIconPlay').style.display = 'none';
-                    document.getElementById('audioIconPause').style.display = 'inline-block';
-                    document.getElementById('audioBtnText').innerText = 'Pause Mantra';
-                }).catch(e => {});
-            }
-            document.removeEventListener('click', playAudioOnInteract);
-            document.removeEventListener('touchstart', playAudioOnInteract);
-        };
-        document.addEventListener('click', playAudioOnInteract);
-        document.addEventListener('touchstart', playAudioOnInteract);
+        window.bgAudioEnabled = true;
+        if (window.userHasInteracted && audioElem.paused) {
+            audioElem.play().then(() => {
+                const playIcon = document.getElementById('audioIconPlay');
+                const pauseIcon = document.getElementById('audioIconPause');
+                const btnText = document.getElementById('audioBtnText');
+                if(playIcon) playIcon.style.display = 'none';
+                if(pauseIcon) pauseIcon.style.display = 'inline-block';
+                if(btnText) btnText.innerText = 'Pause Mantra';
+            }).catch(e => {});
+        }
     }
 }
             const regNoElem = document.getElementById('displayRegNo');
