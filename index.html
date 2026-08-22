@@ -1168,33 +1168,38 @@
             <div class="footer-v6-content">
                 <!-- Left: Mandal Name Photo -->
 <div class="footer-v6-col brand-col">
-    <div class="footer-countdown-container" style="text-align: center; margin-bottom: 20px;">
-        <h3 id="countdownMainTitle" style="color: #d4af37; font-size: 1.2rem; margin-bottom: 15px; font-weight: bold; font-family: 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.5px;">गणेशोत्सव 14 सप्टेंबर ते 26 सप्टेंबर २०२६</h3>
+    <div class="footer-countdown-container" style="margin-bottom: 25px; border: 2px solid #000; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.15); background: transparent;">
+    
+    <!-- Title Inside the Box (Header) -->
+    <div style="background: #000; padding: 12px 10px; text-align: center; border-bottom: 2px solid #000;">
+        <h3 id="countdownMainTitle" style="color: #ffd700; font-size: 1.15rem; margin: 0; font-weight: bold; font-family: 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.5px;">गणेशोत्सव 14 सप्टेंबर ते 26 सप्टेंबर २०२६</h3>
+    </div>
+    
+    <!-- Timer Section (Transparent background) -->
+    <div id="countdownTimerDisplay" style="display: flex; width: 100%; background: transparent;">
         
-        <div style="background: linear-gradient(135deg, #ff7e5f, #feb47b); padding: 8px; border-radius: 8px; box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);">
-            <div id="countdownTimerDisplay" style="display: flex; background: #ffffff; border-radius: 4px; width: 100%; overflow: hidden;">
-                
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 5px; border-right: 1px solid #e2e8f0;">
-                    <div id="cd-days" style="color: #000000; font-size: 2.2rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
-                    <div style="color: #64748b; font-size: 0.85rem; font-weight: 600; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 8px;">दिवस</div>
-                </div>
-                
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 5px; border-right: 1px solid #e2e8f0;">
-                    <div id="cd-hours" style="color: #000000; font-size: 2.2rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
-                    <div style="color: #64748b; font-size: 0.85rem; font-weight: 600; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 8px;">तास</div>
-                </div>
-                
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 5px; border-right: 1px solid #e2e8f0;">
-                    <div id="cd-mins" style="color: #000000; font-size: 2.2rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
-                    <div style="color: #64748b; font-size: 0.85rem; font-weight: 600; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 8px;">मिनिटे</div>
-                </div>
-                
-                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 5px;">
-                    <div id="cd-secs" style="color: #000000; font-size: 2.2rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
-                    <div style="color: #64748b; font-size: 0.85rem; font-weight: 600; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 8px;">सेकंद</div>
-                </div>
-                
-            </div>
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 2px; border-right: 2px solid #000;">
+            <div id="cd-days" style="color: #000; font-size: 2.3rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1; text-shadow: 2px 2px 0px rgba(212,175,55,0.4);">00</div>
+            <div style="color: #222; font-size: 0.85rem; font-weight: 800; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 6px;">दिवस</div>
+        </div>
+        
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 2px; border-right: 2px solid #000;">
+            <div id="cd-hours" style="color: #000; font-size: 2.3rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1; text-shadow: 2px 2px 0px rgba(212,175,55,0.4);">00</div>
+            <div style="color: #222; font-size: 0.85rem; font-weight: 800; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 6px;">तास</div>
+        </div>
+        
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 2px; border-right: 2px solid #000;">
+            <div id="cd-mins" style="color: #000; font-size: 2.3rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1; text-shadow: 2px 2px 0px rgba(212,175,55,0.4);">00</div>
+            <div style="color: #222; font-size: 0.85rem; font-weight: 800; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 6px;">मिनिटे</div>
+        </div>
+        
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 15px 2px;">
+            <div id="cd-secs" style="color: #000; font-size: 2.3rem; font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1; text-shadow: 2px 2px 0px rgba(212,175,55,0.4);">00</div>
+            <div style="color: #222; font-size: 0.85rem; font-weight: 800; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 6px;">सेकंद</div>
+        </div>
+        
+    </div>
+</div>
         </div>
     </div>
 </div>
