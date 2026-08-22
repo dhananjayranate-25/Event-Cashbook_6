@@ -1721,22 +1721,26 @@ window.userHasInteracted = false;
 const globalInteractionHandler = () => {
     window.userHasInteracted = true;
     const audioElem = document.getElementById('bgAudioElement');
-    if (audioElem && audioElem.src && audioElem.paused && window.bgAudioEnabled) {
-        initWebAudio(audioElem);
-        audioElem.play().then(() => {
-            const playIcon = document.getElementById('audioIconPlay');
-            const pauseIcon = document.getElementById('audioIconPause');
-            const btnText = document.getElementById('audioBtnText');
-            if(playIcon) playIcon.style.display = 'none';
-            if(pauseIcon) pauseIcon.style.display = 'inline-block';
-            if(btnText) btnText.innerText = 'Pause Mantra';
-        }).catch(e => {});
+    if (audioElem && audioElem.src && window.bgAudioEnabled) {
+        if (audioElem.paused) {
+            try { initWebAudio(audioElem); } catch(e){}
+            audioElem.play().then(() => {
+                const playIcon = document.getElementById('audioIconPlay');
+                const pauseIcon = document.getElementById('audioIconPause');
+                const btnText = document.getElementById('audioBtnText');
+                if(playIcon) playIcon.style.display = 'none';
+                if(pauseIcon) pauseIcon.style.display = 'inline-block';
+                if(btnText) btnText.innerText = 'Pause Mantra';
+            }).catch(e => {});
+        }
+        document.removeEventListener('click', globalInteractionHandler);
+        document.removeEventListener('touchstart', globalInteractionHandler);
+        document.removeEventListener('scroll', globalInteractionHandler);
     }
-    document.removeEventListener('click', globalInteractionHandler);
-    document.removeEventListener('touchstart', globalInteractionHandler);
 };
 document.addEventListener('click', globalInteractionHandler);
 document.addEventListener('touchstart', globalInteractionHandler);
+document.addEventListener('scroll', globalInteractionHandler);
 
     async function loadAppearanceSettingsHome() {
         const renderSettings = (settings) => {
