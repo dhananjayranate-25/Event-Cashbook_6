@@ -143,9 +143,7 @@
         <div class="floating-decor">🔱</div>
         <div class="floating-decor">☸</div>
         
-        <div id="compactStickyHeader" style="position: fixed; top: 0; left: 0; width: 100%; background: rgba(13, 1, 24, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 9999; transform: translateY(-100%); transition: transform 0.3s ease; border-bottom: 2px solid rgba(255, 215, 0, 0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; padding: 12px 0;">
-    <h2 style="color: #ff8c00; font-size: 1.3rem; margin: 0; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); letter-spacing: 1px;">शिवसृष्टीचा राजा</h2>
-</div>
+        
 
 <header class="custom-header">
             <div class="main-banner" style="padding: 0;">
@@ -1444,17 +1442,7 @@ async function loadHomeGalleryPreview() {
         
         loadCommitteeDataHome();
 
-    // Compact Sticky Header Logic
-    window.addEventListener('scroll', () => {
-        const compactHeader = document.getElementById('compactStickyHeader');
-        if (compactHeader) {
-            if (window.scrollY > 250) {
-                compactHeader.style.transform = 'translateY(0)';
-            } else {
-                compactHeader.style.transform = 'translateY(-100%)';
-            }
-        }
-    });
+    
         
         // Secret Admin Login
         let logoClickCount = 0;

@@ -3168,12 +3168,15 @@ footer::after {
 
 .custom-header {
     width: 100%;
-    background: none;
+    background: #0d0118;
     padding: 0;
     margin-bottom: 0;
-    box-shadow: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     border: none;
     border-radius: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .custom-header::before, .custom-header::after {
@@ -3376,9 +3379,10 @@ footer::after {
 
 @media (max-width: 768px) {
     .custom-header {
-        position: relative !important;
+        position: sticky !important;
         top: 0;
         border-bottom: 2px solid rgba(255, 215, 0, 0.4) !important;
+        z-index: 1000 !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9) !important;
         left: 0;
         right: 0;
