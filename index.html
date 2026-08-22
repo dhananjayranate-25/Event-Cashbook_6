@@ -1727,68 +1727,36 @@ async function loadHomeGalleryPreview() {
 
     window.audioCtx = null;
     window.audioGainNode = null;
-    function initWebAudio(audioElem) {
-        if (!window.audioCtx) {
-            try {
-                window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                window.audioGainNode = window.audioCtx.createGain();
-                const source = window.audioCtx.createMediaElementSource(audioElem);
-                source.connect(window.audioGainNode);
-                window.audioGainNode.connect(window.audioCtx.destination);
-            } catch(e) {
-                console.error('Web Audio API init failed', e);
-            }
-        }
-        if (window.audioCtx && window.audioCtx.state === 'suspended') {
-            window.audioCtx.resume();
-        }
-        if (window.audioGainNode && window.appSettings && window.appSettings.bgAudioVolume !== undefined) {
-            window.audioGainNode.gain.value = window.appSettings.bgAudioVolume;
-        }
-    }
-
-    function toggleBgAudio() {
-    const audioElem = document.getElementById('bgAudioElement');
-    if (!audioElem) return;
-    initWebAudio(audioElem);
-    const playIcon = document.getElementById('audioIconPlay');
-    const pauseIcon = document.getElementById('audioIconPause');
-    const btnText = document.getElementById('audioBtnText');
-    
+    function initWebAudio(audioElem) {}
+window.userHasInteracted = false;
+const globalInteractionHandler = () => {
+window.userHasInteracted = true;
+const audioElem = document.getElementById('bgAudioElement');
+if (audioElem && audioElem.src && window.bgAudioEnabled) {
     if (audioElem.paused) {
         audioElem.play().then(() => {
+            const playIcon = document.getElementById('audioIconPlay');
+            const pauseIcon = document.getElementById('audioIconPause');
+            const btnText = document.getElementById('audioBtnText');
             if(playIcon) playIcon.style.display = 'none';
             if(pauseIcon) pauseIcon.style.display = 'inline-block';
             if(btnText) btnText.innerText = 'Pause Mantra';
-        }).catch(e => console.error('Audio play failed', e));
+            
+            document.removeEventListener('click', globalInteractionHandler);
+            document.removeEventListener('touchstart', globalInteractionHandler);
+            document.removeEventListener('scroll', globalInteractionHandler);
+        }).catch(e => {
+            // Playback failed (likely due to scroll not being a valid user gesture).
+            // Do NOT remove listeners, so the next actual click can trigger it.
+        });
     } else {
-        audioElem.pause();
-        if(playIcon) playIcon.style.display = 'inline-block';
-        if(pauseIcon) pauseIcon.style.display = 'none';
-        if(btnText) btnText.innerText = 'Play Mantra';
-    }
-}
-window.userHasInteracted = false;
-const globalInteractionHandler = () => {
-    window.userHasInteracted = true;
-    const audioElem = document.getElementById('bgAudioElement');
-    if (audioElem && audioElem.src && window.bgAudioEnabled) {
-        if (audioElem.paused) {
-            try { initWebAudio(audioElem); } catch(e){}
-            audioElem.play().then(() => {
-                const playIcon = document.getElementById('audioIconPlay');
-                const pauseIcon = document.getElementById('audioIconPause');
-                const btnText = document.getElementById('audioBtnText');
-                if(playIcon) playIcon.style.display = 'none';
-                if(pauseIcon) pauseIcon.style.display = 'inline-block';
-                if(btnText) btnText.innerText = 'Pause Mantra';
-            }).catch(e => {});
-        }
         document.removeEventListener('click', globalInteractionHandler);
         document.removeEventListener('touchstart', globalInteractionHandler);
         document.removeEventListener('scroll', globalInteractionHandler);
     }
+}
 };
+
 document.addEventListener('click', globalInteractionHandler);
 document.addEventListener('touchstart', globalInteractionHandler);
 document.addEventListener('scroll', globalInteractionHandler);
