@@ -3118,9 +3118,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         };
         
         const accountName = getSafeText('bankAccName', 'Dhananjay Sachin Ranate');
-        const accountNumber = getSafeText('bankAccNo', '322502010043655');
-        const ifscCode = getSafeText('bankIfsc', 'UBIN0532258');
-        const bankName = getSafeText('bankBranch', 'Union Bank Of India');
+        
 
         // Fetch the uploaded QR code image from the DOM
         let qrDataUrl = 'https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg'; // default
@@ -3137,7 +3135,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
         const columnsWrapper = document.createElement('div');
         columnsWrapper.style.display = 'flex';
-        columnsWrapper.style.justifyContent = 'space-between';
+        columnsWrapper.style.justifyContent = 'center';
         columnsWrapper.style.width = '100%';
         columnsWrapper.style.margin = '0';
         columnsWrapper.style.position = 'relative';
@@ -3177,50 +3175,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         `;
         columnsWrapper.appendChild(leftCol);
 
-        // Right Column (Bank Details)
-        const rightCol = document.createElement('div');
-        rightCol.style.flex = '1';
-        rightCol.style.border = '5px double white';
-        rightCol.style.borderRadius = '15px';
-        rightCol.style.padding = '20px';
-        rightCol.style.position = 'relative';
-        rightCol.style.display = 'flex';
-        rightCol.style.flexDirection = 'column';
-        rightCol.innerHTML = `
-
-            
-            <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 2px; position: relative; z-index: 10; gap: 10px; white-space: nowrap; width: 100%;">
-                <div style="flex-grow: 1; max-width: 60px; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
-                <div style="color: #ffd700; font-size: 16px;">✧</div>
-                <div style="color: #ffd700; font-size: 24px; font-weight: bold; font-family: 'Mukta', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0; line-height: 1;">बँक खात्याचा तपशील</div>
-                <div style="color: #ffd700; font-size: 16px;">✧</div>
-                <div style="flex-grow: 1; max-width: 60px; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
-            </div>
-            
-            <div style="margin-bottom: 15px;">
-                <div style="color: #aaa; font-size: 21px; margin-bottom: 8px;">खात्याचे नाव:</div>
-                <div style="color: #fff; font-size: 23px; font-weight: 600; font-family: 'Poppins', sans-serif;">${accountName}</div>
-            </div>
-            <div style="border-bottom: 1px dotted rgba(255,255,255,0.2); margin-bottom: 15px;"></div>
-            
-            <div style="margin-bottom: 15px;">
-                <div style="color: #aaa; font-size: 21px; margin-bottom: 8px;">खाते क्रमांक:</div>
-                <div style="color: #fff; font-size: 23px; font-weight: 600; font-family: 'Poppins', sans-serif;">${accountNumber}</div>
-            </div>
-            <div style="border-bottom: 1px dotted rgba(255,255,255,0.2); margin-bottom: 15px;"></div>
-            
-            <div style="margin-bottom: 15px;">
-                <div style="color: #aaa; font-size: 21px; margin-bottom: 8px;">IFSC कोड:</div>
-                <div style="color: #fff; font-size: 23px; font-weight: 600; font-family: 'Poppins', sans-serif;">${ifscCode}</div>
-            </div>
-            <div style="border-bottom: 1px dotted rgba(255,255,255,0.2); margin-bottom: 15px;"></div>
-            
-            <div>
-                <div style="color: #aaa; font-size: 21px; margin-bottom: 8px;">बँक व शाखा:</div>
-                <div style="color: #fff; font-size: 23px; font-weight: 600; font-family: 'Poppins', sans-serif;">${bankName}</div>
-            </div>
-        `;
-        columnsWrapper.appendChild(rightCol);
+        
         clone.appendChild(columnsWrapper);
 
         // Full Committee Members List Block
