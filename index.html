@@ -1171,7 +1171,7 @@
                     
 <!-- New Footer Countdown Section -->
 <div class="footer-countdown-container" style="text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid rgba(255,215,0,0.2);">
-    <h3 style="color: #ffd700; font-size: 1.1rem; margin-bottom: 15px; font-family: 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.5px;">गणेशोत्सव 14 सप्टेंबर ते 26 सप्टेंबर २०२६</h3>
+    <h3 id="countdownMainTitle" style="color: #ffd700; font-size: 1.1rem; margin-bottom: 15px; font-family: 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.5px;">गणेशोत्सव 14 सप्टेंबर ते 26 सप्टेंबर २०२६</h3>
     
     <div id="countdownTimerDisplay" style="display: flex; justify-content: center; gap: 10px;">
         <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.3); min-width: 60px;">
@@ -1359,8 +1359,8 @@
         
 // Countdown Timer Logic
 function initCountdown() {
-    // Exact Date for Ganeshotsav 2026: September 14, 2026 00:00:00
-    const festivalDate = new Date('2026-09-14T00:00:00').getTime();
+    let festivalDate = new Date('2026-09-14T00:00:00').getTime();
+    let isDateSet = false;
     
     // Confetti generation
     const showCelebration = () => {
@@ -1380,6 +1380,12 @@ function initCountdown() {
     };
 
     const updateTimer = () => {
+        // Dynamically get from window.appSettings if available
+        if (window.appSettings && window.appSettings.festivalDateTarget && !isDateSet) {
+            festivalDate = new Date(window.appSettings.festivalDateTarget + 'T00:00:00').getTime();
+            isDateSet = true;
+        }
+    
         const now = new Date().getTime();
         const distance = festivalDate - now;
 
@@ -1787,6 +1793,10 @@ document.addEventListener('scroll', globalInteractionHandler);
             window.appSettings = settings;
             try { appSettings = settings; } catch(e) {}
             if (settings.estYear) document.getElementById('displayEstYear').textContent = settings.estYear;
+    if (settings.festivalDateText) {
+        const titleEl = document.getElementById('countdownMainTitle');
+        if (titleEl) titleEl.innerText = settings.festivalDateText;
+    }
 if (settings.bgAudioUrl) {
     const audioElem = document.getElementById('bgAudioElement');
     const container = document.getElementById('footerAudioContainer');

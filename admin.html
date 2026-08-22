@@ -1000,6 +1000,8 @@
                 if (result.success) {
                     const settings = result.data;
                     document.getElementById('appEstYear').value = settings.estYear || '';
+document.getElementById('festivalDateText').value = settings.festivalDateText || '';
+document.getElementById('festivalDateTarget').value = settings.festivalDateTarget || '';
 if (settings.bgAudioUrl) document.getElementById('currentBgAudio').innerHTML = `Current: <a href="${settings.bgAudioUrl}" target="_blank" style="color:#ffd700;">Audio Link</a>`;
 if (settings.bgAudioVolume !== undefined) {
     document.getElementById('bgVolumeInput').value = settings.bgAudioVolume;
@@ -1097,6 +1099,8 @@ if (settings.bgAudioVolume !== undefined) {
             status.innerHTML = '<span style="color: #3b82f6;">Saving...</span>';
             
             const estYear = document.getElementById('appEstYear').value;
+const festivalDateText = document.getElementById('festivalDateText').value;
+const festivalDateTarget = document.getElementById('festivalDateTarget').value;
             const varganiAabharTitle = document.getElementById('varganiAabharTitle').value;
             const varganiAabharText = document.getElementById('varganiAabharText').value;
                         const mahaprasadNimantranTitle = document.getElementById('mahaprasadNimantranTitle').value;
@@ -1136,6 +1140,8 @@ if (settings.bgAudioVolume !== undefined) {
 const settingsToSave = [
 { key: 'bgAudioVolume', value: bgVolume },
                     { key: 'estYear', value: estYear },
+{ key: 'festivalDateText', value: festivalDateText },
+{ key: 'festivalDateTarget', value: festivalDateTarget },
                     { key: 'varganiAabharTitle', value: varganiAabharTitle },
                     { key: 'varganiAabharText', value: varganiAabharText },
                     { key: 'varganiCardBadge', value: varganiCardBadge },
