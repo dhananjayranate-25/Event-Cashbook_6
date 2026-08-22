@@ -1168,7 +1168,31 @@
             <div class="footer-v6-content">
                 <!-- Left: Mandal Name Photo -->
                 <div class="footer-v6-col brand-col">
-                    <img src="logo/footer_mandal_name.jpg" alt="Shivsrushti Mandal Name" class="footer-mandal-name-img">
+                    
+<!-- New Footer Countdown Section -->
+<div class="footer-countdown-container" style="text-align: center; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid rgba(255,215,0,0.2);">
+    <h3 style="color: #ffd700; font-size: 1.1rem; margin-bottom: 15px; font-family: 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.5px;">गणेशोत्सव 14 सप्टेंबर ते 26 सप्टेंबर २०२६</h3>
+    
+    <div id="countdownTimerDisplay" style="display: flex; justify-content: center; gap: 10px;">
+        <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.3); min-width: 60px;">
+            <div id="cd-days" style="color: #fff; font-size: 1.5rem; font-weight: bold; font-family: 'Poppins', sans-serif;">00</div>
+            <div style="color: #aaa; font-size: 0.7rem; font-family: 'Noto Sans Devanagari', sans-serif;">दिवस</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.3); min-width: 60px;">
+            <div id="cd-hours" style="color: #fff; font-size: 1.5rem; font-weight: bold; font-family: 'Poppins', sans-serif;">00</div>
+            <div style="color: #aaa; font-size: 0.7rem; font-family: 'Noto Sans Devanagari', sans-serif;">तास</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.3); min-width: 60px;">
+            <div id="cd-mins" style="color: #fff; font-size: 1.5rem; font-weight: bold; font-family: 'Poppins', sans-serif;">00</div>
+            <div style="color: #aaa; font-size: 0.7rem; font-family: 'Noto Sans Devanagari', sans-serif;">मिनिटे</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.3); min-width: 60px;">
+            <div id="cd-secs" style="color: #fff; font-size: 1.5rem; font-weight: bold; font-family: 'Poppins', sans-serif;">00</div>
+            <div style="color: #aaa; font-size: 0.7rem; font-family: 'Noto Sans Devanagari', sans-serif;">सेकंद</div>
+        </div>
+    </div>
+</div>
+
                 </div>
 
                 <!-- Center 1: Links -->
@@ -1335,37 +1359,51 @@
         
 // Countdown Timer Logic
 function initCountdown() {
-    // Exact Date for Ganeshotsav 2026: September 10, 2026 00:00:00
-    const festivalDate = new Date('2026-09-10T00:00:00').getTime();
+    // Exact Date for Ganeshotsav 2026: September 14, 2026 00:00:00
+    const festivalDate = new Date('2026-09-14T00:00:00').getTime();
     
+    // Confetti generation
+    const showCelebration = () => {
+        const display = document.getElementById('countdownTimerDisplay');
+        if (display && !display.hasAttribute('data-celebrated')) {
+            display.setAttribute('data-celebrated', 'true');
+            display.innerHTML = '<h3 style="color: #ffd700; font-size: 1.4rem; width: 100%; text-shadow: 0 0 10px #ff8c00; animation: pulse 1s infinite alternate;">✨ उत्सवाला सुरुवात झाली आहे! मंगलमूर्ती मोरया! ✨</h3>';
+            
+            // Add pulse animation if not exists
+            if (!document.getElementById('pulseAnimStyle')) {
+                const style = document.createElement('style');
+                style.id = 'pulseAnimStyle';
+                style.innerHTML = '@keyframes pulse { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.05); opacity: 1; text-shadow: 0 0 20px #ff8c00; } }';
+                document.head.appendChild(style);
+            }
+        }
+    };
+
     const updateTimer = () => {
         const now = new Date().getTime();
         const distance = festivalDate - now;
-        
-        if (distance < 0) {
-            const display = document.getElementById('countdownTimerDisplay');
-            if (display) {
-                display.innerHTML = '<h3 style="color: #28a745; font-size: 1.5rem; width: 100%;">उत्सवाला सुरुवात झाली आहे! मंगलमूर्ती मोरया!</h3>';
-            }
+
+        if (distance <= 0) {
+            showCelebration();
             return;
         }
-        
+
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
+
         const dEl = document.getElementById('cd-days');
         const hEl = document.getElementById('cd-hours');
         const mEl = document.getElementById('cd-mins');
         const sEl = document.getElementById('cd-secs');
-        
+
         if (dEl) dEl.innerText = days;
         if (hEl) hEl.innerText = hours.toString().padStart(2, '0');
         if (mEl) mEl.innerText = minutes.toString().padStart(2, '0');
         if (sEl) sEl.innerText = seconds.toString().padStart(2, '0');
     };
-    
+
     updateTimer();
     setInterval(updateTimer, 1000);
 }
