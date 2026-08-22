@@ -160,6 +160,17 @@
             </div>
             <div class="upload-container">
                 <div class="form-grid">
+
+<div class="form-group floating-label" style="grid-column: 1 / -1; margin-top: 20px; position: relative;">
+    <input type="text" id="festivalDateText" placeholder=" ">
+    <label for="festivalDateText">Countdown Title (उदा. गणेशोत्सव 14 सप्टेंबर ते 26 सप्टेंबर 2026)</label>
+    <div class="input-focus-line"></div>
+</div>
+<div class="form-group floating-label" style="grid-column: 1 / -1; margin-top: 10px; position: relative;">
+    <label for="festivalDateTarget" style="position: static; font-size: 0.85rem; color: #a0aec0; margin-bottom: 5px; display: block; transform: none;">Countdown Target Date</label>
+    <input type="date" id="festivalDateTarget" style="padding-top: 10px; width: 100%; border-radius: 12px; background: rgba(30, 41, 59, 0.7); border: 2px solid rgba(255, 255, 255, 0.05); color: white; padding: 12px 15px; outline: none; font-size: 0.95rem; font-family: 'Poppins', sans-serif;">
+</div>
+
                     <div class="form-group floating-label">
                         <input type="text" id="appEstYear" placeholder=" ">
 <div class="form-group" style="margin-top: 20px;">
@@ -1000,8 +1011,8 @@
                 if (result.success) {
                     const settings = result.data;
                     document.getElementById('appEstYear').value = settings.estYear || '';
-document.getElementById('festivalDateText').value = settings.festivalDateText || '';
-document.getElementById('festivalDateTarget').value = settings.festivalDateTarget || '';
+const fdt = document.getElementById('festivalDateText'); if(fdt) fdt.value = settings.festivalDateText || '';
+const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value = settings.festivalDateTarget || '';
 if (settings.bgAudioUrl) document.getElementById('currentBgAudio').innerHTML = `Current: <a href="${settings.bgAudioUrl}" target="_blank" style="color:#ffd700;">Audio Link</a>`;
 if (settings.bgAudioVolume !== undefined) {
     document.getElementById('bgVolumeInput').value = settings.bgAudioVolume;
@@ -1099,8 +1110,8 @@ if (settings.bgAudioVolume !== undefined) {
             status.innerHTML = '<span style="color: #3b82f6;">Saving...</span>';
             
             const estYear = document.getElementById('appEstYear').value;
-const festivalDateText = document.getElementById('festivalDateText').value;
-const festivalDateTarget = document.getElementById('festivalDateTarget').value;
+const fdtEl = document.getElementById('festivalDateText'); const festivalDateText = fdtEl ? fdtEl.value : '';
+const fdtgEl = document.getElementById('festivalDateTarget'); const festivalDateTarget = fdtgEl ? fdtgEl.value : '';
             const varganiAabharTitle = document.getElementById('varganiAabharTitle').value;
             const varganiAabharText = document.getElementById('varganiAabharText').value;
                         const mahaprasadNimantranTitle = document.getElementById('mahaprasadNimantranTitle').value;
