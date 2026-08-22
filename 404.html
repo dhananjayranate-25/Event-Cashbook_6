@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found | शिवसृष्टी सार्वजनिक उत्सव मंडळ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; background-color: #0d0118; color: #ffffff; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; text-align: center; overflow: hidden; position: relative; }
+        .background-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, rgba(255, 140, 0, 0.15) 0%, rgba(13, 1, 24, 1) 70%); z-index: 1; }
+        .error-container { position: relative; z-index: 2; padding: 40px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.2); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); max-width: 90%; width: 400px; animation: float 6s ease-in-out infinite; }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        .error-code { font-size: 6rem; font-weight: 800; margin: 0; background: linear-gradient(135deg, #ffcc00, #ff8c00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 4px 15px rgba(255, 140, 0, 0.3); line-height: 1; }
+        .error-title { font-size: 1.5rem; font-weight: 700; color: #ff8c00; margin: 20px 0 10px 0; letter-spacing: 1px; }
+        .error-message { font-size: 1rem; color: #cccccc; margin-bottom: 30px; line-height: 1.6; }
+        .back-btn { display: inline-block; background: linear-gradient(135deg, #ff8c00, #e52e71); color: white; border: none; padding: 12px 30px; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer; text-decoration: none; box-shadow: 0 4px 15px rgba(229, 46, 113, 0.4); transition: transform 0.3s, box-shadow 0.3s; }
+        .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(229, 46, 113, 0.6); }
+        .decor { position: absolute; font-size: 2rem; opacity: 0.1; z-index: 1; }
+        .d1 { top: 10%; left: 10%; animation: float 5s ease-in-out infinite alternate; }
+        .d2 { top: 20%; right: 15%; animation: float 7s ease-in-out infinite alternate-reverse; }
+        .d3 { bottom: 15%; left: 20%; animation: float 6s ease-in-out infinite alternate; }
+        .d4 { bottom: 10%; right: 10%; animation: float 8s ease-in-out infinite alternate-reverse; }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    <div class="decor d1">🌺</div><div class="decor d2">🔱</div><div class="decor d3">🕉️</div><div class="decor d4">☸️</div>
+    <div class="error-container">
+        <h1 class="error-code">४०४</h1>
+        <h2 class="error-title">पान आढळले नाही!</h2>
+        <p class="error-message">क्षमा करा, तुम्ही शोधत असलेले पान अस्तित्वात नाही किंवा हलवले गेले आहे. कृपया मुख्यपृष्ठावर परत जा.</p>
+        <a href="/" class="back-btn">मुख्यपृष्ठावर जा</a>
+    </div>
+</body>
+</html>
