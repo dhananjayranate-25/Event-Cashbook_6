@@ -865,6 +865,162 @@
 
     
     <script>
+        
+        let currentAdminSelectedYear = 'all';
+        let adminCustomYearPanels = [];
+
+        window.checkAdminLogin = async function() {
+            const pwdInput = document.getElementById('adminPassword');
+            const pwd = pwdInput ? pwdInput.value.trim() : '';
+            if (!pwd) {
+                alert('कृपया पासवर्ड प्रविष्ट करा (Please enter password)!');
+                return;
+            }
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pwd })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    sessionStorage.setItem('adminLoggedIn', 'true');
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    if (window.loadYearsForAdmin) window.loadYearsForAdmin();
+                    if (window.fetchStorageStats) window.fetchStorageStats();
+                    if (window.loadUploadedPDFs) window.loadUploadedPDFs();
+                } else {
+                    alert(data.error || 'चुकीचा पासवर्ड! कृपया पुन्हा प्रयत्न करा.');
+                }
+            } catch(err) {
+                console.error('Login error:', err);
+                alert('लॉगिन करताना त्रुटी आली. कृपया इंटरनेट तपासा.');
+            }
+        };
+
+        async function loadYearsForAdmin() {
+            try {
+                const [yearsRes, setRes] = await Promise.all([
+                    fetch('/api/years'),
+                    fetch('/api/settings')
+                ]);
+                const yearsData = await yearsRes.json();
+                const setData = await setRes.json();
+                
+                const apiYears = (yearsData.success && Array.isArray(yearsData.data)) ? yearsData.data : [];
+                const s = (setData.success && setData.settings) ? setData.settings : {};
+                adminCustomYearPanels = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
+
+                const allYears = [...new Set([...apiYears, ...adminCustomYearPanels])].sort().reverse();
+                renderAdminYearTabs(allYears);
+            } catch(e) {
+                console.error('Error loading years for admin:', e);
+                renderAdminYearTabs([]);
+            }
+        }
+
+        function renderAdminYearTabs(years) {
+            const container = document.getElementById('yearTabs');
+            if (!container) return;
+            
+            let html = `<button class="year-tab ${currentAdminSelectedYear === 'all' ? 'active' : ''}" data-year="all" onclick="switchYearTab('all')">All Years</button>`;
+            years.forEach(y => {
+                html += `<button class="year-tab ${currentAdminSelectedYear === String(y) ? 'active' : ''}" data-year="${y}" onclick="switchYearTab('${y}')">${y}</button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        window.switchYearTab = function(year) {
+            currentAdminSelectedYear = year;
+            document.querySelectorAll('.year-tab').forEach(tab => {
+                if (tab.getAttribute('data-year') === String(year)) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            const uploadYearInput = document.getElementById('uploadYearInput');
+            if (uploadYearInput && year !== 'all') {
+                uploadYearInput.value = year;
+                uploadYearInput.dispatchEvent(new Event('input'));
+            }
+        };
+
+        window.createCustomYearPanel = async function() {
+            const input = document.getElementById('customYearInput');
+            if (!input || !input.value) {
+                alert('कृपया वर्ष प्रविष्ट करा (Please enter a year)!');
+                return;
+            }
+            const year = String(input.value).trim();
+            if (!year) return;
+
+            if (!adminCustomYearPanels.includes(year)) {
+                adminCustomYearPanels.push(year);
+                try {
+                    await fetch('/api/settings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key: 'customYearPanels', value: adminCustomYearPanels })
+                    });
+                    alert(`Year ${year} Panel Created Successfully!`);
+                    loadYearsForAdmin();
+                    switchYearTab(year);
+                } catch(e) {
+                    console.error('Error saving custom year panel:', e);
+                    alert('Failed to create year panel. Please try again.');
+                }
+            } else {
+                alert(`Year ${year} panel already exists!`);
+                switchYearTab(year);
+            }
+        };
+
+        window.deleteCustomYearPanel = async function() {
+            if (currentAdminSelectedYear === 'all') {
+                alert('कृपया डिलीट करण्यासाठी विशिष्ट वर्ष निवडा (Please select a specific year tab first)!');
+                return;
+            }
+            const year = currentAdminSelectedYear;
+            if (!confirm(`Are you sure you want to delete Year ${year} panel?`)) return;
+
+            adminCustomYearPanels = adminCustomYearPanels.filter(y => String(y) !== String(year));
+            try {
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'customYearPanels', value: adminCustomYearPanels })
+                });
+                alert(`Year ${year} Panel Deleted!`);
+                currentAdminSelectedYear = 'all';
+                loadYearsForAdmin();
+            } catch(e) {
+                console.error('Error deleting year panel:', e);
+                alert('Failed to delete year panel.');
+            }
+        };
+
+        window.deleteAllPanels = async function() {
+            if (!confirm('Are you sure you want to delete ALL custom year panels?')) return;
+            adminCustomYearPanels = [];
+            try {
+                await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ key: 'customYearPanels', value: [] })
+                });
+                alert('All custom year panels deleted!');
+                currentAdminSelectedYear = 'all';
+                loadYearsForAdmin();
+            } catch(e) {
+                console.error('Error deleting all panels:', e);
+                alert('Failed to delete panels.');
+            }
+        };
+
+        window.loadYearsForAdmin = loadYearsForAdmin;
+
         function adminLogout() {
             sessionStorage.removeItem('adminLoggedIn');
             window.location.replace('index.html');
