@@ -551,5 +551,26 @@
         copyToClipboard(u.trim(), 'UPI ID कॉपी झाला! (' + u + ')');
     }
 </script>
+
+    <!-- Gallery Auto-Sync -->
+    <script>
+    (function() {
+        let isSyncing = false;
+        async function syncGalleryData() {
+            if (isSyncing) return;
+            isSyncing = true;
+            try {
+                if (typeof loadGalleryAlbums === 'function') await loadGalleryAlbums();
+                if (typeof renderVisibleYearSections === 'function') await renderVisibleYearSections();
+            } catch(e) {} finally { isSyncing = false; }
+        }
+        setInterval(syncGalleryData, 8000);
+        window.addEventListener('focus', syncGalleryData);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') syncGalleryData();
+        });
+    })();
+    </script>
+
 </body>
 </html>

@@ -2231,7 +2231,8 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
         </div>
     </div>
 
-</body></html>`;
+
+    </body></html>`;
         }
 
         
@@ -3451,6 +3452,36 @@ async function deleteNiyojan(id) {
             </form>
         </div>
     </div>
+
+    <!-- Admin Live Sync Engine -->
+    <script>
+    (function initAdminAutoSync() {
+        let isSyncing = false;
+        async function syncActiveAdminTab() {
+            if (isSyncing) return;
+            isSyncing = true;
+            try {
+                const activeTab = sessionStorage.getItem('activeAdminTab') || 'tab-home';
+                if (activeTab === 'tab-home' && typeof renderAdminYearPanels === 'function') {
+                    await renderAdminYearPanels();
+                } else if (activeTab === 'tab-aarti' && typeof loadAartiData === 'function') {
+                    await loadAartiData();
+                } else if (activeTab === 'tab-niyojan' && typeof loadNiyojanAdmin === 'function') {
+                    await loadNiyojanAdmin();
+                } else if (activeTab === 'tab-gallery' && typeof loadAdminAlbums === 'function') {
+                    await loadAdminAlbums();
+                } else if (activeTab === 'tab-committee' && typeof loadCommitteeMembers === 'function') {
+                    await loadCommitteeMembers();
+                }
+            } catch(e) {} finally { isSyncing = false; }
+        }
+        setInterval(syncActiveAdminTab, 7000);
+        window.addEventListener('focus', syncActiveAdminTab);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') syncActiveAdminTab();
+        });
+    })();
+    </script>
 
 </body>
 </html>
