@@ -254,6 +254,13 @@
             }
         }
     </style>
+
+    <!-- Social Share Preview Meta Tags -->
+    <meta property="og:title" content="शिवसृष्टी सार्वजनिक उत्सव मंडळ | शिवसृष्टीचा राजा">
+    <meta property="og:description" content="शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर - गणेशोत्सव २०२६. अधिकृत वेबसाईट.">
+    <meta property="og:image" content="https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
 </head>
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
 
@@ -583,13 +590,44 @@
     </script>
 
 <script>
+    function copyToClipboard(text, successMsg) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert(successMsg);
+            }).catch(() => {
+                fallbackCopyText(text, successMsg);
+            });
+        } else {
+            fallbackCopyText(text, successMsg);
+        }
+    }
+
+    function fallbackCopyText(text, successMsg) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            alert(successMsg);
+        } catch (err) {
+            prompt('खालील मजकूर मॅन्युअली कॉपी करा:', text);
+        }
+        document.body.removeChild(textArea);
+    }
+
     function copyDonateMobile() {
         const m = window.currentDonateMobile || '+91 9322134560';
-        navigator.clipboard.writeText(m.replace(/\s+/g, '')).then(() => alert('मोबाईल नंबर कॉपी झाला! (' + m + ')'));
+        copyToClipboard(m.replace(/\s+/g, ''), 'मोबाईल नंबर कॉपी झाला! (' + m + ')');
     }
+
     function copyDonateUPI() {
         const u = window.currentDonateUPI || 'dhananjayranate@ybl';
-        navigator.clipboard.writeText(u.trim()).then(() => alert('UPI ID कॉपी झाला! (' + u + ')'));
+        copyToClipboard(u.trim(), 'UPI ID कॉपी झाला! (' + u + ')');
     }
 </script>
 </body>
