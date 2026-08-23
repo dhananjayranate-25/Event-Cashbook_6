@@ -2029,6 +2029,24 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
             }
         }
 
+        
+        function loadLogoForCover() {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = this.naturalWidth || 200;
+                    canvas.height = this.naturalHeight || 200;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(this, 0, 0);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.onerror = () => resolve('');
+                img.src = 'logo/pdf_logo.jpeg';
+            });
+        }
+        window.loadLogo = loadLogoForCover;
+
         function getPDFSettingsForYear(year) {
             const defaults = { orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'वर्ष : आठवे', headerOrgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ', headerSubtitle: '' };
             try {
@@ -2101,42 +2119,16 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
     <div class="cover-year-box"><span class="cover-year-label">सन</span><span class="cover-year-val">${year}</span></div>
   </div>
   <div class="cover-footer">
-    <div class="cover-footer-om">\u0950 \u0917\u0923 \u0917\u0923\u092A\u0924\u092F\u0947 \u0928\u092E\u0903</div>
+    <div class="cover-footer-om">ॐ गण गणपतये नमः</div>
     <p>Developed by | Dhananjay Ranate</p>
   </div>
 </div>
-
-    
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">प्रकार (Type)</label>
-                        <select id="editEntryType" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
-                            <option value="in">जमा (Cash In)</option>
-                            <option value="out">खर्च (Cash Out)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">रक्कम (₹ Amount)</label>
-                        <input type="number" step="any" min="0" id="editEntryAmount" required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
-                    </div>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button type="submit" class="btn btn-primary ripple" style="flex: 1; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); justify-content: center; font-weight: bold; font-size: 15px;">
-                        अपडेट सेव्ह करा
-                    </button>
-                    <button type="button" onclick="closeEditEntryModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
-                        रद्द करा
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 </body></html>`;
         }
 
         async function generateClientMergedPDF(filename, year, download, pdfSubtitle, pdfTagline, pdfOrgName) {
             try {
-                const logoDataURL = await window.loadLogo();
+                const logoDataURL = await (window.loadLogo ? window.loadLogo() : loadLogoForCover());
                 const coverHTML = createCoverHTML(year, logoDataURL, pdfSubtitle, pdfTagline, pdfOrgName);
                 const iframe = document.createElement('iframe');
                 iframe.style.position = 'absolute';
