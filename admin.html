@@ -173,15 +173,6 @@
 
                     <div class="form-group floating-label">
                         <input type="text" id="appEstYear" placeholder=" ">
-<div class="form-group" style="margin-top: 20px;">
-<h3 style="font-size: 16px; color: #ffd700; margin-bottom: 10px;">Background Audio (Mantra)</h3>
-<input type="file" id="bgAudioInput" accept="audio/*" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed var(--glass-border); width: 100%; color: white;">
-<div id="currentBgAudio" style="margin-top: 10px; color: #10b981; font-size: 12px; word-break: break-all;"></div>
-</div>
-<div class="form-group" style="margin-top: 15px;">
-<label style="color: #ccc; font-size: 14px;">Volume: <span id="bgVolumeLabel">50%</span></label>
-<input type="range" id="bgVolumeInput" min="0" max="1" step="0.1" value="0.5" style="width: 100%; margin-top: 10px;" oninput="document.getElementById('bgVolumeLabel').innerText = Math.round(this.value * 100) + '%'">
-</div>
                         <label for="appEstYear">Establishment Year (e.g., १९२०)</label>
                         <div class="input-focus-line"></div>
                     </div>
@@ -1013,11 +1004,7 @@
                     document.getElementById('appEstYear').value = settings.estYear || '';
 const fdt = document.getElementById('festivalDateText'); if(fdt) fdt.value = settings.festivalDateText || '';
 const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value = settings.festivalDateTarget || '';
-if (settings.bgAudioUrl) document.getElementById('currentBgAudio').innerHTML = `Current: <a href="${settings.bgAudioUrl}" target="_blank" style="color:#ffd700;">Audio Link</a>`;
-if (settings.bgAudioVolume !== undefined) {
-    document.getElementById('bgVolumeInput').value = settings.bgAudioVolume;
-    document.getElementById('bgVolumeLabel').innerText = Math.round(settings.bgAudioVolume * 100) + '%';
-}
+
                     
                     document.getElementById('donateAccName').value = settings.donateAccName || 'Dhananjay Sachin Ranate';
                     document.getElementById('donateAccNo').value = settings.donateAccNo || '322502010043655';
@@ -1186,18 +1173,6 @@ const settingsToSave = [
                     
                     
                 ];
-
-                // Upload Background Audio
-const bgAudioInput = document.getElementById('bgAudioInput');
-if (bgAudioInput.files && bgAudioInput.files.length > 0) {
-    const audioData = new FormData();
-    audioData.append('audio', bgAudioInput.files[0]);
-    const audioRes = await fetch('/api/upload-audio', { method: 'POST', body: audioData });
-    const audioResult = await audioRes.json();
-    if (audioResult.success) {
-        settingsToSave.push({ key: 'bgAudioUrl', value: audioResult.url });
-    }
-}
 
 // Upload Custom Posters as Base64 if selected
                 const donInput = document.getElementById('donationPosterInput');

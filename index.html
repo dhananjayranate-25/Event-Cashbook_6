@@ -1269,21 +1269,11 @@
                 
             </div>
             
-            <div class="footer-v6-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; width: 100%;">
-<div class="footer-audio-toggle" style="display: none; flex: 1; justify-content: flex-start;" id="footerAudioContainer">
-<button id="bgAudioToggleBtn" onclick="toggleBgAudio()" style="background: rgba(255,215,0,0.1); border: 1px solid #ffd700; color: #ffd700; border-radius: 20px; padding: 5px 12px; font-size: 12px; display: flex; align-items: center; gap: 5px; cursor: pointer;">
-<svg id="audioIconPlay" style="display:none;" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-<svg id="audioIconPause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-<span id="audioBtnText">Play Mantra</span>
-</button>
-<audio id="bgAudioElement" crossorigin="anonymous" loop></audio>
-</div>
-                <div class="footer-copyright" style="flex: 2; text-align: center;">
+            <div class="footer-v6-bottom">
+                <div class="footer-copyright">
                     © 2026 शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर. सर्व हक्क राखीव.
                 </div>
-                
-
-                <div class="footer-developer" style="flex: 1; text-align: right;">
+                <div class="footer-developer">
                     Developed By Dhananjay Ranate
                 </div>
             </div>
@@ -1725,42 +1715,6 @@ async function loadHomeGalleryPreview() {
 }
     }
 
-    window.audioCtx = null;
-    window.audioGainNode = null;
-    function initWebAudio(audioElem) {}
-window.userHasInteracted = false;
-const globalInteractionHandler = () => {
-window.userHasInteracted = true;
-const audioElem = document.getElementById('bgAudioElement');
-if (audioElem && audioElem.src && window.bgAudioEnabled) {
-    if (audioElem.paused) {
-        audioElem.play().then(() => {
-            const playIcon = document.getElementById('audioIconPlay');
-            const pauseIcon = document.getElementById('audioIconPause');
-            const btnText = document.getElementById('audioBtnText');
-            if(playIcon) playIcon.style.display = 'none';
-            if(pauseIcon) pauseIcon.style.display = 'inline-block';
-            if(btnText) btnText.innerText = 'Pause Mantra';
-            
-            document.removeEventListener('click', globalInteractionHandler);
-            document.removeEventListener('touchstart', globalInteractionHandler);
-            document.removeEventListener('scroll', globalInteractionHandler);
-        }).catch(e => {
-            // Playback failed (likely due to scroll not being a valid user gesture).
-            // Do NOT remove listeners, so the next actual click can trigger it.
-        });
-    } else {
-        document.removeEventListener('click', globalInteractionHandler);
-        document.removeEventListener('touchstart', globalInteractionHandler);
-        document.removeEventListener('scroll', globalInteractionHandler);
-    }
-}
-};
-
-document.addEventListener('click', globalInteractionHandler);
-document.addEventListener('touchstart', globalInteractionHandler);
-document.addEventListener('scroll', globalInteractionHandler);
-
     async function loadAppearanceSettingsHome() {
         const renderSettings = (settings) => {
             if (!settings) return;
@@ -1771,27 +1725,7 @@ document.addEventListener('scroll', globalInteractionHandler);
         const titleEl = document.getElementById('countdownMainTitle');
         if (titleEl) titleEl.innerText = settings.festivalDateText;
     }
-if (settings.bgAudioUrl) {
-    const audioElem = document.getElementById('bgAudioElement');
-    const container = document.getElementById('footerAudioContainer');
-    if (audioElem && container) {
-        audioElem.src = settings.bgAudioUrl;
-        audioElem.volume = settings.bgAudioVolume !== undefined ? settings.bgAudioVolume : 0.5;
-        container.style.display = 'flex';
-        window.bgAudioEnabled = true;
-        if (window.userHasInteracted && audioElem.paused) {
-            audioElem.play().then(() => {
-                const playIcon = document.getElementById('audioIconPlay');
-                const pauseIcon = document.getElementById('audioIconPause');
-                const btnText = document.getElementById('audioBtnText');
-                if(playIcon) playIcon.style.display = 'none';
-                if(pauseIcon) pauseIcon.style.display = 'inline-block';
-                if(btnText) btnText.innerText = 'Pause Mantra';
-            }).catch(e => {});
-        }
-    }
-}
-            const regNoElem = document.getElementById('displayRegNo');
+const regNoElem = document.getElementById('displayRegNo');
             if (settings.regNo && regNoElem) regNoElem.textContent = settings.regNo;
             const navTitleElem = document.getElementById('displayNavbarTitle');
             if (settings.navbarTitle && navTitleElem) navTitleElem.textContent = settings.navbarTitle;
