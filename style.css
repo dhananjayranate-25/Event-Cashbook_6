@@ -5363,3 +5363,10 @@ img {
     margin-top: 6px;
     font-family: 'Mukta', 'Noto Sans Devanagari', sans-serif;
 }
+
+
+.footer-countdown-container h3::after,
+.footer-countdown-container #countdownMainTitle::after,
+#countdownMainTitle::after {
+    display: none !important;
+}
