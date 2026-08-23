@@ -868,6 +868,7 @@
         
         let currentAdminSelectedYear = 'all';
         let adminCustomYearPanels = [];
+        let adminYearVisibility = {};
 
         window.checkAdminLogin = async function() {
             const pwdInput = document.getElementById('adminPassword');
@@ -901,19 +902,26 @@
 
         async function loadYearsForAdmin() {
             try {
-                const [yearsRes, setRes] = await Promise.all([
+                const [yearsRes, setRes, visRes] = await Promise.all([
                     fetch('/api/years'),
-                    fetch('/api/settings')
+                    fetch('/api/settings'),
+                    fetch('/api/year-visibility')
                 ]);
                 const yearsData = await yearsRes.json();
                 const setData = await setRes.json();
+                const visData = await visRes.json();
                 
+                if (visData.success) {
+                    adminYearVisibility = visData.data || {};
+                }
+
                 const apiYears = (yearsData.success && Array.isArray(yearsData.data)) ? yearsData.data : [];
                 const s = (setData.success && setData.settings) ? setData.settings : {};
                 adminCustomYearPanels = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
 
                 const allYears = [...new Set([...apiYears, ...adminCustomYearPanels])].sort().reverse();
                 renderAdminYearTabs(allYears);
+                await renderAdminYearPanels(allYears);
             } catch(e) {
                 console.error('Error loading years for admin:', e);
                 renderAdminYearTabs([]);
@@ -931,8 +939,8 @@
             container.innerHTML = html;
         }
 
-        window.switchYearTab = function(year) {
-            currentAdminSelectedYear = year;
+        window.switchYearTab = async function(year) {
+            currentAdminSelectedYear = String(year);
             document.querySelectorAll('.year-tab').forEach(tab => {
                 if (tab.getAttribute('data-year') === String(year)) {
                     tab.classList.add('active');
@@ -944,6 +952,266 @@
             if (uploadYearInput && year !== 'all') {
                 uploadYearInput.value = year;
                 uploadYearInput.dispatchEvent(new Event('input'));
+            }
+            
+            await renderAdminYearPanels();
+        };
+
+        async function renderAdminYearPanels(passedYears) {
+            const container = document.getElementById('yearPanels');
+            if (!container) return;
+
+            let yearsToRender = [];
+            if (passedYears && Array.isArray(passedYears)) {
+                yearsToRender = currentAdminSelectedYear === 'all' ? passedYears : [currentAdminSelectedYear];
+            } else {
+                const [yearsRes, setRes] = await Promise.all([fetch('/api/years'), fetch('/api/settings')]);
+                const yData = await yearsRes.json();
+                const sData = await setRes.json();
+                const apiYears = (yData.success && Array.isArray(yData.data)) ? yData.data : [];
+                const s = (sData.success && sData.settings) ? sData.settings : {};
+                const customYears = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
+                const allYears = [...new Set([...apiYears, ...customYears])].sort().reverse();
+                yearsToRender = currentAdminSelectedYear === 'all' ? allYears : [currentAdminSelectedYear];
+            }
+
+            if (yearsToRender.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #aaa; padding: 30px; background: var(--bg-card); border-radius: 12px; margin-top: 20px;">कोणतेही वर्ष उपलब्ध नाही. वरील बॉक्समधून वर्ष जोडा (उदा. 2026).</div>';
+                return;
+            }
+
+            container.innerHTML = '<div style="text-align: center; color: #ffd700; padding: 20px;">हिशोब लोड होत आहे... <i class="fas fa-spinner fa-spin"></i></div>';
+
+            let html = '';
+            for (const yr of yearsToRender) {
+                try {
+                    const res = await fetch('/api/entries?year=' + yr);
+                    const data = await res.json();
+                    const entries = (data.success && Array.isArray(data.data)) ? data.data : [];
+
+                    let totalIn = 0, totalOut = 0;
+                    entries.forEach(e => {
+                        totalIn += parseFloat(e.cash_in) || 0;
+                        totalOut += parseFloat(e.cash_out) || 0;
+                    });
+                    const balance = totalIn - totalOut;
+                    const isVisible = adminYearVisibility[String(yr)] !== false;
+
+                    let rows = '';
+                    let runningBal = 0;
+                    entries.forEach((e, idx) => {
+                        const cin = parseFloat(e.cash_in) || 0;
+                        const cout = parseFloat(e.cash_out) || 0;
+                        runningBal += cin - cout;
+                        const dateFormatted = e.date ? new Date(e.date).toLocaleDateString('en-GB') : '-';
+                        rows += `
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                                <td style="padding: 10px 12px; text-align: center;">${idx + 1}</td>
+                                <td style="padding: 10px 12px; font-weight: 600; color: #fff;">${e.name}</td>
+                                <td style="padding: 10px 12px; color: #cbd5e1;">${dateFormatted}</td>
+                                <td style="padding: 10px 12px; text-align: center;"><span style="padding: 3px 8px; border-radius: 4px; font-size: 12px; background: ${e.mode === 'Online' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(234, 179, 8, 0.2)'}; color: ${e.mode === 'Online' ? '#60a5fa' : '#fde047'};">${e.mode}</span></td>
+                                <td style="padding: 10px 12px; color: #34d399; font-weight: bold;">${cin > 0 ? '₹' + cin.toLocaleString('en-IN') : '-'}</td>
+                                <td style="padding: 10px 12px; color: #f87171; font-weight: bold;">${cout > 0 ? '₹' + cout.toLocaleString('en-IN') : '-'}</td>
+                                <td style="padding: 10px 12px; color: #fbbf24; font-weight: bold;">₹${runningBal.toLocaleString('en-IN')}</td>
+                                <td style="padding: 10px 12px; text-align: center;">
+                                    <button onclick="deleteAdminEntry('${e.id || e._id}', '${yr}')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    if (entries.length === 0) {
+                        rows = '<tr><td colspan="8" style="text-align: center; color: #94a3b8; padding: 25px;">या वर्षासाठी कोणतीही नोंद उपलब्ध नाही. खालील फॉर्मवरून नवीन नोंद जोडा.</td></tr>';
+                    }
+
+                    html += `
+                    <div class="appearance-settings-section animate-fade-up" style="margin-top: 25px; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 16px; background: linear-gradient(145deg, rgba(25, 6, 35, 0.95), rgba(10, 2, 15, 0.98)); padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid rgba(255, 215, 0, 0.2); padding-bottom: 15px;">
+                            <h2 style="color: #ffd700; margin: 0; font-size: 1.5rem; font-family: 'Khand', sans-serif; display: flex; align-items: center; gap: 8px;">
+                                <span>🚩 सन ${yr} - आर्थिक हिशोब (Cashbook)</span>
+                            </h2>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                <button onclick="toggleYearVisibility('${yr}', ${!isVisible})" class="btn btn-secondary ripple" style="background: ${isVisible ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #64748b, #475569)'}; color: white; padding: 8px 14px; font-size: 13px; border-radius: 8px;">
+                                    ${isVisible ? '👁️ मुख्यपृष्ठावर: चालू (ON)' : '🚫 मुख्यपृष्ठावर: बंद (OFF)'}
+                                </button>
+                                <button onclick="deleteYearAllEntries('${yr}')" class="btn btn-delete ripple" style="padding: 8px 14px; font-size: 13px; border-radius: 8px;">
+                                    <i class="fas fa-trash-alt"></i> या वर्षाचा हिशोब हटवा
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Summary Cards -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 18px;">
+                            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 15px; text-align: center;">
+                                <div style="color: #6ee7b7; font-size: 13px;">एकूण जमा (Total In)</div>
+                                <div style="color: #34d399; font-size: 1.6rem; font-weight: 800; margin-top: 5px;">₹${totalIn.toLocaleString('en-IN')}</div>
+                            </div>
+                            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 15px; text-align: center;">
+                                <div style="color: #fca5a5; font-size: 13px;">एकूण खर्च (Total Out)</div>
+                                <div style="color: #f87171; font-size: 1.6rem; font-weight: 800; margin-top: 5px;">₹${totalOut.toLocaleString('en-IN')}</div>
+                            </div>
+                            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; padding: 15px; text-align: center;">
+                                <div style="color: #fde68a; font-size: 13px;">शिल्लक (Balance)</div>
+                                <div style="color: #fbbf24; font-size: 1.6rem; font-weight: 800; margin-top: 5px;">₹${balance.toLocaleString('en-IN')}</div>
+                            </div>
+                        </div>
+
+                        <!-- Add Entry Form -->
+                        <div style="margin-top: 22px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,215,0,0.3); border-radius: 12px; padding: 16px;">
+                            <h4 style="color: #fde047; margin: 0 0 12px 0; font-size: 1.05rem;">➕ सन ${yr} मध्ये नवीन नोंद जोडा (Add New Entry)</h4>
+                            <form onsubmit="handleAdminAddEntry(event, '${yr}')" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-end;">
+                                <div>
+                                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">नाव / तपशील</label>
+                                    <input type="text" id="entryName_${yr}" placeholder="उदा. देणगी / मंडप खर्च" required style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">तारीख</label>
+                                    <input type="date" id="entryDate_${yr}" required value="${new Date().toISOString().split('T')[0]}" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">प्रकार (Type)</label>
+                                    <select id="entryType_${yr}" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box;">
+                                        <option value="in">जमा (Cash In / Donation)</option>
+                                        <option value="out">खर्च (Cash Out / Expense)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">माध्यम (Mode)</label>
+                                    <select id="entryMode_${yr}" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box;">
+                                        <option value="Cash">Cash (रोख)</option>
+                                        <option value="Online">Online (युपीआय)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">रक्कम (₹)</label>
+                                    <input type="number" step="any" min="0" id="entryAmount_${yr}" placeholder="₹ रक्कम" required style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box;">
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-primary ripple" style="width: 100%; padding: 9px; border-radius: 6px; background: linear-gradient(135deg, #ff8c00, #e52e71); justify-content: center; font-weight: bold;">
+                                        सेव्ह करा
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Entries Table -->
+                        <div style="margin-top: 20px; overflow-x: auto; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
+                            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+                                <thead>
+                                    <tr style="background: rgba(255,255,255,0.08); color: #ffd700; border-bottom: 2px solid rgba(255,215,0,0.3);">
+                                        <th style="padding: 10px 12px; text-align: center; width: 50px;">अ.क्र.</th>
+                                        <th style="padding: 10px 12px;">तपशील / नाव</th>
+                                        <th style="padding: 10px 12px;">तारीख</th>
+                                        <th style="padding: 10px 12px; text-align: center;">माध्यम</th>
+                                        <th style="padding: 10px 12px;">जमा (₹)</th>
+                                        <th style="padding: 10px 12px;">खर्च (₹)</th>
+                                        <th style="padding: 10px 12px;">शिल्लक (₹)</th>
+                                        <th style="padding: 10px 12px; text-align: center; width: 60px;">कृती</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${rows}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    `;
+                } catch(e) {
+                    console.error('Error rendering year ' + yr, e);
+                }
+            }
+            container.innerHTML = html;
+        }
+
+        window.handleAdminAddEntry = async function(e, year) {
+            e.preventDefault();
+            const name = document.getElementById('entryName_' + year).value.trim();
+            const date = document.getElementById('entryDate_' + year).value;
+            const type = document.getElementById('entryType_' + year).value;
+            const mode = document.getElementById('entryMode_' + year).value;
+            const amount = parseFloat(document.getElementById('entryAmount_' + year).value) || 0;
+
+            if (!name || !amount) {
+                alert('कृपया नाव व रक्कम भरा!');
+                return;
+            }
+
+            const payload = {
+                name,
+                date,
+                mode,
+                cash_in: type === 'in' ? amount : 0,
+                cash_out: type === 'out' ? amount : 0
+            };
+
+            try {
+                const res = await fetch('/api/entries', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('नोंद यशस्वीरीत्या जोडली!');
+                    await renderAdminYearPanels();
+                } else {
+                    alert('नोंद जोडताना त्रुटी: ' + (data.error || 'अज्ञात त्रुटी'));
+                }
+            } catch(err) {
+                console.error('Add entry error:', err);
+                alert('नोंद जोडताना त्रुटी आली.');
+            }
+        };
+
+        window.deleteAdminEntry = async function(id, year) {
+            if (!confirm('तुम्हाला ही नोंद नक्की हटवायची आहे का?')) return;
+            try {
+                const res = await fetch('/api/entries/' + id, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    await renderAdminYearPanels();
+                } else {
+                    alert('हटवताना त्रुटी: ' + (data.error || 'अज्ञात'));
+                }
+            } catch(e) {
+                console.error('Delete error:', e);
+                alert('त्रुटी आली.');
+            }
+        };
+
+        window.deleteYearAllEntries = async function(year) {
+            if (!confirm(`तुम्हाला सन ${year} चा संपूर्ण हिशोब हटवायचा आहे का?`)) return;
+            try {
+                const res = await fetch('/api/entries/year/' + year, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    alert(`सन ${year} चे सर्व व्यवहार हटवले!`);
+                    await loadYearsForAdmin();
+                } else {
+                    alert('हटवताना त्रुटी: ' + (data.error || 'अज्ञात'));
+                }
+            } catch(e) {
+                console.error('Delete year error:', e);
+                alert('त्रुटी आली.');
+            }
+        };
+
+        window.toggleYearVisibility = async function(year, newStatus) {
+            try {
+                const res = await fetch('/api/year-visibility', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ year, visible: newStatus })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    adminYearVisibility[String(year)] = newStatus;
+                    await renderAdminYearPanels();
+                } else {
+                    alert('अपडेट करताना त्रुटी.');
+                }
+            } catch(e) {
+                console.error('Visibility update error:', e);
             }
         };
 
@@ -965,15 +1233,15 @@
                         body: JSON.stringify({ key: 'customYearPanels', value: adminCustomYearPanels })
                     });
                     alert(`Year ${year} Panel Created Successfully!`);
-                    loadYearsForAdmin();
-                    switchYearTab(year);
+                    await loadYearsForAdmin();
+                    await switchYearTab(year);
                 } catch(e) {
                     console.error('Error saving custom year panel:', e);
                     alert('Failed to create year panel. Please try again.');
                 }
             } else {
                 alert(`Year ${year} panel already exists!`);
-                switchYearTab(year);
+                await switchYearTab(year);
             }
         };
 
@@ -994,7 +1262,7 @@
                 });
                 alert(`Year ${year} Panel Deleted!`);
                 currentAdminSelectedYear = 'all';
-                loadYearsForAdmin();
+                await loadYearsForAdmin();
             } catch(e) {
                 console.error('Error deleting year panel:', e);
                 alert('Failed to delete year panel.');
@@ -1012,7 +1280,7 @@
                 });
                 alert('All custom year panels deleted!');
                 currentAdminSelectedYear = 'all';
-                loadYearsForAdmin();
+                await loadYearsForAdmin();
             } catch(e) {
                 console.error('Error deleting all panels:', e);
                 alert('Failed to delete panels.');
