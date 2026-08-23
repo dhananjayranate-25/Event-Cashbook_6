@@ -868,6 +868,7 @@
         
         let currentAdminSelectedYear = 'all';
         let adminCustomYearPanels = [];
+            try { localStorage.setItem('adminCustomYearPanels', JSON.stringify([])); } catch(le) {}
         let adminYearVisibility = {};
 
         window.checkAdminLogin = async function() {
@@ -916,7 +917,7 @@
                 }
 
                 const apiYears = (yearsData.success && Array.isArray(yearsData.data)) ? yearsData.data : [];
-                const s = (setData.success && setData.settings) ? setData.settings : {};
+                const s = (setData.success && (setData.data || setData.settings)) ? (setData.data || setData.settings) : {};
                 adminCustomYearPanels = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
 
                 const allYears = [...new Set([...apiYears, ...adminCustomYearPanels])].sort().reverse();
@@ -969,7 +970,7 @@
                 const yData = await yearsRes.json();
                 const sData = await setRes.json();
                 const apiYears = (yData.success && Array.isArray(yData.data)) ? yData.data : [];
-                const s = (sData.success && sData.settings) ? sData.settings : {};
+                const s = (sData.success && (sData.data || sData.settings)) ? (sData.data || sData.settings) : {};
                 const customYears = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
                 const allYears = [...new Set([...apiYears, ...customYears])].sort().reverse();
                 yearsToRender = currentAdminSelectedYear === 'all' ? allYears : [currentAdminSelectedYear];
@@ -1297,6 +1298,7 @@
 
             if (!adminCustomYearPanels.includes(year)) {
                 adminCustomYearPanels.push(year);
+                try { localStorage.setItem('adminCustomYearPanels', JSON.stringify(adminCustomYearPanels)); } catch(le) {}
                 try {
                     await fetch('/api/settings', {
                         method: 'POST',
@@ -1325,6 +1327,7 @@
             if (!confirm(`Are you sure you want to delete Year ${year} panel?`)) return;
 
             adminCustomYearPanels = adminCustomYearPanels.filter(y => String(y) !== String(year));
+            try { localStorage.setItem('adminCustomYearPanels', JSON.stringify(adminCustomYearPanels)); } catch(le) {}
             try {
                 await fetch('/api/settings', {
                     method: 'POST',
