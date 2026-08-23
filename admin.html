@@ -3104,22 +3104,29 @@ async function deleteAarti(id) {
 async function loadNiyojanAdmin() {
     try {
         const response = await fetch('/api/niyojan');
-        const list = await response.json();
+        const json = await response.json();
+        const list = Array.isArray(json) ? json : (json.data && Array.isArray(json.data) ? json.data : []);
         const tbody = document.getElementById('niyojanList');
+        if (!tbody) return;
         tbody.innerHTML = '';
         
+        if (list.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 25px; color: #cbd5e1;">कोणतेही नियोजन आढळले नाही. वरील फॉर्मवरून नवीन कार्यक्रम जोडा.</td></tr>';
+            return;
+        }
+
         list.forEach(item => {
             const tr = document.createElement('tr');
-            
-            const formattedDate = formatDate(item.date);
+            tr.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
+            const formattedDate = typeof formatDate === 'function' ? formatDate(item.date) : (item.date || '-');
             
             tr.innerHTML = `
-                <td>${formattedDate}</td>
-                <td>${item.time}</td>
-                <td><strong>${item.title}</strong><br><small style="color: #aaa;">${item.description || ''}</small></td>
-                <td>
-                    <button class="btn-action delete" onclick="deleteNiyojan('${item._id}')" title="Delete">
-                        <i class="fas fa-trash"></i>
+                <td style="padding: 12px 10px; color: #ffd700; font-weight: 600;">${formattedDate}</td>
+                <td style="padding: 12px 10px;"><span style="padding: 4px 8px; border-radius: 6px; font-size: 12px; background: rgba(255, 215, 0, 0.15); color: #fde047;">${item.time || '-'}</span></td>
+                <td style="padding: 12px 10px;"><strong style="color: #fff; font-size: 15px;">${item.title}</strong>${item.description ? '<br><small style="color: #94a3b8;">' + item.description + '</small>' : ''}</td>
+                <td style="padding: 12px 10px;">
+                    <button class="delete-btn ripple" onclick="deleteNiyojan('${item._id || item.id}')" style="padding: 6px 12px; font-size: 12px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+                        <i class="fas fa-trash"></i> हटवा
                     </button>
                 </td>
             `;
@@ -3127,6 +3134,8 @@ async function loadNiyojanAdmin() {
         });
     } catch (e) {
         console.error('Error loading niyojan:', e);
+        const tbody = document.getElementById('niyojanList');
+        if (tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: #ef4444; padding: 20px;">माहिती लोड करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.</td></tr>';
     }
 }
 
@@ -3134,19 +3143,20 @@ async function addNiyojan(e) {
     if (e && e.preventDefault) e.preventDefault();
     if (e && e.stopPropagation) e.stopPropagation();
 
-    const dtVal = document.getElementById('niyojanDate').value;
-    const tmVal = document.getElementById('niyojanTime').value;
-    const ttVal = document.getElementById('niyojanTitle').value;
+    const dtVal = document.getElementById('niyojanDate') ? document.getElementById('niyojanDate').value : '';
+    const tmVal = document.getElementById('niyojanTime') ? document.getElementById('niyojanTime').value : '';
+    const ttVal = document.getElementById('niyojanTitle') ? document.getElementById('niyojanTitle').value : '';
+    const descVal = document.getElementById('niyojanDescription') ? document.getElementById('niyojanDescription').value : '';
     if (!dtVal || !dtVal.trim() || !tmVal || !tmVal.trim() || !ttVal || !ttVal.trim()) {
         alert('कृपया तारीख, वेळ आणि कार्यक्रमाचे नाव भरणे आवश्यक आहे.');
         return false;
     }
 
     const payload = {
-        date: document.getElementById('niyojanDate').value,
-        time: document.getElementById('niyojanTime').value,
-        title: document.getElementById('niyojanTitle').value,
-        description: document.getElementById('niyojanDescription').value
+        date: dtVal.trim(),
+        time: tmVal.trim(),
+        title: ttVal.trim(),
+        description: descVal.trim()
     };
     
     try {
@@ -3156,9 +3166,10 @@ async function addNiyojan(e) {
             body: JSON.stringify(payload)
         });
         if (res.ok) {
-            document.getElementById('niyojanForm').reset();
-            loadNiyojanAdmin();
-            alert('नियोजन ऍड केले!');
+            const form = document.getElementById('niyojanForm');
+            if (form) form.reset();
+            await loadNiyojanAdmin();
+            alert('नियोजन यशस्वीरीत्या सेव्ह केले!');
         } else {
             alert('नियोजन ऍड करताना एरर आली.');
         }
