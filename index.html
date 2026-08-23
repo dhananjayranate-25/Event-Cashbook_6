@@ -1244,8 +1244,14 @@
                         <div class="payment-logos-v6" style="display: flex; flex-direction: column; align-items: center;">
                             <h3 class="desktop-only-donate-title" style="align-self: flex-start; width: 100%; text-align: left;">देणगी</h3>
                             <div style="display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; margin-top: 8px;">
-                                <p style="color: #333; font-size: 17px; font-weight: bold; margin: 0; letter-spacing: 1px;"><i class="fas fa-phone-alt" style="color: #d4af37; margin-right: 5px; font-size: 13px;"></i>मो.नं +91 9322134560</p>
-                                <p style="color: #555; font-size: 17px; margin: 0; letter-spacing: 0.5px;">UPI ID : dhananjayranate@ybl</p>
+                                <p style="color: #333; font-size: 17px; font-weight: bold; margin: 0; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    <span><i class="fas fa-phone-alt" style="color: #d4af37; margin-right: 5px; font-size: 13px;"></i>मो.नं +91 9322134560</span>
+                                    <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 4px 6px; border-radius: 4px; transition: all 0.2s;" title="Copy Mobile Number" onclick="navigator.clipboard.writeText('9322134560').then(() => alert('मोबाईल नंबर कॉपी झाला!'))"></i>
+                                </p>
+                                <p style="color: #555; font-size: 17px; margin: 0; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    <span>UPI ID : dhananjayranate@ybl</span>
+                                    <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 4px 6px; border-radius: 4px; transition: all 0.2s;" title="Copy UPI ID" onclick="navigator.clipboard.writeText('dhananjayranate@ybl').then(() => alert('UPI ID कॉपी झाला!'))"></i>
+                                </p>
                                 <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 10px;">
                                     <div class="payment-logos-main" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
                                         <div style="background: white; padding: 5px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
@@ -3077,7 +3083,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         const accountName = getSafeText('bankAccName', 'Dhananjay Sachin Ranate');
         
 
-        // Fetch the uploaded QR code image from the DOM
+        // Fetch the uploaded QR code image and payment logos
         let qrDataUrl = 'https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg'; // default
         const qrImgDOM = document.getElementById('donationQRImg');
         if (qrImgDOM && qrImgDOM.src) {
@@ -3089,6 +3095,18 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         } else {
             qrDataUrl = qrDataUrl + (qrDataUrl.includes('?') ? '&' : '?') + 'not-from-cache-please=' + Date.now();
         }
+
+        const phonePeLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg';
+        const paytmLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg';
+        const gpayLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg';
+        const upiLogoUrl = 'https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg';
+
+        const [phonePeBase64, paytmBase64, gpayBase64, upiBase64] = await Promise.all([
+            fetchImageAsBase64(phonePeLogoUrl),
+            fetchImageAsBase64(paytmLogoUrl),
+            fetchImageAsBase64(gpayLogoUrl),
+            fetchImageAsBase64(upiLogoUrl)
+        ]);
 
         const columnsWrapper = document.createElement('div');
         columnsWrapper.style.display = 'flex';
@@ -3110,8 +3128,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         leftCol.style.flexDirection = 'column';
         leftCol.style.alignItems = 'center';
         leftCol.innerHTML = `
-
-            
             <div style="background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 20px;">
                 <img src="${qrDataUrl}" crossorigin="anonymous" style="width: 100%; max-width: 180px; display: block;">
             </div>
@@ -3120,19 +3136,27 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             
             <div style="color: #ccc; font-size: 17px; margin-bottom: 15px; font-family: 'Poppins', sans-serif;">UPI ID : dhananjayranate@ybl</div>
             
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <div style="background: #fff; color: #5f259f; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-size: 12px;">PhonePe</div>
-                <div style="background: #fff; color: #002970; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-size: 12px;">Paytm</div>
-                <div style="background: #fff; color: #ea4335; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-size: 12px;">G Pay</div>
-                <div style="background: #fff; color: #000; font-weight: bold; padding: 3px 8px; border-radius: 5px; font-size: 12px;">UPI</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                    <div style="background: white; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                        <img src="${phonePeBase64 || phonePeLogoUrl}" crossorigin="anonymous" alt="PhonePe" style="height: 16px; width: auto; display: block;">
+                    </div>
+                    <div style="background: white; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                        <img src="${paytmBase64 || paytmLogoUrl}" crossorigin="anonymous" alt="Paytm" style="height: 11px; width: auto; display: block;">
+                    </div>
+                    <div style="background: white; padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
+                        <img src="${gpayBase64 || gpayLogoUrl}" crossorigin="anonymous" alt="GPay" style="height: 16px; width: auto; display: block;">
+                    </div>
+                </div>
+                <div style="background: white; padding: 4px 12px; border-radius: 6px; display: flex; justify-content: center; align-items: center;">
+                    <img src="${upiBase64 || upiLogoUrl}" crossorigin="anonymous" alt="UPI" style="height: 18px; width: auto; display: block;">
+                </div>
             </div>
             
             <div style="color: #ffd700; font-size: 17px; font-weight: 500;">UPI द्वारे स्कॅन करून देणगी द्या</div>
             <div style="color: #ffd700; margin-top: 5px; font-size: 10px;">✧✧✧ ◉ ✧✧✧</div>
         `;
         columnsWrapper.appendChild(leftCol);
-
-        
         clone.appendChild(columnsWrapper);
 
         // Full Committee Members List Block
