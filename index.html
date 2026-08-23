@@ -982,7 +982,7 @@
                 </div>
             </div>
 
-            <div class="container" style="max-width: 1000px; padding: 0 15px; margin-bottom: 20px;" id="posterShowcaseContainer">
+            <div class="container" style="max-width: 1000px; padding: 0 15px; margin-bottom: 20px; display: none;" id="posterShowcaseContainer">
                 <div style="height: 1px; background: linear-gradient(90deg, transparent, rgba(255,204,0,0.5), transparent); margin: 35px 0;"></div>
                 <!-- Special Posters & Invitations Showcase in Niyojan -->
                 <div style="text-align: center; margin-bottom: 25px;">
@@ -1569,6 +1569,13 @@ async function loadHomeGalleryPreview() {
             showEl(siteFooter);
             showEl(mainContainer);
             showEl(niyojanSection);
+            const showcaseBox = document.getElementById('posterShowcaseContainer');
+            if (showcaseBox) {
+                const s = window.appSettings || {};
+                const isPosterOn = (val) => !(val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off');
+                const anyPosterVisible = isPosterOn(s.showVarganiPoster) || isPosterOn(s.showMahaprasadPoster) || isPosterOn(s.showAagmanPoster) || isPosterOn(s.showVisarjanPoster) || isPosterOn(s.showCustomEventPoster);
+                showcaseBox.style.setProperty('display', anyPosterVisible ? 'block' : 'none', 'important');
+            }
         }
         
         if (pushState) {
@@ -1907,16 +1914,16 @@ const regNoElem = document.getElementById('displayRegNo');
             const visCard = document.getElementById('visarjanPosterCard');
             const cCard = document.getElementById('customEventPosterCard');
 
-            if (vCard) vCard.style.display = showVargani ? 'flex' : 'none';
-            if (mCard) mCard.style.display = showMahaprasad ? 'flex' : 'none';
-            if (aCard) aCard.style.display = showAagman ? 'flex' : 'none';
-            if (visCard) visCard.style.display = showVisarjan ? 'flex' : 'none';
-            if (cCard) cCard.style.display = showCustomEvent ? 'flex' : 'none';
+            if (vCard) vCard.style.setProperty('display', showVargani ? 'flex' : 'none', 'important');
+            if (mCard) mCard.style.setProperty('display', showMahaprasad ? 'flex' : 'none', 'important');
+            if (aCard) aCard.style.setProperty('display', showAagman ? 'flex' : 'none', 'important');
+            if (visCard) visCard.style.setProperty('display', showVisarjan ? 'flex' : 'none', 'important');
+            if (cCard) cCard.style.setProperty('display', showCustomEvent ? 'flex' : 'none', 'important');
 
             const anyPosterVisible = showVargani || showMahaprasad || showAagman || showVisarjan || showCustomEvent;
             const showcaseBox = document.getElementById('posterShowcaseContainer');
             if (showcaseBox) {
-                showcaseBox.style.display = anyPosterVisible ? 'block' : 'none';
+                showcaseBox.style.setProperty('display', anyPosterVisible ? 'block' : 'none', 'important');
             }
             
             // Donation buttons
