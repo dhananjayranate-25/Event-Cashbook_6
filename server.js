@@ -656,14 +656,18 @@ app.post('/api/change-password', async (req, res) => {
 
 app.post('/api/entries', async (req, res) => {
     try {
-        const { name, date, mode, cashIn, cashOut } = req.body;
+        const { name, date, mode, cashIn, cashOut, cash_in, cash_out } = req.body;
         if (!name || !date || !mode) {
             return res.status(400).json({ success: false, error: 'All fields are required' });
         }
+        const valIn = Number(cashIn !== undefined ? cashIn : (cash_in !== undefined ? cash_in : 0)) || 0;
+        const valOut = Number(cashOut !== undefined ? cashOut : (cash_out !== undefined ? cash_out : 0)) || 0;
         const newEntry = new Entry({
-            name, date, mode,
-            cash_in: cashIn || 0,
-            cash_out: cashOut || 0
+            name: name.trim(),
+            date,
+            mode,
+            cash_in: valIn,
+            cash_out: valOut
         });
         await newEntry.save();
         res.status(201).json({ success: true, data: newEntry });
@@ -694,12 +698,15 @@ app.delete('/api/entries/:id', async (req, res) => {
 
 app.put('/api/entries/:id', async (req, res) => {
     try {
-        const { name, date, mode, cashIn, cashOut } = req.body;
+        const { name, date, mode, cashIn, cashOut, cash_in, cash_out } = req.body;
         if (!name || !date || !mode) return res.status(400).json({ success: false, error: 'All fields are required' });
         
+        const valIn = Number(cashIn !== undefined ? cashIn : (cash_in !== undefined ? cash_in : 0)) || 0;
+        const valOut = Number(cashOut !== undefined ? cashOut : (cash_out !== undefined ? cash_out : 0)) || 0;
+
         const entry = await Entry.findByIdAndUpdate(
             req.params.id,
-            { name, date, mode, cash_in: cashIn || 0, cash_out: cashOut || 0 },
+            { name: name.trim(), date, mode, cash_in: valIn, cash_out: valOut },
             { new: true }
         );
         if (!entry) return res.status(404).json({ success: false, error: 'Entry not found' });
