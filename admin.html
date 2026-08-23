@@ -694,8 +694,10 @@
                         for(let i=1; i<=currentMemberCount; i++) {
                             html += generateMemberForm(i);
                         }
-                        container.innerHTML = html;
-                    }
+                        const currentScroll = window.scrollY;
+            container.innerHTML = html;
+            window.scrollTo({ top: currentScroll, behavior: 'instant' });
+        }
 
                     function addNewMemberSlot() {
                         currentMemberCount++;
@@ -981,7 +983,10 @@
                 return;
             }
 
-            container.innerHTML = '<div style="text-align: center; color: #ffd700; padding: 20px;">हिशोब लोड होत आहे... <i class="fas fa-spinner fa-spin"></i></div>';
+            // Keep existing content while fetching in background to prevent page jump
+            if (!container.innerHTML.trim()) {
+                container.innerHTML = '<div style="text-align: center; color: #ffd700; padding: 20px;">हिशोब लोड होत आहे... <i class="fas fa-spinner fa-spin"></i></div>';
+            }
 
             let html = '';
             for (const yr of yearsToRender) {
@@ -1128,13 +1133,15 @@
             container.innerHTML = html;
         }
 
-        window.handleAdminAddEntry = async function(e, year) {
+                window.handleAdminAddEntry = async function(e, year) {
             e.preventDefault();
-            const name = document.getElementById('entryName_' + year).value.trim();
+            const nameInput = document.getElementById('entryName_' + year);
+            const amountInput = document.getElementById('entryAmount_' + year);
+            const name = nameInput ? nameInput.value.trim() : '';
             const date = document.getElementById('entryDate_' + year).value;
             const type = document.getElementById('entryType_' + year).value;
             const mode = document.getElementById('entryMode_' + year).value;
-            const amount = parseFloat(document.getElementById('entryAmount_' + year).value) || 0;
+            const amount = parseFloat(amountInput ? amountInput.value : 0) || 0;
 
             if (!name || !amount) {
                 alert('कृपया नाव व रक्कम भरा!');
@@ -1151,6 +1158,13 @@
                 cashOut: type === 'out' ? amount : 0
             };
 
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = 'सेव्ह होत आहे...';
+            }
+
             try {
                 const res = await fetch('/api/entries', {
                     method: 'POST',
@@ -1159,7 +1173,9 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    alert('नोंद यशस्वीरीत्या जोडली!');
+                    if (nameInput) nameInput.value = '';
+                    if (amountInput) amountInput.value = '';
+                    if (nameInput) nameInput.focus();
                     await renderAdminYearPanels();
                 } else {
                     alert('नोंद जोडताना त्रुटी: ' + (data.error || 'अज्ञात त्रुटी'));
@@ -1167,6 +1183,11 @@
             } catch(err) {
                 console.error('Add entry error:', err);
                 alert('नोंद जोडताना त्रुटी आली.');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHtml;
+                }
             }
         };
 
@@ -1227,7 +1248,6 @@
                 });
                 const data = await res.json();
                 if (data.success) {
-                    alert('नोंद यशस्वीरीत्या अपडेट झाली!');
                     closeEditEntryModal();
                     await renderAdminYearPanels();
                 } else {
