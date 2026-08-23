@@ -3311,11 +3311,33 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         `;
         clone.insertAdjacentHTML('beforeend', footerHtml);
 
+        
+        // Wait for all images and fonts inside clone to be ready for Ultra-HD rendering
+        const donationImgs = Array.from(clone.querySelectorAll('img'));
+        await Promise.all(donationImgs.map(img => {
+            if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
+            return new Promise(res => {
+                img.onload = () => res();
+                img.onerror = () => res();
+                setTimeout(res, 2000);
+            });
+        }));
+        if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+        }
+
         const canvas = await html2canvas(clone, {
-            scale: 4,
+            scale: 3,
             useCORS: true,
+            allowTaint: true,
             backgroundColor: '#1a1a1a',
-            windowWidth: 1200
+            logging: false,
+            windowWidth: 1200,
+            imageTimeout: 15000,
+            onclone: (clonedDoc) => {
+                const el = clonedDoc.body;
+                if (el) el.style.textRendering = 'optimizeLegibility';
+            }
         });
         
         document.body.removeChild(clone);
@@ -3613,11 +3635,33 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         `;
         clone.insertAdjacentHTML('beforeend', footerHtml);
 
+        
+        // Wait for all images and fonts inside clone to be ready for Ultra-HD rendering
+        const customImgs = Array.from(clone.querySelectorAll('img'));
+        await Promise.all(customImgs.map(img => {
+            if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
+            return new Promise(res => {
+                img.onload = () => res();
+                img.onerror = () => res();
+                setTimeout(res, 2000);
+            });
+        }));
+        if (document.fonts && document.fonts.ready) {
+            await document.fonts.ready;
+        }
+
         const canvas = await html2canvas(clone, {
-            scale: 4,
+            scale: 3,
             useCORS: true,
+            allowTaint: true,
             backgroundColor: '#1a1a1a',
-            windowWidth: 1200
+            logging: false,
+            windowWidth: 1200,
+            imageTimeout: 15000,
+            onclone: (clonedDoc) => {
+                const el = clonedDoc.body;
+                if (el) el.style.textRendering = 'optimizeLegibility';
+            }
         });
         
         document.body.removeChild(clone);
