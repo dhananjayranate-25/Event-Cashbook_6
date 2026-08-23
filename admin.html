@@ -1070,7 +1070,7 @@
                                 </div>
                                 <div>
                                     <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">तारीख</label>
-                                    <input type="date" id="entryDate_${yr}" required value="${new Date().toISOString().split('T')[0]}" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box;">
+                                    <input type="date" id="entryDate_${yr}" required value="${(new Date().getFullYear() == yr ? new Date().toISOString().split('T')[0] : yr + '-08-23')}" onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
                                 </div>
                                 <div>
                                     <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">प्रकार (Type)</label>
@@ -3123,7 +3123,7 @@ async function deleteNiyojan(id) {
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div>
                         <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख (Date)</label>
-                        <input type="date" id="editEntryDate" required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
+                        <input type="date" id="editEntryDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
                     </div>
                     <div>
                         <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">माध्यम (Mode)</label>
