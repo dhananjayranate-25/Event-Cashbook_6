@@ -342,5 +342,15 @@
     
 </script>
 
+<script>
+    function copyDonateMobile() {
+        const m = window.currentDonateMobile || '+91 9322134560';
+        navigator.clipboard.writeText(m.replace(/\s+/g, '')).then(() => alert('मोबाईल नंबर कॉपी झाला! (' + m + ')'));
+    }
+    function copyDonateUPI() {
+        const u = window.currentDonateUPI || 'dhananjayranate@ybl';
+        navigator.clipboard.writeText(u.trim()).then(() => alert('UPI ID कॉपी झाला! (' + u + ')'));
+    }
+</script>
 </body>
 </html>

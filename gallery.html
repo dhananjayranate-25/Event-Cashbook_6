@@ -503,5 +503,15 @@
         <img id="lightboxImg" src="" style="max-width: 90%; max-height: 80vh; border-radius: 10px; box-shadow: 0 5px 25px rgba(255,215,0,0.2);">
     </div>
 
+<script>
+    function copyDonateMobile() {
+        const m = window.currentDonateMobile || '+91 9322134560';
+        navigator.clipboard.writeText(m.replace(/\s+/g, '')).then(() => alert('मोबाईल नंबर कॉपी झाला! (' + m + ')'));
+    }
+    function copyDonateUPI() {
+        const u = window.currentDonateUPI || 'dhananjayranate@ybl';
+        navigator.clipboard.writeText(u.trim()).then(() => alert('UPI ID कॉपी झाला! (' + u + ')'));
+    }
+</script>
 </body>
 </html>

@@ -1488,6 +1488,16 @@ async function loadHomeGalleryPreview() {
         });
     });
 
+    
+    function copyDonateMobile() {
+        const m = window.currentDonateMobile || '+91 9322134560';
+        navigator.clipboard.writeText(m.replace(/\s+/g, '')).then(() => alert('मोबाईल नंबर कॉपी झाला! (' + m + ')'));
+    }
+    function copyDonateUPI() {
+        const u = window.currentDonateUPI || 'dhananjayranate@ybl';
+        navigator.clipboard.writeText(u.trim()).then(() => alert('UPI ID कॉपी झाला! (' + u + ')'));
+    }
+
     function switchTab(tabName, pushState = true) {
         currentTab = tabName;
         window.scrollTo(0, 0);
@@ -3146,9 +3156,9 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             
             <!-- Right: Payment Details -->
             <div style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; gap: 6px;">
-                <div style="color: #fff; font-weight: bold; font-size: 22px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;"><i class="fas fa-phone-alt" style="color: #ffd700; margin-right: 8px; font-size: 16px;"></i>मो.नं +91 9322134560</div>
+                <div style="color: #fff; font-weight: bold; font-size: 22px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px;"><i class="fas fa-phone-alt" style="color: #ffd700; margin-right: 8px; font-size: 16px;"></i>मो.नं ${window.currentDonateMobile || (window.appSettings && window.appSettings.donateMobile) || '+91 9322134560'}</div>
                 
-                <div style="color: #e0e0e0; font-size: 18px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; margin-bottom: 6px;">UPI ID : dhananjayranate@ybl</div>
+                <div style="color: #e0e0e0; font-size: 18px; font-family: 'Poppins', sans-serif; letter-spacing: 0.5px; margin-bottom: 6px;">UPI ID : ${window.currentDonateUPI || (window.appSettings && window.appSettings.donateUPI) || 'dhananjayranate@ybl'}</div>
                 
                 <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
                     <div style="display: flex; align-items: center; gap: 10px;">
