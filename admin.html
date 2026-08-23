@@ -873,7 +873,7 @@
         </div>
     </div>
 
-    <script src="script.js?v=999"></script>
+    
     <script>
         function adminLogout() {
             sessionStorage.removeItem('adminLoggedIn');
@@ -1131,47 +1131,47 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
             const status = document.getElementById('appearanceStatus');
             status.innerHTML = '<span style="color: #3b82f6;">Saving...</span>';
             
-            const estYear = document.getElementById('appEstYear').value;
-const fdtEl = document.getElementById('festivalDateText'); const festivalDateText = fdtEl ? fdtEl.value : '';
-const fdtgEl = document.getElementById('festivalDateTarget'); const festivalDateTarget = fdtgEl ? fdtgEl.value : '';
-            const varganiAabharTitle = document.getElementById('varganiAabharTitle').value;
-            const varganiAabharText = document.getElementById('varganiAabharText').value;
-                        const mahaprasadNimantranTitle = document.getElementById('mahaprasadNimantranTitle').value;
-            const mahaprasadNimantranText = document.getElementById('mahaprasadNimantranText').value;
-            const aagmanSohalaTitle = document.getElementById('aagmanSohalaTitle').value;
-            const aagmanSohalaText = document.getElementById('aagmanSohalaText').value;
-            const visarjanSohalaTitle = document.getElementById('visarjanSohalaTitle') ? document.getElementById('visarjanSohalaTitle').value : '';
-            const visarjanSohalaText = document.getElementById('visarjanSohalaText') ? document.getElementById('visarjanSohalaText').value : '';
-            const customEventTitle = document.getElementById('customEventTitle') ? document.getElementById('customEventTitle').value : '';
-            const customEventText = document.getElementById('customEventText') ? document.getElementById('customEventText').value : '';
-            const varganiCardBadge = document.getElementById('varganiCardBadge') ? document.getElementById('varganiCardBadge').value : '';
-            const varganiCardDesc = document.getElementById('varganiCardDesc') ? document.getElementById('varganiCardDesc').value : '';
-            const mahaprasadCardBadge = document.getElementById('mahaprasadCardBadge') ? document.getElementById('mahaprasadCardBadge').value : '';
-            const mahaprasadCardDesc = document.getElementById('mahaprasadCardDesc') ? document.getElementById('mahaprasadCardDesc').value : '';
-            const aagmanCardBadge = document.getElementById('aagmanCardBadge') ? document.getElementById('aagmanCardBadge').value : '';
-            const aagmanCardDesc = document.getElementById('aagmanCardDesc') ? document.getElementById('aagmanCardDesc').value : '';
-            const visarjanCardBadge = document.getElementById('visarjanCardBadge') ? document.getElementById('visarjanCardBadge').value : '';
-            const visarjanCardDesc = document.getElementById('visarjanCardDesc') ? document.getElementById('visarjanCardDesc').value : '';
-            const customEventCardBadge = document.getElementById('customEventCardBadge') ? document.getElementById('customEventCardBadge').value : '';
-            const customEventCardDesc = document.getElementById('customEventCardDesc') ? document.getElementById('customEventCardDesc').value : '';
+            const getVal = (id, fallback = '') => {
+                const el = document.getElementById(id);
+                return el ? el.value : fallback;
+            };
 
-            const showVarganiPoster = document.getElementById('showVarganiPoster') ? document.getElementById('showVarganiPoster').value : 'true';
-            const showMahaprasadPoster = document.getElementById('showMahaprasadPoster') ? document.getElementById('showMahaprasadPoster').value : 'true';
-            const showAagmanPoster = document.getElementById('showAagmanPoster') ? document.getElementById('showAagmanPoster').value : 'true';
-            const showVisarjanPoster = document.getElementById('showVisarjanPoster') ? document.getElementById('showVisarjanPoster').value : 'true';
-            const showCustomEventPoster = document.getElementById('showCustomEventPoster') ? document.getElementById('showCustomEventPoster').value : 'true';
+            const estYear = getVal('appEstYear');
+            const festivalDateText = getVal('festivalDateText');
+            const festivalDateTarget = getVal('festivalDateTarget');
+            const varganiAabharTitle = getVal('varganiAabharTitle');
+            const varganiAabharText = getVal('varganiAabharText');
+            const mahaprasadNimantranTitle = getVal('mahaprasadNimantranTitle');
+            const mahaprasadNimantranText = getVal('mahaprasadNimantranText');
+            const aagmanSohalaTitle = getVal('aagmanSohalaTitle');
+            const aagmanSohalaText = getVal('aagmanSohalaText');
+            const visarjanSohalaTitle = getVal('visarjanSohalaTitle');
+            const visarjanSohalaText = getVal('visarjanSohalaText');
+            const customEventTitle = getVal('customEventTitle');
+            const customEventText = getVal('customEventText');
+            const varganiCardBadge = getVal('varganiCardBadge');
+            const varganiCardDesc = getVal('varganiCardDesc');
+            const mahaprasadCardBadge = getVal('mahaprasadCardBadge');
+            const mahaprasadCardDesc = getVal('mahaprasadCardDesc');
+            const aagmanCardBadge = getVal('aagmanCardBadge');
+            const aagmanCardDesc = getVal('aagmanCardDesc');
+            const visarjanCardBadge = getVal('visarjanCardBadge');
+            const visarjanCardDesc = getVal('visarjanCardDesc');
+            const customEventCardBadge = getVal('customEventCardBadge');
+            const customEventCardDesc = getVal('customEventCardDesc');
 
-            const donationPosterMode = document.getElementById('donationPosterMode').value;
-            const donationPosterBtnName = document.getElementById('donationPosterBtnName').value;
-            const donationPosterText = document.getElementById('donationPosterText').value;
+            const showVarganiPoster = getVal('showVarganiPoster', 'true');
+            const showMahaprasadPoster = getVal('showMahaprasadPoster', 'true');
+            const showAagmanPoster = getVal('showAagmanPoster', 'true');
+            const showVisarjanPoster = getVal('showVisarjanPoster', 'true');
+            const showCustomEventPoster = getVal('showCustomEventPoster', 'true');
 
-
+            const donationPosterMode = getVal('donationPosterMode');
+            const donationPosterBtnName = getVal('donationPosterBtnName');
+            const donationPosterText = getVal('donationPosterText');
 
             try {
-                // Save texts
-                const bgVolume = document.getElementById('bgVolumeInput').value;
-const settingsToSave = [
-{ key: 'bgAudioVolume', value: bgVolume },
+                const settingsToSave = [
                     { key: 'estYear', value: estYear },
 { key: 'festivalDateText', value: festivalDateText },
 { key: 'festivalDateTarget', value: festivalDateTarget },
@@ -1265,10 +1265,11 @@ const settingsToSave = [
             const status = document.getElementById('donationStatus');
             status.innerHTML = '<span style="color: #3b82f6;">Saving...</span>';
             
-            const accName = document.getElementById('donateAccName').value;
-            const accNo = document.getElementById('donateAccNo').value;
-            const ifsc = document.getElementById('donateIFSC').value;
-            const branch = document.getElementById('donateBranch').value;
+            const getVal = (id, fallback = '') => { const el = document.getElementById(id); return el ? el.value : fallback; };
+            const accName = getVal('donateAccName');
+            const accNo = getVal('donateAccNo');
+            const ifsc = getVal('donateIFSC');
+            const branch = getVal('donateBranch');
             
             try {
                 const settingsToSave = [
@@ -1307,9 +1308,10 @@ const settingsToSave = [
             const status = document.getElementById('parichayStatus');
             status.innerHTML = '<span style="color: #3b82f6;">Saving...</span>';
             
-            const title = document.getElementById('aboutMandalTitle').value;
-            const subtitle = document.getElementById('aboutMandalSubtitle').value;
-            const details = document.getElementById('aboutMandalDetails').value;
+            const getVal = (id, fallback = '') => { const el = document.getElementById(id); return el ? el.value : fallback; };
+            const title = getVal('aboutMandalTitle');
+            const subtitle = getVal('aboutMandalSubtitle');
+            const details = getVal('aboutMandalDetails');
             
             try {
                 const settingsToSave = [
