@@ -971,9 +971,13 @@
             if (passedYears && Array.isArray(passedYears)) {
                 yearsToRender = currentAdminSelectedYear === 'all' ? passedYears : [currentAdminSelectedYear];
             } else {
-                const [yearsRes, setRes] = await Promise.all([fetch('/api/years'), fetch('/api/settings')]);
+                const [yearsRes, setRes, visRes] = await Promise.all([fetch('/api/years'), fetch('/api/settings'), fetch('/api/year-visibility')]);
                 const yData = await yearsRes.json();
                 const sData = await setRes.json();
+                const vData = await visRes.json();
+                if (vData.success && vData.data) {
+                    adminYearVisibility = { ...adminYearVisibility, ...vData.data };
+                }
                 const apiYears = (yData.success && Array.isArray(yData.data)) ? yData.data : [];
                 const s = (sData.success && (sData.data || sData.settings)) ? (sData.data || sData.settings) : {};
                 const customYears = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
@@ -1004,7 +1008,7 @@
                         totalOut += parseFloat(e.cash_out) || 0;
                     });
                     const balance = totalIn - totalOut;
-                    const isVisible = adminYearVisibility[String(yr)] !== false;
+                    const isVisible = adminYearVisibility[String(yr)] === true;
 
                     let rows = '';
                     let runningBal = 0;
@@ -1317,20 +1321,21 @@
 
         window.toggleYearVisibility = async function(year, newStatus) {
             try {
+                adminYearVisibility[String(year)] = (newStatus === true);
                 const res = await fetch('/api/year-visibility', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ year, visible: newStatus })
+                    body: JSON.stringify({ year: String(year), isVisible: newStatus, visible: newStatus })
                 });
                 const data = await res.json();
                 if (data.success) {
-                    adminYearVisibility[String(year)] = newStatus;
                     await renderAdminYearPanels();
                 } else {
-                    alert('अपडेट करताना त्रुटी.');
+                    alert('अपडेट करताना त्रुटी: ' + (data.error || 'अज्ञात'));
                 }
             } catch(e) {
                 console.error('Visibility update error:', e);
+                alert('त्रुटी आली.');
             }
         };
 
