@@ -980,7 +980,42 @@
 
             loadUploadedPDFs();
             loadAppearanceSettings();
+            fetchStorageStats();
         });
+
+        async function fetchStorageStats() {
+            try {
+                const res = await fetch('/api/system/storage');
+                const data = await res.json();
+                if (data && data.success) {
+                    const usedMB = (data.totalUsedBytes / (1024 * 1024)).toFixed(2);
+                    const freeMB = (data.remainingBytes / (1024 * 1024)).toFixed(2);
+                    const perc = Math.min(100, Math.max(0, data.usedPercentage || 0)).toFixed(1);
+                    
+                    const percElem = document.getElementById('storagePercText');
+                    const barElem = document.getElementById('storageBar');
+                    const usedElem = document.getElementById('storageUsedText');
+                    const freeElem = document.getElementById('storageFreeText');
+                    
+                    if (percElem) percElem.innerText = perc + '%';
+                    if (usedElem) usedElem.innerText = 'Used: ' + usedMB + ' MB';
+                    if (freeElem) freeElem.innerText = 'Free: ' + freeMB + ' MB';
+                    if (barElem) {
+                        barElem.style.width = perc + '%';
+                        if (parseFloat(perc) > 85) {
+                            barElem.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+                        } else if (parseFloat(perc) > 65) {
+                            barElem.style.background = 'linear-gradient(90deg, #f59e0b, #d97706)';
+                        } else {
+                            barElem.style.background = 'linear-gradient(90deg, #4caf50, #8bc34a)';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Failed to fetch storage stats:', e);
+            }
+        }
+        window.fetchStorageStats = fetchStorageStats;
 
         // Global Function to upload file and get URL
         async function uploadFile(file) {

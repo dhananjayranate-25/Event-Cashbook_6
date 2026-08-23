@@ -380,8 +380,15 @@ app.post('/api/settings/aarti-media', uploadCloudinary.fields([{ name: 'aarti_au
 app.get('/api/system/storage', async (req, res) => {
     try {
         // 1. Get MongoDB size
-        const dbStats = await mongoose.connection.db.command({ dbStats: 1 });
-        const dbSize = dbStats.dataSize + dbStats.indexSize; // Size in bytes
+        let dbSize = 0;
+        try {
+            if (mongoose.connection && mongoose.connection.readyState === 1 && mongoose.connection.db) {
+                const dbStats = await mongoose.connection.db.command({ dbStats: 1 });
+                dbSize = (dbStats.dataSize || 0) + (dbStats.indexSize || 0); // Size in bytes
+            }
+        } catch (dbErr) {
+            console.error('Error fetching dbStats:', dbErr.message);
+        }
         
         // 2. Get Uploads folder size
         let uploadsSize = 0;
