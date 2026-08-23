@@ -1238,18 +1238,6 @@ app.delete('/api/users/:id/photo', async (req, res) => {
     }
 });
 
-// Handle 404 Pages
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, '404.html'));
-});
-
-app.listen(PORT, () => {
-    console.log(`Ganpati Vargani Cashbook running at http://localhost:${PORT}`);
-    console.log(`Database: MongoDB`);
-    console.log(`Uploads directory: ${UPLOAD_DIR}`);
-});
-
-
 app.post('/api/upload-pdf', uploadMemory.single('pdf'), async (req, res) => {
     try {
         const { year, subtitle, tagline, orgName } = req.body;
@@ -1639,4 +1627,18 @@ app.post('/api/merge-pdf', express.json(), async (req, res) => {
         console.error('Merge error:', error.message);
         res.status(500).json({ success: false, error: error.message, stack: error.stack });
     }
+});
+
+// Handle 404 Pages (Catch-all after all API and static routes)
+app.use((req, res, next) => {
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ success: false, error: 'API endpoint not found' });
+    }
+    res.status(404).sendFile(path.join(__dirname, '404.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`Ganpati Vargani Cashbook running at http://localhost:${PORT}`);
+    console.log(`Database: MongoDB`);
+    console.log(`Uploads directory: ${UPLOAD_DIR}`);
 });

@@ -1427,6 +1427,13 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
 
             try {
                 const response = await fetch('/api/uploaded-pdfs');
+                if (!response.ok) {
+                    throw new Error(`Server status ${response.status}`);
+                }
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('सर्व्हर सुरू होत आहे, कृपया काही सेकंदांनंतर पुन्हा प्रयत्न करा.');
+                }
                 const result = await response.json();
 
                 if (result.success && result.data.length > 0) {
@@ -1477,7 +1484,7 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     pdfList.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">No PDFs uploaded yet. Upload your existing PDFs above.</p>';
                 }
             } catch (error) {
-                pdfList.innerHTML = `<p style="color: #ef4444;">Error loading PDFs: ${error.message}</p>`;
+                pdfList.innerHTML = `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px;"><p style="color: #ef4444; margin: 0;">Error loading PDFs: ${error.message}</p><button class="btn btn-secondary ripple" onclick="loadUploadedPDFs()" style="padding: 6px 15px; font-size: 12px; background: rgba(255,255,255,0.1);">🔄 पुन्हा प्रयत्न करा (Retry)</button></div>`;
             }
         }
 
