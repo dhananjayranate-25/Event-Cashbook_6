@@ -138,15 +138,6 @@
 </style>
 </head>
 <body>
-
-    <!-- Global Page Loader (कृपया थांबा...) -->
-    <div id="globalPageLoader" class="global-page-loader">
-        <div class="global-loader-content">
-            <div class="global-loader-spinner"></div>
-            <p class="global-loader-text">कृपया थांबा...</p>
-            <span class="global-loader-subtext">श्री गणेशाय नमः 🚩</span>
-        </div>
-    </div>
     <div id="mainContent">
         <div class="floating-decor">✨</div>
         <div class="floating-decor">🌺</div>
@@ -1497,35 +1488,7 @@ async function loadHomeGalleryPreview() {
         });
     });
 
-    function showPageLoader(callback, duration = 300) {
-        const loader = document.getElementById('globalPageLoader');
-        if (!loader) {
-            if (callback) callback();
-            return;
-        }
-        loader.classList.add('active');
-        setTimeout(() => {
-            if (callback) {
-                try { callback(); } catch(e) { console.error(e); }
-            }
-            setTimeout(() => {
-                loader.classList.remove('active');
-            }, 80);
-        }, duration);
-    }
-    window.showPageLoader = showPageLoader;
-
     function switchTab(tabName, pushState = true) {
-        if (pushState) {
-            showPageLoader(() => {
-                executeTabSwitch(tabName, pushState);
-            }, 280);
-            return;
-        }
-        executeTabSwitch(tabName, pushState);
-    }
-
-    function executeTabSwitch(tabName, pushState = true) {
         currentTab = tabName;
         window.scrollTo(0, 0);
         const navMenu = document.getElementById('navLinks');
@@ -3791,7 +3754,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     async function viewCustomPoster(type, btn) {
         let originalText = btn ? btn.innerHTML : '';
-        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true; }
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         try {
             const canvas = await captureCustomPoster(type, true);
             const dataUrl = canvas.toDataURL('image/png', 1.0);
@@ -3930,23 +3893,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
-    // Attach to internal page navigation links
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('a').forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:') && !link.hasAttribute('target')) {
-                link.addEventListener('click', function(e) {
-                    if (link.host === window.location.host || (!href.startsWith('http') && !href.startsWith('//'))) {
-                        e.preventDefault();
-                        showPageLoader(null, 300);
-                        setTimeout(() => {
-                            window.location.href = href;
-                        }, 250);
-                    }
-                });
-            }
-        });
-    });
+    
     </script>
 </body>
 </html>

@@ -9,15 +9,6 @@
 </head>
 <body>
 
-    <!-- Global Page Loader (कृपया थांबा...) -->
-    <div id="globalPageLoader" class="global-page-loader">
-        <div class="global-loader-content">
-            <div class="global-loader-spinner"></div>
-            <p class="global-loader-text">कृपया थांबा...</p>
-            <span class="global-loader-subtext">श्री गणेशाय नमः 🚩</span>
-        </div>
-    </div>
-
     <div class="particles" id="particles"></div>
     
     <div class="container">
@@ -350,44 +341,6 @@
     });
     
 </script>
-
-    <script>
-    function showPageLoader(callback, duration = 350) {
-        const loader = document.getElementById('globalPageLoader');
-        if (!loader) {
-            if (callback) callback();
-            return;
-        }
-        loader.classList.add('active');
-        setTimeout(() => {
-            if (callback) {
-                try { callback(); } catch(e) { console.error(e); }
-            }
-            setTimeout(() => {
-                loader.classList.remove('active');
-            }, 100);
-        }, duration);
-    }
-    window.showPageLoader = showPageLoader;
-
-    // Attach to internal page navigation links
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('a').forEach(link => {
-            const href = link.getAttribute('href');
-            if (href && !href.startsWith('#') && !href.startsWith('javascript:') && !href.startsWith('tel:') && !href.startsWith('mailto:') && !link.hasAttribute('target')) {
-                link.addEventListener('click', function(e) {
-                    if (link.host === window.location.host || !href.startsWith('http')) {
-                        e.preventDefault();
-                        showPageLoader(null, 300);
-                        setTimeout(() => {
-                            window.location.href = href;
-                        }, 300);
-                    }
-                });
-            }
-        });
-    });
-    </script>
 
 </body>
 </html>
