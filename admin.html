@@ -1083,8 +1083,8 @@
                                 <div>
                                     <label style="font-size: 12px; color: #cbd5e1; display: block; margin-bottom: 4px;">माध्यम (Mode)</label>
                                     <select id="entryMode_${yr}" style="width: 100%; padding: 8px 12px; border-radius: 6px; background: #1e1b2e; border: 1px solid #475569; color: #fff; box-sizing: border-box;">
-                                        <option value="Cash">Cash (रोख)</option>
                                         <option value="Online">Online (युपीआय)</option>
+                                        <option value="Cash">Cash (रोख)</option>
                                     </select>
                                 </div>
                                 <div>
@@ -3108,8 +3108,7 @@ async function deleteNiyojan(id) {
 
     </script>
 
-
-<!-- Edit Entry / Rename Modal -->
+    <!-- Edit Entry / Rename Modal -->
     <div id="editEntryModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
         <div style="background: linear-gradient(145deg, #240a34, #12031c); border: 2px solid #ffd700; border-radius: 16px; width: 90%; max-width: 480px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 10px;">
@@ -3131,9 +3130,35 @@ async function deleteNiyojan(id) {
                     <div>
                         <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">माध्यम (Mode)</label>
                         <select id="editEntryMode" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
-                            <option value="Cash">Cash (रोख)</option>
                             <option value="Online">Online (युपीआय)</option>
+                            <option value="Cash">Cash (रोख)</option>
                         </select>
                     </div>
                 </div>
-</body></html>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">प्रकार (Type)</label>
+                        <select id="editEntryType" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
+                            <option value="in">जमा (Cash In)</option>
+                            <option value="out">खर्च (Cash Out)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">रक्कम (₹ Amount)</label>
+                        <input type="number" step="any" min="0" id="editEntryAmount" required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary ripple" style="flex: 1; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); justify-content: center; font-weight: bold; font-size: 15px;">
+                        अपडेट सेव्ह करा
+                    </button>
+                    <button type="button" onclick="closeEditEntryModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
+                        रद्द करा
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
