@@ -237,7 +237,7 @@ const API_URL = ''; // Leave empty if same domain
                         sessionStorage.setItem('adminLoggedIn', 'true');
                         window.location.replace('admin.html?v=' + new Date().getTime());
                     } else {
-                        throw new Error(data.message || 'Wrong password! Try again.');
+                        throw new Error(data.error || data.message || 'चुकीचा पासवर्ड! कृपया पुन्हा प्रयत्न करा.');
                     }
                 } else {
                     // Super Admin and Member use the portal login API
@@ -250,7 +250,7 @@ const API_URL = ''; // Leave empty if same domain
                     
                     if(data.success) {
                         if(data.user.role !== role) {
-                            throw new Error(`Please login using the ${data.user.role} option instead.`);
+                            throw new Error(`कृपया ${data.user.role} पर्यायातून लॉगिन करा.`);
                         }
                         localStorage.setItem('portalUser', JSON.stringify(data.user));
                         localStorage.setItem('userRole', data.user.role);
@@ -261,7 +261,7 @@ const API_URL = ''; // Leave empty if same domain
                             window.location.replace('member.html?v=' + new Date().getTime());
                         }
                     } else {
-                        throw new Error(data.message || 'Login failed');
+                        throw new Error(data.error || data.message || 'लॉगिन अयशस्वी! कृपया युझरनेम किंवा पासवर्ड तपासा.');
                     }
                 }
             } catch (err) {
