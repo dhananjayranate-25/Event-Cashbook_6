@@ -1066,60 +1066,61 @@
                             </div>
                         </div>
 
-                        <!-- Add Entry Form (VIP Unique Quality Design) -->
-                        <div style="margin-top: 24px; background: linear-gradient(135deg, rgba(32, 8, 48, 0.85), rgba(16, 3, 24, 0.95)); border: 1.5px solid rgba(255, 215, 0, 0.35); border-radius: 16px; padding: 22px 24px; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px);">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;">
-                                <h4 style="color: #ffd700; margin: 0; font-size: 1.25rem; font-weight: 700; font-family: 'Khand', sans-serif; display: flex; align-items: center; gap: 10px; letter-spacing: 0.5px;">
-                                    <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-size: 15px; font-weight: 900; box-shadow: 0 2px 10px rgba(245,158,11,0.4);">➕</span>
-                                    सन ${yr} मध्ये नवीन नोंद जोडा (Add New Entry)
-                                </h4>
-                                <span style="font-size: 12px; font-weight: 600; color: #cbd5e1; background: rgba(255,255,255,0.06); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(255,215,0,0.2); display: flex; align-items: center; gap: 6px;">
-                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block; box-shadow: 0 0 8px #10b981;"></span> Fast Live Sync
-                                </span>
+                                                <!-- Add Entry Form (Clean, Modern Website Native Theme) -->
+                        <div class="create-year-panel animate-fade-up" style="margin-top: 25px; padding: 22px; border-radius: 18px; background: var(--bg-card); border: 1px solid var(--glass-border); box-shadow: var(--shadow-md);">
+                            <div class="section-header" style="margin-bottom: 18px;">
+                                <div class="header-line"></div>
+                                <h2 style="font-size: 1.25rem;">सन ${yr} मध्ये नवीन नोंद जोडा (Add New Entry)</h2>
+                                <div class="header-line"></div>
                             </div>
                             
-                            <form onsubmit="handleAdminAddEntry(event, '${yr}')" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; align-items: flex-end;">
-                                <div style="min-width: 190px;">
-                                    <label style="font-size: 12.5px; font-weight: 600; color: #f1f5f9; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                                        <span style="color: #ffd700;">👤</span> नाव / तपशील
-                                    </label>
-                                    <input type="text" id="entryName_${yr}" placeholder="उदा. देणगी / मंडप खर्च" required style="width: 100%; padding: 11px 14px; border-radius: 10px; background: rgba(12, 2, 18, 0.85); border: 1.5px solid rgba(255, 215, 0, 0.25); color: #ffffff; font-size: 14px; font-weight: 500; box-sizing: border-box; transition: all 0.25s ease; outline: none;" onfocus="this.style.borderColor='#ffd700'; this.style.boxShadow='0 0 12px rgba(255,215,0,0.35)';" onblur="this.style.borderColor='rgba(255, 215, 0, 0.25)'; this.style.boxShadow='none';">
+                            <form onsubmit="handleAdminAddEntry(event, '${yr}')" class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; align-items: end;">
+                                <div class="form-group floating-label">
+                                    <input type="text" id="entryName_${yr}" placeholder=" " required>
+                                    <label for="entryName_${yr}">नाव / तपशील</label>
+                                    <div class="input-focus-line"></div>
                                 </div>
-                                <div style="min-width: 150px;">
-                                    <label style="font-size: 12.5px; font-weight: 600; color: #f1f5f9; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                                        <span style="color: #ffd700;">📅</span> तारीख
-                                    </label>
-                                    <input type="date" id="entryDate_${yr}" required value="${(new Date().getFullYear() == yr ? new Date().toISOString().split('T')[0] : yr + '-08-23')}" onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 11px 14px; border-radius: 10px; background: rgba(12, 2, 18, 0.85); border: 1.5px solid rgba(255, 215, 0, 0.25); color: #ffffff; font-size: 14px; font-weight: 500; box-sizing: border-box; cursor: pointer; color-scheme: dark; transition: all 0.25s ease; outline: none;" onfocus="this.style.borderColor='#ffd700'; this.style.boxShadow='0 0 12px rgba(255,215,0,0.35)';" onblur="this.style.borderColor='rgba(255, 215, 0, 0.25)'; this.style.boxShadow='none';">
+                                
+                                <div class="form-group floating-label">
+                                    <input type="date" id="entryDate_${yr}" placeholder=" " required value="${(new Date().getFullYear() == yr ? new Date().toISOString().split('T')[0] : yr + '-08-23')}" onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
+                                    <label for="entryDate_${yr}" style="top: 10px; transform: none; font-size: 0.75rem; color: var(--primary-gradient-mid);">तारीख</label>
+                                    <div class="input-focus-line"></div>
                                 </div>
-                                <div style="min-width: 160px;">
-                                    <label style="font-size: 12.5px; font-weight: 600; color: #f1f5f9; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                                        <span style="color: #ffd700;">🏷️</span> प्रकार (Type)
-                                    </label>
-                                    <select id="entryType_${yr}" style="width: 100%; padding: 11px 12px; border-radius: 10px; background: rgba(12, 2, 18, 0.85); border: 1.5px solid rgba(255, 215, 0, 0.25); color: #ffffff; font-size: 14px; font-weight: 500; box-sizing: border-box; cursor: pointer; transition: all 0.25s ease; outline: none;" onfocus="this.style.borderColor='#ffd700'; this.style.boxShadow='0 0 12px rgba(255,215,0,0.35)';" onblur="this.style.borderColor='rgba(255, 215, 0, 0.25)'; this.style.boxShadow='none';">
-                                        <option value="in">🟢 जमा (Cash In / Donation)</option>
-                                        <option value="out">🔴 खर्च (Cash Out / Expense)</option>
+                                
+                                <div class="form-group floating-label">
+                                    <select id="entryType_${yr}" required>
+                                        <option value="in">जमा (Cash In)</option>
+                                        <option value="out">खर्च (Cash Out)</option>
                                     </select>
+                                    <label for="entryType_${yr}" style="top: 10px; transform: none; font-size: 0.75rem; color: var(--primary-gradient-mid);">प्रकार (Type)</label>
+                                    <div class="input-focus-line"></div>
                                 </div>
-                                <div style="min-width: 150px;">
-                                    <label style="font-size: 12.5px; font-weight: 600; color: #f1f5f9; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                                        <span style="color: #ffd700;">💳</span> माध्यम (Mode)
-                                    </label>
-                                    <select id="entryMode_${yr}" style="width: 100%; padding: 11px 12px; border-radius: 10px; background: rgba(12, 2, 18, 0.85); border: 1.5px solid rgba(255, 215, 0, 0.25); color: #ffffff; font-size: 14px; font-weight: 500; box-sizing: border-box; cursor: pointer; transition: all 0.25s ease; outline: none;" onfocus="this.style.borderColor='#ffd700'; this.style.boxShadow='0 0 12px rgba(255,215,0,0.35)';" onblur="this.style.borderColor='rgba(255, 215, 0, 0.25)'; this.style.boxShadow='none';">
-                                        <option value="Online">⚡ Online (युपीआय)</option>
-                                        <option value="Cash">💵 Cash (रोख)</option>
+                                
+                                <div class="form-group floating-label">
+                                    <select id="entryMode_${yr}" required>
+                                        <option value="Online">Online (युपीआय)</option>
+                                        <option value="Cash">Cash (रोख)</option>
                                     </select>
+                                    <label for="entryMode_${yr}" style="top: 10px; transform: none; font-size: 0.75rem; color: var(--primary-gradient-mid);">माध्यम (Mode)</label>
+                                    <div class="input-focus-line"></div>
                                 </div>
-                                <div style="min-width: 150px;">
-                                    <label style="font-size: 12.5px; font-weight: 600; color: #f1f5f9; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                                        <span style="color: #ffd700;">💰</span> रक्कम (₹)
-                                    </label>
-                                    <input type="number" step="any" min="0" id="entryAmount_${yr}" placeholder="₹ रक्कम" required style="width: 100%; padding: 11px 14px; border-radius: 10px; background: rgba(12, 2, 18, 0.85); border: 1.5px solid rgba(255, 215, 0, 0.25); color: #34d399; font-size: 15px; font-weight: 700; box-sizing: border-box; transition: all 0.25s ease; outline: none;" onfocus="this.style.borderColor='#ffd700'; this.style.boxShadow='0 0 12px rgba(255,215,0,0.35)';" onblur="this.style.borderColor='rgba(255, 215, 0, 0.25)'; this.style.boxShadow='none';">
+                                
+                                <div class="form-group floating-label">
+                                    <input type="number" step="any" min="0" id="entryAmount_${yr}" placeholder=" " required>
+                                    <label for="entryAmount_${yr}">रक्कम (₹)</label>
+                                    <div class="input-focus-line"></div>
                                 </div>
-                                <div style="min-width: 140px;">
-                                    <button type="submit" class="btn ripple" style="width: 100%; padding: 12px 18px; border-radius: 10px; background: linear-gradient(135deg, #ff8c00 0%, #e11d48 50%, #ec4899 100%); color: #ffffff; font-weight: 700; font-size: 15px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 18px rgba(225, 29, 72, 0.45); transition: all 0.25s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 24px rgba(225,29,72,0.65)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 18px rgba(225,29,72,0.45)';">
-                                        <span style="font-size: 16px;">💾</span> सेव्ह करा
-                                    </button>
-                                </div>
+                                
+                                <button type="submit" class="btn btn-primary ripple" style="height: 52px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 600; border-radius: 14px;">
+                                    <span class="btn-icon">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                            <polyline points="7 3 7 8 15 8"></polyline>
+                                        </svg>
+                                    </span>
+                                    सेव्ह करा
+                                </button>
                             </form>
                         </div>
 
