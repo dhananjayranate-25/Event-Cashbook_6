@@ -2145,92 +2145,6 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
     <p>Developed by | Dhananjay Ranate</p>
   </div>
 </div>
-
-    <!-- Edit Aarti Modal -->
-    <div id="editAartiModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
-        <div style="background: linear-gradient(145deg, #240a34, #12031c); border: 2px solid #ffd700; border-radius: 16px; width: 90%; max-width: 480px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 10px;">
-                <h3 style="color: #ffd700; margin: 0; font-size: 1.4rem; font-family: 'Khand', sans-serif;"><i class="fas fa-edit"></i> महाआरती नोंद बदला (Edit Aarti)</h3>
-                <span onclick="closeEditAartiModal()" style="color: #cbd5e1; font-size: 24px; cursor: pointer; line-height: 1;">&times;</span>
-            </div>
-            <form onsubmit="handleSaveEditAarti(event)" style="display: flex; flex-direction: column; gap: 14px;">
-                <input type="hidden" id="editAartiId">
-                <div>
-                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">संपूर्ण नाव *</label>
-                    <input type="text" id="editAartiName" required style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख *</label>
-                        <input type="date" id="editAartiDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
-                    </div>
-                    <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ *</label>
-                        <select id="editAartiTime" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
-                            <option value="सकाळ">सकाळ</option>
-                            <option value="संध्याकाळ">संध्याकाळ</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">मोबाईल नंबर</label>
-                    <input type="text" id="editAartiPhone" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
-                </div>
-                <div>
-                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">इतर माहिती (ऐच्छिक)</label>
-                    <textarea id="editAartiPujaDetails" rows="2" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;"></textarea>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button type="submit" class="btn btn-primary ripple" style="flex: 1; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); justify-content: center; font-weight: bold; font-size: 15px;">
-                        अपडेट सेव्ह करा
-                    </button>
-                    <button type="button" onclick="closeEditAartiModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
-                        रद्द करा
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Edit Niyojan Modal -->
-    <div id="editNiyojanModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
-        <div style="background: linear-gradient(145deg, #240a34, #12031c); border: 2px solid #ffd700; border-radius: 16px; width: 90%; max-width: 480px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 10px;">
-                <h3 style="color: #ffd700; margin: 0; font-size: 1.4rem; font-family: 'Khand', sans-serif;"><i class="fas fa-edit"></i> नियोजन बदला (Edit Niyojan)</h3>
-                <span onclick="closeEditNiyojanModal()" style="color: #cbd5e1; font-size: 24px; cursor: pointer; line-height: 1;">&times;</span>
-            </div>
-            <form onsubmit="handleSaveEditNiyojan(event)" style="display: flex; flex-direction: column; gap: 14px;">
-                <input type="hidden" id="editNiyojanId">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                    <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख *</label>
-                        <input type="date" id="editNiyojanDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
-                    </div>
-                    <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ *</label>
-                        <input type="text" id="editNiyojanTime" placeholder="उदा. सायं. ७:०० वा." required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;">
-                    </div>
-                </div>
-                <div>
-                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">कार्यक्रमाचे नाव *</label>
-                    <input type="text" id="editNiyojanTitle" required style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
-                </div>
-                <div>
-                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">अधिक माहिती (वर्णन)</label>
-                    <textarea id="editNiyojanDescription" rows="2" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;"></textarea>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button type="submit" class="btn btn-primary ripple" style="flex: 1; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); justify-content: center; font-weight: bold; font-size: 15px;">
-                        अपडेट सेव्ह करा
-                    </button>
-                    <button type="button" onclick="closeEditNiyojanModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
-                        रद्द करा
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
 </body></html>`;
         }
 
@@ -3426,6 +3340,92 @@ async function deleteNiyojan(id) {
                         अपडेट सेव्ह करा
                     </button>
                     <button type="button" onclick="closeEditEntryModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
+                        रद्द करा
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    <!-- Edit Aarti Modal -->
+    <div id="editAartiModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
+        <div style="background: linear-gradient(145deg, #240a34, #12031c); border: 2px solid #ffd700; border-radius: 16px; width: 90%; max-width: 480px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 10px;">
+                <h3 style="color: #ffd700; margin: 0; font-size: 1.4rem; font-family: 'Khand', sans-serif;"><i class="fas fa-edit"></i> महाआरती नोंद बदला (Edit Aarti)</h3>
+                <span onclick="closeEditAartiModal()" style="color: #cbd5e1; font-size: 24px; cursor: pointer; line-height: 1;">&times;</span>
+            </div>
+            <form onsubmit="handleSaveEditAarti(event)" style="display: flex; flex-direction: column; gap: 14px;">
+                <input type="hidden" id="editAartiId">
+                <div>
+                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">संपूर्ण नाव *</label>
+                    <input type="text" id="editAartiName" required style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख *</label>
+                        <input type="date" id="editAartiDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
+                    </div>
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ *</label>
+                        <select id="editAartiTime" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
+                            <option value="सकाळ">सकाळ</option>
+                            <option value="संध्याकाळ">संध्याकाळ</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">मोबाईल नंबर</label>
+                    <input type="text" id="editAartiPhone" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
+                </div>
+                <div>
+                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">इतर माहिती (ऐच्छिक)</label>
+                    <textarea id="editAartiPujaDetails" rows="2" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary ripple" style="flex: 1; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); justify-content: center; font-weight: bold; font-size: 15px;">
+                        अपडेट सेव्ह करा
+                    </button>
+                    <button type="button" onclick="closeEditAartiModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
+                        रद्द करा
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Niyojan Modal -->
+    <div id="editNiyojanModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99999; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
+        <div style="background: linear-gradient(145deg, #240a34, #12031c); border: 2px solid #ffd700; border-radius: 16px; width: 90%; max-width: 480px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 10px;">
+                <h3 style="color: #ffd700; margin: 0; font-size: 1.4rem; font-family: 'Khand', sans-serif;"><i class="fas fa-edit"></i> नियोजन बदला (Edit Niyojan)</h3>
+                <span onclick="closeEditNiyojanModal()" style="color: #cbd5e1; font-size: 24px; cursor: pointer; line-height: 1;">&times;</span>
+            </div>
+            <form onsubmit="handleSaveEditNiyojan(event)" style="display: flex; flex-direction: column; gap: 14px;">
+                <input type="hidden" id="editNiyojanId">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख *</label>
+                        <input type="date" id="editNiyojanDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
+                    </div>
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ *</label>
+                        <input type="text" id="editNiyojanTime" placeholder="उदा. सायं. ७:०० वा." required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;">
+                    </div>
+                </div>
+                <div>
+                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">कार्यक्रमाचे नाव *</label>
+                    <input type="text" id="editNiyojanTitle" required style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
+                </div>
+                <div>
+                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">अधिक माहिती (वर्णन)</label>
+                    <textarea id="editNiyojanDescription" rows="2" style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary ripple" style="flex: 1; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); justify-content: center; font-weight: bold; font-size: 15px;">
+                        अपडेट सेव्ह करा
+                    </button>
+                    <button type="button" onclick="closeEditNiyojanModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
                         रद्द करा
                     </button>
                 </div>
