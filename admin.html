@@ -1000,6 +1000,7 @@
                     let rows = '';
                     let runningBal = 0;
                     entries.forEach((e, idx) => {
+                        const escName = (e.name || '').replace(/'/g, "\\'");
                         const cin = parseFloat(e.cash_in) || 0;
                         const cout = parseFloat(e.cash_out) || 0;
                         runningBal += cin - cout;
@@ -1014,7 +1015,10 @@
                                 <td style="padding: 10px 12px; color: #f87171; font-weight: bold;">${cout > 0 ? '₹' + cout.toLocaleString('en-IN') : '-'}</td>
                                 <td style="padding: 10px 12px; color: #fbbf24; font-weight: bold;">₹${runningBal.toLocaleString('en-IN')}</td>
                                 <td style="padding: 10px 12px; text-align: center;">
-                                    <button onclick="deleteAdminEntry('${e.id || e._id}', '${yr}')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;"><i class="fas fa-trash"></i></button>
+                                    <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: center;">
+                                        <button onclick="openEditEntryModal('${e.id || e._id}', '${escName}', '${e.date || ''}', '${e.mode || 'Cash'}', ${cin}, ${cout}, '${yr}')" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fbbf24; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;" title="बदला / Rename (Edit)"><i class="fas fa-edit"></i></button>
+                                        <button onclick="deleteAdminEntry('${e.id || e._id}', '${yr}')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;" title="हटवा (Delete)"><i class="fas fa-trash"></i></button>
+                                    </div>
                                 </td>
                             </tr>
                         `;
@@ -1160,6 +1164,73 @@
             } catch(err) {
                 console.error('Add entry error:', err);
                 alert('नोंद जोडताना त्रुटी आली.');
+            }
+        };
+
+        
+        window.openEditEntryModal = function(id, name, date, mode, cin, cout, year) {
+            document.getElementById('editEntryId').value = id;
+            document.getElementById('editEntryYear').value = year;
+            document.getElementById('editEntryName').value = name || '';
+            
+            let d = date;
+            if (d && d.includes('T')) d = d.split('T')[0];
+            document.getElementById('editEntryDate').value = d || new Date().toISOString().split('T')[0];
+            document.getElementById('editEntryMode').value = mode || 'Cash';
+            
+            const isExpense = (cout && cout > 0 && !cin);
+            document.getElementById('editEntryType').value = isExpense ? 'out' : 'in';
+            document.getElementById('editEntryAmount').value = isExpense ? cout : (cin || 0);
+
+            const modal = document.getElementById('editEntryModal');
+            if (modal) modal.style.display = 'flex';
+        };
+
+        window.closeEditEntryModal = function() {
+            const modal = document.getElementById('editEntryModal');
+            if (modal) modal.style.display = 'none';
+        };
+
+        window.handleSaveEditEntry = async function(e) {
+            e.preventDefault();
+            const id = document.getElementById('editEntryId').value;
+            const year = document.getElementById('editEntryYear').value;
+            const name = document.getElementById('editEntryName').value.trim();
+            const date = document.getElementById('editEntryDate').value;
+            const mode = document.getElementById('editEntryMode').value;
+            const type = document.getElementById('editEntryType').value;
+            const amount = parseFloat(document.getElementById('editEntryAmount').value) || 0;
+
+            if (!name || isNaN(amount)) {
+                alert('कृपया सर्व माहिती अचूक भरा!');
+                return;
+            }
+
+            const payload = {
+                name,
+                date,
+                mode,
+                cash_in: type === 'in' ? amount : 0,
+                cash_out: type === 'out' ? amount : 0
+            };
+
+            try {
+                const res = await fetch('/api/entries/' + id, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    alert('नोंद यशस्वीरीत्या अपडेट झाली!');
+                    closeEditEntryModal();
+                    await renderAdminYearPanels();
+                } else {
+                    alert('अपडेट करताना त्रुटी: ' + (data.error || 'अज्ञात'));
+                }
+            } catch(err) {
+                console.error('Update entry error:', err);
+                alert('अपडेट करताना त्रुटी आली.');
             }
         };
 
@@ -1988,6 +2059,32 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
     <p>Developed by | Dhananjay Ranate</p>
   </div>
 </div>
+
+    
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">प्रकार (Type)</label>
+                        <select id="editEntryType" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
+                            <option value="in">जमा (Cash In)</option>
+                            <option value="out">खर्च (Cash Out)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">रक्कम (₹ Amount)</label>
+                        <input type="number" step="any" min="0" id="editEntryAmount" required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="btn btn-primary ripple" style="flex: 1; padding: 11px; border-radius: 8px; background: linear-gradient(135deg, #10b981, #059669); justify-content: center; font-weight: bold; font-size: 15px;">
+                        अपडेट सेव्ह करा
+                    </button>
+                    <button type="button" onclick="closeEditEntryModal()" class="btn btn-secondary ripple" style="padding: 11px 18px; border-radius: 8px; justify-content: center;">
+                        रद्द करा
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body></html>`;
         }
 
@@ -3008,4 +3105,32 @@ async function deleteNiyojan(id) {
 
     </script>
 
+
+<!-- Edit Entry / Rename Modal -->
+    <div id="editEntryModal" class="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(8px);">
+        <div style="background: linear-gradient(145deg, #240a34, #12031c); border: 2px solid #ffd700; border-radius: 16px; width: 90%; max-width: 480px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,215,0,0.2); padding-bottom: 10px;">
+                <h3 style="color: #ffd700; margin: 0; font-size: 1.4rem; font-family: 'Khand', sans-serif;"><i class="fas fa-edit"></i> नोंद बदला / Rename Entry</h3>
+                <span onclick="closeEditEntryModal()" style="color: #cbd5e1; font-size: 24px; cursor: pointer; line-height: 1;">&times;</span>
+            </div>
+            <form onsubmit="handleSaveEditEntry(event)" style="display: flex; flex-direction: column; gap: 14px;">
+                <input type="hidden" id="editEntryId">
+                <input type="hidden" id="editEntryYear">
+                <div>
+                    <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तपशील / नाव (Name / Details)</label>
+                    <input type="text" id="editEntryName" required style="width: 100%; padding: 10px 14px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 15px;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख (Date)</label>
+                        <input type="date" id="editEntryDate" required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
+                    </div>
+                    <div>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">माध्यम (Mode)</label>
+                        <select id="editEntryMode" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
+                            <option value="Cash">Cash (रोख)</option>
+                            <option value="Online">Online (युपीआय)</option>
+                        </select>
+                    </div>
+                </div>
 </body></html>
