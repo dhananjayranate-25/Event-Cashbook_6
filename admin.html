@@ -46,6 +46,83 @@
             document.documentElement.classList.add('show-login');
         }
     </script>
+
+    <!-- Mobile Responsiveness Optimization -->
+    <style>
+        /* Smooth horizontal scrolling for tabs */
+        .year-tabs {
+            display: flex !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            gap: 8px !important;
+            padding-bottom: 8px !important;
+            scrollbar-width: thin;
+        }
+        .year-tab {
+            flex: 0 0 auto !important;
+            white-space: nowrap !important;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .admin-nav {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                padding-bottom: 6px !important;
+                gap: 6px !important;
+            }
+            .btn-tab {
+                flex: 0 0 auto !important;
+                white-space: nowrap !important;
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+            }
+            .form-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .create-year-panel {
+                padding: 16px 12px !important;
+                border-radius: 12px !important;
+            }
+            .appearance-settings-section {
+                padding: 16px 12px !important;
+                border-radius: 12px !important;
+            }
+            .summary-cards-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .modal > div {
+                width: 95% !important;
+                max-width: 95% !important;
+                padding: 18px 14px !important;
+                max-height: 90vh !important;
+                overflow-y: auto !important;
+            }
+            .table-responsive {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                width: 100% !important;
+                margin-top: 10px;
+            }
+            table {
+                min-width: 580px;
+            }
+            button, select, input {
+                min-height: 42px;
+            }
+        }
+    </style>
+
 </head>
 <body>
     <div class="particles" id="particles"></div>
