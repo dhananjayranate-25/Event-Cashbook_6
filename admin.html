@@ -2272,7 +2272,7 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 const { PDFDocument } = PDFLib;
                 const mergedPdf = await PDFDocument.create();
                 const coverPage = mergedPdf.addPage([595.28, 841.89]);
-                const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.95));
+                const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.98));
                 coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
                 const existingPdf = await PDFDocument.load(uploadBytes);
                 const indices = existingPdf.getPageIndices();

@@ -594,13 +594,25 @@
 
         
         const canvas = await html2canvas(iframe.contentDocument.body, {
-            scale: 2, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff'
+            scale: 2.5,
+            windowWidth: 794,
+            width: 794,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            allowTaint: true,
+            logging: false,
+            imageTimeout: 15000
         });
         
         document.body.removeChild(iframe);
         
         const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdf = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
+            compress: true
+        });
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
         
@@ -615,14 +627,16 @@
             pageCanvas.height = Math.min(pageHeightInPx, canvas.height - i * pageHeightInPx);
             
             const ctx = pageCanvas.getContext('2d');
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
             
-            const imgData = pageCanvas.toDataURL('image/jpeg', 0.95);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.98);
             const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
             
-            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight);
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight, undefined, 'FAST');
         }
         
         pdf.save(filename || 'Cashbook.pdf');
@@ -1031,7 +1045,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 2, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true
+                scale: 2.5, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true, logging: false
             });
             document.body.removeChild(iframe);
             
@@ -1042,7 +1056,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             const mergedPdf = await PDFDocument.create();
             
             const coverPage = mergedPdf.addPage([595.28, 841.89]);
-            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.95));
+            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.98));
             coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
             
             const existingPdf = await PDFDocument.load(uploadBytes);
