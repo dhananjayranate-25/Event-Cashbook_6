@@ -58,10 +58,16 @@
                 gap: 16px !important;
             }
         }
+        @media (max-width: 768px) {
+            #albumsGrid {
+                grid-template-columns: 1fr !important;
+                gap: 18px !important;
+            }
+        }
         @media (max-width: 600px) {
             #albumsGrid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 12px !important;
+                grid-template-columns: 1fr !important;
+                gap: 18px !important;
             }
         }
 
