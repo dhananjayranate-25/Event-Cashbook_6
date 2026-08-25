@@ -3837,6 +3837,36 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
     }
 
 
+    
+    async function getPosterBlobAndDataUrl(customImageSource, captureFallbackFn) {
+        if (customImageSource && typeof customImageSource === 'string') {
+            if (customImageSource.startsWith('data:image')) {
+                const blob = dataURItoBlob(customImageSource);
+                return { blob, dataUrl: customImageSource };
+            } else if (customImageSource.startsWith('http') || customImageSource.startsWith('uploads/') || customImageSource.startsWith('logo/')) {
+                try {
+                    const res = await fetch(customImageSource, { mode: 'cors' });
+                    if (res.ok) {
+                        const blob = await res.blob();
+                        const dataUrl = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.onerror = () => resolve(customImageSource);
+                            reader.readAsDataURL(blob);
+                        });
+                        return { blob, dataUrl };
+                    }
+                } catch(e) {
+                    console.warn('Direct fetch failed, falling back to capture', e);
+                }
+            }
+        }
+        const canvas = await captureFallbackFn();
+        const dataUrl = canvas.toDataURL('image/png', 1.0);
+        const blob = dataURItoBlob(dataUrl);
+        return { blob, dataUrl };
+    }
+
     async function downloadDonationImage(btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
@@ -3844,18 +3874,13 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         try {
             let blob, dataUrl;
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
-                try {
-                    dataUrl = window.appSettings.donationPosterImage;
-                    blob = dataURItoBlob(dataUrl);
-                } catch(e) {
-                    const canvas = await captureDonationPoster();
-                    dataUrl = canvas.toDataURL('image/png', 1.0);
-                    blob = dataURItoBlob(dataUrl);
-                }
+                const res = await getPosterBlobAndDataUrl(window.appSettings.donationPosterImage, captureDonationPoster);
+                blob = res.blob;
+                dataUrl = res.dataUrl;
             } else {
-                const canvas = await captureDonationPoster();
-                dataUrl = canvas.toDataURL('image/png', 1.0);
-                blob = dataURItoBlob(dataUrl);
+                const res = await getPosterBlobAndDataUrl(null, captureDonationPoster);
+                blob = res.blob;
+                dataUrl = res.dataUrl;
             }
             const link = document.createElement('a');
             link.download = 'Donation_Poster.png';
@@ -3919,21 +3944,13 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             // Note: shareData is built below after file is generated in shareDonationImage
 
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
-                try {
-                    dataUrl = window.appSettings.donationPosterImage;
-                    const blob = dataURItoBlob(dataUrl);
-                    file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
-                } catch(e) {
-                    const canvas = await captureDonationPoster();
-                    dataUrl = canvas.toDataURL('image/png', 1.0);
-                    const blob = dataURItoBlob(dataUrl);
-                    file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
-                }
+                const res = await getPosterBlobAndDataUrl(window.appSettings.donationPosterImage, captureDonationPoster);
+                dataUrl = res.dataUrl;
+                file = new File([res.blob], 'Donation_Poster.png', { type: 'image/png' });
             } else {
-                const canvas = await captureDonationPoster();
-                dataUrl = canvas.toDataURL('image/png', 1.0);
-                const blob = dataURItoBlob(dataUrl);
-                file = new File([blob], 'Donation_Poster.png', { type: 'image/png' });
+                const res = await getPosterBlobAndDataUrl(null, captureDonationPoster);
+                dataUrl = res.dataUrl;
+                file = new File([res.blob], 'Donation_Poster.png', { type: 'image/png' });
             }
 
             const shareData = {
