@@ -63,6 +63,8 @@
         }
     </style>
     <link rel="prefetch" href="login.html">
+    <link rel="prefetch" href="gallery.html">
+    <link rel="prerender" href="gallery.html">
     <link rel="prerender" href="login.html">
     <style> 
     a, button { touch-action: manipulation; } 
@@ -198,7 +200,7 @@
                     <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); return false;" style="display: block !important;">उत्सव कार्यकारिणी</a>
                     <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); return false;" style="display: block !important;">उत्सव नियोजन</a>
                     <a href="javascript:void(0)" id="nav-aarti" onclick="switchTab('aarti'); return false;" style="display: block !important;">महाआरती</a>
-                    <a href="javascript:void(0)" id="nav-gallery" onclick="window.location.href='gallery.html'; return false;" style="display: block !important;">गणेशोत्सव छायाचित्रे</a>
+                    <a href="gallery.html" id="nav-gallery" onpointerenter="const l=document.createElement('link');l.rel='prefetch';l.href='gallery.html';document.head.appendChild(l);" onpointerdown="window.location.href='gallery.html';" onclick="window.location.href='gallery.html'; return false;" style="display: block !important;">गणेशोत्सव छायाचित्रे</a>
                     <a href="javascript:void(0)" id="nav-contact" onclick="switchTab('contact'); return false;" style="display: block !important;">संपर्क</a>
                     <a href="javascript:void(0)" id="nav-donate" class="nav-donate-btn" onclick="switchTab('donate'); return false;">देणगी</a>
                     <a href="login.html" id="nav-login" class="nav-donate-btn">Login</a>
@@ -1598,6 +1600,11 @@ async function loadHomeGalleryPreview() {
         window.scrollTo(0, 0);
         const navMenu = document.getElementById('navLinks');
         if (navMenu) navMenu.classList.remove('active');
+        
+        // Instant Active Nav Link Highlight
+        document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+        const activeNav = document.getElementById('nav-' + tabName);
+        if (activeNav) activeNav.classList.add('active');
         
         const heroContainer = document.getElementById('heroSectionContainer');
         const ganeshotsavHeader = document.getElementById('ganeshotsavHeader');
