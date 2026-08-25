@@ -1526,6 +1526,33 @@ async function loadHomeGalleryPreview() {
     });
 
     
+    
+    // Global Custom Marathi Notification System (Replaces browser '...onrender.com says' popups)
+    function showMarathiToast(msg, isError = false) {
+        if (!msg) return;
+        let container = document.getElementById('customMarathiToastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'customMarathiToastContainer';
+            document.body.appendChild(container);
+        }
+        const toast = document.createElement('div');
+        toast.className = 'marathi-toast-item';
+        const icon = isError ? '⚠️' : '✨';
+        toast.innerHTML = '<span class="marathi-toast-icon">' + icon + '</span><span>' + msg + '</span>';
+        container.appendChild(toast);
+
+        requestAnimationFrame(() => {
+            toast.classList.add('visible');
+        });
+
+        setTimeout(() => {
+            toast.classList.remove('visible');
+            setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 400);
+        }, 3000);
+    }
+    window.alert = function(msg) { showMarathiToast(msg); };
+
     function copyToClipboard(text, successMsg) {
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(text).then(() => {
@@ -2447,7 +2474,7 @@ const regNoElem = document.getElementById('displayRegNo');
         if (!download) {
             const newWindow = window.open('', '_blank');
             if (!newWindow) {
-                alert('Please allow popups for this website to view/download PDFs.');
+                alert('अहवाल पाहण्यासाठी किंवा डाउनलोड करण्यासाठी कृपया पॉपअपची परवानगी द्या.');
                 return;
             }
             newWindow.document.write(htmlContent);
@@ -2565,13 +2592,13 @@ const regNoElem = document.getElementById('displayRegNo');
             } else {
                 const r = await fetch(API_URL + '/api/entries?year=' + year);
                 const d = await r.json();
-                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
+                if (!d.success || !d.data.length) { alert('सन ' + year + ' साठी कोणत्याही नोंदी उपलब्ध नाहीत.'); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
                 entries = d.data;
             }
             const logoDataURL = await loadLogoForCover();
             const html = await generatePDFHTML(entries, year, logoDataURL);
             await generatePDFFromHTML(html, false);
-        } catch(e) { alert('Error: ' + e.message); }
+        } catch(e) { alert('त्रुटी आली: ' + e.message); }
         if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
@@ -2586,13 +2613,13 @@ const regNoElem = document.getElementById('displayRegNo');
             } else {
                 const r = await fetch(API_URL + '/api/entries?year=' + year);
                 const d = await r.json();
-                if (!d.success || !d.data.length) { alert('No entries for ' + year); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
+                if (!d.success || !d.data.length) { alert('सन ' + year + ' साठी कोणत्याही नोंदी उपलब्ध नाहीत.'); if (btn) { btn.innerHTML = originalText; btn.disabled = false; } return; }
                 entries = d.data;
             }
             const logoDataURL = await loadLogoForCover();
             const html = await generatePDFHTML(entries, year, logoDataURL);
             await generatePDFFromHTML(html, true, `Cashbook_${year}.pdf`);
-        } catch(e) { alert('Error: ' + e.message); }
+        } catch(e) { alert('त्रुटी आली: ' + e.message); }
         if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
@@ -3063,7 +3090,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             }
         } catch (error) {
             console.error('PDF merge error:', error);
-            alert('Error generating PDF. Make sure server is running!');
+            alert('अहवाल तयार करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
         }
     }
 
