@@ -222,9 +222,9 @@
         <div class="admin-tabs animate-fade-up" style="display: flex; gap: 10px; margin: 20px 0; justify-content: center; flex-wrap: wrap;">
             <button id="btn-tab-home" class="btn btn-tab active" onclick="switchAdminTab('tab-home')">Home Page Settings</button>
             <button id="btn-tab-committee" class="btn btn-tab" onclick="switchAdminTab('tab-committee')">Committee Settings</button>
-            <button id="btn-tab-cashbook" class="btn btn-tab" onclick="switchAdminTab('tab-cashbook')">Cashbook Settings</button>
+            <button id="btn-tab-cashbook" class="btn btn-tab" onclick="switchAdminTab('tab-cashbook')">अहवाल सेटिंग्ज (PDF Settings)</button>
             <button id="btn-tab-aarti" class="btn btn-tab" onclick="switchAdminTab('tab-aarti')">Maha Aarti</button>
-            <button id="btn-tab-gallery" class="btn btn-tab" onclick="switchAdminTab('tab-gallery')">सुवर्ण आठवणी</button>
+            <button id="btn-tab-gallery" class="btn btn-tab" onclick="switchAdminTab('tab-gallery')">गणेशोत्सव छायाचित्रे</button>
             <button id="btn-tab-niyojan" class="btn btn-tab" onclick="switchAdminTab('tab-niyojan')">नियोजन</button>
             <button class="btn btn-tab" onclick="window.location.replace('index.html')" style="background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; border: none;">🏠 Back to Home (मागे जा)</button>
             <button class="btn btn-tab" onclick="adminLogout()" style="background: linear-gradient(135deg, #374151, #111827); color: #f87171; border: 1px solid #f87171; font-weight: bold;"><i class="fas fa-sign-out-alt"></i> Logout (लॉग आउट)</button>
@@ -632,7 +632,7 @@
             <div class="appearance-settings-section animate-fade-up" style="animation-delay: 0.1s; margin-top: 10px;">
                 <div class="section-header">
                     <div class="header-line"></div>
-                    <h2>सुवर्ण आठवणी (Photo Gallery)</h2>
+                    <h2>गणेशोत्सव छायाचित्रे (Photo Gallery)</h2>
                     <div class="header-line"></div>
                 </div>
                 
@@ -1094,13 +1094,13 @@
                         const cin = parseFloat(e.cash_in) || 0;
                         const cout = parseFloat(e.cash_out) || 0;
                         runningBal += cin - cout;
-                        const dateFormatted = e.date ? new Date(e.date).toLocaleDateString('en-GB') : '-';
+                        const dateFormatted = typeof formatDate === 'function' ? formatDate(e.date, true) : (e.date || '-');
                         rows += `
                             <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
                                 <td style="padding: 10px 12px; text-align: center;">${idx + 1}</td>
                                 <td style="padding: 10px 12px; font-weight: 600; color: #fff;">${e.name}</td>
                                 <td style="padding: 10px 12px; color: #cbd5e1;">${dateFormatted}</td>
-                                <td style="padding: 10px 12px; text-align: center;"><span style="padding: 3px 8px; border-radius: 4px; font-size: 12px; background: ${e.mode === 'Online' ? 'rgba(59, 130, 246, 0.2)' : 'rgba(234, 179, 8, 0.2)'}; color: ${e.mode === 'Online' ? '#60a5fa' : '#fde047'};">${e.mode}</span></td>
+                                <td style="padding: 10px 12px; text-align: center;"><span style="padding: 3px 8px; border-radius: 4px; font-size: 12px; background: ${(e.mode === 'Online' || e.mode === 'ऑनलाइन') ? 'rgba(59, 130, 246, 0.2)' : 'rgba(234, 179, 8, 0.2)'}; color: ${(e.mode === 'Online' || e.mode === 'ऑनलाइन') ? '#60a5fa' : '#fde047'};">${(e.mode === 'Online' || e.mode === 'ऑनलाइन') ? 'ऑनलाइन' : 'कॅश'}</span></td>
                                 <td style="padding: 10px 12px; color: #34d399; font-weight: bold;">${cin > 0 ? '₹' + cin.toLocaleString('en-IN') : '-'}</td>
                                 <td style="padding: 10px 12px; color: #f87171; font-weight: bold;">${cout > 0 ? '₹' + cout.toLocaleString('en-IN') : '-'}</td>
                                 <td style="padding: 10px 12px; color: #fbbf24; font-weight: bold;">₹${runningBal.toLocaleString('en-IN')}</td>
@@ -1122,7 +1122,7 @@
                     <div class="appearance-settings-section animate-fade-up" style="margin-top: 25px; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 16px; background: linear-gradient(145deg, rgba(25, 6, 35, 0.95), rgba(10, 2, 15, 0.98)); padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; border-bottom: 1px solid rgba(255, 215, 0, 0.2); padding-bottom: 15px;">
                             <h2 style="color: #ffd700; margin: 0; font-size: 1.5rem; font-family: 'Khand', sans-serif; display: flex; align-items: center; gap: 8px;">
-                                <span>🚩 सन ${yr} - आर्थिक हिशोब (Cashbook)</span>
+                                <span>🚩 सन ${yr} - आर्थिक अहवाल</span>
                             </h2>
                             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                                 <button onclick="toggleYearVisibility('${yr}', ${!isVisible})" class="btn btn-secondary ripple" style="background: ${isVisible ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #64748b, #475569)'}; color: white; padding: 8px 14px; font-size: 13px; border-radius: 8px;">
@@ -1158,53 +1158,50 @@
                                 <div class="header-line"></div>
                             </div>
                             
-                            <form onsubmit="handleAdminAddEntry(event, '${yr}')" class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; align-items: end;">
+                            <form onsubmit="handleAdminAddEntry(event, '${yr}')" class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 15px; align-items: end;">
                                 <div class="form-group floating-label">
-                                    <input type="text" id="entryName_${yr}" placeholder=" " required>
                                     <label for="entryName_${yr}">नाव / तपशील</label>
-                                    <div class="input-focus-line"></div>
+                                    <input type="text" id="entryName_${yr}" placeholder="तपशील टाका" required>
                                 </div>
                                 
                                 <div class="form-group floating-label">
-                                    <input type="date" id="entryDate_${yr}" placeholder=" " required value="${(new Date().getFullYear() == yr ? new Date().toISOString().split('T')[0] : yr + '-08-23')}" onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
-                                    <label for="entryDate_${yr}" style="top: 10px; transform: none; font-size: 0.75rem; color: var(--primary-gradient-mid);">तारीख</label>
-                                    <div class="input-focus-line"></div>
+                                    <label for="entryDate_${yr}">तारीख</label>
+                                    <input type="date" id="entryDate_${yr}" required value="${(new Date().getFullYear() == yr ? new Date().toISOString().split('T')[0] : yr + '-08-23')}" onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
                                 </div>
                                 
                                 <div class="form-group floating-label">
+                                    <label for="entryType_${yr}">प्रकार (Type)</label>
                                     <select id="entryType_${yr}" required>
                                         <option value="in">जमा (Cash In)</option>
                                         <option value="out">खर्च (Cash Out)</option>
                                     </select>
-                                    <label for="entryType_${yr}" style="top: 10px; transform: none; font-size: 0.75rem; color: var(--primary-gradient-mid);">प्रकार (Type)</label>
-                                    <div class="input-focus-line"></div>
                                 </div>
                                 
                                 <div class="form-group floating-label">
+                                    <label for="entryMode_${yr}">माध्यम (Mode)</label>
                                     <select id="entryMode_${yr}" required>
-                                        <option value="Online">Online (युपीआय)</option>
-                                        <option value="Cash">Cash (रोख)</option>
+                                        <option value="Online">ऑनलाइन (Online)</option>
+                                        <option value="Cash">कॅश (Cash)</option>
                                     </select>
-                                    <label for="entryMode_${yr}" style="top: 10px; transform: none; font-size: 0.75rem; color: var(--primary-gradient-mid);">माध्यम (Mode)</label>
-                                    <div class="input-focus-line"></div>
                                 </div>
                                 
                                 <div class="form-group floating-label">
-                                    <input type="number" step="any" min="0" id="entryAmount_${yr}" placeholder=" " required>
                                     <label for="entryAmount_${yr}">रक्कम (₹)</label>
-                                    <div class="input-focus-line"></div>
+                                    <input type="number" step="any" min="0" id="entryAmount_${yr}" placeholder="₹ 0" required>
                                 </div>
                                 
-                                <button type="submit" class="btn btn-primary ripple" style="height: 52px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 600; border-radius: 14px;">
-                                    <span class="btn-icon">
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                            <polyline points="7 3 7 8 15 8"></polyline>
-                                        </svg>
-                                    </span>
-                                    सेव्ह करा
-                                </button>
+                                <div style="margin-bottom: 5px;">
+                                    <button type="submit" class="btn btn-primary ripple" style="height: 46px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 600; border-radius: 12px;">
+                                        <span class="btn-icon">
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                                <polyline points="7 3 7 8 15 8"></polyline>
+                                            </svg>
+                                        </span>
+                                        सेव्ह करा
+                                    </button>
+                                </div>
                             </form>
                         </div>
 
@@ -2087,10 +2084,10 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                 <button class="btn btn-primary ripple" onclick="viewMergedPDF('${pdf.filename}', '${pdf.year}', '${escSub}', '${escTag}', '${escOrg}')" style="padding: 8px 16px; font-size: 13px;">
-                    View PDF
+                    अहवाल पहा
                 </button>
                 <button class="btn btn-secondary ripple" onclick="downloadMergedPDF('${pdf.filename}', '${pdf.year}', '${escSub}', '${escTag}', '${escOrg}')" style="padding: 8px 16px; font-size: 13px;">
-                    Download
+                    अहवाल डाउनलोड करा
                 </button>
                 <button class="btn btn-secondary ripple" onclick="togglePDFHomeVisibility('${pdf.filename}', ${!isVisible})" style="padding: 8px 12px; font-size: 13px; ${visBtnStyle}">
                     ${visBtnText}
@@ -2120,9 +2117,26 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
         function formatDate(dateStr) {
             if (!dateStr) return '-';
             try {
-                const d = new Date(dateStr);
+                let d;
+                if (typeof dateStr === 'string' && dateStr.includes('-')) {
+                    const parts = dateStr.split('T')[0].split('-');
+                    if (parts.length === 3) {
+                        d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    } else {
+                        d = new Date(dateStr);
+                    }
+                } else {
+                    d = new Date(dateStr);
+                }
                 if (isNaN(d.getTime())) return dateStr;
-                return d.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                const marathiMonths = [
+                    "जानेवारी", "फेब्रुवारी", "मार्च", "एप्रिल", "मे", "जून",
+                    "जुलै", "ऑगस्ट", "सप्टेंबर", "ऑक्टोबर", "नोव्हेंबर", "डिसेंबर"
+                ];
+                const day = d.getDate().toString().padStart(2, '0');
+                const month = marathiMonths[d.getMonth()];
+                const year = d.getFullYear().toString().slice(-2);
+                return `${day} ${month} ${year}`;
             } catch(e) {
                 return dateStr;
             }

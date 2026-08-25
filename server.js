@@ -15,6 +15,58 @@ app.use(cors());
 app.use(compression());
 app.use(express.json({ limit: '50mb' }));
 
+// ===== HIGH-SPEED IN-MEMORY CACHE FOR INSTANT MULTITASKING & READS =====
+const apiCacheStore = new Map();
+
+function getCachedApi(key) {
+    const item = apiCacheStore.get(key);
+    if (!item) return null;
+    if (Date.now() > item.expiry) {
+        apiCacheStore.delete(key);
+        return null;
+    }
+    return item.data;
+}
+
+function setCachedApi(key, data, ttlMs = 20000) {
+    apiCacheStore.set(key, { data, expiry: Date.now() + ttlMs });
+}
+
+function invalidateApiCache() {
+    apiCacheStore.clear();
+}
+
+// Invalidate on any write operation (POST, PUT, DELETE, PATCH)
+app.use((req, res, next) => {
+    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
+        invalidateApiCache();
+    }
+    next();
+});
+
+// Cache public GET API routes automatically
+app.use('/api', (req, res, next) => {
+    if (req.method !== 'GET') return next();
+    // Do not cache portal user session or live streaming upload check
+    if (req.path.startsWith('/portal/users') || req.path.startsWith('/system/storage')) return next();
+    
+    const key = req.originalUrl;
+    const cached = getCachedApi(key);
+    if (cached) {
+        res.setHeader('X-Fast-Cache', 'HIT');
+        return res.json(cached);
+    }
+    const originalJson = res.json.bind(res);
+    res.json = (body) => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+            setCachedApi(key, body, 20000);
+        }
+        res.setHeader('X-Fast-Cache', 'MISS');
+        return originalJson(body);
+    };
+    next();
+});
+
 // Explicit root route to prevent browser cache issues
 app.get('/', (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
@@ -427,17 +479,19 @@ app.get('/api/system/storage', async (req, res) => {
 // GALLERY ENDPOINTS
 // ==========================================
 
-// Get all albums (Optimized for frontend - no full photos)
+// Get all albums (Optimized for frontend - parallel queries & field projection)
 app.get('/api/gallery', async (req, res) => {
     try {
         const albums = await GalleryAlbum.find().lean().sort({ order: 1 });
-        for (let album of albums) {
-            const dbPhotosCount = await GalleryPhoto.countDocuments({ albumId: album._id });
-            const firstPhoto = await GalleryPhoto.findOne({ albumId: album._id }).lean();
+        await Promise.all(albums.map(async (album) => {
+            const [dbPhotosCount, firstPhoto] = await Promise.all([
+                GalleryPhoto.countDocuments({ albumId: album._id }),
+                GalleryPhoto.findOne({ albumId: album._id }, { photoData: 1 }).lean()
+            ]);
             album.photosCount = dbPhotosCount;
             album.coverPhoto = firstPhoto ? firstPhoto.photoData : '';
             album.photos = []; // Empty to save bandwidth
-        }
+        }));
         res.json({ success: true, albums });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });

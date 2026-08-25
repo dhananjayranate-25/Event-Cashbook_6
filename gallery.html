@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="mr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ganpati Vargani Cashbook - Shivsrushti</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=706">
+    <link rel="stylesheet" href="style.css?v=712">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     // Auto-wrap tables for mobile responsiveness
     document.addEventListener('DOMContentLoaded', function() {
@@ -45,24 +45,51 @@
             }
         }
     
-        .gallery-responsive-grid {
+        #albumsGrid {
             display: grid !important;
             grid-template-columns: repeat(3, 1fr) !important;
-            gap: 25px !important;
+            gap: 22px !important;
             width: 100% !important;
             box-sizing: border-box !important;
         }
         @media (max-width: 991px) {
-            .gallery-responsive-grid {
+            #albumsGrid {
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 20px !important;
+                gap: 16px !important;
             }
         }
         @media (max-width: 600px) {
-            .gallery-responsive-grid {
-                grid-template-columns: 1fr !important;
-                gap: 18px !important;
+            #albumsGrid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
             }
+        }
+
+        #photosGrid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+            gap: 22px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        @media (max-width: 991px) {
+            #photosGrid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+                gap: 16px !important;
+            }
+        }
+        @media (max-width: 600px) {
+            #photosGrid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+        }
+
+        .gallery-responsive-grid {
+            display: grid;
+            gap: 22px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .album-card {
             background: rgba(255, 255, 255, 0.05);
@@ -78,7 +105,24 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
             border-color: rgba(255, 215, 0, 0.5);
         }
-    
+        #currentAlbumTitle {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif !important;
+            font-size: 1.35rem !important;
+            font-weight: 700 !important;
+            color: #ffeb3b !important;
+            letter-spacing: 0.5px !important;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            #currentAlbumTitle {
+                font-size: 1.25rem !important;
+            }
+        }
+        @media (max-width: 480px) {
+            #currentAlbumTitle {
+                font-size: 1.15rem !important;
+            }
+        }
     </style>
 
     <!-- Social Share Preview Meta Tags -->
@@ -118,7 +162,7 @@
                     <a href="index.html#committee" id="nav-committee">उत्सव कार्यकारिणी</a>
                     <a href="index.html#niyojan" id="nav-niyojan">उत्सव नियोजन</a>
                     <a href="index.html#aarti" id="nav-aarti">महाआरती</a>
-                    <a href="#" id="nav-gallery">सुवर्ण आठवणी</a>
+                    <a href="#" id="nav-gallery">गणेशोत्सव छायाचित्रे</a>
                     <a href="index.html#contact" id="nav-contact">संपर्क</a>
                     <a href="index.html#donate" class="nav-donate-btn" id="nav-donate">देणगी</a>
                 </div>
@@ -281,7 +325,7 @@
                 <div class="glass-panel" style="padding: 30px; border-radius: 20px;">
                     <div class="section-header">
                         <div class="header-line"></div>
-                        <h2>सुवर्ण आठवणी</h2>
+                        <h2>गणेशोत्सव छायाचित्रे</h2>
                         <div class="header-line"></div>
                     </div>
                     
@@ -289,6 +333,35 @@
                     <div id="albumsGrid" class="gallery-responsive-grid">
                         <div style="height: 50px;"></div>
                     </div>
+                    <script>
+                        (function() {
+                            try {
+                                const cached = localStorage.getItem('gallery_albums_cache');
+                                if (cached) {
+                                    const albums = JSON.parse(cached);
+                                    if (albums && albums.length > 0) {
+                                        const grid = document.getElementById('albumsGrid');
+                                        if (grid) {
+                                            grid.innerHTML = albums.map(album => {
+                                                const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
+                                                return `
+                                                    <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                                                        <div style="width: 100%; padding-top: 75%; position: relative;">
+                                                            <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
+                                                        </div>
+                                                        <div style="padding: 15px; text-align: center;">
+                                                            <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;">${album.title}</h3>
+                                                            <p style="color: #ccc; margin: 0; font-size: 0.9rem;">${album.photosCount || 0} photos</p>
+                                                        </div>
+                                                    </div>
+                                                `;
+                                            }).join('');
+                                        }
+                                    }
+                                }
+                            } catch(e) {}
+                        })();
+                    </script>
 
                     <!-- Single Album Photos View (Hidden by Default) -->
                     <div id="photosView" style="display: none;">
@@ -296,7 +369,7 @@
                             <div style="width: 100%; display: flex; justify-content: flex-start;">
                                 <button onclick="backToAlbums()" class="btn btn-primary ripple" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 15px; border-radius: 8px;"><i class="fas fa-arrow-left"></i> मागे जा</button>
                             </div>
-                            <h3 id="currentAlbumTitle" style="color: #ffeb3b; margin: 0; font-size: 1.8rem; font-family: 'Khand', sans-serif; text-align: center; width: 100%; word-break: break-word;"></h3>
+                            <h3 id="currentAlbumTitle" style="color: #ffeb3b; margin: 0; font-size: 1.35rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-align: center; width: 100%; word-break: break-word; letter-spacing: 0.5px;"></h3>
                         </div>
                         <div id="photosGrid" class="gallery-responsive-grid">
                             <!-- Photos will be injected here -->
@@ -325,7 +398,7 @@
                         <a href="index.html#niyojan">उत्सव नियोजन</a>
                     </div>
                     <div class="nav-links-v6" style="display: flex !important; flex-direction: column !important; gap: 12px !important; align-items: flex-start !important; justify-items: start !important; margin: 0 !important;">
-                        <a href="gallery.html">सुवर्ण आठवणी</a>
+                        <a href="gallery.html">गणेशोत्सव छायाचित्रे</a>
                         <a href="index.html#contact">संपर्क</a>
                         <a href="index.html#donate">देणगी</a>
                         <a href="index.html#aarti">महाआरती</a>
@@ -410,45 +483,87 @@
         </div>
     </footer>
 
-
 <script>
     let galleryAlbumsCache = [];
+    let currentViewingAlbumId = null;
+
+    try {
+        const cached = localStorage.getItem('gallery_albums_cache');
+        if (cached) {
+            galleryAlbumsCache = JSON.parse(cached);
+        }
+    } catch(e) {}
+
+    function renderAlbumsHTML(albums) {
+        if (!albums || albums.length === 0) {
+            return '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">कोणतेही अल्बम उपलब्ध नाहीत.</p>';
+        }
+        return albums.map(album => {
+            const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
+            return `
+                <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                    <div style="width: 100%; padding-top: 75%; position: relative;">
+                        <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
+                    </div>
+                    <div style="padding: 15px; text-align: center;">
+                        <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;">${album.title}</h3>
+                        <p style="color: #ccc; margin: 0; font-size: 0.9rem;">${album.photosCount || 0} photos</p>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderPhotosHTML(photos) {
+        if (!photos || photos.length === 0) {
+            return '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">या अल्बममध्ये कोणतेही फोटो नाहीत.</p>';
+        }
+        return photos.map(photo => `
+            <div class="album-card photo-card" onclick="openLightbox('${photo.photoData}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+                <div style="width: 100%; padding-top: 75%; position: relative;">
+                    <img src="${photo.photoData}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high" loading="eager">
+                </div>
+            </div>
+        `).join('');
+    }
 
     async function loadGalleryAlbums() {
         const grid = document.getElementById('albumsGrid');
         if(!grid) return;
-        grid.innerHTML = '<div style="height: 50px;"></div>';
+        
+        if (!currentViewingAlbumId && grid.children.length === 0) {
+            if (galleryAlbumsCache.length > 0) {
+                grid.innerHTML = renderAlbumsHTML(galleryAlbumsCache);
+            } else {
+                grid.innerHTML = '<div style="height: 50px;"></div>';
+            }
+        }
+        
         try {
             const res = await fetch('/api/gallery');
             if (!res.ok) throw new Error('Server returned ' + res.status);
             const data = await res.json();
             if (data.success) {
                 galleryAlbumsCache = data.albums || [];
-                if (galleryAlbumsCache.length === 0) {
-                    grid.innerHTML = '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">कोणतेही अल्बम उपलब्ध नाहीत.</p>';
-                    return;
-                }
+                try {
+                    localStorage.setItem('gallery_albums_cache', JSON.stringify(galleryAlbumsCache));
+                } catch(e) {}
                 
-                grid.innerHTML = galleryAlbumsCache.map(album => {
-                    const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
-                    return `
-                        <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                            <div style="width: 100%; padding-top: 75%; position: relative;">
-                                <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
-                            </div>
-                            <div style="padding: 15px; text-align: center;">
-                                <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem;">${album.title}</h3>
-                                <p style="color: #ccc; margin: 0; font-size: 0.9rem;">${album.photosCount || 0} photos</p>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+                if (!currentViewingAlbumId) {
+                    grid.innerHTML = renderAlbumsHTML(galleryAlbumsCache);
+                } else {
+                    grid.style.setProperty('display', 'none', 'important');
+                }
             } else {
-                grid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">माहिती लोड करण्यात त्रुटी: ' + (data.error || 'अज्ञात त्रुटी') + '</p>';
+                if (!currentViewingAlbumId && grid.children.length === 0) {
+                    grid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">माहिती लोड करण्यात त्रुटी: ' + (data.error || 'अज्ञात त्रुटी') + '</p>';
+                }
             }
         } catch (e) {
             console.error('Gallery API Error:', e);
-            grid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">माहिती लोड करण्यात त्रुटी आली. कृपया इंटरनेट तपासा.</p>';
+            if (!currentViewingAlbumId && grid.children.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">माहिती लोड करण्यात त्रुटी आली. कृपया इंटरनेट तपासा.</p>';
+            }
         }
     }
 
@@ -456,40 +571,70 @@
         const album = galleryAlbumsCache.find(a => a._id === albumId);
         if (!album) return;
 
-        document.getElementById('albumsGrid').style.display = 'none';
-        document.getElementById('photosView').style.display = 'block';
+        currentViewingAlbumId = albumId;
+        const albumsGrid = document.getElementById('albumsGrid');
+        const photosView = document.getElementById('photosView');
+
+        if (albumsGrid) {
+            albumsGrid.style.setProperty('display', 'none', 'important');
+        }
+        if (photosView) {
+            photosView.style.display = 'block';
+        }
+
         document.getElementById('currentAlbumTitle').innerText = album.title;
 
         const photosGrid = document.getElementById('photosGrid');
-        photosGrid.innerHTML = '<div style="height: 50px;"></div>';
+        
+        // Fast instant render from cache if visited before
+        let hasCache = false;
+        try {
+            const cachedPhotos = sessionStorage.getItem('gallery_photos_' + albumId);
+            if (cachedPhotos) {
+                const photos = JSON.parse(cachedPhotos);
+                if (photos && photos.length > 0) {
+                    photosGrid.innerHTML = renderPhotosHTML(photos);
+                    hasCache = true;
+                }
+            }
+        } catch(e) {}
+
+        if (!hasCache) {
+            photosGrid.innerHTML = '<div style="height: 50px;"></div>';
+        }
         
         try {
             const res = await fetch(`/api/gallery/album/${albumId}/photos`);
             const data = await res.json();
             
             if (data.success) {
-                if (data.photos.length === 0) {
-                    photosGrid.innerHTML = '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">या अल्बममध्ये कोणतेही फोटो नाहीत.</p>';
-                    return;
-                }
-                
-                photosGrid.innerHTML = data.photos.map(photo => `
-                    <div style="width: 100%; padding-top: 100%; position: relative; border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" onclick="openLightbox('${photo.photoData}')">
-                        <img src="${photo.photoData}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
-                    </div>
-                `).join('');
-            } else {
+                try {
+                    sessionStorage.setItem('gallery_photos_' + albumId, JSON.stringify(data.photos));
+                } catch(e) {}
+                photosGrid.innerHTML = renderPhotosHTML(data.photos);
+            } else if (!hasCache) {
                 photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी: ' + data.error + '</p>';
             }
         } catch(e) {
             console.error(e);
-            photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी आली.</p>';
+            if (!hasCache) {
+                photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी आली.</p>';
+            }
         }
     }
 
     function backToAlbums() {
-        document.getElementById('photosView').style.display = 'none';
-        document.getElementById('albumsGrid').style.display = 'grid';
+        currentViewingAlbumId = null;
+        const photosView = document.getElementById('photosView');
+        const albumsGrid = document.getElementById('albumsGrid');
+
+        if (photosView) {
+            photosView.style.display = 'none';
+        }
+        if (albumsGrid) {
+            albumsGrid.style.removeProperty('display');
+            albumsGrid.style.display = 'grid';
+        }
     }
 
     function openLightbox(src) {
