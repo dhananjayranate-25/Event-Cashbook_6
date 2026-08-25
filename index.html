@@ -1590,15 +1590,6 @@ async function loadHomeGalleryPreview() {
             el.style.setProperty('opacity', '1', 'important');
             el.style.setProperty('visibility', 'visible', 'important');
             el.classList.add('visible');
-            if (el.querySelectorAll) {
-                el.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .animate-fade-up, .pdf-card-home, .committee-member, .utsav-card, .donation-card').forEach(child => {
-                    child.classList.add('visible');
-                    child.style.setProperty('opacity', '1', 'important');
-                    child.style.setProperty('transform', 'none', 'important');
-                    child.style.setProperty('animation', 'none', 'important');
-                    child.style.setProperty('visibility', 'visible', 'important');
-                });
-            }
         };
 
         // Hide everything first
@@ -3135,24 +3126,18 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
-    // Automatically pre-render canvases silently after page load to prevent mobile browser User Gesture timeout errors during share/download!
+    // Lightweight non-blocking library preload (keeps main thread 100% responsive for instant clicks)
     window.addEventListener('load', () => {
-        setTimeout(async () => {
+        const idlePreload = window.requestIdleCallback || ((cb) => setTimeout(cb, 1000));
+        idlePreload(async () => {
             try {
                 if (typeof loadPDFLibraries === 'function') await loadPDFLibraries();
                 const s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : {}) || {};
                 if (s && s.pdfCustomSettings && s.pdfCustomSettings.headerLogoUrl) {
-                    await fetchImageAsBase64(s.pdfCustomSettings.headerLogoUrl);
+                    fetchImageAsBase64(s.pdfCustomSettings.headerLogoUrl).catch(()=>{});
                 }
-                await captureDonationPoster();
-                await captureCustomPoster('vargani');
-                await captureCustomPoster('mahaprasad');
-                await captureCustomPoster('aagman');
-                console.log('All posters pre-rendered in background for zero-latency mobile sharing!');
-            } catch(e) {
-                console.log('Background poster pre-render info:', e);
-            }
-        }, 2000);
+            } catch(e) {}
+        });
     });
 
     async function captureDonationPoster(forceRefresh = false) {

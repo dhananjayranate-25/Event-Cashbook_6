@@ -5366,3 +5366,19 @@ img {
             }
         }
     
+
+/* Instant Touch & Click Response Optimization */
+* {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.btn, .btn-tab, .action-btn, .pdf-card-btn, button, .whatsapp-btn, a {
+    touch-action: manipulation !important;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.btn:active, button:active, .action-btn:active, .pdf-card-btn:active, .whatsapp-btn:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.05s ease !important;
+}
