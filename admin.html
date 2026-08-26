@@ -727,6 +727,14 @@
                     </div>
                 </div>
                 
+                
+                <div style="margin: 25px 0 15px 0; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                    <button class="btn btn-primary ripple" onclick="saveAllCommitteeMembers()" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 16px; padding: 12px 24px; box-shadow: 0 4px 15px rgba(16,185,129,0.4);">
+                        <i class="fas fa-save"></i> सर्व कार्यकारिणी बदल सेव्ह करा (Save All)
+                    </button>
+                    <span id="saveAllStatus" style="align-self: center; font-size: 15px; font-weight: bold;"></span>
+                </div>
+
                 <div id="extra-members-container"></div>
                 <div style="margin-top: 20px; text-align: center;">
                     <button class="btn btn-primary ripple" onclick="addNewMemberSlot()" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">+ Add New Member (नवीन सदस्य जोडा)</button>
@@ -2755,6 +2763,35 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             }
         });
 
+        
+        async function saveAllCommitteeMembers() {
+            const statusElem = document.getElementById('saveAllStatus');
+            if (statusElem) {
+                statusElem.style.color = '#fbbf24';
+                statusElem.innerHTML = '<i class="fas fa-spinner fa-spin"></i> सर्व सेव्ह होत आहे...';
+            }
+
+            const rolesToSave = ['president', 'treasurer'];
+            for (let i = 1; i <= currentMemberCount; i++) {
+                rolesToSave.push('member' + i);
+            }
+
+            let savedCount = 0;
+            for (const r of rolesToSave) {
+                const nameEl = document.getElementById(r + 'Name');
+                if (nameEl && nameEl.value.trim()) {
+                    await saveCommitteeMember(r);
+                    savedCount++;
+                }
+            }
+
+            if (statusElem) {
+                statusElem.style.color = '#10b981';
+                statusElem.innerHTML = '<i class="fas fa-check-circle"></i> सर्व बदल यशस्वीरित्या सेव्ह झाले!';
+                setTimeout(() => statusElem.innerHTML = '', 4000);
+            }
+        }
+    
         async function saveCommitteeMember(role) {
             const statusElem = document.getElementById(role + 'Status');
             statusElem.style.color = '#fff';

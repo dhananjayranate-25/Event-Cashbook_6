@@ -2237,6 +2237,7 @@ const regNoElem = document.getElementById('displayRegNo');
             if (result.success && Array.isArray(result.data)) {
                 window.currentCommitteeData = result.data;
                 localStorage.setItem('committeeCache', JSON.stringify(result.data));
+                window.currentCommitteeData = result.data;
                 renderCommittee(result.data);
             }
         } catch(e) {
@@ -3413,15 +3414,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         
         let dynamicMembersHTML = '';
         if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
-            const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
             let orderedData = [...window.currentCommitteeData];
-            orderedData.sort((a, b) => {
-                let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
-                let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
-                if (indexA === -1) indexA = 999;
-                if (indexB === -1) indexB = 999;
-                return indexA - indexB;
-            });
+            orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
             
             let rows = [];
             for (let i = 0; i < orderedData.length; i += 4) {
@@ -3737,15 +3731,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         
         let dynamicMembersHTML = '';
         if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
-            const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
             let orderedData = [...window.currentCommitteeData];
-            orderedData.sort((a, b) => {
-                let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
-                let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
-                if (indexA === -1) indexA = 999;
-                if (indexB === -1) indexB = 999;
-                return indexA - indexB;
-            });
+            orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
             
             let rows = [];
             for (let i = 0; i < orderedData.length; i += 4) {
@@ -3965,15 +3952,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             
             let shareTextBase = customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर \n\n🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com\n\n===================\nउत्सव कार्यकारिणी\n===================\n`;
             if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
-                const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
                 let orderedData = [...window.currentCommitteeData];
-                orderedData.sort((a, b) => {
-                    let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
-                    let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
-                    if (indexA === -1) indexA = 999;
-                    if (indexB === -1) indexB = 999;
-                    return indexA - indexB;
-                });
+            orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
                 orderedData.forEach(m => {
                     let d = m.designation || '';
                     if (!d) {
@@ -4095,15 +4075,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
             let shareTextBase = customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर \n\n🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com\n\n===================\nउत्सव कार्यकारिणी\n===================\n`;
             if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
-                const desiredOrder = ['तेजस फटांगरे', 'धीरज झावरे', 'आदित्य मते', 'सार्थक माताडे', 'धनंजय रणाते', 'ओंकार वर्पे', 'तेजस देशमुख', 'तेजस वर्पे', 'वैभव सांगळे', 'निलेश कदम', 'शुभम पेटकर'];
                 let orderedData = [...window.currentCommitteeData];
-                orderedData.sort((a, b) => {
-                    let indexA = desiredOrder.indexOf(a.name ? a.name.trim() : '');
-                    let indexB = desiredOrder.indexOf(b.name ? b.name.trim() : '');
-                    if (indexA === -1) indexA = 999;
-                    if (indexB === -1) indexB = 999;
-                    return indexA - indexB;
-                });
+            orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
                 orderedData.forEach(m => {
                     let d = m.designation || '';
                     if (!d) {
