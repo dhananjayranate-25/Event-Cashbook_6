@@ -2448,6 +2448,7 @@ const regNoElem = document.getElementById('displayRegNo');
             const e = entries[i];
             const ci = parseFloat(e.cash_in) || 0;
             const co = parseFloat(e.cash_out) || 0;
+            runningBalance += ci - co;
             const isOnline = (e.mode === 'Online' || e.mode === 'ऑनलाइन');
             const modeClass = isOnline ? 'online' : 'cash';
             const modeText = isOnline ? 'ऑनलाइन' : 'कॅश';
