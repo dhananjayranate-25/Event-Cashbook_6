@@ -24,7 +24,7 @@
     <meta name="twitter:image" content="https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=715">
+    <link rel="stylesheet" href="style.css?v=1787746884653">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
@@ -2136,9 +2136,13 @@ const regNoElem = document.getElementById('displayRegNo');
                 }
                 const mobileClean = member.mobile ? member.mobile.replace(/[^0-9+]/g, '') : '';
                 const mobileHtml = member.mobile ? `
-                    <a href="tel:${mobileClean}" class="member-phone" onclick="event.stopPropagation();" title="कॉल करा : ${member.mobile}">
-                        <span class="member-phone-label"><i class="fas fa-phone-alt"></i> मो. नं.</span>
-                        <span class="member-phone-num">${member.mobile}</span>
+                    <a href="tel:${mobileClean}" class="member-phone" onclick="event.stopPropagation();" title="कॉल करा : ${member.mobile}" style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; text-align: center !important; padding: 6px 12px !important; border-radius: 12px !important; margin: 8px auto 0 auto !important; text-decoration: none !important; width: fit-content !important; max-width: 96% !important;">
+                        <span class="member-phone-label" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important; font-size: 11.5px !important; color: #ffd700 !important; font-weight: 700 !important; white-space: nowrap !important; line-height: 1.2 !important;">
+                            <i class="fas fa-phone-alt" style="font-size: 9.5px !important; margin-right: 2px !important;"></i> मो. नं.
+                        </span>
+                        <span class="member-phone-num" style="display: block !important; font-size: 13px !important; font-weight: 700 !important; color: #ffffff !important; letter-spacing: 0.8px !important; margin-top: 2px !important; white-space: nowrap !important; line-height: 1.2 !important;">
+                            ${member.mobile}
+                        </span>
                     </a>
                 ` : '<p class="member-phone" style="display:none;"></p>';
                 const memberName = member.name || 'नाव टाका';
