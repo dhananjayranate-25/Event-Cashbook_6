@@ -378,6 +378,7 @@ header::after {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--gold-light);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     animation: glow-pulse 2s ease-in-out infinite;
     max-width: 100%;
@@ -432,6 +433,7 @@ header::after {
 
 .card-glass {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     padding: 30px;
@@ -556,6 +558,7 @@ header::after {
 
 .form-container {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 24px;
@@ -982,6 +985,7 @@ header::after {
 
 .table-container {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 24px;
@@ -1679,6 +1683,7 @@ footer[style*="text-align: left"] {
 
 .info-card {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 24px;
@@ -1728,6 +1733,7 @@ footer[style*="text-align: left"] {
 
 .year-selector-container {
     background: linear-gradient(135deg, rgba(232,121,249,0.05), rgba(192,38,211,0.03));
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(251,191,36,0.1);
     border-radius: 20px;
@@ -1840,6 +1846,7 @@ footer[style*="text-align: left"] {
 
 .create-cashbook-section .year-selector-container {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 24px;
@@ -1873,6 +1880,7 @@ footer[style*="text-align: left"] {
     flex-wrap: wrap;
     padding: 10px;
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
@@ -1922,6 +1930,7 @@ footer[style*="text-align: left"] {
     z-index: 9999;
     align-items: center;
     justify-content: center;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
 }
 
@@ -2044,6 +2053,7 @@ footer[style*="text-align: left"] {
 /* PDF Upload Section */
 .pdf-upload-section {
     background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     border-radius: 16px;
@@ -2100,6 +2110,7 @@ footer[style*="text-align: left"] {
 .uploaded-pdfs-section {
     margin: 30px 0;
     background: linear-gradient(135deg, rgba(232,121,249,0.05), rgba(192,38,211,0.03));
+    -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
     border: 1px solid rgba(251,191,36,0.12);
     border-radius: 20px;
@@ -3559,6 +3570,7 @@ footer::after {
     border-radius: 20px;
     border: 1px solid rgba(232, 121, 249, 0.2);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 
@@ -3720,8 +3732,10 @@ footer::after {
     text-align: center;
     background: linear-gradient(145deg, rgba(38, 20, 56, 0.85), rgba(18, 9, 28, 0.95));
     border: 1.5px solid rgba(255, 215, 0, 0.4);
-    backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+    -webkit--webkit-backdrop-filter: blur(16px);
+backdrop-filter: blur(16px);
     padding: 24px 16px 20px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 15px rgba(255, 215, 0, 0.15);
@@ -3891,6 +3905,7 @@ footer::after {
     border: 1px solid rgba(255, 215, 0, 0.3);
     border-top: 5px solid #FFD700;
     border-bottom: 3px solid #FF8C00;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 
@@ -5445,6 +5460,7 @@ img {
     transform: translateY(-20px) scale(0.95);
     transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: auto;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 .marathi-toast-item.visible {
