@@ -2668,8 +2668,8 @@ const regNoElem = document.getElementById('displayRegNo');
         const day = d.getDate().toString().padStart(2, '0');
         const month = marathiMonths[d.getMonth()];
         if (shortYear) {
-            const year2 = d.getFullYear().toString().slice(-2);
-            return `<span class="date-dm">${day} ${month}</span> <span class="date-y">${year2}</span>`;
+            const fullYear = d.getFullYear();
+            return `<span class="date-dm">${day} ${month}</span><span class="date-y">${fullYear}</span>`;
         } else {
             const fullYear = d.getFullYear();
             return `${day} ${month} ${fullYear}`;

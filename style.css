@@ -5056,7 +5056,7 @@ body.mobile-hishob-navbar .nav-links.active a.nav-donate-btn {
     .year-section th:nth-child(6), .year-section td:nth-child(6) { width: 13% !important; text-align: center !important; padding: 12px 4px !important; }
     .year-section th:nth-child(7), .year-section td:nth-child(7) { width: 15% !important; text-align: center !important; padding: 12px 4px !important; }
     .year-section th { white-space: nowrap !important; }
-    .date-y { display: inline !important; }
+    .date-y { display: block !important; margin-top: 2px; font-size: 0.9em; }
 }
 
 /* Symmetrical balanced columns */
@@ -5536,3 +5536,6 @@ img {
         font-size: 13.5px !important;
     }
 }
+
+.date-dm { display: block !important; white-space: nowrap !important; line-height: 1.25 !important; }
+.date-y { display: block !important; font-size: 0.9em !important; margin-top: 2px !important; line-height: 1.25 !important; }
