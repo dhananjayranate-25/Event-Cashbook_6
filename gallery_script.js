@@ -347,7 +347,12 @@
                     } else {
                         photoUrl = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%23bdbdbd'/%3E%3Cpath d='M20,90 Q50,50 80,90' stroke='%23bdbdbd' stroke-width='10' fill='none'/%3E%3C/svg%3E";
                     }
-                    const mobileHtml = member.mobile ? `<p class="member-phone">मो.नं ${member.mobile}</p>` : '<p class="member-phone" style="display:none;"></p>';
+                    const mobileClean = member.mobile ? member.mobile.replace(/[^0-9+]/g, '') : '';
+                    const mobileHtml = member.mobile ? `
+                        <a href="tel:${mobileClean}" class="member-phone" onclick="event.stopPropagation();" title="कॉल करा : ${member.mobile}">
+                            <i class="fas fa-phone-alt" style="font-size: 10px;"></i> मो.नं ${member.mobile}
+                        </a>
+                    ` : '<p class="member-phone" style="display:none;"></p>';
                     const memberName = member.name || 'नाव टाका';
                     
                     return `

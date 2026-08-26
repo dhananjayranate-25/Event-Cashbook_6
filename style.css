@@ -5607,3 +5607,34 @@ img {
         min-width: 8px !important;
     }
 }
+
+
+/* Committee Member Phone Call Button */
+.member-phone {
+    font-size: 0.85rem !important;
+    color: #ffe89e !important;
+    margin: 6px 0 0 0 !important;
+    font-weight: 600 !important;
+    background: rgba(255, 215, 0, 0.15) !important;
+    padding: 5px 14px !important;
+    border-radius: 50px !important;
+    border: 1px solid rgba(255, 215, 0, 0.35) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    transition: all 0.25s ease !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.member-phone:hover, .member-phone:active {
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #ffffff !important;
+    border-color: #34d399 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+}
