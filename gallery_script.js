@@ -599,7 +599,7 @@
 
         
         const canvas = await html2canvas(iframe.contentDocument.body, {
-            scale: 3.5,
+            scale: 3.0,
             windowWidth: 794,
             width: 794,
             useCORS: true,
@@ -638,7 +638,7 @@
             ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
             
-            const imgData = pageCanvas.toDataURL('image/jpeg', 1.0);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.94);
             const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
             
             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight, undefined, 'SLOW');
@@ -957,7 +957,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
-                resolve(canvas.toDataURL('image/jpeg', 1.0));
+                resolve(canvas.toDataURL('image/jpeg', 0.94));
             };
             img.onerror = () => resolve('');
             img.src = 'logo/pdf_logo.jpeg?v=' + Date.now();
@@ -1063,7 +1063,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
             await new Promise(r => setTimeout(r, 500));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 3.5, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true, logging: false
+                scale: 3.0, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true, logging: false
             });
             document.body.removeChild(iframe);
             
@@ -1074,7 +1074,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             const mergedPdf = await PDFDocument.create();
             
             const coverPage = mergedPdf.addPage([595.28, 841.89]);
-            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 1.0));
+            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.94));
             coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
             
             const existingPdf = await PDFDocument.load(uploadBytes);

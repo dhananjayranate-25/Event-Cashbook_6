@@ -2563,7 +2563,7 @@ const regNoElem = document.getElementById('displayRegNo');
 
         
         const canvas = await html2canvas(iframe.contentDocument.body, {
-            scale: 3.5,
+            scale: 3.0,
             windowWidth: 794,
             width: 794,
             useCORS: true,
@@ -2576,6 +2576,7 @@ const regNoElem = document.getElementById('displayRegNo');
                 if (b) {
                     b.style.textRendering = 'geometricPrecision';
                     b.style.webkitFontSmoothing = 'antialiased';
+                    b.style.fontSmooth = 'always';
                 }
             }
         });
@@ -2609,7 +2610,7 @@ const regNoElem = document.getElementById('displayRegNo');
             ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
             
-            const imgData = pageCanvas.toDataURL('image/jpeg', 1.0);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.94);
             const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
             
             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight, undefined, 'SLOW');
