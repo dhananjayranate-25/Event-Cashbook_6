@@ -5539,3 +5539,71 @@ img {
 
 .date-dm { display: block !important; white-space: nowrap !important; line-height: 1.25 !important; }
 .date-y { display: block !important; font-size: 0.9em !important; margin-top: 2px !important; line-height: 1.25 !important; }
+
+
+/* ========================================================
+   100% STABLE, PERSISTENT & NON-FLICKERING SECTION HEADERS
+   ======================================================== */
+.section-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 10 !important;
+    margin-top: 5px !important;
+    margin-bottom: 25px !important;
+}
+
+.section-header h1,
+.section-header h2,
+.section-header h3,
+.section-header h4,
+.niyojan-same-heading {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: inline-block !important;
+    color: #fbbf24 !important;
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.4) !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    animation: none !important;
+    transform: none !important;
+}
+
+.header-line {
+    flex: 1 1 auto !important;
+    min-width: 15px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, transparent, #fbbf24, #e879f9, #fbbf24, transparent) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+@media (max-width: 480px) {
+    .section-header {
+        gap: 6px !important;
+        margin-bottom: 18px !important;
+    }
+    .section-header h1,
+    .section-header h2,
+    .section-header h3,
+    .section-header h4,
+    .niyojan-same-heading {
+        font-size: 1.2rem !important;
+        padding: 0 6px !important;
+        white-space: normal !important;
+        text-align: center !important;
+    }
+    .header-line {
+        min-width: 8px !important;
+    }
+}
