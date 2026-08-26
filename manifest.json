@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "Shivsrushti Mandal",
   "short_name": "Shivsrushti",
   "description": "Shivsrushti Boyz Utsav Mandal, Sangamner",
@@ -8,12 +8,12 @@
   "theme_color": "#ff8c00",
   "icons": [
     {
-      "src": "/logo/Shivsrushti.jpg",
+      "src": "logo/logo.jpeg",
       "sizes": "192x192",
       "type": "image/jpeg"
     },
     {
-      "src": "/logo/Shivsrushti.jpg",
+      "src": "logo/logo.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg"
     }
