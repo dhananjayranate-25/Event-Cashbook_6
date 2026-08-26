@@ -2137,7 +2137,8 @@ const regNoElem = document.getElementById('displayRegNo');
                 const mobileClean = member.mobile ? member.mobile.replace(/[^0-9+]/g, '') : '';
                 const mobileHtml = member.mobile ? `
                     <a href="tel:${mobileClean}" class="member-phone" onclick="event.stopPropagation();" title="कॉल करा : ${member.mobile}">
-                        <i class="fas fa-phone-alt" style="font-size: 10px;"></i> मो.नं ${member.mobile}
+                        <span class="member-phone-label"><i class="fas fa-phone-alt"></i> मो. नं.</span>
+                        <span class="member-phone-num">${member.mobile}</span>
                     </a>
                 ` : '<p class="member-phone" style="display:none;"></p>';
                 const memberName = member.name || 'नाव टाका';

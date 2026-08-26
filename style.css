@@ -5611,30 +5611,62 @@ img {
 
 /* Committee Member Phone Call Button */
 .member-phone {
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
     color: #ffe89e !important;
-    margin: 6px 0 0 0 !important;
+    margin: 8px auto 0 auto !important;
     font-weight: 600 !important;
-    background: rgba(255, 215, 0, 0.15) !important;
-    padding: 5px 14px !important;
-    border-radius: 50px !important;
+    background: rgba(255, 215, 0, 0.12) !important;
+    padding: 6px 14px !important;
+    border-radius: 12px !important;
     border: 1px solid rgba(255, 215, 0, 0.35) !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
     display: inline-flex !important;
+    flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
     text-decoration: none !important;
     cursor: pointer !important;
     transition: all 0.25s ease !important;
     position: relative !important;
     z-index: 10 !important;
+    min-width: 110px !important;
+    text-align: center !important;
+}
+
+.member-phone-label {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    font-size: 11px !important;
+    color: #ffd700 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.2 !important;
+}
+
+.member-phone-label i {
+    font-size: 9px !important;
+}
+
+.member-phone-num {
+    display: block !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    letter-spacing: 0.5px !important;
+    margin-top: 2px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
 }
 
 .member-phone:hover, .member-phone:active {
     background: linear-gradient(135deg, #10b981, #059669) !important;
-    color: #ffffff !important;
     border-color: #34d399 !important;
     transform: scale(1.05) !important;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.45) !important;
+}
+
+.member-phone:hover .member-phone-label, .member-phone:hover .member-phone-num {
+    color: #ffffff !important;
 }
