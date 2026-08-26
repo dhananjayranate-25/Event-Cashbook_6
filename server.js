@@ -936,12 +936,18 @@ app.post('/api/portal/ping', express.json(), async (req, res) => {
 
 app.post('/api/portal/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = await PortalUser.findOne({ username, password });
-        if (!user) {
+        const username = (req.body.username || '').trim();
+        const password = (req.body.password || '').trim();
+        if (!username || !password) {
+            return res.status(400).json({ success: false, message: 'Invalid username or password' });
+        }
+        const user = await PortalUser.findOne({ 
+            username: { $regex: new RegExp('^' + username.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&') + '$', 'i') } 
+        });
+        if (!user || user.password.trim() !== password) {
             return res.status(401).json({ success: false, message: 'Invalid username or password' });
         }
-        res.json({ success: true, user: { _id: user._id, id: user._id, name: user.name, role: user.role, photoUrl: user.photoUrl, totalFunds: user.totalFunds, totalSpent: user.totalSpent, balance: user.balance } });
+        res.json({ success: true, user: { _id: user._id, id: user._id, name: user.name, username: user.username, role: user.role, photoUrl: user.photoUrl, totalFunds: user.totalFunds, totalSpent: user.totalSpent, balance: user.balance } });
     } catch(err) {
         res.status(500).json({ success: false, message: err.message });
     }
@@ -1026,8 +1032,15 @@ app.get('/api/portal/users/:id', async (req, res) => {
 
 app.post('/api/portal/users', async (req, res) => {
     try {
-        const { name, username, password } = req.body;
-        const existing = await PortalUser.findOne({ username });
+        const name = (req.body.name || '').trim();
+        const username = (req.body.username || '').trim();
+        const password = (req.body.password || '').trim();
+        if (!username || !password) {
+            return res.status(400).json({ success: false, message: 'Username and password are required' });
+        }
+        const existing = await PortalUser.findOne({ 
+            username: { $regex: new RegExp('^' + username.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&') + '$', 'i') } 
+        });
         if (existing) {
             return res.status(400).json({ success: false, message: 'Username already exists' });
         }
@@ -1048,12 +1061,24 @@ app.post('/api/portal/users', async (req, res) => {
 
 app.put('/api/portal/users/:id', async (req, res) => {
     try {
-        const { name, username, password } = req.body;
-        const existing = await PortalUser.findOne({ username, _id: { $ne: req.params.id } });
+        const name = (req.body.name || '').trim();
+        const username = (req.body.username || '').trim();
+        const password = (req.body.password || '').trim();
+        if (!username) {
+            return res.status(400).json({ success: false, message: 'Username cannot be empty' });
+        }
+        const existing = await PortalUser.findOne({ 
+            username: { $regex: new RegExp('^' + username.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&') + '$', 'i') }, 
+            _id: { $ne: req.params.id } 
+        });
         if (existing) {
             return res.status(400).json({ success: false, message: 'Username already exists' });
         }
-        const user = await PortalUser.findByIdAndUpdate(req.params.id, { name, username, password }, { new: true });
+        const updateData = { name, username };
+        if (password) {
+            updateData.password = password;
+        }
+        const user = await PortalUser.findByIdAndUpdate(req.params.id, updateData, { new: true });
         res.json({ success: true, user });
     } catch(err) {
         res.status(500).json({ success: false, message: err.message });
