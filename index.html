@@ -1806,6 +1806,7 @@ async function loadHomeGalleryPreview() {
                 let html = '';
                 aartis.forEach(aarti => {
                     const formattedDate = formatDate(aarti.date);
+                    const phone = (aarti.phone || aarti.mobile || '').trim();
                     
                     html += `
                         <div class="aarti-item glass-panel" style="padding: 15px; margin-bottom: 15px; border-left: 4px solid #ffcc00; background: rgba(255,255,255,0.1);">
@@ -1814,6 +1815,17 @@ async function loadHomeGalleryPreview() {
                                 <div><strong style="color: #ffcc00;">तारीख:</strong> ${formattedDate}</div>
                                 <div><strong style="color: #ffcc00;">वेळ:</strong> ${aarti.timeOfDay}</div>
                             </div>
+                            ${phone ? `
+                                <div style="margin-top: 10px; color: #fff; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                    <strong style="color: #ffcc00;">मोबाईल नंबर:</strong> 
+                                    <a href="tel:${phone.replace(/\s+/g, '')}" style="color: #60a5fa; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                        <i class="fas fa-phone-alt" style="font-size: 11px;"></i>${phone}
+                                    </a>
+                                    <a href="https://wa.me/91${phone.replace(/[^0-9]/g, '').slice(-10)}" target="_blank" style="color: #25D366; text-decoration: none; margin-left: 4px;" title="WhatsApp">
+                                        <i class="fab fa-whatsapp" style="font-size: 14px;"></i>
+                                    </a>
+                                </div>
+                            ` : ''}
                             ${aarti.pujaDetails ? `<div style="margin-top: 10px; color: #eee; font-size: 0.85rem;"><strong style="color: #ffcc00;">इतर माहिती:</strong> ${aarti.pujaDetails}</div>` : ''}
                             ${aarti.addedBy ? `<div style="display:flex; justify-content:flex-end; margin-top: 12px; grid-column: 1 / -1;"><span style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 15px; font-size: 0.75rem; color:#aaa;"><i class="fas fa-user-edit" style="margin-right:5px; color:#ffcc00;"></i>${aarti.addedBy}</span></div>` : ''}
                         </div>
