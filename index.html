@@ -2761,30 +2761,8 @@ const regNoElem = document.getElementById('displayRegNo');
                     '</div>' +
                     '<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:12px; padding:0 10px;">';
                 
-                
                 let orderedData = [...comData.data];
-                const desiredOrder = [
-                    "तेजस फटांगरे",
-                    "धीरज झावरे",
-                    "आदित्य मते",
-                    "सार्थक माताडे",
-                    "धनंजय रणाते",
-                    "ओंकार वर्पे",
-                    "तेजस देशमुख",
-                    "तेजस वर्पे",
-                    "वैभव सांगळे",
-                    "निलेश कदम",
-                    "शुभम पेटकर"
-                ];
-                orderedData.sort((a, b) => {
-                    let nameA = a.name ? a.name.trim() : "";
-                    let nameB = b.name ? b.name.trim() : "";
-                    let indexA = desiredOrder.indexOf(nameA);
-                    let indexB = desiredOrder.indexOf(nameB);
-                    if (indexA === -1) indexA = 999;
-                    if (indexB === -1) indexB = 999;
-                    return indexA - indexB;
-                });
+                orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
                 
                 let rowsData = [];
                 for (let i = 0; i < orderedData.length; i += 4) {
@@ -3826,12 +3804,12 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             `;
         }
 
-        committeeListBlockCustom.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; padding: 2px 0; position: relative; z-index: 10; gap: 10px; white-space: nowrap;">
-                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
-                  <div style="color: #ffd700; font-size: 20px;">✧</div>
-                  <div style="color: #ffd700; font-size: 30px; font-weight: bold; font-family: 'Mukta', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0; line-height: 1;">उत्सव कार्यकारिणी</div>
-                  <div style="color: #ffd700; font-size: 20px;">✧</div>
-                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
+        committeeListBlockCustom.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; padding: 2px 0; position: relative; z-index: 10; gap: 14px; white-space: nowrap; width: 100%;">
+                  <div style="flex: 1; max-width: 130px; height: 2px; background: linear-gradient(90deg, transparent, #fbbf24, #e879f9, #fbbf24, transparent);"></div>
+                  <div style="color: #fbbf24; font-size: 16px; opacity: 0.8;">✦</div>
+                  <div style="color: #fbbf24; font-size: 34px; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-shadow: 0 0 15px rgba(251, 191, 36, 0.45); margin: 0; line-height: 1.2; letter-spacing: 0.5px;">उत्सव कार्यकारिणी</div>
+                  <div style="color: #fbbf24; font-size: 16px; opacity: 0.8;">✦</div>
+                  <div style="flex: 1; max-width: 130px; height: 2px; background: linear-gradient(90deg, transparent, #fbbf24, #e879f9, #fbbf24, transparent);"></div>
               </div>
               <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 0; padding: 0 10px;">
                   ${dynamicMembersHTML}
