@@ -2559,14 +2559,21 @@ const regNoElem = document.getElementById('displayRegNo');
 
         
         const canvas = await html2canvas(iframe.contentDocument.body, {
-            scale: 2.5,
+            scale: 3.5,
             windowWidth: 794,
             width: 794,
             useCORS: true,
             backgroundColor: '#ffffff',
             allowTaint: true,
             logging: false,
-            imageTimeout: 15000
+            imageTimeout: 20000,
+            onclone: (clonedDoc) => {
+                const b = clonedDoc.body;
+                if (b) {
+                    b.style.textRendering = 'geometricPrecision';
+                    b.style.webkitFontSmoothing = 'antialiased';
+                }
+            }
         });
         
         document.body.removeChild(iframe);
@@ -2598,10 +2605,10 @@ const regNoElem = document.getElementById('displayRegNo');
             ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
             
-            const imgData = pageCanvas.toDataURL('image/jpeg', 0.98);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 1.0);
             const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
             
-            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight, undefined, 'FAST');
+            pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight, undefined, 'SLOW');
         }
         
         pdf.save(filename || 'Cashbook.pdf');
@@ -3540,16 +3547,19 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
 
         const canvas = await html2canvas(clone, {
-            scale: 3,
+            scale: 3.5,
             useCORS: true,
             allowTaint: true,
             backgroundColor: '#1a1a1a',
             logging: false,
             windowWidth: 1200,
-            imageTimeout: 15000,
+            imageTimeout: 25000,
             onclone: (clonedDoc) => {
                 const el = clonedDoc.body;
-                if (el) el.style.textRendering = 'optimizeLegibility';
+                if (el) {
+                    el.style.textRendering = 'geometricPrecision';
+                    el.style.webkitFontSmoothing = 'antialiased';
+                }
             }
         });
         
