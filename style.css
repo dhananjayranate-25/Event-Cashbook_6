@@ -4795,7 +4795,7 @@ backdrop-filter: blur(16px);
     .year-section th:nth-child(7), .year-section td:nth-child(7) { width: 15% !important; text-align: center !important; white-space: nowrap !important; padding: 6px 1px !important; }
 
     .date-dm { white-space: nowrap !important; }
-    .date-y { display: block !important; margin-top: 1px; }
+    .date-y { display: block !important; margin-top: 1px; color: inherit !important; font-weight: 600 !important; }
 
     .mode-badge {
         font-size: 8px !important;
