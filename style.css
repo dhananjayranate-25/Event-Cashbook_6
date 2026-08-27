@@ -5679,3 +5679,23 @@ img {
 .member-phone:hover .member-phone-label, .member-phone:hover .member-phone-num {
     color: #ffffff !important;
 }
+
+/* Committee Member Contact Row & WhatsApp Action */
+.member-contact-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+.member-wa-btn {
+    transition: transform 0.22s ease, box-shadow 0.22s ease !important;
+}
+.member-wa-btn:hover {
+    transform: scale(1.12) translateY(-2px) !important;
+    box-shadow: 0 6px 18px rgba(37, 211, 102, 0.6) !important;
+    filter: brightness(1.1) !important;
+}
+.member-wa-btn:active {
+    transform: scale(0.95) !important;
+}

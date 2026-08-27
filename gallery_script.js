@@ -348,11 +348,25 @@
                         photoUrl = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%23bdbdbd'/%3E%3Cpath d='M20,90 Q50,50 80,90' stroke='%23bdbdbd' stroke-width='10' fill='none'/%3E%3C/svg%3E";
                     }
                     const mobileClean = member.mobile ? member.mobile.replace(/[^0-9+]/g, '') : '';
+                    const rawNum = (member.mobile || '').replace(/[^0-9]/g, '');
+                    const waNumber = rawNum.length === 10 ? rawNum : (rawNum.startsWith('91') && rawNum.length === 12 ? rawNum.substring(2) : rawNum);
+                    const memberNameClean = member.name || '';
+                    const waText = encodeURIComponent('नमस्ते ' + memberNameClean + ', मी शिवसृष्टी मंडळाबाबत संपर्क साधत आहे.');
                     const mobileHtml = member.mobile ? `
-                        <a href="tel:${mobileClean}" class="member-phone" onclick="event.stopPropagation();" title="कॉल करा : ${member.mobile}">
-                            <i class="fas fa-phone-alt" style="font-size: 10px;"></i> मो.नं ${member.mobile}
-                        </a>
-                    ` : '<p class="member-phone" style="display:none;"></p>';
+                        <div class="member-contact-row" onclick="event.stopPropagation();" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; margin: 8px auto 0 auto !important; width: 100% !important;">
+                            <a href="tel:${mobileClean}" class="member-phone" title="कॉल करा : ${member.mobile}" style="display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; text-align: center !important; padding: 5px 12px !important; border-radius: 12px !important; text-decoration: none !important; margin: 0 !important; flex: 1 !important; max-width: 140px !important;">
+                                <span class="member-phone-label" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important; font-size: 11px !important; color: #ffd700 !important; font-weight: 700 !important; white-space: nowrap !important; line-height: 1.1 !important;">
+                                    <i class="fas fa-phone-alt" style="font-size: 9px !important;"></i> मो. नं.
+                                </span>
+                                <span class="member-phone-num" style="display: block !important; font-size: 12.5px !important; font-weight: 700 !important; color: #ffffff !important; letter-spacing: 0.5px !important; margin-top: 2px !important; white-space: nowrap !important; line-height: 1.1 !important;">
+                                    ${member.mobile}
+                                </span>
+                            </a>
+                            <a href="https://api.whatsapp.com/send?phone=91${waNumber}&text=${waText}" target="_blank" rel="noopener noreferrer" class="member-wa-btn" title="${memberNameClean} यांना WhatsApp करा" style="display: flex !important; align-items: center !important; justify-content: center !important; width: 38px !important; height: 38px !important; min-width: 38px !important; border-radius: 50% !important; background: linear-gradient(135deg, #25D366, #128C7E) !important; color: #ffffff !important; font-size: 20px !important; text-decoration: none !important; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.45) !important; border: 1.5px solid #25D366 !important; cursor: pointer !important;">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    ` : '<div class="member-contact-row" style="display:none;"></div>';
                     const memberName = member.name || 'नाव टाका';
                     
                     return `
