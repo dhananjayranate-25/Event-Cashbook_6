@@ -613,7 +613,7 @@
         });
 
         const canvas = await html2canvas(iframe.contentDocument.body, {
-            scale: 3.2,
+            scale: 2.8,
             windowWidth: 794,
             width: 794,
             useCORS: true,
@@ -661,7 +661,7 @@
             ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
             
-            const imgData = pageCanvas.toDataURL('image/jpeg', 0.96);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.93);
             const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
             
             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight, undefined, 'SLOW');
@@ -1003,7 +1003,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
-                resolve(canvas.toDataURL('image/jpeg', 0.96));
+                resolve(canvas.toDataURL('image/jpeg', 0.93));
             };
             img.onerror = () => resolve('');
             img.src = 'logo/pdf_logo.jpeg?v=' + Date.now();
@@ -1120,7 +1120,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             const mergedPdf = await PDFDocument.create();
             
             const coverPage = mergedPdf.addPage([595.28, 841.89]);
-            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.96));
+            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.93));
             coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
             
             const existingPdf = await PDFDocument.load(uploadBytes);
