@@ -2260,19 +2260,19 @@ footer[style*="text-align: left"] {
 }
 .pdf-card-cover-mini .mini-subtitle {
     font-size: 9.5px !important;
-    color: #ffd700 !important;
+    color: #e879f9 !important;
     font-weight: 700 !important;
     letter-spacing: 0.5px !important;
     margin-bottom: 2px !important;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
+    text-shadow: 0 0 12px rgba(232, 121, 249, 0.6) !important;
 }
 .pdf-card-cover-mini .mini-tagline {
     font-size: 9.5px !important;
-    color: #ffd700 !important;
+    color: #e879f9 !important;
     font-weight: 700 !important;
     margin-bottom: 6px !important;
     letter-spacing: 0.5px !important;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4) !important;
+    text-shadow: 0 0 12px rgba(232, 121, 249, 0.6) !important;
 }
 .pdf-card-cover-mini .mini-year {
     font-size: 18px;
@@ -4929,17 +4929,17 @@ body.mobile-hishob-navbar .pdf-card-cover-mini .mini-divider {
 }
 body.mobile-hishob-navbar .pdf-card-cover-mini .mini-subtitle {
     font-size: 22px !important;
-    color: #ffd700 !important;
+    color: #e879f9 !important;
     font-weight: 700 !important;
     margin-bottom: 4px !important;
-    text-shadow: 0 0 12px rgba(255, 215, 0, 0.5) !important;
+    text-shadow: 0 0 15px rgba(232, 121, 249, 0.7) !important;
 }
 body.mobile-hishob-navbar .pdf-card-cover-mini .mini-tagline {
     font-size: 22px !important;
-    color: #ffd700 !important;
+    color: #e879f9 !important;
     font-weight: 700 !important;
     margin-bottom: 10px !important;
-    text-shadow: 0 0 12px rgba(255, 215, 0, 0.5) !important;
+    text-shadow: 0 0 15px rgba(232, 121, 249, 0.7) !important;
 }
 body.mobile-hishob-navbar .pdf-card-cover-mini .mini-year {
     font-size: 50px !important;
