@@ -756,7 +756,7 @@
         const month = marathiMonths[d.getMonth()];
         const fullYear = d.getFullYear();
         if (shortYear) {
-            return `<div class="date-dm" style="display:block; white-space:nowrap; font-weight:600; font-size:12px; line-height:1.2; color:#000000;">${day} ${month}</div><div class="date-y" style="display:block; white-space:nowrap; font-weight:600; font-size:11.5px; color:#000000; line-height:1.1; margin-top:2px;">${fullYear}</div>`;
+            return `<div class="date-dm" style="display:block; white-space:nowrap; font-weight:600; font-size:12px; line-height:1.2;">${day} ${month}</div><div class="date-y" style="display:block; white-space:nowrap; font-weight:600; font-size:11.5px; line-height:1.1; margin-top:2px;">${fullYear}</div>`;
         } else {
             return `${day} ${month} ${fullYear}`;
         }
