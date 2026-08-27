@@ -1509,6 +1509,7 @@
         function adminLogout() {
             sessionStorage.removeItem('adminLoggedIn');
             localStorage.removeItem('adminLoggedIn');
+            localStorage.removeItem('admin_saved_pwd');
             window.location.replace('login.html?logout=true');
         }
 
