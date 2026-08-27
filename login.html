@@ -169,6 +169,23 @@
     
     <script>
 
+        // Check if user just logged out
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('logout') === 'true') {
+            localStorage.removeItem('member_saved_user');
+            localStorage.removeItem('member_saved_pwd');
+            localStorage.removeItem('superadmin_saved_pwd');
+            localStorage.removeItem('admin_saved_pwd');
+            localStorage.removeItem('portalUser');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('adminLoggedIn');
+            sessionStorage.clear();
+            try {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } catch(e) {}
+        }
+
+
 const API_URL = ''; // Leave empty if same domain
 
         function showLoginForm(role) {
