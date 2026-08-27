@@ -2693,7 +2693,22 @@ const regNoElem = document.getElementById('displayRegNo');
             }
             const logoDataURL = await loadLogoForCover();
             const html = await generatePDFHTML(entries, year, logoDataURL);
-            await generatePDFFromHTML(html, true, `Cashbook_${year}.pdf`);
+            
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+                await generatePDFFromHTML(html, true, `Cashbook_${year}.pdf`);
+                if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+                return;
+            }
+            printWin.document.write(html);
+            printWin.document.close();
+            setTimeout(() => {
+                printWin.document.title = `अहवाल_${year}`;
+                try {
+                    printWin.focus();
+                    printWin.print();
+                } catch(e) {}
+            }, 600);
         } catch(e) { alert('त्रुटी आली: ' + e.message); }
         if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
     }
