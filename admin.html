@@ -44,7 +44,7 @@
         html.show-admin #adminPanel { display: block !important; }
     </style>
     <script>
-        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+        if (sessionStorage.getItem('adminLoggedIn') === 'true' || localStorage.getItem('adminLoggedIn') === 'true') {
             document.documentElement.classList.add('show-admin');
         } else {
             document.documentElement.classList.add('show-login');
@@ -985,6 +985,7 @@
                 const data = await res.json();
                 if (data.success) {
                     sessionStorage.setItem('adminLoggedIn', 'true');
+                    localStorage.setItem('adminLoggedIn', 'true');
                     document.getElementById('loginContainer').style.display = 'none';
                     document.getElementById('adminPanel').style.display = 'block';
                     if (window.loadYearsForAdmin) window.loadYearsForAdmin();
@@ -1507,12 +1508,13 @@
 
         function adminLogout() {
             sessionStorage.removeItem('adminLoggedIn');
-            window.location.replace('index.html');
+            localStorage.removeItem('adminLoggedIn');
+            window.location.replace('login.html?logout=true');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             // Check session persistence (if logged in from login.html)
-            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            if (sessionStorage.getItem('adminLoggedIn') === 'true' || localStorage.getItem('adminLoggedIn') === 'true') {
                 document.getElementById('loginContainer').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 // Wait a moment for script.js to load, then initialize

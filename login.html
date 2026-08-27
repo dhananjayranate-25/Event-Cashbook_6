@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
+    <script>
+        (function checkInstantAutoLogin() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('logout') === 'true' || urlParams.get('force') === 'true') {
+                return;
+            }
+            if (localStorage.getItem('adminLoggedIn') === 'true' || sessionStorage.getItem('adminLoggedIn') === 'true') {
+                window.location.replace('admin.html?v=' + Date.now());
+                return;
+            }
+            const userStr = localStorage.getItem('portalUser');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user && user.role === 'superadmin') {
+                        window.location.replace('superadmin.html?v=' + Date.now());
+                        return;
+                    } else if (user && user.role === 'member') {
+                        window.location.replace('member.html?v=' + Date.now());
+                        return;
+                    }
+                } catch(e) {}
+            }
+        })();
+    </script>
+
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff8c00">
     <meta charset="UTF-8">
@@ -239,6 +265,7 @@ const API_URL = ''; // Leave empty if same domain
                     const data = await res.json();
                     if (data.success) {
                         sessionStorage.setItem('adminLoggedIn', 'true');
+                        localStorage.setItem('adminLoggedIn', 'true');
                         window.location.replace('admin.html?v=' + new Date().getTime());
                     } else {
                         throw new Error(data.error || data.message || 'चुकीचा पासवर्ड! कृपया पुन्हा प्रयत्न करा.');

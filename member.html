@@ -1014,7 +1014,7 @@ table {
 
     window.onload = () => {
             const userStr = localStorage.getItem('portalUser');
-            if(!userStr) return window.location.replace('index.html');
+            if(!userStr) return window.location.replace('login.html?logout=true');
             currentUser = JSON.parse(userStr);
             if(currentUser.role !== 'member') return window.location.replace('index.html');
             
