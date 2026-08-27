@@ -451,13 +451,173 @@ table {
     }
 }
 
-</style>
+
+        /* ========================================================
+           EXACT PHOTO 1 MODAL STYLING (100% Guaranteed)
+           ======================================================== */
+        .modal {
+            display: none;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: rgba(0, 0, 0, 0.85) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            z-index: 99999 !important;
+            justify-content: center !important;
+            align-items: center !important;
+            padding: 16px !important;
+            box-sizing: border-box !important;
+        }
+        .modal.active {
+            display: flex !important;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #240a34, #12031c) !important;
+            border: 2px solid #ffd700 !important;
+            border-radius: 20px !important;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 215, 0, 0.25) !important;
+            padding: 24px 22px !important;
+            color: #ffffff !important;
+            width: 100% !important;
+            max-width: 480px !important;
+            box-sizing: border-box !important;
+            max-height: 90vh !important;
+            overflow-y: auto !important;
+            position: relative !important;
+        }
+        .modal-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 10px;
+        }
+        .modal-title {
+            color: #ffd700 !important;
+            margin: 0 !important;
+            font-size: 1.4rem !important;
+            font-family: 'Khand', 'Poppins', sans-serif !important;
+            font-weight: 700 !important;
+        }
+        .modal-close-icon {
+            color: #cbd5e1;
+            font-size: 26px;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .modal-close-icon:hover {
+            color: #ef4444;
+        }
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .modal-form label {
+            font-size: 13.5px !important;
+            color: #e2e8f0 !important;
+            font-weight: 600 !important;
+            display: block !important;
+            margin-bottom: 6px !important;
+            text-align: left !important;
+        }
+        .modal-form input[type="text"],
+        .modal-form input[type="number"],
+        .modal-form input[type="date"],
+        .modal-form input[type="time"],
+        .modal-form input[type="password"],
+        .modal-form select,
+        .modal-form textarea,
+        .modal-form .form-control,
+        .modal-form .form-control-full {
+            width: 100% !important;
+            padding: 11px 14px !important;
+            border-radius: 10px !important;
+            background: #1a0526 !important;
+            border: 1.5px solid #64748b !important;
+            color: #ffffff !important;
+            box-sizing: border-box !important;
+            font-size: 15px !important;
+            font-family: inherit !important;
+            outline: none !important;
+            transition: all 0.2s ease !important;
+            margin-bottom: 0 !important;
+        }
+        .modal-form input:focus,
+        .modal-form select:focus,
+        .modal-form textarea:focus {
+            border-color: #ffd700 !important;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.35) !important;
+            background: #1f072e !important;
+        }
+        .modal-form input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) !important;
+            cursor: pointer !important;
+        }
+        .modal-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .modal-action-buttons {
+            display: flex !important;
+            gap: 12px !important;
+            margin-top: 8px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .btn-save-modal {
+            flex: 1 !important;
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 15px !important;
+            padding: 12px 18px !important;
+            border-radius: 10px !important;
+            border: none !important;
+            cursor: pointer !important;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.45) !important;
+            text-align: center !important;
+            transition: all 0.2s ease !important;
+        }
+        .btn-save-modal:hover {
+            filter: brightness(1.1) !important;
+            transform: translateY(-1px) !important;
+        }
+        .btn-cancel-modal {
+            flex: 1 !important;
+            background: #2d2640 !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 15px !important;
+            padding: 12px 18px !important;
+            border-radius: 10px !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            transition: all 0.2s ease !important;
+        }
+        .btn-cancel-modal:hover {
+            background: #392b4f !important;
+        }
+
+    </style>
 
     <style>
         * {
             touch-action: manipulation; /* Removes 300ms tap delay on mobile */
         }
     </style>
+    <link rel="stylesheet" href="style.css?v=1787850865177">
 </head>
 <body>
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -611,12 +771,18 @@ table {
     <!-- Change Admin Password Modal -->
     <div class="modal" id="changeAdminPasswordModal">
         <div class="modal-content">
-            <h3 class="modal-title">Change Password</h3>
-            <form onsubmit="changeAdminPassword(event)">
-                <input type="password" id="newAdminPass" class="form-control" placeholder="New Password" required>
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
-                    <button type="submit" class="btn" style="background: var(--primary); color: var(--darker);">Update</button>
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-key"></i> पासवर्ड बदला (Change Password)</h3>
+                <span class="modal-close-icon" onclick="closeModals()">&times;</span>
+            </div>
+            <form onsubmit="changeAdminPassword(event)" class="modal-form">
+                <div>
+                    <label>नवीन पासवर्ड (New Password) *</label>
+                    <input type="password" id="newAdminPass" placeholder="नवीन पासवर्ड टाका" required>
+                </div>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">अपडेट सेव्ह करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModals()">रद्द करा</button>
                 </div>
             </form>
         </div>
@@ -625,31 +791,54 @@ table {
     <!-- Add Member Modal -->
     <div class="modal" id="addMemberModal">
         <div class="modal-content">
-            <h3 class="modal-title">Add New Member</h3>
-            <form onsubmit="addMember(event)">
-                <input type="text" id="memName" class="form-control" placeholder="Full Name" required>
-                <input type="text" id="memUser" class="form-control" placeholder="Username (for login)" required>
-                <input type="password" id="memPass" class="form-control" placeholder="Password" required>
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
-                    <button type="submit" class="btn">Add Member</button>
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-user-plus"></i> नवीन सदस्य जोडा (Add Member)</h3>
+                <span class="modal-close-icon" onclick="closeModals()">&times;</span>
+            </div>
+            <form onsubmit="addMember(event)" class="modal-form">
+                <div>
+                    <label>संपूर्ण नाव *</label>
+                    <input type="text" id="memName" placeholder="सदस्याचे नाव" required>
+                </div>
+                <div>
+                    <label>युझरनेम (Username) *</label>
+                    <input type="text" id="memUser" placeholder="लॉगिन युझरनेम" required>
+                </div>
+                <div>
+                    <label>पासवर्ड (Password) *</label>
+                    <input type="password" id="memPass" placeholder="पासवर्ड" required>
+                </div>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">सदस्य जोडा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModals()">रद्द करा</button>
                 </div>
             </form>
         </div>
     </div>
 
-    
     <!-- Edit Member Modal -->
     <div class="modal" id="editMemberModal">
         <div class="modal-content">
-            <h3 class="modal-title">Edit Member</h3>
-            <form onsubmit="editMember(event)">
-                <input type="text" id="editMemName" class="form-control" placeholder="Full Name" required>
-                <input type="text" id="editMemUser" class="form-control" placeholder="Username (for login)" required>
-                <input type="text" id="editMemPass" class="form-control" placeholder="Password" required>
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
-                    <button type="submit" class="btn">Update</button>
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-user-edit"></i> सदस्य माहिती बदला (Edit Member)</h3>
+                <span class="modal-close-icon" onclick="closeModals()">&times;</span>
+            </div>
+            <form onsubmit="editMember(event)" class="modal-form">
+                <div>
+                    <label>संपूर्ण नाव *</label>
+                    <input type="text" id="editMemName" placeholder="सदस्याचे नाव" required>
+                </div>
+                <div>
+                    <label>युझरनेम (Username) *</label>
+                    <input type="text" id="editMemUser" placeholder="युझरनेम" required>
+                </div>
+                <div>
+                    <label>नवीन पासवर्ड (ऐच्छिक)</label>
+                    <input type="password" id="editMemPass" placeholder="नवीन पासवर्ड टाका">
+                </div>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">अपडेट सेव्ह करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModals()">रद्द करा</button>
                 </div>
             </form>
         </div>
@@ -658,13 +847,22 @@ table {
     <!-- Add Task Modal -->
     <div class="modal" id="addTaskModal">
         <div class="modal-content">
-            <h3 class="modal-title">Assign Task</h3>
-            <form onsubmit="addTask(event)">
-                <input type="text" id="taskTitle" class="form-control" placeholder="Task description..." required>
-                <input type="file" id="taskPhoto" class="form-control" accept="image/*" style="margin-top:10px;">
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
-                    <button type="submit" class="btn">Assign</button>
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-tasks"></i> काम सोपवा (Assign Task)</h3>
+                <span class="modal-close-icon" onclick="closeModals()">&times;</span>
+            </div>
+            <form onsubmit="addTask(event)" class="modal-form">
+                <div>
+                    <label>कामाचे वर्णन (Task Description) *</label>
+                    <input type="text" id="taskTitle" placeholder="कामाचे वर्णन" required>
+                </div>
+                <div>
+                    <label>फोटो / संदर्भ जोडा (Optional)</label>
+                    <input type="file" id="taskPhoto" accept="image/*" style="padding: 8px;">
+                </div>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">काम सोपवा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModals()">रद्द करा</button>
                 </div>
             </form>
         </div>
@@ -673,18 +871,22 @@ table {
     <!-- Add Funds Modal -->
     <div class="modal" id="addFundsModal">
         <div class="modal-content">
-            <h3 class="modal-title">Add Funds</h3>
-            <form onsubmit="addFunds(event)">
-                <input type="number" id="fundAmount" class="form-control" placeholder="Amount (₹)" required min="1">
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
-                    <button type="submit" class="btn">Add</button>
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-hand-holding-usd"></i> रक्कम द्या (Add Funds)</h3>
+                <span class="modal-close-icon" onclick="closeModals()">&times;</span>
+            </div>
+            <form onsubmit="addFunds(event)" class="modal-form">
+                <div>
+                    <label>रक्कम (₹ Amount) *</label>
+                    <input type="number" id="fundAmount" placeholder="₹ रक्कम टाका" required min="1">
+                </div>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">रक्कम जमा करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModals()">रद्द करा</button>
                 </div>
             </form>
         </div>
     </div>
-
-
 
     <script>
         const API_URL = '';

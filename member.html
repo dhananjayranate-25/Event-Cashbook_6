@@ -395,13 +395,173 @@ table {
 .close-btn:hover {
     color: #f43f5e;
 }
-</style>
+
+        /* ========================================================
+           EXACT PHOTO 1 MODAL STYLING (100% Guaranteed)
+           ======================================================== */
+        .modal {
+            display: none;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: rgba(0, 0, 0, 0.85) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            z-index: 99999 !important;
+            justify-content: center !important;
+            align-items: center !important;
+            padding: 16px !important;
+            box-sizing: border-box !important;
+        }
+        .modal.active {
+            display: flex !important;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #240a34, #12031c) !important;
+            border: 2px solid #ffd700 !important;
+            border-radius: 20px !important;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(255, 215, 0, 0.25) !important;
+            padding: 24px 22px !important;
+            color: #ffffff !important;
+            width: 100% !important;
+            max-width: 480px !important;
+            box-sizing: border-box !important;
+            max-height: 90vh !important;
+            overflow-y: auto !important;
+            position: relative !important;
+        }
+        .modal-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.25);
+            padding-bottom: 10px;
+        }
+        .modal-title {
+            color: #ffd700 !important;
+            margin: 0 !important;
+            font-size: 1.4rem !important;
+            font-family: 'Khand', 'Poppins', sans-serif !important;
+            font-weight: 700 !important;
+        }
+        .modal-close-icon {
+            color: #cbd5e1;
+            font-size: 26px;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .modal-close-icon:hover {
+            color: #ef4444;
+        }
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .modal-form label {
+            font-size: 13.5px !important;
+            color: #e2e8f0 !important;
+            font-weight: 600 !important;
+            display: block !important;
+            margin-bottom: 6px !important;
+            text-align: left !important;
+        }
+        .modal-form input[type="text"],
+        .modal-form input[type="number"],
+        .modal-form input[type="date"],
+        .modal-form input[type="time"],
+        .modal-form input[type="password"],
+        .modal-form select,
+        .modal-form textarea,
+        .modal-form .form-control,
+        .modal-form .form-control-full {
+            width: 100% !important;
+            padding: 11px 14px !important;
+            border-radius: 10px !important;
+            background: #1a0526 !important;
+            border: 1.5px solid #64748b !important;
+            color: #ffffff !important;
+            box-sizing: border-box !important;
+            font-size: 15px !important;
+            font-family: inherit !important;
+            outline: none !important;
+            transition: all 0.2s ease !important;
+            margin-bottom: 0 !important;
+        }
+        .modal-form input:focus,
+        .modal-form select:focus,
+        .modal-form textarea:focus {
+            border-color: #ffd700 !important;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.35) !important;
+            background: #1f072e !important;
+        }
+        .modal-form input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) !important;
+            cursor: pointer !important;
+        }
+        .modal-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .modal-action-buttons {
+            display: flex !important;
+            gap: 12px !important;
+            margin-top: 8px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        .btn-save-modal {
+            flex: 1 !important;
+            background: linear-gradient(135deg, #10b981, #059669) !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 15px !important;
+            padding: 12px 18px !important;
+            border-radius: 10px !important;
+            border: none !important;
+            cursor: pointer !important;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.45) !important;
+            text-align: center !important;
+            transition: all 0.2s ease !important;
+        }
+        .btn-save-modal:hover {
+            filter: brightness(1.1) !important;
+            transform: translateY(-1px) !important;
+        }
+        .btn-cancel-modal {
+            flex: 1 !important;
+            background: #2d2640 !important;
+            border: 1.5px solid rgba(255, 255, 255, 0.18) !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 15px !important;
+            padding: 12px 18px !important;
+            border-radius: 10px !important;
+            cursor: pointer !important;
+            text-align: center !important;
+            transition: all 0.2s ease !important;
+        }
+        .btn-cancel-modal:hover {
+            background: #392b4f !important;
+        }
+
+    </style>
 
     <style>
         * {
             touch-action: manipulation; /* Removes 300ms tap delay on mobile */
         }
     </style>
+    <link rel="stylesheet" href="style.css?v=1787850865173">
 </head>
 <body>
 
@@ -566,12 +726,18 @@ table {
     <!-- Change Password Modal -->
     <div class="modal" id="changePasswordModal">
         <div class="modal-content">
-            <h3 class="modal-title">Change Password</h3>
-            <form onsubmit="changeUserPassword(event)">
-                <input type="password" id="newUserPass" class="form-control" placeholder="New Password" required>
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
-                    <button type="submit" class="btn" style="background: var(--primary); color: var(--darker);">Update</button>
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-key"></i> पासवर्ड बदला (Change Password)</h3>
+                <span class="modal-close-icon" onclick="closeModals()">&times;</span>
+            </div>
+            <form onsubmit="changeUserPassword(event)" class="modal-form">
+                <div>
+                    <label>नवीन पासवर्ड (New Password) *</label>
+                    <input type="password" id="newUserPass" placeholder="नवीन पासवर्ड टाका" required>
+                </div>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">अपडेट सेव्ह करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModals()">रद्द करा</button>
                 </div>
             </form>
         </div>
@@ -580,46 +746,62 @@ table {
     <!-- Add Expense Modal -->
     <div class="modal" id="addExpenseModal">
         <div class="modal-content">
-            <h3 class="modal-title">Log New Expense</h3>
-            <p style="font-size:0.85rem; color:#888;">This will be deducted from your remaining balance.</p>
-            <form onsubmit="addExpense(event)">
-                <input type="text" id="expItem" class="form-control-full" placeholder="Item Name (वस्तूचे नाव)" required>
-                <input type="number" id="expPrice" class="form-control-full" placeholder="Price / Amount (₹)" required min="1">
-                <div style="margin-top: 10px; text-align: left;">
-                    <label style="font-size: 0.85rem; color: var(--text-light, #ccc);">Upload Bill / Receipt Photo (फोटो / बिल जोडा - Optional):</label>
-                    <input type="file" id="expPhoto" class="form-control-full" accept="image/*" style="margin-top: 4px; padding: 6px;">
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-receipt"></i> नवीन खर्च नोंदवा (Log Expense)</h3>
+                <span class="modal-close-icon" onclick="closeModals()">&times;</span>
+            </div>
+            <form onsubmit="addExpense(event)" class="modal-form">
+                <div>
+                    <label>वस्तूचे / खर्चाचे नाव *</label>
+                    <input type="text" id="expItem" placeholder="उदा. मंडप सजावट / हार फुले" required>
                 </div>
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
-                    <button type="button" class="btn btn-outline" onclick="closeModals()">Cancel</button>
-                    <button type="submit" class="btn">Save</button>
+                <div>
+                    <label>रक्कम (₹ Amount) *</label>
+                    <input type="number" id="expPrice" placeholder="₹ रक्कम" required min="1">
+                </div>
+                <div>
+                    <label>फोटो / बिल जोडा (Optional)</label>
+                    <input type="file" id="expPhoto" accept="image/*" style="padding: 8px;">
+                </div>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">खर्च सेव्ह करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModals()">रद्द करा</button>
                 </div>
             </form>
         </div>
     </div>
+
     <!-- Edit Niyojan Modal -->
     <div class="modal" id="editNiyojanModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('editNiyojanModal')">&times;</span>
-            <h3 class="modal-title">Edit Niyojan</h3>
-            <form onsubmit="updateNiyojan(event)">
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-edit"></i> नियोजन बदला (Edit Niyojan)</h3>
+                <span class="modal-close-icon" onclick="closeModal('editNiyojanModal')">&times;</span>
+            </div>
+            <form onsubmit="updateNiyojan(event)" class="modal-form">
                 <input type="hidden" id="editNiyojanId">
-                <div class="form-group">
-                    <label>तारीख (Date)</label>
-                    <input type="date" id="editNiyojanDate" class="form-control" required>
+                <div class="modal-grid-2">
+                    <div>
+                        <label>तारीख *</label>
+                        <input type="date" id="editNiyojanDate" required onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
+                    </div>
+                    <div>
+                        <label>वेळ *</label>
+                        <input type="text" id="editNiyojanTime" placeholder="उदा. सायं. ७:०० वा." required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>वेळ (Time)</label>
-                    <input type="time" id="editNiyojanTime" class="form-control" required>
+                <div>
+                    <label>कार्यक्रमाचे नाव *</label>
+                    <input type="text" id="editNiyojanTitle" required>
                 </div>
-                <div class="form-group">
-                    <label>कार्यक्रमाचे नाव (Title)</label>
-                    <input type="text" id="editNiyojanTitle" class="form-control" required>
+                <div>
+                    <label>अधिक माहिती (वर्णन)</label>
+                    <textarea id="editNiyojanDesc" rows="3"></textarea>
                 </div>
-                <div class="form-group">
-                    <label>अधिक माहिती (Description)</label>
-                    <textarea id="editNiyojanDesc" class="form-control" rows="3"></textarea>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">अपडेट सेव्ह करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModal('editNiyojanModal')">रद्द करा</button>
                 </div>
-                <button type="submit" class="btn">Update Niyojan (अपडेट करा)</button>
             </form>
         </div>
     </div>
@@ -627,23 +809,28 @@ table {
     <!-- Edit Expense Modal -->
     <div class="modal" id="editExpenseModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('editExpenseModal')">&times;</span>
-            <h3 class="modal-title">Edit Expense</h3>
-            <form onsubmit="updateExpense(event)">
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-edit"></i> खर्च बदला (Edit Expense)</h3>
+                <span class="modal-close-icon" onclick="closeModal('editExpenseModal')">&times;</span>
+            </div>
+            <form onsubmit="updateExpense(event)" class="modal-form">
                 <input type="hidden" id="editExpenseId">
-                <div class="form-group">
-                    <label>Item Name (वस्तूचे नाव)</label>
-                    <input type="text" id="editExpenseItem" class="form-control" required>
+                <div>
+                    <label>वस्तूचे / खर्चाचे नाव *</label>
+                    <input type="text" id="editExpenseItem" required>
                 </div>
-                <div class="form-group">
-                    <label>Amount (₹ रक्कम)</label>
-                    <input type="number" id="editExpensePrice" class="form-control" required min="1">
+                <div>
+                    <label>रक्कम (₹ Amount) *</label>
+                    <input type="number" id="editExpensePrice" required min="1">
                 </div>
-                <div class="form-group">
-                    <label>Change / Add Photo (फोटो जोडा किंवा बदला)</label>
-                    <input type="file" id="editExpensePhoto" class="form-control" accept="image/*">
+                <div>
+                    <label>फोटो / बिल बदला किंवा जोडा</label>
+                    <input type="file" id="editExpensePhoto" accept="image/*" style="padding: 8px;">
                 </div>
-                <button type="submit" class="btn">Update Expense (अपडेट करा)</button>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">अपडेट सेव्ह करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModal('editExpenseModal')">रद्द करा</button>
+                </div>
             </form>
         </div>
     </div>
@@ -651,38 +838,44 @@ table {
     <!-- Edit Aarti Modal -->
     <div class="modal" id="editAartiModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('editAartiModal')">&times;</span>
-            <h3 class="modal-title">Edit Mahaaarti (महाआरती बदला)</h3>
-            <form onsubmit="updateAarti(event)">
+            <div class="modal-header-row">
+                <h3 class="modal-title"><i class="fas fa-edit"></i> महाआरती नोंद बदला (Edit Aarti)</h3>
+                <span class="modal-close-icon" onclick="closeModal('editAartiModal')">&times;</span>
+            </div>
+            <form onsubmit="updateAarti(event)" class="modal-form">
                 <input type="hidden" id="editAartiId">
-                <div class="form-group">
-                    <label>नाव (Name)</label>
-                    <input type="text" id="editAartiName" class="form-control" required>
+                <div>
+                    <label>संपूर्ण नाव *</label>
+                    <input type="text" id="editAartiName" required>
                 </div>
-                <div class="form-group">
-                    <label>तारीख (Date)</label>
-                    <input type="date" id="editAartiDate" class="form-control" required>
+                <div class="modal-grid-2">
+                    <div>
+                        <label>तारीख *</label>
+                        <input type="date" id="editAartiDate" required onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
+                    </div>
+                    <div>
+                        <label>वेळ (सकाळ/संध्याकाळ) *</label>
+                        <select id="editAartiTime" required>
+                            <option value="सकाळ">सकाळ</option>
+                            <option value="संध्याकाळ">संध्याकाळ</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>वेळ (सकाळ/संध्याकाळ)</label>
-                    <select id="editAartiTime" class="form-control" required>
-                        <option value="सकाळ">सकाळ</option>
-                        <option value="संध्याकाळ">संध्याकाळ</option>
-                    </select>
-                </div>
-                <div class="form-group">
+                <div>
                     <label>फोन नंबर (Phone)</label>
-                    <input type="text" id="editAartiPhone" class="form-control">
+                    <input type="text" id="editAartiPhone">
                 </div>
-                <div class="form-group">
-                    <label>इतर माहिती (Details)</label>
-                    <textarea id="editAartiDetails" class="form-control" rows="2"></textarea>
+                <div>
+                    <label>इतर माहिती (ऐच्छिक)</label>
+                    <textarea id="editAartiDetails" rows="2"></textarea>
                 </div>
-                <button type="submit" class="btn">Update Aarti (अपडेट करा)</button>
+                <div class="modal-action-buttons">
+                    <button type="submit" class="btn-save-modal">अपडेट सेव्ह करा</button>
+                    <button type="button" class="btn-cancel-modal" onclick="closeModal('editAartiModal')">रद्द करा</button>
+                </div>
             </form>
         </div>
     </div>
-
 
     <script>
         const API_URL = '';
