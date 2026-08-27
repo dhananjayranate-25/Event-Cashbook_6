@@ -362,7 +362,7 @@
                                     ${member.mobile}
                                 </span>
                             </a>
-                            <a href="https://api.whatsapp.com/send?phone=91${waNumber}&text=${waText}" target="_blank" rel="noopener noreferrer" class="member-wa-btn" title="${memberNameClean} यांना WhatsApp करा" style="display: flex !important; align-items: center !important; justify-content: center !important; width: 38px !important; height: 38px !important; min-width: 38px !important; border-radius: 50% !important; background: linear-gradient(135deg, #25D366, #128C7E) !important; color: #ffffff !important; font-size: 20px !important; text-decoration: none !important; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.45) !important; border: 1.5px solid #25D366 !important; cursor: pointer !important;">
+                            <a href="https://api.whatsapp.com/send?phone=91${waNumber}&text=${waText}" target="_blank" rel="noopener noreferrer" class="member-wa-btn" title="${memberNameClean} यांना WhatsApp करा" style="display: flex !important; align-items: center !important; justify-content: center !important; width: 32px !important; height: 32px !important; min-width: 32px !important; border-radius: 50% !important; background: linear-gradient(135deg, #25D366, #128C7E) !important; color: #ffffff !important; font-size: 16px !important; text-decoration: none !important; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.45) !important; border: 1.5px solid #25D366 !important; cursor: pointer !important;">
                                 <i class="fab fa-whatsapp"></i>
                             </a>
                         </div>

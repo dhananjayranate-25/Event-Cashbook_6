@@ -5689,6 +5689,10 @@ img {
     width: 100% !important;
 }
 .member-wa-btn {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    font-size: 16px !important;
     transition: transform 0.22s ease, box-shadow 0.22s ease !important;
 }
 .member-wa-btn:hover {
