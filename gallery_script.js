@@ -903,7 +903,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
         const slice = uploadedPDFsData.slice(from, to);
         return slice.map((pdf, idx) => {
             const s = getPDFSettings(pdf.year);
-            const pOrg = pdf.orgName || s.orgName;
+            const pOrg = (pdf.orgName || s.orgName || "शिवसृष्टी सार्वजनिक उत्सव मंडळ").replace(/संगमनेर.*$/, "").trim() || "शिवसृष्टी सार्वजनिक उत्सव मंडळ";
             const pSub = pdf.subtitle || s.subtitle;
             const pTag = pdf.tagline || s.tagline;
             const escSub = (pdf.subtitle || '').replace(/'/g, "\\'");
