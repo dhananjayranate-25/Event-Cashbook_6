@@ -5537,8 +5537,8 @@ img {
     }
 }
 
-.date-dm { display: block !important; white-space: nowrap !important; line-height: 1.25 !important; }
-.date-y { display: block !important; font-size: 0.9em !important; margin-top: 2px !important; line-height: 1.25 !important; }
+.date-dm { display: block !important; font-size: 1.05em !important; font-weight: 700 !important; white-space: nowrap !important; line-height: 1.25 !important; }
+.date-y { display: block !important; font-size: 0.82em !important; font-weight: 600 !important; margin-top: 2px !important; line-height: 1.15 !important; }
 
 
 /* ========================================================
