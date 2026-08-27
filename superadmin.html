@@ -1111,7 +1111,8 @@ table {
                                         if (!u.lastSeen) return '';
                                         const d = new Date(u.lastSeen);
                                         const diffMins = Math.floor((new Date() - d) / 60000);
-                                        if (u.isOnline && diffMins < 5) return '<span style="color:#4CAF50; font-size:0.75rem;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Online</span>';
+                                        const diffSecs = Math.floor((new Date() - d) / 1000);
+                                        if (u.isOnline && diffSecs <= 35) return '<span style="color:#4CAF50; font-size:0.75rem;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Online</span>';
                                         
                                         const timeStr = d.toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true });
                                         return `<span style="color:#9e9e9e; font-size:0.75rem;" title="${timeStr}">Last seen: ${timeStr}</span>`;
