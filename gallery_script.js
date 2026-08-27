@@ -597,16 +597,38 @@
         
         iframe.style.height = Math.max(1123, iframe.contentDocument.body.scrollHeight) + 'px';
 
-        
+        // Extract all clickable links with exact bounding boxes before removing iframe
+        const domWidth = iframe.contentDocument.body.offsetWidth || 794;
+        const linkElements = Array.from(iframe.contentDocument.querySelectorAll('a[href]')).map(a => {
+            const rect = a.getBoundingClientRect();
+            const absTop = rect.top + (iframe.contentWindow ? iframe.contentWindow.scrollY : 0);
+            const absLeft = rect.left + (iframe.contentWindow ? iframe.contentWindow.scrollX : 0);
+            return {
+                href: a.href,
+                absTop,
+                absLeft,
+                width: rect.width,
+                height: rect.height
+            };
+        });
+
         const canvas = await html2canvas(iframe.contentDocument.body, {
-            scale: 3.0,
+            scale: 3.5,
             windowWidth: 794,
             width: 794,
             useCORS: true,
             backgroundColor: '#ffffff',
             allowTaint: true,
             logging: false,
-            imageTimeout: 15000
+            imageTimeout: 25000,
+            onclone: (clonedDoc) => {
+                const b = clonedDoc.body;
+                if (b) {
+                    b.style.textRendering = 'geometricPrecision';
+                    b.style.webkitFontSmoothing = 'antialiased';
+                    b.style.fontSmooth = 'always';
+                }
+            }
         });
         
         document.body.removeChild(iframe);
@@ -620,6 +642,7 @@
         });
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
+        const mmPerPx = pdfWidth / domWidth;
         
         const pageHeightInPx = (canvas.width * pdfHeight) / pdfWidth;
         const totalPages = Math.ceil(canvas.height / pageHeightInPx);
@@ -638,11 +661,26 @@
             ctx.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
             ctx.drawImage(canvas, 0, i * pageHeightInPx, canvas.width, pageCanvas.height, 0, 0, pageCanvas.width, pageCanvas.height);
             
-            const imgData = pageCanvas.toDataURL('image/jpeg', 0.94);
+            const imgData = pageCanvas.toDataURL('image/jpeg', 0.98);
             const drawHeight = (pageCanvas.height * pdfWidth) / pageCanvas.width;
             
             pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, drawHeight, undefined, 'SLOW');
         }
+
+        // Add interactive clickable hyperlinks across all pages in the PDF
+        linkElements.forEach(item => {
+            if (!item.href) return;
+            const targetPageIndex = Math.floor(item.absTop / pageHeightInDOM);
+            if (targetPageIndex >= 0 && targetPageIndex < totalPages) {
+                pdf.setPage(targetPageIndex + 1);
+                const relTopPx = item.absTop - (targetPageIndex * pageHeightInDOM);
+                const x = item.absLeft * mmPerPx;
+                const y = relTopPx * mmPerPx;
+                const w = Math.max(item.width * mmPerPx, 15);
+                const h = Math.max(item.height * mmPerPx, 5);
+                pdf.link(x, y, w, h, { url: item.href });
+            }
+        });
         
         pdf.save(filename || 'Cashbook.pdf');
     }
