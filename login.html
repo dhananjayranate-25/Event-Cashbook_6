@@ -188,49 +188,56 @@
 
 const API_URL = ''; // Leave empty if same domain
 
-        function showLoginForm(role) {
+                function showLoginForm(role) {
+            // 1. IF NOT LOGGED OUT, DIRECTLY OPEN THE DASHBOARD WITHOUT SHOWING ANY FORM!
+            if (role === 'websiteadmin') {
+                if (localStorage.getItem('adminLoggedIn') === 'true' || sessionStorage.getItem('adminLoggedIn') === 'true') {
+                    return window.location.replace('admin.html?v=' + Date.now());
+                }
+            } else {
+                const userStr = localStorage.getItem('portalUser');
+                if (userStr) {
+                    try {
+                        const user = JSON.parse(userStr);
+                        if (role === 'superadmin' && user && user.role === 'superadmin') {
+                            return window.location.replace('superadmin.html?v=' + Date.now());
+                        }
+                        if (role === 'member' && user && user.role === 'member') {
+                            return window.location.replace('member.html?v=' + Date.now());
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            // 2. IF LOGGED OUT OR NOT AUTHENTICATED, SHOW CLEAN LOGIN FORM WITH BLANK INPUTS
             document.getElementById('roleSelection').style.display = 'none';
             document.getElementById('loginForm').style.display = 'block';
             document.getElementById('loginRole').value = role;
             document.getElementById('errorMsg').style.display = 'none';
+            document.getElementById('password').value = '';
             
             if (role === 'superadmin') {
                 document.getElementById('pageTitle').innerText = 'Super Admin Login';
                 document.getElementById('usernameGroup').style.display = 'none';
                 document.getElementById('username').value = 'admin';
                 document.getElementById('username').removeAttribute('required');
-                // Auto-fill password if not logged out
-                const savedSuperPass = localStorage.getItem('superadmin_saved_pwd') || '';
-                document.getElementById('password').value = savedSuperPass;
+                document.getElementById('password').value = '';
+                setTimeout(() => document.getElementById('password').focus(), 100);
             } else if (role === 'websiteadmin') {
                 document.getElementById('pageTitle').innerText = 'Website Admin Login';
                 document.getElementById('usernameGroup').style.display = 'none';
                 document.getElementById('username').value = 'websiteadmin';
                 document.getElementById('username').removeAttribute('required');
-                // Auto-fill password if not logged out
-                const savedAdminPass = localStorage.getItem('admin_saved_pwd') || '';
-                document.getElementById('password').value = savedAdminPass;
+                document.getElementById('password').value = '';
+                setTimeout(() => document.getElementById('password').focus(), 100);
             } else {
                 document.getElementById('pageTitle').innerText = 'Member Login';
                 document.getElementById('usernameGroup').style.display = 'block';
                 document.getElementById('username').setAttribute('required', 'true');
-                // Auto-fill member credentials if not logged out
-                const savedMemberUser = localStorage.getItem('member_saved_user') || '';
-                const savedMemberPass = localStorage.getItem('member_saved_pwd') || '';
-                document.getElementById('username').value = savedMemberUser;
-                document.getElementById('password').value = savedMemberPass;
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                setTimeout(() => document.getElementById('username').focus(), 100);
             }
-
-            // Focus on submit button if credentials are auto-filled, else focus input
-            setTimeout(() => {
-                if (document.getElementById('password').value) {
-                    document.getElementById('loginBtn').focus();
-                } else if (role === 'member' && !document.getElementById('username').value) {
-                    document.getElementById('username').focus();
-                } else {
-                    document.getElementById('password').focus();
-                }
-            }, 100);
         }
 
         function showRoleSelection() {
