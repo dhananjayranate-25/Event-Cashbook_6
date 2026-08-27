@@ -5761,3 +5761,88 @@ img {
     outline: none !important;
     box-shadow: 0 0 10px rgba(255, 215, 0, 0.35) !important;
 }
+
+/* ========================================================
+   FLAWLESS MOBILE-OPTIMIZED EDIT MODAL RESPONSIVENESS
+   ======================================================== */
+@media (max-width: 600px) {
+    .modal {
+        padding: 12px !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .modal-content, .modal > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 18px 15px !important;
+        border-radius: 16px !important;
+        border-width: 2px !important;
+        max-height: 90vh !important;
+        box-sizing: border-box !important;
+    }
+    .modal-header-row,
+    .modal div[style*="justify-content: space-between"] {
+        margin-bottom: 14px !important;
+        padding-bottom: 8px !important;
+    }
+    .modal-title, .modal h3 {
+        font-size: 1.22rem !important;
+    }
+    .modal-close-icon,
+    .modal span[onclick*="close"] {
+        font-size: 24px !important;
+    }
+    .modal-form, .modal form {
+        gap: 10px !important;
+    }
+    .modal label, .modal-form label {
+        font-size: 12.5px !important;
+        margin-bottom: 4px !important;
+    }
+    .modal input[type="text"],
+    .modal input[type="number"],
+    .modal input[type="date"],
+    .modal input[type="time"],
+    .modal input[type="password"],
+    .modal select,
+    .modal textarea,
+    .modal-form input,
+    .modal-form select,
+    .modal-form textarea {
+        padding: 9px 12px !important;
+        font-size: 14px !important;
+        border-radius: 9px !important;
+    }
+    .modal-grid-2,
+    .modal div[style*="grid-template-columns: 1fr 1fr"] {
+        gap: 8px !important;
+    }
+    .modal-action-buttons,
+    .modal-btn-row,
+    .modal div[style*="display: flex; gap: 12px"] {
+        gap: 8px !important;
+        margin-top: 10px !important;
+    }
+    .btn-save-modal,
+    .btn-cancel-modal,
+    .modal-btn-row button,
+    .modal-btn-row .btn {
+        padding: 11px 8px !important;
+        font-size: 14px !important;
+        border-radius: 9px !important;
+        min-height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .modal-content, .modal > div {
+        padding: 14px 10px !important;
+    }
+    .btn-save-modal,
+    .btn-cancel-modal {
+        font-size: 13px !important;
+    }
+}
