@@ -1113,6 +1113,34 @@
                         </div>
                     </div>
                 </div>
+                <script>
+                    (function() {
+                        try {
+                            const cached = localStorage.getItem('settingsCache');
+                            if (cached) {
+                                const s = JSON.parse(cached);
+                                const isPosterOn = (val) => !(val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off');
+                                const v = isPosterOn(s.showVarganiPoster);
+                                const m = isPosterOn(s.showMahaprasadPoster);
+                                const a = isPosterOn(s.showAagmanPoster);
+                                const vis = isPosterOn(s.showVisarjanPoster);
+                                const c = isPosterOn(s.showCustomEventPoster);
+                                const vCard = document.getElementById('varganiPosterCard');
+                                const mCard = document.getElementById('mahaprasadPosterCard');
+                                const aCard = document.getElementById('aagmanPosterCard');
+                                const visCard = document.getElementById('visarjanPosterCard');
+                                const cCard = document.getElementById('customEventPosterCard');
+                                if (vCard) vCard.style.setProperty('display', v ? 'flex' : 'none', 'important');
+                                if (mCard) mCard.style.setProperty('display', m ? 'flex' : 'none', 'important');
+                                if (aCard) aCard.style.setProperty('display', a ? 'flex' : 'none', 'important');
+                                if (visCard) visCard.style.setProperty('display', vis ? 'flex' : 'none', 'important');
+                                if (cCard) cCard.style.setProperty('display', c ? 'flex' : 'none', 'important');
+                                const sc = document.getElementById('posterShowcaseContainer');
+                                if (sc) sc.style.setProperty('display', (v || m || a || vis || c) ? 'block' : 'none', 'important');
+                            }
+                        } catch(e) {}
+                    })();
+                </script>
             </div>
         </div>
 
@@ -1334,6 +1362,42 @@
     let uploadedPDFsPage = 0;
     let yearVisibilityMap = {};
     let appSettings = {};
+
+    function applyPosterVisibility(settings) {
+        if (!settings || Object.keys(settings).length === 0) {
+            try {
+                const cached = localStorage.getItem('settingsCache');
+                if (cached) settings = JSON.parse(cached);
+            } catch(e) {}
+        }
+        if (!settings) return;
+        window.appSettings = settings;
+
+        const isPosterOn = (val) => !(val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off');
+        const showVargani = isPosterOn(settings.showVarganiPoster);
+        const showMahaprasad = isPosterOn(settings.showMahaprasadPoster);
+        const showAagman = isPosterOn(settings.showAagmanPoster);
+        const showVisarjan = isPosterOn(settings.showVisarjanPoster);
+        const showCustomEvent = isPosterOn(settings.showCustomEventPoster);
+
+        const vCard = document.getElementById('varganiPosterCard');
+        const mCard = document.getElementById('mahaprasadPosterCard');
+        const aCard = document.getElementById('aagmanPosterCard');
+        const visCard = document.getElementById('visarjanPosterCard');
+        const cCard = document.getElementById('customEventPosterCard');
+
+        if (vCard) vCard.style.setProperty('display', showVargani ? 'flex' : 'none', 'important');
+        if (mCard) mCard.style.setProperty('display', showMahaprasad ? 'flex' : 'none', 'important');
+        if (aCard) aCard.style.setProperty('display', showAagman ? 'flex' : 'none', 'important');
+        if (visCard) visCard.style.setProperty('display', showVisarjan ? 'flex' : 'none', 'important');
+        if (cCard) cCard.style.setProperty('display', showCustomEvent ? 'flex' : 'none', 'important');
+
+        const anyPosterVisible = showVargani || showMahaprasad || showAagman || showVisarjan || showCustomEvent;
+        const showcaseBox = document.getElementById('posterShowcaseContainer');
+        if (showcaseBox) {
+            showcaseBox.style.setProperty('display', anyPosterVisible ? 'block' : 'none', 'important');
+        }
+    }
 
     function getPDFSettings(year) {
         const defaults = { orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'वर्ष : आठवे', headerOrgName: '', headerSubtitle: '' };
@@ -1678,13 +1742,7 @@ async function loadHomeGalleryPreview() {
             showEl(siteFooter);
             showEl(mainContainer);
             showEl(niyojanSection);
-            const showcaseBox = document.getElementById('posterShowcaseContainer');
-            if (showcaseBox) {
-                const s = window.appSettings || {};
-                const isPosterOn = (val) => !(val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off');
-                const anyPosterVisible = isPosterOn(s.showVarganiPoster) || isPosterOn(s.showMahaprasadPoster) || isPosterOn(s.showAagmanPoster) || isPosterOn(s.showVisarjanPoster) || isPosterOn(s.showCustomEventPoster);
-                showcaseBox.style.setProperty('display', anyPosterVisible ? 'block' : 'none', 'important');
-            }
+            applyPosterVisibility(window.appSettings);
         }
         
         if (pushState) {
@@ -2021,31 +2079,8 @@ const regNoElem = document.getElementById('displayRegNo');
             updateDescDisplay('visarjanDescDisplay', settings.visarjanCardDesc);
             updateDescDisplay('customEventDescDisplay', settings.customEventCardDesc);
 
-            // Poster Visibility Toggles
-            const isPosterOn = (val) => !(val === false || val === 0 || val === '0' || String(val).trim().toLowerCase() === 'false' || String(val).trim().toLowerCase() === 'off');
-            const showVargani = isPosterOn(settings.showVarganiPoster);
-            const showMahaprasad = isPosterOn(settings.showMahaprasadPoster);
-            const showAagman = isPosterOn(settings.showAagmanPoster);
-            const showVisarjan = isPosterOn(settings.showVisarjanPoster);
-            const showCustomEvent = isPosterOn(settings.showCustomEventPoster);
-
-            const vCard = document.getElementById('varganiPosterCard');
-            const mCard = document.getElementById('mahaprasadPosterCard');
-            const aCard = document.getElementById('aagmanPosterCard');
-            const visCard = document.getElementById('visarjanPosterCard');
-            const cCard = document.getElementById('customEventPosterCard');
-
-            if (vCard) vCard.style.setProperty('display', showVargani ? 'flex' : 'none', 'important');
-            if (mCard) mCard.style.setProperty('display', showMahaprasad ? 'flex' : 'none', 'important');
-            if (aCard) aCard.style.setProperty('display', showAagman ? 'flex' : 'none', 'important');
-            if (visCard) visCard.style.setProperty('display', showVisarjan ? 'flex' : 'none', 'important');
-            if (cCard) cCard.style.setProperty('display', showCustomEvent ? 'flex' : 'none', 'important');
-
-            const anyPosterVisible = showVargani || showMahaprasad || showAagman || showVisarjan || showCustomEvent;
-            const showcaseBox = document.getElementById('posterShowcaseContainer');
-            if (showcaseBox) {
-                showcaseBox.style.setProperty('display', anyPosterVisible ? 'block' : 'none', 'important');
-            }
+            // Apply Poster Visibility Toggles
+            applyPosterVisibility(settings);
             
             // Donation buttons
             if (settings.donationPosterBtnName) {
@@ -2332,7 +2367,9 @@ const regNoElem = document.getElementById('displayRegNo');
             }
             if (setResult.success) {
                 appSettings = setResult.data;
+                window.appSettings = setResult.data;
                 try { localStorage.setItem('settingsCache', JSON.stringify(appSettings)); } catch(e){}
+                applyPosterVisibility(setResult.data);
             }
             const apiYears = (d.success && d.data) ? d.data : [];
             try { localStorage.setItem('cached_visible_years', JSON.stringify(apiYears)); } catch(e){}
