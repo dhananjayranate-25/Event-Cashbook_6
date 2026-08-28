@@ -1520,17 +1520,7 @@ table {
                     let niyojanHtml = '';
                     myNiyojan.forEach((n, index) => {
                         let formattedDate = new Date(n.date).toLocaleDateString('mr-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-                        let time12 = n.time;
-                        if(n.time) {
-                            let parts = n.time.split(':');
-                            if(parts.length === 2) {
-                                let h = parseInt(parts[0]);
-                                let m = parts[1];
-                                let ampm = h >= 12 ? 'PM' : 'AM';
-                                h = h % 12 || 12;
-                                time12 = `${h}:${m} ${ampm}`;
-                            }
-                        }
+                        let time12 = formatTime12Hour(n.time);
                         
                         niyojanHtml += `
                         <div style="background: rgba(255,255,255,0.05); border-left: 3px solid #d4af37; padding: 15px; border-radius: 8px; margin-bottom: 15px; position:relative;">
@@ -1567,7 +1557,7 @@ table {
                             <h3 style="color: #ffeb3b; margin: 0 0 10px 0; font-size: 1.1rem;">${a.name}</h3>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 8px; color: #fff; font-size: 0.85rem; margin-bottom: 10px;">
                                 <div><i class="far fa-calendar-alt" style="color: #d4af37;"></i> ${formattedDate}</div>
-                                <div><i class="far fa-clock" style="color: #d4af37;"></i> ${a.timeOfDay}</div>
+                                <div><i class="far fa-clock" style="color: #d4af37;"></i> ${formatTime12Hour(a.timeOfDay)}</div>
                                 ${a.phone ? `<div style="grid-column: 1 / -1;"><i class="fas fa-phone-alt" style="color: #d4af37;"></i> ${a.phone}</div>` : ''}
                             </div>
                             ${a.pujaDetails ? `<div style="color: #ccc; font-size: 0.85rem; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 4px;">${a.pujaDetails}</div>` : ''}

@@ -613,8 +613,8 @@
                             <div class="qr-frame">
                                 <img src="https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg" alt="Donate QR Code" id="donationQRImg" loading="eager" fetchpriority="high">
                             </div>
-                            <p style="color: #fff; font-size: 16px; font-weight: bold; margin: 15px 0 0 0; letter-spacing: 1px; text-align: center;">मो.नं +91 9322134560 <i class="fas fa-copy" style="font-size: 14px; cursor: pointer; color: #ff8c00; margin-left: 5px;" onclick="navigator.clipboard.writeText('9322134560').then(() => alert('मोबाईल नंबर कॉपी झाला!'))"></i></p>
-                            <p style="color: #eee; font-size: 17px; margin: 3px 0 0 0; text-align: center; letter-spacing: 0.5px;">UPI ID : dhananjayranate@ybl <i class="fas fa-copy" style="font-size: 14px; cursor: pointer; color: #ff8c00; margin-left: 5px;" onclick="navigator.clipboard.writeText('dhananjayranate@ybl').then(() => alert('UPI ID कॉपी झाला!'))"></i></p>
+                            <p id="donationMobileDisplay" style="color: #fff; font-size: 16px; font-weight: bold; margin: 15px 0 0 0; letter-spacing: 1px; text-align: center;">मो.नं +91 9322134560 <i class="fas fa-copy" style="font-size: 14px; cursor: pointer; color: #ff8c00; margin-left: 5px;" onclick="navigator.clipboard.writeText('9322134560').then(() => alert('मोबाईल नंबर कॉपी झाला!'))"></i></p>
+                            <p id="donationUPIDisplay" style="color: #eee; font-size: 17px; margin: 3px 0 0 0; text-align: center; letter-spacing: 0.5px;">UPI ID : dhananjayranate@ybl <i class="fas fa-copy" style="font-size: 14px; cursor: pointer; color: #ff8c00; margin-left: 5px;" onclick="navigator.clipboard.writeText('dhananjayranate@ybl').then(() => alert('UPI ID कॉपी झाला!'))"></i></p>
                             <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; margin-bottom: 10px;">
                                 <div class="payment-logos-main" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
                                         <div style="background: white; width: 78px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
@@ -1399,6 +1399,39 @@
         }
     }
 
+    function formatTime12Hour(timeStr) {
+        if (!timeStr) return '';
+        let str = String(timeStr).trim();
+        if (!str) return '';
+
+        const hasAM = /am/i.test(str);
+        const hasPM = /pm/i.test(str);
+
+        const match = str.match(/(\d{1,2}):(\d{1,2})(?::\d{1,2})?/);
+        if (!match) return str;
+
+        let h = parseInt(match[1], 10);
+        let m = match[2].padStart(2, '0');
+
+        let ampm = '';
+        if (hasPM) {
+            ampm = 'PM';
+            if (h === 0) h = 12;
+            else if (h > 12) h = h % 12;
+        } else if (hasAM) {
+            ampm = 'AM';
+            if (h === 0) h = 12;
+            else if (h > 12) h = h % 12;
+        } else {
+            ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12;
+            if (h === 0) h = 12;
+        }
+
+        const padH = String(h).padStart(2, '0');
+        return `${padH}:${m} ${ampm}`;
+    }
+
     function getPDFSettings(year) {
         const defaults = { orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'वर्ष : आठवे', headerOrgName: '', headerSubtitle: '' };
         try {
@@ -1810,17 +1843,7 @@ async function loadHomeGalleryPreview() {
                 niyojans.forEach((item, index) => {
                     const formattedDate = formatDate(item.date);
                     
-                    let time12 = item.time;
-                    if (time12) {
-                        let parts = time12.split(':');
-                        if (parts.length >= 2) {
-                            let h = parseInt(parts[0], 10);
-                            let m = parts[1];
-                            let ampm = h >= 12 ? 'PM' : 'AM';
-                            h = h % 12 || 12;
-                            time12 = `${h}:${m} ${ampm}`;
-                        }
-                    }
+                    const time12 = formatTime12Hour(item.time);
 
                     html += `
                         <div class="niyojan-item animate-fade-up" style="animation-delay: ${index * 0.1}s; display: flex; gap: 20px; margin-bottom: 25px;">
@@ -1877,7 +1900,7 @@ async function loadHomeGalleryPreview() {
                             <h3 style="color: #ffeb3b; margin: 0 0 10px 0; font-family: 'Khand', sans-serif; font-size: 1.2rem;">${aarti.name}</h3>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #fff; font-size: 0.85rem;">
                                 <div><strong style="color: #ffcc00;">तारीख:</strong> ${formattedDate}</div>
-                                <div><strong style="color: #ffcc00;">वेळ:</strong> ${aarti.timeOfDay}</div>
+                                <div><strong style="color: #ffcc00;">वेळ:</strong> ${formatTime12Hour(aarti.timeOfDay)}</div>
                             </div>
                             ${phone ? `
                                 <div style="margin-top: 10px; color: #fff; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -2079,9 +2102,45 @@ const regNoElem = document.getElementById('displayRegNo');
             updateDescDisplay('visarjanDescDisplay', settings.visarjanCardDesc);
             updateDescDisplay('customEventDescDisplay', settings.customEventCardDesc);
 
-            // Apply Poster Visibility Toggles
             applyPosterVisibility(settings);
             
+            // Sync Donation details across Donation Section, Footer, and Poster Canvas
+            const mobileVal = settings.donateMobile || '+91 9322134560';
+            const upiVal = settings.donateUPI || 'dhananjayranate@ybl';
+            const qrUrl = settings.donateQRCode || settings.donateQRImage || settings.donationPosterImage || 'https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg';
+
+            window.currentDonateMobile = mobileVal;
+            window.currentDonateUPI = upiVal;
+            window.currentDonateQRUrl = qrUrl;
+
+            const cleanMobile = mobileVal.replace(/[^\d+]/g, '');
+
+            const donMobElem = document.getElementById('donationMobileDisplay');
+            if (donMobElem) {
+                donMobElem.innerHTML = `मो.नं ${mobileVal} <i class="fas fa-copy" style="font-size: 14px; cursor: pointer; color: #ff8c00; margin-left: 5px;" onclick="navigator.clipboard.writeText('${cleanMobile}').then(() => alert('मोबाईल नंबर कॉपी झाला!'))"></i>`;
+            }
+            const donUpiElem = document.getElementById('donationUPIDisplay');
+            if (donUpiElem) {
+                donUpiElem.innerHTML = `UPI ID : ${upiVal} <i class="fas fa-copy" style="font-size: 14px; cursor: pointer; color: #ff8c00; margin-left: 5px;" onclick="navigator.clipboard.writeText('${upiVal}').then(() => alert('UPI ID कॉपी झाला!'))"></i>`;
+            }
+            const donQRElem = document.getElementById('donationQRImg');
+            if (donQRElem) {
+                donQRElem.src = qrUrl;
+            }
+
+            const footMobElem = document.getElementById('footerDonationMobileDisplay');
+            if (footMobElem) {
+                footMobElem.innerHTML = `<span><i class="fas fa-phone-alt" style="color: #d4af37; margin-right: 5px; font-size: 13px;"></i>मो.नं ${mobileVal}</span> <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 4px 6px; border-radius: 4px; transition: all 0.2s;" title="Copy Mobile Number" onclick="navigator.clipboard.writeText('${cleanMobile}').then(() => alert('मोबाईल नंबर कॉपी झाला!'))"></i>`;
+            }
+            const footUpiElem = document.getElementById('footerDonationUPIDisplay');
+            if (footUpiElem) {
+                footUpiElem.innerHTML = `<span>UPI ID : ${upiVal}</span> <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 4px 6px; border-radius: 4px; transition: all 0.2s;" title="Copy UPI ID" onclick="navigator.clipboard.writeText('${upiVal}').then(() => alert('UPI ID कॉपी झाला!'))"></i>`;
+            }
+            const footQRElem = document.getElementById('footerDonationQRImg');
+            if (footQRElem) {
+                footQRElem.src = qrUrl;
+            }
+
             // Donation buttons
             if (settings.donationPosterBtnName) {
                 const donDownloadBtns = document.querySelectorAll('.donation-download-btn');

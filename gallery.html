@@ -213,9 +213,27 @@
         try {
             const response = await fetch('/api/settings');
             const result = await response.json();
-            if (result.success && result.data && result.data.donateQRCode) {
+            if (result.success && result.data) {
+                const data = result.data;
                 const footerQrImg = document.getElementById('footerDonationQRImg');
-                if (footerQrImg) footerQrImg.src = result.data.donateQRCode;
+                if (footerQrImg && (data.donateQRCode || data.donateQRImage || data.donationPosterImage)) {
+                    footerQrImg.src = data.donateQRCode || data.donateQRImage || data.donationPosterImage;
+                }
+                if (data.donateMobile) {
+                    window.currentDonateMobile = data.donateMobile;
+                    const footMobElem = document.getElementById('footerDonationMobileDisplay');
+                    if (footMobElem) {
+                        const clean = data.donateMobile.replace(/[^\d+]/g, '');
+                        footMobElem.innerHTML = `<span><i class="fas fa-phone-alt" style="color: #d4af37; margin-right: 5px; font-size: 13px;"></i>मो.नं ${data.donateMobile}</span> <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 3px 5px; border-radius: 4px; transition: all 0.2s;" title="Copy Mobile Number" onclick="navigator.clipboard.writeText('${clean}').then(() => alert('मोबाईल नंबर कॉपी झाला!'))"></i>`;
+                    }
+                }
+                if (data.donateUPI) {
+                    window.currentDonateUPI = data.donateUPI;
+                    const footUpiElem = document.getElementById('footerDonationUPIDisplay');
+                    if (footUpiElem) {
+                        footUpiElem.innerHTML = `<span>UPI ID : ${data.donateUPI}</span> <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 3px 5px; border-radius: 4px; transition: all 0.2s;" title="Copy UPI ID" onclick="navigator.clipboard.writeText('${data.donateUPI}').then(() => alert('UPI ID कॉपी झाला!'))"></i>`;
+                    }
+                }
             }
         } catch(e) {}
     }
@@ -442,11 +460,11 @@
                     <div class="payment-logos-v6" style="display: flex; flex-direction: column; align-items: center;">
                         <h3 class="desktop-only-donate-title" style="align-self: flex-start; width: 100%; text-align: left;">देणगी</h3>
                         <div style="display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; margin-top: 8px;">
-                            <p style="color: #333; font-size: 15px; font-weight: bold; margin: 0; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <p id="footerDonationMobileDisplay" style="color: #333; font-size: 15px; font-weight: bold; margin: 0; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 6px;">
                                 <span><i class="fas fa-phone-alt" style="color: #d4af37; margin-right: 5px; font-size: 13px;"></i>मो.नं +91 9322134560</span>
                                 <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 3px 5px; border-radius: 4px; transition: all 0.2s;" title="Copy Mobile Number" onclick="navigator.clipboard.writeText('9322134560').then(() => alert('मोबाईल नंबर कॉपी झाला!'))"></i>
                             </p>
-                            <p style="color: #555; font-size: 14px; margin: 0; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <p id="footerDonationUPIDisplay" style="color: #555; font-size: 14px; margin: 0; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 6px;">
                                 <span>UPI ID : dhananjayranate@ybl</span>
                                 <i class="fas fa-copy" style="font-size: 13px; cursor: pointer; color: #ff8c00; background: rgba(255,140,0,0.12); padding: 3px 5px; border-radius: 4px; transition: all 0.2s;" title="Copy UPI ID" onclick="navigator.clipboard.writeText('dhananjayranate@ybl').then(() => alert('UPI ID कॉपी झाला!'))"></i>
                             </p>

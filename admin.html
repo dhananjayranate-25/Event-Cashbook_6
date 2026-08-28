@@ -531,6 +531,7 @@
                     <div style="margin-top: 15px;">
                         <label style="color: var(--text-secondary); font-size: 12px; display: block; margin-bottom: 5px;">Donation QR Code (UPI स्कॅन फोटो)</label>
                         <input type="file" id="donateQRInput" accept="image/*" style="padding: 8px; border-radius: 10px; background: var(--bg-card); border: 2px dashed var(--glass-border); color: var(--text-primary); cursor: pointer; width: 100%;">
+                        <img id="donateQRPreview" style="max-width: 100%; max-height: 150px; display: none; margin-top: 10px; border-radius: 8px; border: 1px solid rgba(255,215,0,0.3);" />
                     </div>
 
                     <div style="margin-top: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
@@ -1680,6 +1681,16 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     if (document.getElementById('donateUPI')) {
                         document.getElementById('donateUPI').value = settings.donateUPI || 'dhananjayranate@ybl';
                     }
+                    if (settings.donateQRCode || settings.donateQRImage) {
+                        const prev = document.getElementById('donateQRPreview');
+                        if (prev) {
+                            prev.src = settings.donateQRCode || settings.donateQRImage;
+                            prev.style.display = 'block';
+                        }
+                    }
+                    if (document.getElementById('donateUPI')) {
+                        document.getElementById('donateUPI').value = settings.donateUPI || 'dhananjayranate@ybl';
+                    }
                     
                     if (document.getElementById('aboutMandalTitle')) {
                         document.getElementById('aboutMandalTitle').value = settings.aboutMandalTitle || 'मंडळाचा परिचय';
@@ -1935,6 +1946,15 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     });
                 }
                 
+                // Immediately refresh and sync settingsCache in localStorage
+                try {
+                    const freshRes = await fetch('/api/settings?_=' + Date.now(), { cache: 'no-store' });
+                    const freshData = await freshRes.json();
+                    if (freshData.success) {
+                        localStorage.setItem('settingsCache', JSON.stringify(freshData.data));
+                    }
+                } catch(cacheErr) {}
+
                 status.innerHTML = '<span style="color: #10b981;">Donation settings saved successfully!</span>';
                 setTimeout(() => { status.innerHTML = ''; }, 3000);
                 alert('Settings Saved Successfully!');
@@ -2972,7 +2992,8 @@ async function loadAartiData() {
             const formattedDate = typeof formatDate === 'function' ? formatDate(aarti.date) : (aarti.date || '-');
             const escName = (aarti.name || '').replace(/'/g, "\\'");
             const escPuja = (aarti.pujaDetails || '').replace(/'/g, "\\'");
-            const timeVal = aarti.timeOfDay || aarti.time || 'सकाळ';
+            const rawTime = aarti.timeOfDay || aarti.time || 'सकाळ';
+            const timeVal = formatTime12Hour(rawTime);
             
             tr.innerHTML = `
                 <td style="padding: 12px 10px; color: #ffd700; font-weight: 600;">${formattedDate}</td>
@@ -3267,9 +3288,11 @@ async function loadNiyojanAdmin() {
             const escTitle = (item.title || '').replace(/'/g, "\\'");
             const escDesc = (item.description || '').replace(/'/g, "\\'");
             
+            const formattedTime = formatTime12Hour(item.time) || '-';
+            
             tr.innerHTML = `
                 <td style="padding: 12px 10px; color: #ffd700; font-weight: 600;">${formattedDate}</td>
-                <td style="padding: 12px 10px;"><span style="padding: 4px 8px; border-radius: 6px; font-size: 12px; background: rgba(255, 215, 0, 0.15); color: #fde047;">${item.time || '-'}</span></td>
+                <td style="padding: 12px 10px;"><span style="padding: 4px 8px; border-radius: 6px; font-size: 12px; background: rgba(255, 215, 0, 0.15); color: #fde047;">${formattedTime}</span></td>
                 <td style="padding: 12px 10px;"><strong style="color: #fff; font-size: 15px;">${item.title}</strong>${item.description ? '<br><small style="color: #94a3b8;">' + item.description + '</small>' : ''}</td>
                 <td style="padding: 12px 10px;">
                     <div style="display: inline-flex; gap: 6px; align-items: center;">
@@ -3389,6 +3412,23 @@ async function loadNiyojanAdmin() {
                 alert('त्रुटी आली.');
             }
         };
+
+function formatTime12Hour(timeStr) {
+    if (!timeStr) return '';
+    let str = String(timeStr).trim();
+    if (!str) return '';
+    const hasAM = /am/i.test(str);
+    const hasPM = /pm/i.test(str);
+    const match = str.match(/(\d{1,2}):(\d{1,2})(?::\d{1,2})?/);
+    if (!match) return str;
+    let h = parseInt(match[1], 10);
+    let m = match[2].padStart(2, '0');
+    let ampm = '';
+    if (hasPM) { ampm = 'PM'; if (h === 0) h = 12; else if (h > 12) h = h % 12; }
+    else if (hasAM) { ampm = 'AM'; if (h === 0) h = 12; else if (h > 12) h = h % 12; }
+    else { ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12; if (h === 0) h = 12; }
+    return `${String(h).padStart(2, '0')}:${m} ${ampm}`;
+}
 
 async function addNiyojan(e) {
     if (e && e.preventDefault) e.preventDefault();
