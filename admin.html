@@ -312,6 +312,13 @@
                                     <option value="false">🔴 OFF (लपवा)</option>
                                 </select>
                             </div>
+                            <div style="background: rgba(0,0,0,0.5); padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);">
+                                <label style="color: #ff8c00; font-weight: bold; font-size: 13.5px; display: block; margin-bottom: 6px;">💳 ६. देणगी विभाग / पोस्टर</label>
+                                <select id="showDonationPoster" class="form-control" style="width: 100%; padding: 8px 12px; background: #111827; color: white; border-radius: 8px; border: 1px solid #374151; font-weight: 600;">
+                                    <option value="true">🟢 ON (दाखवा)</option>
+                                    <option value="false">🔴 OFF (लपवा)</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -1758,6 +1765,9 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     if (document.getElementById('showCustomEventPoster')) {
                         document.getElementById('showCustomEventPoster').value = getToggleStr(settings.showCustomEventPoster);
                     }
+                    if (document.getElementById('showDonationPoster')) {
+                        document.getElementById('showDonationPoster').value = getToggleStr(settings.showDonationPoster);
+                    }
                     if (document.getElementById('donationPosterMode')) {
                         document.getElementById('donationPosterMode').value = settings.donationPosterMode || 'generated';
                     }
@@ -1811,6 +1821,7 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
             const showAagmanPoster = getVal('showAagmanPoster', 'true');
             const showVisarjanPoster = getVal('showVisarjanPoster', 'true');
             const showCustomEventPoster = getVal('showCustomEventPoster', 'true');
+            const showDonationPoster = getVal('showDonationPoster', 'true');
 
             const donationPosterMode = getVal('donationPosterMode');
             const donationPosterBtnName = getVal('donationPosterBtnName');
@@ -1846,6 +1857,7 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     { key: 'showAagmanPoster', value: showAagmanPoster },
                     { key: 'showVisarjanPoster', value: showVisarjanPoster },
                     { key: 'showCustomEventPoster', value: showCustomEventPoster },
+                    { key: 'showDonationPoster', value: showDonationPoster },
                     { key: 'donationPosterMode', value: donationPosterMode },
                     { key: 'donationPosterBtnName', value: donationPosterBtnName },
                     { key: 'donationPosterText', value: donationPosterText },

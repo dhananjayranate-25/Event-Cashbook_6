@@ -1379,6 +1379,7 @@
         const showAagman = isPosterOn(settings.showAagmanPoster);
         const showVisarjan = isPosterOn(settings.showVisarjanPoster);
         const showCustomEvent = isPosterOn(settings.showCustomEventPoster);
+        const showDonation = isPosterOn(settings.showDonationPoster);
 
         const vCard = document.getElementById('varganiPosterCard');
         const mCard = document.getElementById('mahaprasadPosterCard');
@@ -1391,6 +1392,11 @@
         if (aCard) aCard.style.setProperty('display', showAagman ? 'flex' : 'none', 'important');
         if (visCard) visCard.style.setProperty('display', showVisarjan ? 'flex' : 'none', 'important');
         if (cCard) cCard.style.setProperty('display', showCustomEvent ? 'flex' : 'none', 'important');
+
+        const donSec = document.getElementById('donationSection');
+        if (donSec) donSec.style.setProperty('display', showDonation ? 'block' : 'none', 'important');
+        const donNav = document.getElementById('nav-donate');
+        if (donNav) donNav.style.setProperty('display', showDonation ? 'inline-block' : 'none', 'important');
 
         const anyPosterVisible = showVargani || showMahaprasad || showAagman || showVisarjan || showCustomEvent;
         const showcaseBox = document.getElementById('posterShowcaseContainer');
@@ -1746,6 +1752,7 @@ async function loadHomeGalleryPreview() {
         if (tabName === 'home') {
             showEl(heroContainer);
             showEl(siteFooter);
+            applyPosterVisibility(window.appSettings);
         } else if (tabName === 'ganeshotsav') {
             showEl(mainContainer);
             showEl(ganeshotsavHeader);
