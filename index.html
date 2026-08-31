@@ -1411,9 +1411,12 @@
         if (cCard) cCard.style.setProperty('display', showCustomEvent ? 'flex' : 'none', 'important');
 
         const donSec = document.getElementById('donationSection');
-        if (donSec) donSec.style.setProperty('display', showDonation ? 'block' : 'none', 'important');
+        if (donSec) {
+            const isDonateTab = (window.currentTab === 'donate');
+            donSec.style.setProperty('display', (showDonation && isDonateTab) ? 'block' : 'none', 'important');
+        }
         const donNav = document.getElementById('nav-donate');
-        if (donNav) donNav.style.setProperty('display', showDonation ? 'inline-block' : 'none', 'important');
+        if (donNav) donNav.style.setProperty('display', showDonation ? 'inline-flex' : 'none', 'important');
 
         const anyPosterVisible = showVargani || showMahaprasad || showAagman || showVisarjan || showCustomEvent;
         const showcaseBox = document.getElementById('posterShowcaseContainer');
@@ -1726,6 +1729,8 @@ async function loadHomeGalleryPreview() {
         window.scrollTo(0, 0);
         const navMenu = document.getElementById('navLinks');
         if (navMenu) navMenu.classList.remove('active');
+        
+        window.currentTab = tabName;
         
         // Instant Active Nav Link Highlight
         document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
