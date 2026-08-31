@@ -215,9 +215,11 @@
             const result = await response.json();
             if (result.success && result.data) {
                 const data = result.data;
-                const footerQrImg = document.getElementById('footerDonationQRImg');
-                if (footerQrImg && (data.donateQRCode || data.donateQRImage || data.donationPosterImage)) {
-                    footerQrImg.src = data.donateQRCode || data.donateQRImage || data.donationPosterImage;
+                const rawQr = data.donateQRCode || data.donateQRImage || data.donationPosterImage;
+                if (rawQr) {
+                    const formatUrl = (u) => (!u ? '' : (u.startsWith('http') || u.startsWith('data:image')) ? u : (u.startsWith('/') ? u : ('/' + u)));
+                    const footerQrImg = document.getElementById('footerDonationQRImg');
+                    if (footerQrImg) footerQrImg.src = formatUrl(rawQr);
                 }
                 if (data.donateMobile) {
                     window.currentDonateMobile = data.donateMobile;

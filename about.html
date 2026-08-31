@@ -577,10 +577,11 @@
                         }
                     }
 
-                    // Set Footer QR & Details
-                    if (s.donateQRCode || s.donateQRImage) {
+                    const rawQr = s.donateQRCode || s.donateQRImage || s.donationPosterImage;
+                    if (rawQr) {
+                        const formatUrl = (u) => (!u ? '' : (u.startsWith('http') || u.startsWith('data:image')) ? u : (u.startsWith('/') ? u : ('/' + u)));
                         const footerQrImg = document.getElementById('footerDonationQRImg');
-                        if (footerQrImg) footerQrImg.src = s.donateQRCode || s.donateQRImage;
+                        if (footerQrImg) footerQrImg.src = formatUrl(rawQr);
                     }
                     if (s.donateMobile) {
                         window.currentDonateMobile = s.donateMobile;

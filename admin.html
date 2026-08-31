@@ -1733,10 +1733,12 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     if (document.getElementById('donateUPI')) {
                         document.getElementById('donateUPI').value = settings.donateUPI || 'dhananjayranate@ybl';
                     }
-                    if (settings.donateQRCode || settings.donateQRImage) {
+                    const rawQrVal = settings.donateQRCode || settings.donateQRImage || settings.donationPosterImage;
+                    if (rawQrVal) {
                         const prev = document.getElementById('donateQRPreview');
                         if (prev) {
-                            prev.src = settings.donateQRCode || settings.donateQRImage;
+                            const formatUrl = (u) => (!u ? '' : (u.startsWith('http') || u.startsWith('data:image')) ? u : (u.startsWith('/') ? u : ('/' + u)));
+                            prev.src = formatUrl(rawQrVal);
                             prev.style.display = 'block';
                         }
                     }
@@ -1992,6 +1994,8 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     const file = fileInput.files[0];
                     const url = await uploadFile(file);
                     settingsToSave.push({ key: 'donateQRCode', value: url });
+                    settingsToSave.push({ key: 'donateQRImage', value: url });
+                    settingsToSave.push({ key: 'donationPosterImage', value: url });
                     fileInput.value = '';
                 }
 

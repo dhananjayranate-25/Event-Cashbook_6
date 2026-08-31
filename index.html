@@ -2135,8 +2135,9 @@ const regNoElem = document.getElementById('displayRegNo');
             
             // Sync Donation details across Donation Section, Footer, and Poster Canvas
             const mobileVal = settings.donateMobile || '+91 9322134560';
-            const upiVal = settings.donateUPI || 'dhananjayranate@ybl';
-            const qrUrl = settings.donateQRCode || settings.donateQRImage || settings.donationPosterImage || 'https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg';
+            const rawQr = settings.donateQRCode || settings.donateQRImage || settings.donationPosterImage;
+            const formatUrl = (u) => (!u ? '' : (u.startsWith('http') || u.startsWith('data:image')) ? u : (u.startsWith('/') ? u : ('/' + u)));
+            const qrUrl = rawQr ? formatUrl(rawQr) : 'https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg';
 
             window.currentDonateMobile = mobileVal;
             window.currentDonateUPI = upiVal;
