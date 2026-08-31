@@ -72,21 +72,33 @@
     <link rel="prerender" href="login.html">
     <style> 
     a, button { touch-action: manipulation; } 
+    .custom-navbar {
+        padding: 8px 20px !important;
+        min-height: 48px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+    }
+    .nav-links {
+        align-items: center !important;
+        justify-content: center !important;
+    }
     #nav-login, #nav-donate, .nav-donate-btn {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        height: 38px !important;
+        height: 32px !important;
+        line-height: 32px !important;
         min-width: 85px !important;
         padding: 0 16px !important;
         border-radius: 6px !important;
         font-weight: 700 !important;
-        font-size: 15px !important;
+        font-size: 14px !important;
         box-sizing: border-box !important;
         vertical-align: middle !important;
-        line-height: 1 !important;
         text-decoration: none !important;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+        margin: 0 3px !important;
     }
     #nav-donate {
         background-color: #e53935 !important;
@@ -116,8 +128,13 @@
         }
         #nav-login, #nav-donate, .nav-donate-btn {
             width: 90% !important;
-            margin: 6px auto !important;
-            height: 42px !important;
+            max-width: 280px !important;
+            margin: 8px auto !important;
+            height: 38px !important;
+            line-height: 38px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
     }
     /* SPA Navigation Tab & Home Page Visibility Override to prevent blank rendering */
@@ -201,13 +218,13 @@
                     <div style="width: 25px; height: 3px; background-color: white;"></div>
                 </div>
                 <div class="nav-links" id="navLinks">
-                    <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); return false;" style="display: block !important;">मुखपृष्ठ</a>
-                    <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); return false;" style="display: block !important;">आर्थिक अहवाल</a>
-                    <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); return false;" style="display: block !important;">उत्सव कार्यकारिणी</a>
-                    <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); return false;" style="display: block !important;">उत्सव नियोजन</a>
-                    <a href="javascript:void(0)" id="nav-aarti" onclick="switchTab('aarti'); return false;" style="display: block !important;">महाआरती</a>
-                    <a href="gallery.html" id="nav-gallery" onpointerenter="const l=document.createElement('link');l.rel='prefetch';l.href='gallery.html';document.head.appendChild(l);" onpointerdown="window.location.href='gallery.html';" onclick="window.location.href='gallery.html'; return false;" style="display: block !important;">गणेशोत्सव छायाचित्रे</a>
-                    <a href="javascript:void(0)" id="nav-contact" onclick="switchTab('contact'); return false;" style="display: block !important;">संपर्क</a>
+                    <a href="javascript:void(0)" id="nav-home" onclick="switchTab('home'); return false;">मुखपृष्ठ</a>
+                    <a href="javascript:void(0)" id="nav-ganeshotsav" onclick="switchTab('ganeshotsav'); return false;">आर्थिक अहवाल</a>
+                    <a href="javascript:void(0)" id="nav-committee" onclick="switchTab('committee'); return false;">उत्सव कार्यकारिणी</a>
+                    <a href="javascript:void(0)" id="nav-niyojan" onclick="switchTab('niyojan'); return false;">उत्सव नियोजन</a>
+                    <a href="javascript:void(0)" id="nav-aarti" onclick="switchTab('aarti'); return false;">महाआरती</a>
+                    <a href="gallery.html" id="nav-gallery" onpointerenter="const l=document.createElement('link');l.rel='prefetch';l.href='gallery.html';document.head.appendChild(l);" onpointerdown="window.location.href='gallery.html';" onclick="window.location.href='gallery.html'; return false;">गणेशोत्सव छायाचित्रे</a>
+                    <a href="javascript:void(0)" id="nav-contact" onclick="switchTab('contact'); return false;">संपर्क</a>
                     <a href="javascript:void(0)" id="nav-donate" class="nav-donate-btn" onclick="switchTab('donate'); return false;">देणगी</a>
                     <a href="login.html" id="nav-login" class="nav-donate-btn">Login</a>
                 </div>

@@ -3247,11 +3247,13 @@ footer::after {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px 30px;
+    padding: 8px 20px;
+    min-height: 48px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     position: sticky;
     top: 0;
     z-index: 100;
+    box-sizing: border-box;
 }
 
 .nav-brand {
@@ -3276,6 +3278,8 @@ footer::after {
 
 .nav-links {
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 20px;
 }
 
@@ -3285,6 +3289,9 @@ footer::after {
     font-weight: 600;
     font-size: 15px;
     transition: color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-links a:hover {
@@ -3295,17 +3302,18 @@ footer::after {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    height: 38px !important;
+    height: 32px !important;
+    line-height: 32px !important;
     min-width: 85px !important;
     padding: 0 16px !important;
     border-radius: 6px !important;
     font-weight: 700 !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     box-sizing: border-box !important;
     vertical-align: middle !important;
-    line-height: 1 !important;
     text-decoration: none !important;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+    margin: 0 3px !important;
 }
 
 #nav-donate {
