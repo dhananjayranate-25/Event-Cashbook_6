@@ -3388,7 +3388,6 @@ ${commTextList}`;
             setTimeout(closePDFSettingsModal, 1200);
         }
 
-        window.switchAdminTab = switchAdminTab;
         function switchAdminTab(tabId, pushState = true) {
             if (pushState) {
                 const currentHash = window.location.hash.replace('#', '');
@@ -3427,6 +3426,8 @@ ${commTextList}`;
                 loadNiyojanAdmin();
             }
         }
+        window.switchAdminTab = switchAdminTab;
+
         
         window.addEventListener('popstate', function(e) {
             const hash = window.location.hash.replace('#', '');
