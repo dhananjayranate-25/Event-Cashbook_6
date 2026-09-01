@@ -2817,25 +2817,33 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 for (let r = 0; r < rowsCount; r++) {
                     const rowMembers = members.slice(r * cols, (r + 1) * cols);
                     const count = rowMembers.length;
-                    const itemWidth = 1080 / count;
                     const currentY = startY + (r * rowHeight);
 
                     rowMembers.forEach((mem, colIdx) => {
-                        const itemX = (colIdx * itemWidth) + (itemWidth / 2);
+                        let itemX;
+                        if (count === 4) {
+                            itemX = 135 + (colIdx * 270);
+                        } else if (count === 3) {
+                            itemX = 270 + (colIdx * 270);
+                        } else if (count === 2) {
+                            itemX = 360 + (colIdx * 360);
+                        } else {
+                            itemX = 540;
+                        }
 
                         // Member Name
                         ctx.fillStyle = '#ffffff';
-                        ctx.font = 'bold 22px "Noto Sans Devanagari", sans-serif';
+                        ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
                         ctx.fillText(mem.name, itemX, currentY);
 
                         // Member Designation
                         ctx.fillStyle = '#cbd5e1';
-                        ctx.font = '19px "Noto Sans Devanagari", sans-serif';
-                        ctx.fillText(mem.designation, itemX, currentY + 25);
+                        ctx.font = '20px "Noto Sans Devanagari", sans-serif';
+                        ctx.fillText(mem.designation, itemX, currentY + 26);
                     });
                 }
 
-                // 8. Bottom Branding Line (Always 35px above bottom inner golden border!)
+                // 8. Bottom Branding Line (Always 25px above bottom inner border!)
                 ctx.fillStyle = '#94a3b8';
                 ctx.font = '500 19px "Poppins", sans-serif';
                 ctx.fillText('Developed by | Dhananjay Ranate', 540, brandingY);
