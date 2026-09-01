@@ -4391,6 +4391,30 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
+    window.shareCustomPoster = shareCustomPoster;
+    window.captureCustomPoster = captureCustomPoster;
+
+    // Immediately pre-cache all 5 poster canvases on page load so 1st click triggers WhatsApp share instantly (0ms)
+    async function precacheAllPostersImmediate() {
+        try {
+            if (typeof html2canvas === 'undefined') {
+                await loadPDFLibraries();
+            }
+            const types = ['vargani', 'mahaprasad', 'aagman', 'visarjan', 'custom'];
+            for (const t of types) {
+                if (!cachedCustomCanvases[t]) {
+                    await captureCustomPoster(t, false);
+                }
+            }
+        } catch(e) {}
+    }
+
+    if (document.readyState === 'complete') {
+        setTimeout(precacheAllPostersImmediate, 300);
+    } else {
+        window.addEventListener('load', () => setTimeout(precacheAllPostersImmediate, 300));
+    }
+
     
     </script>
 
