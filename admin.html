@@ -3044,20 +3044,7 @@ ${commTextList}`;
                     imageFile = new File([u8arr], fileName, { type: mime });
                 } catch(e) {}
 
-                // Always download receipt poster PNG image file automatically to device gallery/downloads
-                try {
-                    const link = document.createElement('a');
-                    link.download = fileName;
-                    link.href = dataUrl;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                } catch(de) {}
-
-                // Always copy caption text to clipboard
-                try { await navigator.clipboard.writeText(captionText); } catch(e) {}
-
-                // 1. Mobile Native Web Share API (Attempt direct image + text share)
+                // Direct Mobile Native Share API (Shares BOTH Banner Image File AND Message Text directly into WhatsApp without downloading file)
                 if (imageFile && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
                     try {
                         await navigator.share({
@@ -3072,8 +3059,7 @@ ${commTextList}`;
                     }
                 }
 
-                // 2. WhatsApp Direct Link Mode
-                alert('📸 देणगी पावती इमेज गॅलरीत डाऊनलोड झाली आहे व संदेश कॉपी झाला आहे!\n\nव्हॉट्सॲपवर फोटो सिलेक्ट करून मेसेज पेस्ट (Paste / Ctrl+V) करा. 🚩');
+                // PC / Web Fallback Mode
                 window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(captionText), '_blank');
 
             } catch(err) {
