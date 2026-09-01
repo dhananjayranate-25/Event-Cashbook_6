@@ -2699,33 +2699,31 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                     ctx.stroke();
                 }
 
-                // 1. Official Website Link (Normal font weight, not bold!)
+                // 1. Official Website Link (Normal font weight)
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#ffffff';
-                ctx.font = '500 19px "Poppins", sans-serif';
-                ctx.fillText('🌐 अधिकृत वेबसाईट : shivsrushti-utsav-mandal.onrender.com', 540, 290);
+                ctx.font = '500 18px "Poppins", sans-serif';
+                ctx.fillText('🌐 अधिकृत वेबसाईट : shivsrushti-utsav-mandal.onrender.com', 540, 288);
 
-                // 2. Subtitle Year (YELLOW, EXTRA BOLD 32px!)
+                // 2. Subtitle Year (YELLOW, PROPER BOLD 24px, CRISP!)
                 ctx.fillStyle = '#ffd700';
-                ctx.font = '800 32px "Noto Sans Devanagari", "Khand", sans-serif';
-                ctx.shadowColor = 'rgba(255, 215, 0, 0.4)';
-                ctx.shadowBlur = 10;
-                ctx.fillText(`श्री गणेशोत्सव ${data.year}`, 540, 335);
-
-                // 3. Section Badge Box (Compact Badge Box for देणगी पावती!)
+                ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
                 ctx.shadowBlur = 0;
+                ctx.fillText(`श्री गणेशोत्सव ${data.year}`, 540, 325);
+
+                // 3. Section Badge Box (Compact Badge Box for देणगी पावती)
                 ctx.fillStyle = 'rgba(255, 215, 0, 0.14)';
                 ctx.strokeStyle = '#ffd700';
                 ctx.lineWidth = 2;
                 ctx.beginPath();
-                if (ctx.roundRect) ctx.roundRect(380, 368, 320, 46, 23);
-                else ctx.rect(380, 368, 320, 46);
+                if (ctx.roundRect) ctx.roundRect(380, 356, 320, 46, 23);
+                else ctx.rect(380, 356, 320, 46);
                 ctx.fill();
                 ctx.stroke();
 
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('🧾 देणगी पावती', 540, 401);
+                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('🧾 देणगी पावती', 540, 389);
 
                 // 4. Donor Details Box (Receipt Card)
                 const cardX = 80;
