@@ -1074,7 +1074,17 @@
 
                 const apiYears = (yearsData.success && Array.isArray(yearsData.data)) ? yearsData.data : [];
                 const s = (setData.success && (setData.data || setData.settings)) ? (setData.data || setData.settings) : {};
-                adminCustomYearPanels = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
+                let serverPanels = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
+                
+                // Merge with localStorage fallback
+                let localPanels = [];
+                try {
+                    const cached = localStorage.getItem('adminCustomYearPanels');
+                    if (cached) localPanels = JSON.parse(cached) || [];
+                } catch(le) {}
+
+                adminCustomYearPanels = [...new Set([...serverPanels, ...localPanels])];
+                try { localStorage.setItem('adminCustomYearPanels', JSON.stringify(adminCustomYearPanels)); } catch(le) {}
 
                 const allYears = [...new Set(['2026', ...apiYears, ...adminCustomYearPanels])].sort().reverse();
                 renderAdminYearTabs(allYears);
@@ -1131,8 +1141,14 @@
                 }
                 const apiYears = (yData.success && Array.isArray(yData.data)) ? yData.data : [];
                 const s = (sData.success && (sData.data || sData.settings)) ? (sData.data || sData.settings) : {};
-                const customYears = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
-                const allYears = [...new Set([...apiYears, ...customYears])].sort().reverse();
+                let serverPanels = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
+                let localPanels = [];
+                try {
+                    const cached = localStorage.getItem('adminCustomYearPanels');
+                    if (cached) localPanels = JSON.parse(cached) || [];
+                } catch(le) {}
+                const customYears = [...new Set([...serverPanels, ...localPanels])];
+                const allYears = [...new Set(['2026', ...apiYears, ...customYears])].sort().reverse();
                 yearsToRender = currentAdminSelectedYear === 'all' ? allYears : [currentAdminSelectedYear];
             }
 
@@ -2164,6 +2180,17 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
             const pdfList = document.getElementById('pdfList');
             if (!pdfList) return;
 
+            // Instant render from localStorage cache
+            try {
+                const cachedPdfs = localStorage.getItem('uploadedPDFsCache');
+                if (cachedPdfs) {
+                    const pdfs = JSON.parse(cachedPdfs);
+                    if (Array.isArray(pdfs) && pdfs.length > 0) {
+                        renderPDFListHTML(pdfs);
+                    }
+                }
+            } catch(e) {}
+
             try {
                 const response = await fetch('/api/uploaded-pdfs?t=' + Date.now());
                 if (!response.ok) {
@@ -2176,7 +2203,9 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                 const result = await response.json();
 
                 if (result.success && result.data.length > 0) {
-                    pdfList.innerHTML = result.data.map(pdf => {
+                    try { localStorage.setItem('uploadedPDFsCache', JSON.stringify(result.data)); } catch(e) {}
+                    renderPDFListHTML(result.data);
+                }
                         const escName = pdf.displayName.replace(/'/g, "\\'");
                         const escSub = (pdf.subtitle || '').replace(/'/g, "\\'");
                         const escTag = (pdf.tagline || '').replace(/'/g, "\\'");
