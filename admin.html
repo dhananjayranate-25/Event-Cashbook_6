@@ -2608,8 +2608,7 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             if (window.currentCommitteeData && Array.isArray(window.currentCommitteeData)) {
                 const active = window.currentCommitteeData.filter(m => m && m.name && m.name.trim() !== '');
                 if (active.length > 0) {
-                    commTextList = active.map(m => `${m.name.trim()} - ${m.designation || (m.role === 'president' ? 'अध्यक्ष' : m.role === 'treasurer' ? 'खजिनदार' : 'कार्यकारी सदस्य')}`).join('
-');
+                    commTextList = active.map(m => `${m.name.trim()} - ${m.designation || (m.role === 'president' ? 'अध्यक्ष' : m.role === 'treasurer' ? 'खजिनदार' : 'कार्यकारी सदस्य')}`).join('\n');
                 }
             }
             if (!commTextList) {
