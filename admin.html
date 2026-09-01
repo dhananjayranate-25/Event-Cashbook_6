@@ -2918,17 +2918,17 @@ ${commTextList}`;
                     rowMembers.forEach((mem, colIdx) => {
                         let itemX;
                         if (count === 4) {
-                            itemX = 135 + (colIdx * 270);
+                            itemX = 158 + (colIdx * 254);
                         } else if (count === 3) {
-                            itemX = 270 + (colIdx * 270);
+                            itemX = 285 + (colIdx * 255);
                         } else if (count === 2) {
-                            itemX = 360 + (colIdx * 360);
+                            itemX = 370 + (colIdx * 340);
                         } else {
                             itemX = 540;
                         }
 
-                        // 1. Draw Executive Royal Golden Badge Card Container
-                        const cardW = 242;
+                        // 1. Draw Executive Royal Golden Badge Card Container (Strictly inside page borders)
+                        const cardW = 216;
                         const cardH = 64;
                         const cardX = itemX - (cardW / 2);
                         const cardY = currentY - 22;
