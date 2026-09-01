@@ -5,6 +5,7 @@
     <meta name="theme-color" content="#ff8c00">
     <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="शिवसृष्टी">
@@ -2158,6 +2159,7 @@ const regNoElem = document.getElementById('displayRegNo');
             
             // Sync Donation details across Donation Section, Footer, and Poster Canvas
             const mobileVal = settings.donateMobile || '+91 9322134560';
+            const upiVal = settings.donateUPI || '9322134560@ybl';
             const rawQr = settings.donateQRCode || settings.donateQRImage || settings.donationPosterImage;
             const formatUrl = (u) => (!u ? '' : (u.startsWith('http') || u.startsWith('data:image')) ? u : (u.startsWith('/') ? u : ('/' + u)));
             const qrUrl = rawQr ? formatUrl(rawQr) : 'https://res.cloudinary.com/vu0ccgsm/image/upload/v1784816369/shivsrushti_boyz_migration/wr3lj8n8z4qbymcgpnaw.jpg';
