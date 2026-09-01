@@ -3713,14 +3713,14 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         clone.insertAdjacentHTML('beforeend', footerHtml);
 
         
-        // Wait for all images and fonts inside clone to be ready for Ultra-HD rendering
+        // Fast wait for images inside clone
         const donationImgs = Array.from(clone.querySelectorAll('img'));
         await Promise.all(donationImgs.map(img => {
             if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
             return new Promise(res => {
                 img.onload = () => res();
                 img.onerror = () => res();
-                setTimeout(res, 2000);
+                setTimeout(res, 150);
             });
         }));
         if (document.fonts && document.fonts.ready) {
@@ -3734,7 +3734,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             backgroundColor: '#1a1a1a',
             logging: false,
             windowWidth: 1200,
-            imageTimeout: 25000,
+            imageTimeout: 2000,
             onclone: (clonedDoc) => {
                 const el = clonedDoc.body;
                 if (el) {
@@ -4211,6 +4211,10 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 file = new File([res.blob], 'Donation_Poster.png', { type: 'image/png' });
             }
 
+            // Restore button UI immediately so spinner never sticks
+            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+            isDonationShareInProgress = false;
+
             // Direct Mobile Native Share API (Shares BOTH Banner Image File AND Message Text directly into WhatsApp without downloading file)
             if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
@@ -4403,6 +4407,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 await loadPDFLibraries();
             }
             const types = ['vargani', 'mahaprasad', 'aagman', 'visarjan', 'custom'];
+            if (!cachedDonationCanvas) await captureDonationPoster(false);
             for (const t of types) {
                 if (!cachedCustomCanvases[t]) {
                     await captureCustomPoster(t, false);
