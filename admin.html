@@ -2984,40 +2984,78 @@ ${commTextList}`;
             link.click();
         };
 
+        let isSharingInProgress = false;
+
         window.shareAdminReceiptImage = async function() {
+            if (isSharingInProgress) return;
+            isSharingInProgress = true;
+
             const canvas = document.getElementById('adminReceiptCanvas');
-            if (!canvas) return;
+            if (!canvas) {
+                isSharingInProgress = false;
+                return;
+            }
             
             const captionEl = document.getElementById('adminReceiptCaptionText');
             const captionText = captionEl ? captionEl.value : (currentAdminReceiptData ? currentAdminReceiptData.message : '');
+            const name = currentAdminReceiptData ? currentAdminReceiptData.donorName : 'Donor';
+            const fileName = `Denagi_Pavati_${name.replace(/\s+/g, '_')}.png`;
 
             try {
-                canvas.toBlob(async (blob) => {
-                    if (!blob) {
-                        window.open('https://wa.me/?text=' + encodeURIComponent(captionText), '_blank');
-                        return;
-                    }
-                    const name = currentAdminReceiptData ? currentAdminReceiptData.donorName : 'Donor';
-                    const file = new File([blob], `Denagi_Pavati_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
-                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                if (!blob) {
+                    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(captionText), '_blank');
+                    isSharingInProgress = false;
+                    return;
+                }
+
+                const file = new File([blob], fileName, { type: 'image/png' });
+
+                // Try native Web Share API (Android / iOS native WhatsApp share)
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    try {
                         await navigator.share({
                             title: 'देणगी पावती - श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ',
                             text: captionText,
                             files: [file]
                         });
-                    } else {
-                        try {
-                            await navigator.clipboard.writeText(captionText);
-                            alert('पावतीचा संदेश कॉपी झाला आहे! व्हॉट्सॲपवर फोटोसोबत पेस्ट करा.');
-                        } catch(e) {}
-                        window.open('https://wa.me/?text=' + encodeURIComponent(captionText), '_blank');
+                    } catch (shareErr) {
+                        console.log('Native share response:', shareErr);
+                        // If not user cancellation, fallback to direct open + download
+                        if (shareErr.name !== 'AbortError') {
+                            try { await navigator.clipboard.writeText(captionText); } catch(e) {}
+                            
+                            const link = document.createElement('a');
+                            link.href = canvas.toDataURL('image/png');
+                            link.download = fileName;
+                            link.click();
+
+                            window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(captionText), '_blank');
+                        }
                     }
-                }, 'image/png');
+                } else {
+                    // Desktop / PC Fallback Mode: Copy text caption + Auto Download PNG + Open WhatsApp Web
+                    try {
+                        await navigator.clipboard.writeText(captionText);
+                        alert('पावतीचा संदेश कॉपी झाला आहे व पोस्टर इमेज डाउनलोड झाली आहे! व्हॉट्सॲपवर पाठवा.');
+                    } catch(e) {}
+                    
+                    const link = document.createElement('a');
+                    link.href = canvas.toDataURL('image/png');
+                    link.download = fileName;
+                    link.click();
+
+                    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(captionText), '_blank');
+                }
             } catch(err) {
-                window.open('https://wa.me/?text=' + encodeURIComponent(captionText), '_blank');
+                console.error('Share error:', err);
+                window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(captionText), '_blank');
+            } finally {
+                isSharingInProgress = false;
             }
         };
 
+        window.shareAdminReceiptPoster = window.shareAdminReceiptImage;
     </script>
 
     <!-- Admin Digital Receipt Modal -->
