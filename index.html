@@ -4197,12 +4197,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 `;
             }
 
-            // Copy text caption immediately to clipboard
-            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
-
-            // Pre-open WhatsApp target window on user click before async delay to avoid popup blocker
-            shareWin = window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
-
             let file, dataUrl;
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
                 const res = await getPosterBlobAndDataUrl(window.appSettings.donationPosterImage, captureDonationPoster);
@@ -4214,7 +4208,23 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 file = new File([res.blob], 'Donation_Poster.png', { type: 'image/png' });
             }
 
-            // Auto download poster image for sharing
+            // 1. Mobile Native Web Share API (Sends Image + Text directly into WhatsApp)
+            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: orgName + ' - देणगी',
+                        text: shareTextBase.trim(),
+                        files: [file]
+                    });
+                    return;
+                } catch(se) {
+                    console.log('Native share closed/cancelled:', se);
+                }
+            }
+
+            // 2. Desktop PC Fallback Mode (Copy Text + Download PNG + Open WhatsApp Web)
+            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
+
             const link = document.createElement('a');
             link.download = 'Donation_Poster.png';
             link.href = dataUrl || (file ? URL.createObjectURL(file) : '');
@@ -4222,19 +4232,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             link.click();
             document.body.removeChild(link);
 
-            // Native Web Share API attempt on Mobile
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    if (shareWin && !shareWin.closed) shareWin.close();
-                    await navigator.share({
-                        title: orgName + ' - देणगी',
-                        text: shareTextBase.trim(),
-                        files: [file]
-                    });
-                } catch(se) {
-                    console.log('Native share closed/cancelled:', se);
-                }
-            }
+            alert('पोस्टर इमेज डाऊनलोड झाली आहे व संदेश कॉपी झाला आहे! व्हॉट्सॲप उघडल्यावर इमेज पाठवून मेसेज पेस्ट (Ctrl+V) करा. 🚩');
+            window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
         } catch (shareErr) {
             console.error('Share action failed:', shareErr);
             if (!shareWin || shareWin.closed) {
@@ -4364,19 +4363,29 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 `;
             }
 
-            // Copy text caption immediately to clipboard
-            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
-
-            // Pre-open WhatsApp target window on user click before async delay to avoid popup blocker
-            shareWin = window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
-
             const canvas = await captureCustomPoster(type, true);
             const dataUrl = canvas.toDataURL('image/png', 1.0);
             const blob = dataURItoBlob(dataUrl);
             const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : (type === 'visarjan' ? 'Ganpati_Visarjan.png' : (type === 'custom' ? 'Vishesh_Karyakram.png' : 'Aagman_Sohala.png')));
             const file = new File([blob], filename, { type: 'image/png' });
 
-            // Auto download poster image for sharing
+            // 1. Mobile Native Web Share API (Sends Image + Text directly into WhatsApp)
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        title: orgName + ' - ' + titleStr,
+                        text: shareTextBase.trim(),
+                        files: [file]
+                    });
+                    return;
+                } catch(se) {
+                    console.log('Native share closed/cancelled:', se);
+                }
+            }
+
+            // 2. Desktop PC Fallback Mode (Copy Text + Download PNG + Open WhatsApp Web)
+            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
+
             const link = document.createElement('a');
             link.download = filename;
             link.href = dataUrl;
@@ -4384,19 +4393,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             link.click();
             document.body.removeChild(link);
 
-            // Native Web Share API attempt on Mobile
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    if (shareWin && !shareWin.closed) shareWin.close();
-                    await navigator.share({
-                        title: orgName + ' - ' + titleStr,
-                        text: shareTextBase.trim(),
-                        files: [file]
-                    });
-                } catch(se) {
-                    console.log('Native share closed/cancelled:', se);
-                }
-            }
+            alert('पोस्टर इमेज डाऊनलोड झाली आहे व संदेश कॉपी झाला आहे! व्हॉट्सॲप उघडल्यावर इमेज पाठवून मेसेज पेस्ट (Ctrl+V) करा. 🚩');
+            window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
         } catch (shareErr) {
             console.error('Share action failed:', shareErr);
             if (!shareWin || shareWin.closed) {
