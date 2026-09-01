@@ -2576,9 +2576,21 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 year: year
             };
 
+            // Build dynamic Utsav Committee list text for WhatsApp caption
+            let commTextList = '';
+            if (window.currentCommitteeData && Array.isArray(window.currentCommitteeData)) {
+                const active = window.currentCommitteeData.filter(m => m && m.name && m.name.trim() !== '');
+                if (active.length > 0) {
+                    commTextList = active.map(m => `🔹 ${m.name.trim()} (${m.designation || (m.role === 'president' ? 'अध्यक्ष' : m.role === 'treasurer' ? 'खजिनदार' : 'कार्यकारी सदस्य')})`).join('\n');
+                }
+            }
+            if (!commTextList) {
+                commTextList = `🔹 तेजस फटांगरे (अध्यक्ष)\n🔹 धनंजय रणाते (खजिनदार)\n🔹 धीरज झावरे (उपाध्यक्ष)\n🔹 आदित्य मते (सचिव)\n🔹 सार्थक माताडे (सहसचिव)\n🔹 ओंकार वर्पे (सहखजिनदार)\n🔹 तेजस देशमुख (सोशल मीडिया प्रमुख)\n🔹 तेजस वर्पे (कार्यकारी सदस्य)\n🔹 वैभव सांगळे (कार्यकारी सदस्य)\n🔹 निलेश कदम (कार्यकारी सदस्य)\n🔹 शुभम पेटकर (कार्यकारी सदस्य)`;
+            }
+
             let msgTemplate = (typeof appSettings !== 'undefined' && appSettings.receiptPosterText) ? appSettings.receiptPosterText : '';
             if (!msgTemplate) {
-                msgTemplate = `🌺 श्री गणेशाय नमः 🌺\n॥ हर हर महादेव ॥\n\nश्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, गणेशोत्सव [वर्ष]\n\n🧾 देणगी पावती\n\nदेणगीदाराचे नाव : [नाव]\nदेणगीची रक्कम : ₹[रक्कम]\nदेणगीचे माध्यम : [माध्यम]\nदेणगी प्राप्त दिनांक : [दिनांक]\n\nवरील रक्कम गणेशोत्सव [वर्ष] साठी देणगी प्राप्त झाली आहे.\n\nआपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे मनःपूर्वक आभार! 🙏🌸\n\nआपले सहकार्य असेच निरंतर लाभत राहो, ही नम्र अपेक्षा.`;
+                msgTemplate = `🌺 श्री गणेशाय नमः 🌺\n॥ हर हर महादेव ॥\n\nश्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🚩 श्री गणेशोत्सव [वर्ष] 🚩\n\n🧾 देणगी पावती\n\nदेणगीदाराचे नाव : [नाव]\nदेणगीची रक्कम : ₹[रक्कम]\nदेणगीचे माध्यम : [माध्यम]\nदेणगी प्राप्त दिनांक : [दिनांक]\n\nवरील रक्कम गणेशोत्सव [वर्ष] साठी देणगी म्हणून प्राप्त झाली आहे.\n\nआपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे मनःपूर्वक आभार! 🙏🌸\n\nआपले सहकार्य असेच निरंतर लाभत राहो, ही नम्र अपेक्षा.`;
             }
 
             let formattedMsg = msgTemplate
@@ -2586,7 +2598,15 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 .replace(/\[रक्कम\]/g, amountFormatted)
                 .replace(/\[माध्यम\]/g, modeFormatted)
                 .replace(/\[दिनांक\]/g, dateFormatted)
-                .replace(/\[वर्ष\]/g, year);
+                .replace(/\[वर्ष\]/g, year)
+                .replace(/\[कार्यकारिणी\]/g, commTextList);
+
+            // Append Utsav Committee section & Website link automatically at end if not already present
+            if (!formattedMsg.includes('उत्सव कार्यकारिणी')) {
+                formattedMsg += `\n\n❖ उत्सव कार्यकारिणी ❖\n${commTextList}\n\n🌐 अधिकृत वेबसाईट : https://shivsrushti-utsav-mandal.onrender.com`;
+            } else if (!formattedMsg.includes('shivsrushti-utsav-mandal')) {
+                formattedMsg += `\n\n🌐 अधिकृत वेबसाईट : https://shivsrushti-utsav-mandal.onrender.com`;
+            }
 
             currentAdminReceiptData.message = formattedMsg;
 
@@ -2863,7 +2883,9 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
         window.shareAdminReceiptImage = async function() {
             const canvas = document.getElementById('adminReceiptCanvas');
             if (!canvas) return;
-            const captionText = currentAdminReceiptData ? currentAdminReceiptData.message : '';
+            
+            const captionEl = document.getElementById('adminReceiptCaptionText');
+            const captionText = captionEl ? captionEl.value : (currentAdminReceiptData ? currentAdminReceiptData.message : '');
 
             try {
                 canvas.toBlob(async (blob) => {
@@ -2871,18 +2893,20 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                         window.open('https://wa.me/?text=' + encodeURIComponent(captionText), '_blank');
                         return;
                     }
-                    const file = new File([blob], 'denagi_pavati.png', { type: 'image/png' });
+                    const name = currentAdminReceiptData ? currentAdminReceiptData.donorName : 'Donor';
+                    const file = new File([blob], `Denagi_Pavati_${name.replace(/\s+/g, '_')}.png`, { type: 'image/png' });
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         await navigator.share({
-                            title: 'देणगी पावती',
+                            title: 'देणगी पावती - श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ',
                             text: captionText,
                             files: [file]
                         });
                     } else {
-                        navigator.clipboard.writeText(captionText).then(() => {
-                            alert('पावतीचा संदेश कॉपी झाला आहे! व्हॉट्सॲपवर पेस्ट करा.');
-                            window.open('https://wa.me/?text=' + encodeURIComponent(captionText), '_blank');
-                        });
+                        try {
+                            await navigator.clipboard.writeText(captionText);
+                            alert('पावतीचा संदेश कॉपी झाला आहे! व्हॉट्सॲपवर फोटोसोबत पेस्ट करा.');
+                        } catch(e) {}
+                        window.open('https://wa.me/?text=' + encodeURIComponent(captionText), '_blank');
                     }
                 }, 'image/png');
             } catch(err) {
