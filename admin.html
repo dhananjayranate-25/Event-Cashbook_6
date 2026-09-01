@@ -2543,16 +2543,14 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             const modal = document.getElementById('adminReceiptModal');
             if (!modal) return;
 
-            // Fetch committee data dynamically if not loaded
-            if (!window.currentCommitteeData || window.currentCommitteeData.length === 0) {
-                try {
-                    const commRes = await fetch('/api/committee');
-                    const commData = await commRes.json();
-                    if (commData.success && Array.isArray(commData.data)) {
-                        window.currentCommitteeData = commData.data;
-                    }
-                } catch(e) {}
-            }
+            // Always fetch live fresh committee data from server for 100% instant sync
+            try {
+                const commRes = await fetch('/api/committee?v=' + Date.now());
+                const commData = await commRes.json();
+                if (commData.success && Array.isArray(commData.data)) {
+                    window.currentCommitteeData = commData.data;
+                }
+            } catch(e) {}
 
             const year = yrStr || '2026';
             
@@ -3408,6 +3406,7 @@ ${commTextList}`;
                     statusElem.textContent = 'Saved Successfully!';
                     photoInput.value = ''; // clear file input
                     setTimeout(() => statusElem.textContent = '', 3000);
+                    if (typeof loadCommitteeMembers === 'function') loadCommitteeMembers();
                 } else {
                     statusElem.style.color = '#ff6b6b';
                     statusElem.textContent = 'Error: ' + result.error;
@@ -3440,6 +3439,7 @@ ${commTextList}`;
                     const photoInput = document.getElementById(role + 'PhotoInput');
                     if(photoInput) photoInput.value = '';
                     setTimeout(() => statusElem.textContent = '', 3000);
+                    if (typeof loadCommitteeMembers === 'function') loadCommitteeMembers();
                 } else {
                     statusElem.style.color = '#ff6b6b';
                     statusElem.textContent = 'Error: ' + result.error;
