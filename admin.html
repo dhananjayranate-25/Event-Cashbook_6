@@ -3071,6 +3071,35 @@ ${commTextList}`;
             }
         };
 
+        
+        window.saveAdminReceiptMessageTemplate = async function() {
+            const captionEl = document.getElementById('adminReceiptCaptionText');
+            if (!captionEl) return;
+            const txt = captionEl.value;
+            if (!txt) return;
+
+            try {
+                const res = await fetch('/api/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        settings: [{ key: 'receiptPosterText', value: txt }]
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    if (typeof appSettings !== 'undefined') appSettings.receiptPosterText = txt;
+                    const rTxt = document.getElementById('receiptPosterText');
+                    if (rTxt) rTxt.value = txt;
+                    alert('हा मेसेज कायमस्वरूपी सेव्ह झाला आहे! 💾');
+                } else {
+                    alert('सेव्ह करताना त्रुटी आली.');
+                }
+            } catch(e) {
+                alert('सेव्ह करताना त्रुटी आली.');
+            }
+        };
+
         window.shareAdminReceiptPoster = window.shareAdminReceiptImage;
     </script>
     <!-- Admin Digital Receipt Modal -->
@@ -3084,7 +3113,12 @@ ${commTextList}`;
                 <canvas id="adminReceiptCanvas" width="1080" height="1350" style="max-width: 100%; height: auto; border-radius: 12px; border: 2px solid rgba(255, 215, 0, 0.4); box-shadow: 0 8px 25px rgba(0,0,0,0.5); display: block; margin: 0 auto;"></canvas>
             </div>
             <div style="background: rgba(0,0,0,0.4); padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;">
-                <label style="color: #34d399; font-weight: bold; font-size: 12.5px; display: block; margin-bottom: 6px;">💬 WhatsApp मेसेज संदेश (Caption - संपादित करू शकता):</label>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <label style="color: #34d399; font-weight: bold; font-size: 12.5px;">💬 WhatsApp मेसेज संदेश (Caption - संपादित करू शकता):</label>
+                    <button type="button" onclick="saveAdminReceiptMessageTemplate()" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; border: none; padding: 5px 12px; border-radius: 6px; font-size: 11.5px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+                        <i class="fas fa-save"></i> 💾 हा मेसेज सेव्ह करा
+                    </button>
+                </div>
                 <textarea id="adminReceiptCaptionText" rows="6" placeholder="येथे मेसेज एडिट करू शकता..." style="width: 100%; padding: 10px 12px; background: #1e293b; color: #f1f5f9; border-radius: 8px; border: 1px solid #3b82f6; font-size: 13px; resize: vertical; box-sizing: border-box; font-family: inherit; line-height: 1.5;"></textarea>
             </div>
             <div class="edit-modal-actions" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
