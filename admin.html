@@ -2764,17 +2764,15 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
 
                 // Row 1: Name
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('👤 देणगीदाराचे नाव :', cardX + 35, cardY + 62);
                 ctx.fillStyle = '#ffffff';
                 
                 let displayName = data.donorName;
-                if (displayName.length > 30) {
+                if (displayName.length > 28) {
                     ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
-                } else if (displayName.length > 22) {
-                    ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
                 } else {
-                    ctx.font = 'bold 32px "Noto Sans Devanagari", sans-serif';
+                    ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
                 }
                 ctx.fillText(displayName, cardX + 320, cardY + 62);
 
@@ -2785,10 +2783,10 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
 
                 // Row 2: Amount
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('💰 देणगीची रक्कम :', cardX + 35, cardY + 150);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 38px "Poppins", "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 27px "Poppins", "Noto Sans Devanagari", sans-serif';
                 ctx.fillText(`₹${data.amount}/-`, cardX + 320, cardY + 150);
 
                 // Row Divider
@@ -2796,10 +2794,10 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
 
                 // Row 3: Mode
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('💳 देणगीचे माध्यम :', cardX + 35, cardY + 238);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText(data.mode, cardX + 320, cardY + 238);
 
                 // Row Divider
@@ -2807,10 +2805,10 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
 
                 // Row 4: Date
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('📅 प्राप्त दिनांक :', cardX + 35, cardY + 325);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText(data.date, cardX + 320, cardY + 325);
 
                 // 5. Thank You Messages
