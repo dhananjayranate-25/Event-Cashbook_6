@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 app.use('/api', (req, res, next) => {
     if (req.method !== 'GET') return next();
     // Do not cache portal user session or live streaming upload check
-    if (req.path.startsWith('/portal/users') || req.path.startsWith('/system/storage')) return next();
+    if (req.path.startsWith('/portal/users') || req.path.startsWith('/system/storage') || req.path.startsWith('/uploaded-pdfs') || req.path.startsWith('/settings') || req.path.startsWith('/years') || req.path.startsWith('/year-visibility') || req.path.startsWith('/committee') || req.path.startsWith('/entries') || req.path.startsWith('/aarti') || req.query.t || req.query.v) return next();
     
     const key = req.originalUrl;
     const cached = getCachedApi(key);

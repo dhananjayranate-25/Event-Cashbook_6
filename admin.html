@@ -1060,9 +1060,9 @@
         async function loadYearsForAdmin() {
             try {
                 const [yearsRes, setRes, visRes] = await Promise.all([
-                    fetch('/api/years'),
-                    fetch('/api/settings'),
-                    fetch('/api/year-visibility')
+                    fetch('/api/years?t=' + Date.now()),
+                    fetch('/api/settings?t=' + Date.now()),
+                    fetch('/api/year-visibility?t=' + Date.now())
                 ]);
                 const yearsData = await yearsRes.json();
                 const setData = await setRes.json();
@@ -1122,7 +1122,7 @@
             if (passedYears && Array.isArray(passedYears)) {
                 yearsToRender = currentAdminSelectedYear === 'all' ? passedYears : [currentAdminSelectedYear];
             } else {
-                const [yearsRes, setRes, visRes] = await Promise.all([fetch('/api/years'), fetch('/api/settings'), fetch('/api/year-visibility')]);
+                const [yearsRes, setRes, visRes] = await Promise.all([fetch('/api/years?t=' + Date.now()), fetch('/api/settings?t=' + Date.now()), fetch('/api/year-visibility?t=' + Date.now())]);
                 const yData = await yearsRes.json();
                 const sData = await setRes.json();
                 const vData = await visRes.json();
@@ -1723,7 +1723,7 @@
 
         async function loadAppearanceSettings() {
             try {
-                const response = await fetch('/api/settings');
+                const response = await fetch('/api/settings?t=' + Date.now());
                 const result = await response.json();
                 if (result.success) {
                     const settings = result.data;
@@ -2165,7 +2165,7 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
             if (!pdfList) return;
 
             try {
-                const response = await fetch('/api/uploaded-pdfs');
+                const response = await fetch('/api/uploaded-pdfs?t=' + Date.now());
                 if (!response.ok) {
                     throw new Error(`Server status ${response.status}`);
                 }
