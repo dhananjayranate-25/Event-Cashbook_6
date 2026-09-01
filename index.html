@@ -4158,21 +4158,25 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             };
 
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share(shareData);
+                try {
+                    await navigator.share(shareData);
+                } catch(se) {
+                    if (se.name !== 'AbortError') {
+                        try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
+                        const link = document.createElement('a');
+                        link.download = 'Donation_Poster.png';
+                        link.href = dataUrl || URL.createObjectURL(file);
+                        link.click();
+                        window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
+                    }
+                }
             } else {
-                // Download fallback and open lightbox for in-app browser workaround
+                try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
                 const link = document.createElement('a');
                 link.download = 'Donation_Poster.png';
                 link.href = dataUrl || URL.createObjectURL(file);
-                document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link);
-                if (dataUrl) openLightbox(dataUrl);
-                if (isInAppBrowser()) {
-                    alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
-                } else {
-                    alert('तुमच्या डिव्हाइसवर डायरेक्ट इमेज शेअरिंग उपलब्ध नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस करून थेट Share करू शकता.');
-                }
+                window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
             }
         } catch (shareErr) {
             console.log('Share action was cancelled or failed:', shareErr);
