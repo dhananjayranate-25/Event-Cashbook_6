@@ -3601,9 +3601,9 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                         else d = 'कार्यकारी सदस्य';
                     }
                     dynamicMembersHTML += `
-                    <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                        <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">${m.name || ''}</span>
-                        <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">${d}</span>
+                    <div style="width: 22%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                        <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">${m.name || ''}</span>
+                        <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">${d}</span>
                     </div>`;
                 });
                 dynamicMembersHTML += '</div>';
