@@ -4364,7 +4364,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 `;
             }
 
-            const canvas = await captureCustomPoster(type, true);
+            const canvas = await captureCustomPoster(type, false);
             const dataUrl = canvas.toDataURL('image/png', 1.0);
             const blob = dataURItoBlob(dataUrl);
             const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : (type === 'visarjan' ? 'Ganpati_Visarjan.png' : (type === 'custom' ? 'Vishesh_Karyakram.png' : 'Aagman_Sohala.png')));
