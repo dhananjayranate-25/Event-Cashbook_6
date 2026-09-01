@@ -2631,26 +2631,35 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             const cols = 4;
             const rowsCount = Math.ceil(members.length / cols);
 
-            canvas.width = 1080;
-            canvas.height = 1420;
+            // 2x High-DPI Ultra-HD Resolution for 100% Crystal Clarity
+            const scale = 2;
+            const logicalW = 1080;
+            const logicalH = 1360;
 
-            // Background Gradient (Dark Royal Red/Purple Festival Theme)
-            const bgGrad = ctx.createLinearGradient(0, 0, 0, 1420);
+            canvas.width = logicalW * scale;
+            canvas.height = logicalH * scale;
+
+            ctx.scale(scale, scale);
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
+            // Background Gradient (Dark Royal Festival Theme)
+            const bgGrad = ctx.createLinearGradient(0, 0, 0, logicalH);
             bgGrad.addColorStop(0, '#1a0429');
             bgGrad.addColorStop(0.35, '#2d0b3f');
             bgGrad.addColorStop(0.7, '#1f0422');
             bgGrad.addColorStop(1, '#0c0112');
             ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, 1080, 1420);
+            ctx.fillRect(0, 0, logicalW, logicalH);
 
             // Double Golden Borders
             ctx.strokeStyle = '#ffd700';
             ctx.lineWidth = 6;
-            ctx.strokeRect(25, 25, 1030, 1370);
+            ctx.strokeRect(25, 25, logicalW - 50, logicalH - 50);
 
             ctx.strokeStyle = '#ff8c00';
             ctx.lineWidth = 2;
-            ctx.strokeRect(35, 35, 1010, 1350);
+            ctx.strokeRect(35, 35, logicalW - 70, logicalH - 70);
 
             // Header Banner Image
             let headerImgSrc = 'logo/pdf_header_banner_opt.jpg';
@@ -2671,39 +2680,32 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 if (img.complete && img.naturalWidth > 0) {
                     ctx.save();
                     ctx.beginPath();
-                    if (ctx.roundRect) ctx.roundRect(50, 45, 980, 205, 12);
-                    else ctx.rect(50, 45, 980, 205);
+                    if (ctx.roundRect) ctx.roundRect(50, 45, 980, 220, 12);
+                    else ctx.rect(50, 45, 980, 220);
                     ctx.clip();
-                    ctx.drawImage(img, 50, 45, 980, 205);
+                    ctx.drawImage(img, 50, 45, 980, 220);
                     ctx.restore();
 
                     ctx.strokeStyle = '#ffd700';
                     ctx.lineWidth = 3;
                     ctx.beginPath();
-                    if (ctx.roundRect) ctx.roundRect(50, 45, 980, 205, 12);
-                    else ctx.rect(50, 45, 980, 205);
+                    if (ctx.roundRect) ctx.roundRect(50, 45, 980, 220, 12);
+                    else ctx.rect(50, 45, 980, 220);
                     ctx.stroke();
                 }
 
-                // 1. Official Website Link (Placed directly under header image!)
+                // 1. Official Website Link (Placed directly under top header image!)
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#94a3b8';
                 ctx.font = '500 20px "Poppins", sans-serif';
-                ctx.fillText('🌐 अधिकृत वेबसाईट : shivsrushti-utsav-mandal.onrender.com', 540, 282);
+                ctx.fillText('🌐 अधिकृत वेबसाईट : shivsrushti-utsav-mandal.onrender.com', 540, 295);
 
-                // 2. Mandal Title
-                const orgName = (typeof appSettings !== 'undefined' && appSettings && appSettings.orgName) ? appSettings.orgName : 'श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर';
+                // 2. Subtitle Year (YELLOW, NO FLAGS as requested!)
                 ctx.fillStyle = '#ffd700';
-                ctx.font = 'bold 36px "Khand", "Noto Sans Devanagari", sans-serif';
+                ctx.font = 'bold 34px "Noto Sans Devanagari", "Khand", sans-serif';
                 ctx.shadowColor = 'rgba(255, 215, 0, 0.4)';
                 ctx.shadowBlur = 10;
-                ctx.fillText(orgName, 540, 328);
-
-                // 3. Subtitle Year
-                ctx.fillStyle = '#ff8c00';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
-                ctx.shadowBlur = 0;
-                ctx.fillText(`🚩 श्री गणेशोत्सव ${data.year} 🚩`, 540, 370);
+                ctx.fillText(`श्री गणेशोत्सव ${data.year}`, 540, 342);
 
                 // 4. Section Badge Box (Receipt Title)
                 ctx.fillStyle = 'rgba(255, 215, 0, 0.12)';
