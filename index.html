@@ -4303,14 +4303,16 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             }
 
             let file, dataUrl;
-            if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
-                const res = await getPosterBlobAndDataUrl(window.appSettings.donationPosterImage, captureDonationPoster);
-                dataUrl = res.dataUrl;
-                file = new File([res.blob], 'Donation_Poster.png', { type: 'image/png' });
+            if (window.donationPosterBlobCache) {
+                dataUrl = window.donationPosterBlobCache.dataUrl;
+                file = new File([window.donationPosterBlobCache.blob], 'Donation_Poster.png', { type: 'image/png' });
             } else {
-                const res = await getPosterBlobAndDataUrl(null, captureDonationPoster);
+                const s = window.appSettings || {};
+                const src = (s.donationPosterMode === 'custom' && s.donationPosterImage) ? s.donationPosterImage : null;
+                const res = await getPosterBlobAndDataUrl(src, captureDonationPoster);
                 dataUrl = res.dataUrl;
                 file = new File([res.blob], 'Donation_Poster.png', { type: 'image/png' });
+                window.donationPosterBlobCache = res;
             }
 
             // Restore button UI immediately so spinner never sticks
