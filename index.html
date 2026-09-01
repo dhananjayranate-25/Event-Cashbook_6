@@ -2044,10 +2044,17 @@ const regNoElem = document.getElementById('displayRegNo');
             }
             
             // Populate Donation Details
-            if (settings.donateAccName) document.getElementById('bankAccName').textContent = settings.donateAccName;
-            if (settings.donateAccNo) document.getElementById('bankAccNo').textContent = settings.donateAccNo;
-            if (settings.donateIFSC) document.getElementById('bankIFSC').textContent = settings.donateIFSC;
-            if (settings.donateBranch) document.getElementById('bankBranch').textContent = settings.donateBranch;
+            const bankAccNameEl = document.getElementById('bankAccName');
+            if (bankAccNameEl && settings.donateAccName) bankAccNameEl.textContent = settings.donateAccName;
+            
+            const bankAccNoEl = document.getElementById('bankAccNo');
+            if (bankAccNoEl && settings.donateAccNo) bankAccNoEl.textContent = settings.donateAccNo;
+            
+            const bankIFSCEl = document.getElementById('bankIFSC');
+            if (bankIFSCEl && settings.donateIFSC) bankIFSCEl.textContent = settings.donateIFSC;
+            
+            const bankBranchEl = document.getElementById('bankBranch');
+            if (bankBranchEl && settings.donateBranch) bankBranchEl.textContent = settings.donateBranch;
             
             if (settings.donateQRCode) {
                 const qrImg = document.getElementById('donationQRImg');
@@ -4072,6 +4079,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         return { blob, dataUrl };
     }
 
+    window.downloadDonationImage = downloadDonationImage;
     async function downloadDonationImage(btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
@@ -4108,6 +4116,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     let isDonationShareInProgress = false;
 
+    window.shareDonationImage = shareDonationImage;
     async function shareDonationImage(btn) {
         if (isDonationShareInProgress) return;
         isDonationShareInProgress = true;
@@ -4225,6 +4234,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
+    window.viewCustomPoster = viewCustomPoster;
     async function viewCustomPoster(type, btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
@@ -4242,6 +4252,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     let isCustomShareInProgress = false;
 
+    window.shareCustomPoster = shareCustomPoster;
     async function shareCustomPoster(type, btn) {
         if (isCustomShareInProgress) return;
         isCustomShareInProgress = true;
