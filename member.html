@@ -1574,6 +1574,38 @@ table {
             } catch(e) { console.error(e); }
         }
 
+        function formatTime12Hour(timeStr) {
+    if (!timeStr) return '';
+    let str = String(timeStr).trim();
+    if (!str) return '';
+    if (str.includes('सायं') || str.includes('सकाळी')) return str;
+
+    const hasAM = /am/i.test(str);
+    const hasPM = /pm/i.test(str);
+    const match = str.match(/(\d{1,2}):(\d{1,2})(?::\d{1,2})?/);
+    if (!match) return str;
+
+    let h = parseInt(match[1], 10);
+    let m = match[2].padStart(2, '0');
+
+    let prefix = '';
+    if (hasPM) {
+        prefix = 'सायं';
+        if (h === 0) h = 12;
+        else if (h > 12) h = h % 12;
+    } else if (hasAM) {
+        prefix = 'सकाळी';
+        if (h === 0) h = 12;
+        else if (h > 12) h = h % 12;
+    } else {
+        prefix = h >= 12 ? 'सायं' : 'सकाळी';
+        h = h % 12;
+        if (h === 0) h = 12;
+    }
+
+    return `${prefix} ${h}:${m} वा.`;
+}
+
         function formatTimeForInput(timeStr) {
             if (!timeStr) return '';
             if (timeStr.match(/^\d{2}:\d{2}$/)) return timeStr;
