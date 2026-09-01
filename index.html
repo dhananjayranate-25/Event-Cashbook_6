@@ -4106,20 +4106,45 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
+    let isDonationShareInProgress = false;
+
     async function shareDonationImage(btn) {
+        if (isDonationShareInProgress) return;
+        isDonationShareInProgress = true;
+
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
-        await new Promise(r => setTimeout(r, 50));
         
+        let shareWin = null;
+        let shareTextBase = '';
         try {
-            let file, dataUrl;
             const orgName = (typeof appSettings !== 'undefined' && appSettings.pdfCustomSettings && appSettings.pdfCustomSettings.orgName) ? appSettings.pdfCustomSettings.orgName : 'मंडळ';
-            let customText = (typeof appSettings !== 'undefined' && appSettings.donationPosterText) ? appSettings.donationPosterText : `🌺 श्री गणेशाय नमः 🌺\n\nश्री गणेशोत्सव हा आपल्या सर्वांचा उत्सव आहे. या उत्सवाचे आयोजन अधिक भव्य, दिव्य आणि यशस्वी करण्यासाठी आपल्या सहकार्याची आम्हाला मनापासून अपेक्षा आहे.\n\nकृपया आपल्या सार्वजनिक गणेश उत्सव मंडळासाठी किमान ₹1111/- (एक हजार एकशे अकरा रुपये) वर्गणी/देणगी देऊन सहकार्य करा.\nआपण वर दिलेल्या QR कोड स्कॅन करून / UPI ID किंवा फोन नंबर द्वारे सहज देणगी देऊ शकता.\n\nआपले प्रत्येक योगदान आपल्या मंडळाचा गणेशोत्सव अधिक उत्साहाने, भक्तिभावाने आणि दिमाखात साजरा करण्यासाठी मोलाचे ठरेल. 🙏🌸\n\n॥ गणपती बाप्पा मोरया ॥\n॥ मंगलमूर्ती मोरया ॥\n॥ हर हर महादेव ॥`;
+            let customText = (typeof appSettings !== 'undefined' && appSettings.donationPosterText) ? appSettings.donationPosterText : `🌺 श्री गणेशाय नमः 🌺
+
+श्री गणेशोत्सव हा आपल्या सर्वांचा उत्सव आहे. या उत्सवाचे आयोजन अधिक भव्य, दिव्य आणि यशस्वी करण्यासाठी आपल्या सहकार्याची आम्हाला मनापासून अपेक्षा आहे.
+
+कृपया आपल्या सार्वजनिक गणेश उत्सव मंडळासाठी किमान ₹1111/- (एक हजार एकशे अकरा रुपये) वर्गणी/देणगी देऊन सहकार्य करा.
+आपण वर दिलेल्या QR कोड स्कॅन करून / UPI ID किंवा फोन नंबर द्वारे सहज देणगी देऊ शकता.
+
+आपले प्रत्येक योगदान आपल्या मंडळाचा गणेशोत्सव अधिक उत्साहाने, भक्तिभावाने आणि दिमाखात साजरा करण्यासाठी मोलाचे ठरेल. 🙏🌸
+
+॥ गणपती बाप्पा मोरया ॥
+॥ मंगलमूर्ती मोरया ॥
+॥ हर हर महादेव ॥`;
             
-            let shareTextBase = customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर \n\n🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com\n\n===================\nउत्सव कार्यकारिणी\n===================\n`;
+            shareTextBase = customText.trim() + `
+
+- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
+
+🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com
+
+===================
+उत्सव कार्यकारिणी
+===================
+`;
             if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
                 let orderedData = [...window.currentCommitteeData];
-            orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
+                orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
                 orderedData.forEach(m => {
                     let d = m.designation || '';
                     if (!d) {
@@ -4133,14 +4158,31 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                         else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
                         else d = 'कार्यकारी सदस्य';
                     }
-                    shareTextBase += (m.name || '') + ' - ' + d + '\n';
+                    shareTextBase += (m.name || '') + ' - ' + d + '
+';
                 });
             } else {
-                shareTextBase += 'तेजस फटांगरे - अध्यक्ष\nधीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख\nआदित्य मते - सचिव / डेकोरेशन प्रमुख\nसार्थक माताडे - सहसचिव / सहसमन्वयक\nधनंजय रणाते - खजिनदार / समन्वयक\nओंकार वर्पे - सहखजिनदार\nतेजस देशमुख - सोशल मीडिया प्रमुख\nतेजस वर्पे - प्रसिद्धी प्रमुख\nवैभव सांगळे - कार्यकारी सदस्य\nनिलेश कदम - कार्यकारी सदस्य\nशुभम पेटकर - कार्यकारी सदस्य\n';
+                shareTextBase += 'तेजस फटांगरे - अध्यक्ष
+धीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख
+आदित्य मते - सचिव / डेकोरेशन प्रमुख
+सार्थक माताडे - सहसचिव / सहसमन्वयक
+धनंजय रणाते - खजिनदार / समन्वयक
+ओंकार वर्पे - सहखजिनदार
+तेजस देशमुख - सोशल मीडिया प्रमुख
+तेजस वर्पे - प्रसिद्धी प्रमुख
+वैभव सांगळे - कार्यकारी सदस्य
+निलेश कदम - कार्यकारी सदस्य
+शुभम पेटकर - कार्यकारी सदस्य
+';
             }
-            
-            // Note: shareData is built below after file is generated in shareDonationImage
 
+            // Copy text caption immediately to clipboard
+            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
+
+            // Pre-open WhatsApp target window on user click before async delay to avoid popup blocker
+            shareWin = window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
+
+            let file, dataUrl;
             if (window.appSettings && window.appSettings.donationPosterMode === 'custom' && window.appSettings.donationPosterImage) {
                 const res = await getPosterBlobAndDataUrl(window.appSettings.donationPosterImage, captureDonationPoster);
                 dataUrl = res.dataUrl;
@@ -4151,50 +4193,34 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 file = new File([res.blob], 'Donation_Poster.png', { type: 'image/png' });
             }
 
-            const shareData = {
-                title: orgName + ' - देणगी',
-                text: shareTextBase.trim(),
-                files: [file]
-            };
+            // Auto download poster image for sharing
+            const link = document.createElement('a');
+            link.download = 'Donation_Poster.png';
+            link.href = dataUrl || (file ? URL.createObjectURL(file) : '');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
+            // Native Web Share API attempt on Mobile
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
-                    await navigator.share(shareData);
+                    if (shareWin && !shareWin.closed) shareWin.close();
+                    await navigator.share({
+                        title: orgName + ' - देणगी',
+                        text: shareTextBase.trim(),
+                        files: [file]
+                    });
                 } catch(se) {
-                    if (se.name !== 'AbortError') {
-                        try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
-                        const link = document.createElement('a');
-                        link.download = 'Donation_Poster.png';
-                        link.href = dataUrl || URL.createObjectURL(file);
-                        link.click();
-                        window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
-                    }
+                    console.log('Native share closed/cancelled:', se);
                 }
-            } else {
-                try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
-                const link = document.createElement('a');
-                link.download = 'Donation_Poster.png';
-                link.href = dataUrl || URL.createObjectURL(file);
-                link.click();
-                window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
             }
         } catch (shareErr) {
-            console.log('Share action was cancelled or failed:', shareErr);
-            if (shareErr.name !== 'AbortError' && !String(shareErr).includes('AbortError') && !String(shareErr).toLowerCase().includes('cancel') && !String(shareErr).toLowerCase().includes('abort')) {
-                const link = document.createElement('a');
-                link.download = 'Donation_Poster.png';
-                link.href = dataUrl || (file ? URL.createObjectURL(file) : '');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                if (dataUrl) openLightbox(dataUrl);
-                if (isInAppBrowser()) {
-                    alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
-                } else {
-                    alert('डायरेक्ट शेअरिंगऐवजी पोस्टर स्क्रीनवर उघडले आहे आणि डाउनलोडही झाले आहे! फोटोवर लॉंग-प्रेस करून तुम्ही थेट Share करू शकता.');
-                }
+            console.error('Share action failed:', shareErr);
+            if (!shareWin || shareWin.closed) {
+                window.location.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase);
             }
         } finally {
+            isDonationShareInProgress = false;
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
         }
     }
