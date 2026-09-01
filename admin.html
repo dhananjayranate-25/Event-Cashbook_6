@@ -3082,18 +3082,17 @@ ${commTextList}`;
                 const res = await fetch('/api/settings', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        settings: [{ key: 'receiptPosterText', value: txt }]
-                    })
+                    body: JSON.stringify({ key: 'receiptPosterText', value: txt })
                 });
                 const data = await res.json();
                 if (data.success) {
                     if (typeof appSettings !== 'undefined') appSettings.receiptPosterText = txt;
+                    try { localStorage.setItem('receiptPosterText', txt); } catch(e) {}
                     const rTxt = document.getElementById('receiptPosterText');
                     if (rTxt) rTxt.value = txt;
                     alert('हा मेसेज कायमस्वरूपी सेव्ह झाला आहे! 💾');
                 } else {
-                    alert('सेव्ह करताना त्रुटी आली.');
+                    alert(data.error || 'सेव्ह करताना त्रुटी आली.');
                 }
             } catch(e) {
                 alert('सेव्ह करताना त्रुटी आली.');

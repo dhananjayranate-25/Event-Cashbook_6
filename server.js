@@ -395,6 +395,18 @@ app.post('/api/upload-audio', uploadCloudinary.single('audio'), async (req, res)
 });
 app.post('/api/settings', async (req, res) => {
     try {
+        if (req.body.settings && Array.isArray(req.body.settings)) {
+            for (const item of req.body.settings) {
+                if (item.key) {
+                    await AppSetting.findOneAndUpdate(
+                        { key: item.key },
+                        { value: item.value },
+                        { upsert: true, new: true }
+                    );
+                }
+            }
+            return res.json({ success: true });
+        }
         const { key, value } = req.body;
         if (!key) return res.status(400).json({ success: false, error: 'Key is required' });
         await AppSetting.findOneAndUpdate(
