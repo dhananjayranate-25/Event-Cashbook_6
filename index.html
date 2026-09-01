@@ -4370,7 +4370,20 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : (type === 'visarjan' ? 'Ganpati_Visarjan.png' : (type === 'custom' ? 'Vishesh_Karyakram.png' : 'Aagman_Sohala.png')));
             const file = new File([blob], filename, { type: 'image/png' });
 
-            // 1. Mobile Native Web Share API (Sends Image + Text directly into WhatsApp)
+            // Always download poster PNG image file automatically to device gallery/downloads
+            try {
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } catch(de) {}
+
+            // Always copy caption text to clipboard
+            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
+
+            // 1. Mobile Native Web Share API (Attempt direct image + text share)
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
                     await navigator.share({
@@ -4384,17 +4397,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 }
             }
 
-            // 2. Desktop PC Fallback Mode (Copy Text + Download PNG + Open WhatsApp Web)
-            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
-
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = dataUrl;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            alert('पोस्टर इमेज डाऊनलोड झाली आहे व संदेश कॉपी झाला आहे! व्हॉट्सॲप उघडल्यावर इमेज पाठवून मेसेज पेस्ट (Ctrl+V) करा. 🚩');
+            // 2. WhatsApp Direct Link Mode
+            alert('📸 पोस्टर इमेज गॅलरीत डाऊनलोड झाली आहे व संदेश कॉपी झाला आहे!\n\nव्हॉट्सॲपवर फोटो सिलेक्ट करून मेसेज पेस्ट (Paste / Ctrl+V) करा. 🚩');
             window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
         } catch (shareErr) {
             console.error('Share action failed:', shareErr);
