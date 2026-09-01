@@ -2725,7 +2725,7 @@ ${commTextList}`;
             const rowsCount = Math.ceil(members.length / cols);
 
             // Dynamic Canvas Height Calculation (Content auto-fits with zero overflow!)
-            const startY = 1095;
+            const startY = 1005;
             const rowHeight = 78;
             const gridHeight = rowsCount * rowHeight;
             const brandingY = startY + gridHeight + 25;
@@ -2818,11 +2818,11 @@ ${commTextList}`;
                 ctx.font = 'bold 29px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('🧾 देणगी पावती', 540, 409);
 
-                // 4. Donor Details Box (Receipt Card - Mobile Friendly Large Fonts)
+                // 4. Donor Details Box (Compact Vertical Spacing)
                 const cardX = 80;
-                const cardY = 455;
+                const cardY = 445;
                 const cardW = 920;
-                const cardH = 360;
+                const cardH = 275;
 
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
                 ctx.strokeStyle = 'rgba(255, 215, 0, 0.35)';
@@ -2837,78 +2837,78 @@ ${commTextList}`;
 
                 // Row 1: Name
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('👤 देणगीदाराचे नाव :', cardX + 35, cardY + 62);
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('👤 देणगीदाराचे नाव :', cardX + 35, cardY + 48);
                 ctx.fillStyle = '#ffffff';
                 
                 let displayName = data.donorName;
                 if (displayName.length > 25) {
-                    ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                    ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
                 } else {
-                    ctx.font = 'bold 31px "Noto Sans Devanagari", sans-serif';
+                    ctx.font = 'bold 29px "Noto Sans Devanagari", sans-serif';
                 }
-                ctx.fillText(displayName, cardX + 315, cardY + 62);
+                ctx.fillText(displayName, cardX + 315, cardY + 48);
 
                 // Row Divider
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
                 ctx.lineWidth = 1;
-                ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 98); ctx.lineTo(cardX + cardW - 25, cardY + 98); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 70); ctx.lineTo(cardX + cardW - 25, cardY + 70); ctx.stroke();
 
                 // Row 2: Amount
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('💰 देणगीची रक्कम :', cardX + 35, cardY + 150);
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('💰 देणगीची रक्कम :', cardX + 35, cardY + 112);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 30px "Poppins", "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(`₹${data.amount}/-`, cardX + 315, cardY + 150);
+                ctx.font = 'bold 29px "Poppins", "Noto Sans Devanagari", sans-serif';
+                ctx.fillText(`₹${data.amount}/-`, cardX + 315, cardY + 112);
 
                 // Row Divider
-                ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 186); ctx.lineTo(cardX + cardW - 25, cardY + 186); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 134); ctx.lineTo(cardX + cardW - 25, cardY + 134); ctx.stroke();
 
                 // Row 3: Mode
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('💳 देणगीचे माध्यम :', cardX + 35, cardY + 238);
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('💳 देणगीचे माध्यम :', cardX + 35, cardY + 176);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 31px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(data.mode, cardX + 315, cardY + 238);
+                ctx.font = 'bold 29px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText(data.mode, cardX + 315, cardY + 176);
 
                 // Row Divider
-                ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 274); ctx.lineTo(cardX + cardW - 25, cardY + 274); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 198); ctx.lineTo(cardX + cardW - 25, cardY + 198); ctx.stroke();
 
                 // Row 4: Date
                 ctx.fillStyle = '#fef08a';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('📅 दिनांक :', cardX + 35, cardY + 325);
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('📅 दिनांक :', cardX + 35, cardY + 238);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 31px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(data.date, cardX + 315, cardY + 325);
+                ctx.font = 'bold 29px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText(data.date, cardX + 315, cardY + 238);
 
-                // 5. Thank You Messages (Large Mobile Readable Fonts)
+                // 5. Thank You Messages (Balanced Clean Spacing Below Box)
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(`वरील रक्कम गणेशोत्सव ${data.year} साठी देणगी म्हणून प्राप्त झाली आहे.`, 540, 852);
+                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText(`वरील रक्कम गणेशोत्सव ${data.year} साठी देणगी म्हणून प्राप्त झाली आहे.`, 540, 768);
 
                 ctx.fillStyle = '#ffd700';
-                ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('आपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे', 540, 890);
-                ctx.fillText('मनःपूर्वक आभार! 🙏🌸', 540, 924);
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('आपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे', 540, 808);
+                ctx.fillText('मनःपूर्वक आभार! 🙏🌸', 540, 844);
 
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('आपले सहकार्य असेच निरंतर लाभत राहो, ही नम्र अपेक्षा.', 540, 962);
+                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('आपले सहकार्य असेच निरंतर लाभत राहो, ही नम्र अपेक्षा.', 540, 884);
 
                 // 6. Bottom Divider Line
                 ctx.strokeStyle = '#ff8c00';
                 ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.moveTo(80, 1000); ctx.lineTo(1000, 1000); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(80, 925); ctx.lineTo(1000, 925); ctx.stroke();
 
                 // 7. ❖ उत्सव कार्यकारिणी ❖ Grid Section
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#ff8c00';
                 ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('❖ उत्सव कार्यकारिणी ❖', 540, 1040);
+                ctx.fillText('❖ उत्सव कार्यकारिणी ❖', 540, 965);
 
                 for (let r = 0; r < rowsCount; r++) {
                     const rowMembers = members.slice(r * cols, (r + 1) * cols);
