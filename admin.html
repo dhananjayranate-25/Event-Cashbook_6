@@ -2847,7 +2847,7 @@ ${commTextList}`;
                 } else {
                     ctx.font = 'bold 31px "Noto Sans Devanagari", sans-serif';
                 }
-                ctx.fillText(displayName, cardX + 285, cardY + 62);
+                ctx.fillText(displayName, cardX + 315, cardY + 62);
 
                 // Row Divider
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
@@ -2860,7 +2860,7 @@ ${commTextList}`;
                 ctx.fillText('💰 देणगीची रक्कम :', cardX + 35, cardY + 150);
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 30px "Poppins", "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(`₹${data.amount}/-`, cardX + 285, cardY + 150);
+                ctx.fillText(`₹${data.amount}/-`, cardX + 315, cardY + 150);
 
                 // Row Divider
                 ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 186); ctx.lineTo(cardX + cardW - 25, cardY + 186); ctx.stroke();
@@ -2871,7 +2871,7 @@ ${commTextList}`;
                 ctx.fillText('💳 देणगीचे माध्यम :', cardX + 35, cardY + 238);
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 31px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(data.mode, cardX + 285, cardY + 238);
+                ctx.fillText(data.mode, cardX + 315, cardY + 238);
 
                 // Row Divider
                 ctx.beginPath(); ctx.moveTo(cardX + 25, cardY + 274); ctx.lineTo(cardX + cardW - 25, cardY + 274); ctx.stroke();
@@ -2882,7 +2882,7 @@ ${commTextList}`;
                 ctx.fillText('📅 दिनांक :', cardX + 35, cardY + 325);
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 31px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(data.date, cardX + 285, cardY + 325);
+                ctx.fillText(data.date, cardX + 315, cardY + 325);
 
                 // 5. Thank You Messages (Large Mobile Readable Fonts)
                 ctx.textAlign = 'center';
