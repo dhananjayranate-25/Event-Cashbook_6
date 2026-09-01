@@ -2689,7 +2689,7 @@ ${commTextList}`;
 
             // Dynamic Canvas Height Calculation (Content auto-fits with zero overflow!)
             const startY = 1095;
-            const rowHeight = 65;
+            const rowHeight = 78;
             const gridHeight = rowsCount * rowHeight;
             const brandingY = startY + gridHeight + 25;
             const logicalH = brandingY + 55; // 55px padding below branding text
@@ -2890,27 +2890,43 @@ ${commTextList}`;
                             itemX = 540;
                         }
 
-                        // Member Name (Dynamic font scaling for long names)
+                        // 1. Draw Executive Royal Golden Badge Card Container
+                        const cardW = 242;
+                        const cardH = 64;
+                        const cardX = itemX - (cardW / 2);
+                        const cardY = currentY - 22;
+
+                        ctx.shadowBlur = 0;
+                        ctx.fillStyle = 'rgba(255, 215, 0, 0.07)';
+                        ctx.strokeStyle = 'rgba(255, 215, 0, 0.38)';
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        if (ctx.roundRect) ctx.roundRect(cardX, cardY, cardW, cardH, 12);
+                        else ctx.rect(cardX, cardY, cardW, cardH);
+                        ctx.fill();
+                        ctx.stroke();
+
+                        // 2. Member Name (Crisp Bold White)
                         ctx.fillStyle = '#ffffff';
                         if (mem.name.length > 18) {
-                            ctx.font = 'bold 19px "Noto Sans Devanagari", sans-serif';
+                            ctx.font = 'bold 18px "Noto Sans Devanagari", sans-serif';
                         } else if (mem.name.length > 13) {
-                            ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
+                            ctx.font = 'bold 20px "Noto Sans Devanagari", sans-serif';
                         } else {
-                            ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+                            ctx.font = 'bold 22px "Noto Sans Devanagari", sans-serif';
                         }
-                        ctx.fillText(mem.name, itemX, currentY);
+                        ctx.fillText(mem.name, itemX, currentY + 4);
 
-                        // Member Designation (Dynamic font scaling for long designations)
-                        ctx.fillStyle = '#cbd5e1';
+                        // 3. Member Designation (Warm Saffron Gold)
+                        ctx.fillStyle = '#ffd700';
                         if (mem.designation.length > 18) {
-                            ctx.font = '17px "Noto Sans Devanagari", sans-serif';
+                            ctx.font = '600 15px "Noto Sans Devanagari", sans-serif';
                         } else if (mem.designation.length > 13) {
-                            ctx.font = '18px "Noto Sans Devanagari", sans-serif';
+                            ctx.font = '600 16px "Noto Sans Devanagari", sans-serif';
                         } else {
-                            ctx.font = '20px "Noto Sans Devanagari", sans-serif';
+                            ctx.font = '600 17.5px "Noto Sans Devanagari", sans-serif';
                         }
-                        ctx.fillText(mem.designation, itemX, currentY + 26);
+                        ctx.fillText(mem.designation, itemX, currentY + 29);
                     });
                 }
 
