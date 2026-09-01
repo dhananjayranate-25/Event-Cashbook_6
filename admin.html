@@ -2543,6 +2543,17 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             const modal = document.getElementById('adminReceiptModal');
             if (!modal) return;
 
+            // Fetch committee data dynamically if not loaded
+            if (!window.currentCommitteeData || window.currentCommitteeData.length === 0) {
+                try {
+                    const commRes = await fetch('/api/committee');
+                    const commData = await commRes.json();
+                    if (commData.success && Array.isArray(commData.data)) {
+                        window.currentCommitteeData = commData.data;
+                    }
+                } catch(e) {}
+            }
+
             const year = yrStr || '2026';
             
             let dateFormatted = dateRaw || '';
@@ -2592,26 +2603,54 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
 
+            const defaultCommittee = [
+                { name: 'तेजस फटांगरे', designation: 'अध्यक्ष' },
+                { name: 'धनंजय रणाते', designation: 'खजिनदार' },
+                { name: 'धीरज झावरे', designation: 'उपाध्यक्ष' },
+                { name: 'आदित्य मते', designation: 'सचिव' },
+                { name: 'सार्थक माताडे', designation: 'सहसचिव' },
+                { name: 'ओंकार वर्पे', designation: 'सहखजिनदार' },
+                { name: 'तेजस देशमुख', designation: 'सोशल मीडिया प्रमुख' },
+                { name: 'तेजस वर्पे', designation: 'कार्यकारी सदस्य' },
+                { name: 'वैभव सांगळे', designation: 'कार्यकारी सदस्य' },
+                { name: 'निलेश कदम', designation: 'कार्यकारी सदस्य' },
+                { name: 'शुभम पेटकर', designation: 'कार्यकारी सदस्य' }
+            ];
+
+            let members = [];
+            if (window.currentCommitteeData && Array.isArray(window.currentCommitteeData)) {
+                members = window.currentCommitteeData
+                    .filter(m => m && m.name && m.name.trim() !== '')
+                    .map(m => ({
+                        name: m.name.trim(),
+                        designation: m.designation || (m.role === 'president' ? 'अध्यक्ष' : m.role === 'treasurer' ? 'खजिनदार' : 'कार्यकारी सदस्य')
+                    }));
+            }
+            if (members.length === 0) members = defaultCommittee;
+
+            const cols = 4;
+            const rowsCount = Math.ceil(members.length / cols);
+
             canvas.width = 1080;
-            canvas.height = 1350;
+            canvas.height = 1420;
 
             // Background Gradient (Dark Royal Red/Purple Festival Theme)
-            const bgGrad = ctx.createLinearGradient(0, 0, 0, 1350);
+            const bgGrad = ctx.createLinearGradient(0, 0, 0, 1420);
             bgGrad.addColorStop(0, '#1a0429');
             bgGrad.addColorStop(0.35, '#2d0b3f');
             bgGrad.addColorStop(0.7, '#1f0422');
             bgGrad.addColorStop(1, '#0c0112');
             ctx.fillStyle = bgGrad;
-            ctx.fillRect(0, 0, 1080, 1350);
+            ctx.fillRect(0, 0, 1080, 1420);
 
             // Double Golden Borders
             ctx.strokeStyle = '#ffd700';
             ctx.lineWidth = 6;
-            ctx.strokeRect(25, 25, 1030, 1300);
+            ctx.strokeRect(25, 25, 1030, 1370);
 
             ctx.strokeStyle = '#ff8c00';
             ctx.lineWidth = 2;
-            ctx.strokeRect(35, 35, 1010, 1280);
+            ctx.strokeRect(35, 35, 1010, 1350);
 
             // Header Banner Image
             let headerImgSrc = 'logo/pdf_header_banner_opt.jpg';
@@ -2743,13 +2782,12 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 ctx.font = 'bold 28px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText(data.date, cardX + 320, cardY + 335);
 
-                // 6. Thank You Messages (Multi-line clean formatting)
+                // 6. Thank You Messages
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#f1f5f9';
                 ctx.font = '24px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText(`वरील रक्कम गणेशोत्सव ${data.year} साठी देणगी म्हणून प्राप्त झाली आहे.`, 540, 882);
 
-                // Main Gratitude Message (Split into 2 lines to prevent border overflow)
                 ctx.fillStyle = '#ffd700';
                 ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('आपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे', 540, 925);
@@ -2764,45 +2802,41 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 ctx.lineWidth = 2;
                 ctx.beginPath(); ctx.moveTo(80, 1045); ctx.lineTo(1000, 1045); ctx.stroke();
 
-                // 8. Bottom Committee Signatures
-                let presidentName = "तेजस फटांगरे";
-                let presidentPhone = "9370599259";
-                let treasurerName = "धनंजय रणाते";
-                let treasurerPhone = "9322134560";
-
-                if (window.currentCommitteeData) {
-                    const pres = window.currentCommitteeData.find(m => m.role && m.role.includes("अध्यक्ष"));
-                    if(pres) { presidentName = pres.name; presidentPhone = pres.mobile; }
-                    const treas = window.currentCommitteeData.find(m => m.role && m.role.includes("खजिनदार"));
-                    if(treas) { treasurerName = treas.name; treasurerPhone = treas.mobile; }
-                }
-
-                // Left: President
+                // 8. ❖ उत्सव कार्यकारिणी ❖ Grid Section
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#ff8c00';
-                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('अध्यक्ष', 270, 1090);
-                
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 29px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(presidentName, 270, 1130);
-                
-                ctx.fillStyle = '#cbd5e1';
-                ctx.font = '21px "Poppins", sans-serif';
-                ctx.fillText(`मो. नं - ${presidentPhone}`, 270, 1165);
+                ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText('❖ उत्सव कार्यकारिणी ❖', 540, 1082);
 
-                // Right: Treasurer
-                ctx.fillStyle = '#ff8c00';
-                ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('खजिनदार', 810, 1090);
-                
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 29px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(treasurerName, 810, 1130);
-                
-                ctx.fillStyle = '#cbd5e1';
-                ctx.font = '21px "Poppins", sans-serif';
-                ctx.fillText(`मो. नं - ${treasurerPhone}`, 810, 1165);
+                const startY = 1125;
+                const rowHeight = 65;
+
+                for (let r = 0; r < rowsCount; r++) {
+                    const rowMembers = members.slice(r * cols, (r + 1) * cols);
+                    const count = rowMembers.length;
+                    const itemWidth = 1080 / count;
+                    const currentY = startY + (r * rowHeight);
+
+                    rowMembers.forEach((mem, colIdx) => {
+                        const itemX = (colIdx * itemWidth) + (itemWidth / 2);
+
+                        // Member Name
+                        ctx.fillStyle = '#ffffff';
+                        ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+                        ctx.fillText(mem.name, itemX, currentY);
+
+                        // Member Designation
+                        ctx.fillStyle = '#cbd5e1';
+                        ctx.font = '20px "Noto Sans Devanagari", sans-serif';
+                        ctx.fillText(mem.designation, itemX, currentY + 26);
+                    });
+                }
+
+                // 9. Bottom Branding Line
+                const finalY = startY + (rowsCount * rowHeight) + 20;
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '500 19px "Poppins", sans-serif';
+                ctx.fillText('Developed by | Dhananjay Ranate', 540, Math.min(finalY, 1385));
             }
         }
 
@@ -3335,6 +3369,7 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 const response = await fetch('/api/committee');
                 const result = await response.json();
                 if (result.success) {
+                    window.currentCommitteeData = result.data;
                     // First ensure we have enough slots for all fetched members
                     let maxMemberNum = 9;
                     result.data.forEach(member => {
