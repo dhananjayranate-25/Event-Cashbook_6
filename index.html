@@ -191,6 +191,19 @@
         }
     }
 </style>
+
+window.openLightbox = function(src) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    if (lightboxImg) lightboxImg.src = src;
+    if (lightbox) lightbox.style.display = 'flex';
+};
+
+window.closeLightbox = function() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) lightbox.style.display = 'none';
+};
+
 </head>
 <body>
 
@@ -4079,7 +4092,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         return { blob, dataUrl };
     }
 
-    window.downloadDonationImage = downloadDonationImage;
     async function downloadDonationImage(btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
@@ -4116,7 +4128,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     let isDonationShareInProgress = false;
 
-    window.shareDonationImage = shareDonationImage;
     async function shareDonationImage(btn) {
         if (isDonationShareInProgress) return;
         isDonationShareInProgress = true;
@@ -4234,7 +4245,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
-    window.viewCustomPoster = viewCustomPoster;
     async function viewCustomPoster(type, btn) {
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
@@ -4252,7 +4262,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     let isCustomShareInProgress = false;
 
-    window.shareCustomPoster = shareCustomPoster;
     async function shareCustomPoster(type, btn) {
         if (isCustomShareInProgress) return;
         isCustomShareInProgress = true;
