@@ -2749,7 +2749,7 @@ const regNoElem = document.getElementById('displayRegNo');
             backgroundColor: '#ffffff',
             allowTaint: true,
             logging: false,
-            imageTimeout: 15000,
+            imageTimeout: 2000,
             onclone: (clonedDoc) => {
                 const b = clonedDoc.body;
                 if (b) {
@@ -4031,14 +4031,14 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         clone.insertAdjacentHTML('beforeend', footerHtml);
 
         
-        // Wait for all images and fonts inside clone to be ready for Ultra-HD rendering
+        // Fast wait for images inside clone
         const customImgs = Array.from(clone.querySelectorAll('img'));
         await Promise.all(customImgs.map(img => {
             if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
             return new Promise(res => {
                 img.onload = () => res();
                 img.onerror = () => res();
-                setTimeout(res, 2000);
+                setTimeout(res, 150);
             });
         }));
         if (document.fonts && document.fonts.ready) {
@@ -4359,6 +4359,10 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             const blob = dataURItoBlob(dataUrl);
             const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : (type === 'visarjan' ? 'Ganpati_Visarjan.png' : (type === 'custom' ? 'Vishesh_Karyakram.png' : 'Aagman_Sohala.png')));
             const file = new File([blob], filename, { type: 'image/png' });
+
+            // Restore button UI immediately so spinner never sticks
+            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+            isCustomShareInProgress = false;
 
             // Direct Mobile Native Share API (Shares BOTH Banner Image File AND Message Text directly into WhatsApp without downloading file)
             if (navigator.canShare && navigator.canShare({ files: [file] })) {

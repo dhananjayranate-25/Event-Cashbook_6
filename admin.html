@@ -3044,6 +3044,8 @@ ${commTextList}`;
                     imageFile = new File([u8arr], fileName, { type: mime });
                 } catch(e) {}
 
+                isSharingInProgress = false;
+
                 // Direct Mobile Native Share API (Shares BOTH Banner Image File AND Message Text directly into WhatsApp without downloading file)
                 if (imageFile && navigator.canShare && navigator.canShare({ files: [imageFile] })) {
                     try {
@@ -3052,7 +3054,6 @@ ${commTextList}`;
                             text: captionText,
                             files: [imageFile]
                         });
-                        isSharingInProgress = false;
                         return;
                     } catch (shareErr) {
                         console.log('Mobile share cancelled or alternative fallback:', shareErr);
