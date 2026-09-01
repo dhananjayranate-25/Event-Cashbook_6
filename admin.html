@@ -1076,7 +1076,7 @@
                 const s = (setData.success && (setData.data || setData.settings)) ? (setData.data || setData.settings) : {};
                 adminCustomYearPanels = Array.isArray(s.customYearPanels) ? s.customYearPanels : (s.customYearPanels ? JSON.parse(s.customYearPanels) : []);
 
-                const allYears = [...new Set([...apiYears, ...adminCustomYearPanels])].sort().reverse();
+                const allYears = [...new Set(['2026', ...apiYears, ...adminCustomYearPanels])].sort().reverse();
                 renderAdminYearTabs(allYears);
                 await renderAdminYearPanels(allYears);
             } catch(e) {
@@ -2187,12 +2187,12 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                         const subDisplay = pdf.subtitle ? `<div style="font-size: 10px; color: #ff8c00;">Marathi: ${pdf.subtitle}</div>` : '';
                         const tagDisplay = pdf.tagline ? `<div style="font-size: 10px; color: #aaa;">Tagline: ${pdf.tagline}</div>` : '';
                         return `
-                        <div class="pdf-item" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; margin-bottom: 10px; background: var(--card-bg); border-radius: 10px; border: 1px solid var(--border-color);">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <span style="font-size: 24px;">📄</span>
+                        <div class="pdf-item" style="display: flex; align-items: center; justify-content: space-between; padding: 15px; margin-bottom: 12px; background: rgba(30, 41, 59, 0.85); border-radius: 12px; border: 1px solid rgba(255, 215, 0, 0.35); box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                            <div style="display: flex; align-items: center; gap: 14px;">
+                                <span style="font-size: 28px;">📄</span>
                                 <div>
-                    <strong style="color: var(--text-primary);">${pdf.displayName}</strong>
-                    <div style="font-size: 11px; color: #888;">Year: ${pdf.year} | Uploaded: ${pdf.uploadedAt}</div>
+                    <strong style="color: #ffffff; font-size: 15px;">${pdf.displayName}</strong>
+                    <div style="font-size: 12px; color: #cbd5e1; margin-top: 2px;">Year: <b style="color: #ffd700;">${pdf.year}</b> | Uploaded: ${pdf.uploadedAt}</div>
                     ${subDisplay}
                     ${tagDisplay}
                 </div>
@@ -2220,7 +2220,7 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
         </div>`;
                     }).join('');
                 } else {
-                    pdfList.innerHTML = '<p style="color: #888; text-align: center; padding: 20px;">No PDFs uploaded yet. Upload your existing PDFs above.</p>';
+                    pdfList.innerHTML = '<div style="text-align: center; color: #ffd700; padding: 25px; background: rgba(255, 215, 0, 0.05); border: 1px dashed rgba(255, 215, 0, 0.3); border-radius: 12px;"><i class="fas fa-file-pdf" style="font-size: 28px; margin-bottom: 8px; color: #f59e0b;"></i><p style="color: #f1f5f9; font-size: 14px; margin: 0;">कोणतीही PDF फाईल अपलोड केलेली नाही. वरील फॉर्मवरून नवीन PDF अपलोड करा.</p></div>';
                 }
             } catch (error) {
                 pdfList.innerHTML = `<div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 15px;"><p style="color: #ef4444; margin: 0;">Error loading PDFs: ${error.message}</p><button class="btn btn-secondary ripple" onclick="loadUploadedPDFs()" style="padding: 6px 15px; font-size: 12px; background: rgba(255,255,255,0.1);">🔄 पुन्हा प्रयत्न करा (Retry)</button></div>`;
