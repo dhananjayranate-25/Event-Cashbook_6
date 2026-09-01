@@ -67,7 +67,7 @@
                 </div>
                 <div class="user-info">
                     <span>Welcome, <strong id="loggedUser">User</strong></span>
-                    <button class="btn btn-secondary ripple" onclick="logout()" style="padding: 8px 16px; font-size: 0.85rem;">
+                    <button class="btn btn-secondary ripple" onclick="window.location.replace('login.html?logout=true')" style="padding: 8px 16px; font-size: 0.85rem;">
                         <span class="btn-icon">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -364,6 +364,12 @@
                 }
             }
         } catch(e) {}
+    }
+    
+    function resetForm(num) {
+        const forms = document.querySelectorAll('form');
+        if (forms && forms[num - 1]) forms[num - 1].reset();
+        else if (forms && forms[0]) forms[0].reset();
     }
     loadFooterSettings();
 
