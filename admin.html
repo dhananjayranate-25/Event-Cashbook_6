@@ -2884,31 +2884,31 @@ ${commTextList}`;
                 ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText(data.date, cardX + 320, cardY + 325);
 
-                // 5. Thank You Messages
+                // 5. Thank You Messages (Equal 38px spacing from top card border & bottom divider line)
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(`वरील रक्कम गणेशोत्सव ${data.year} साठी देणगी म्हणून प्राप्त झाली आहे.`, 540, 835);
+                ctx.fillText(`वरील रक्कम गणेशोत्सव ${data.year} साठी देणगी म्हणून प्राप्त झाली आहे.`, 540, 852);
 
                 ctx.fillStyle = '#ffd700';
                 ctx.font = 'bold 25px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('आपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे', 540, 878);
-                ctx.fillText('मनःपूर्वक आभार! 🙏🌸', 540, 914);
+                ctx.fillText('आपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे', 540, 890);
+                ctx.fillText('मनःपूर्वक आभार! 🙏🌸', 540, 924);
 
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('आपले सहकार्य असेच निरंतर लाभत राहो, ही नम्र अपेक्षा.', 540, 954);
+                ctx.fillText('आपले सहकार्य असेच निरंतर लाभत राहो, ही नम्र अपेक्षा.', 540, 962);
 
                 // 6. Bottom Divider Line
                 ctx.strokeStyle = '#ff8c00';
                 ctx.lineWidth = 2;
-                ctx.beginPath(); ctx.moveTo(80, 995); ctx.lineTo(1000, 995); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(80, 1000); ctx.lineTo(1000, 1000); ctx.stroke();
 
                 // 7. ❖ उत्सव कार्यकारिणी ❖ Grid Section
                 ctx.textAlign = 'center';
                 ctx.fillStyle = '#ff8c00';
                 ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText('❖ उत्सव कार्यकारिणी ❖', 540, 1035);
+                ctx.fillText('❖ उत्सव कार्यकारिणी ❖', 540, 1040);
 
                 for (let r = 0; r < rowsCount; r++) {
                     const rowMembers = members.slice(r * cols, (r + 1) * cols);
