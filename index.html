@@ -4240,39 +4240,79 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
+    let isCustomShareInProgress = false;
+
     async function shareCustomPoster(type, btn) {
+        if (isCustomShareInProgress) return;
+        isCustomShareInProgress = true;
+
         let originalText = btn ? btn.innerHTML : '';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         
-        let dataUrl = '';
-        let file = null;
+        let shareWin = null;
+        let shareTextBase = '';
         try {
-            const canvas = await captureCustomPoster(type, true);
-            dataUrl = canvas.toDataURL('image/png', 1.0);
-            const blob = dataURItoBlob(dataUrl);
-            const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : (type === 'visarjan' ? 'Ganpati_Visarjan.png' : (type === 'custom' ? 'Vishesh_Karyakram.png' : 'Aagman_Sohala.png')));
-            file = new File([blob], filename, { type: 'image/png' });
-            
             const s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : {}) || {};
             const orgName = (s.pdfCustomSettings && s.pdfCustomSettings.orgName) ? s.pdfCustomSettings.orgName : 'मंडळ';
             const titleStr = type === 'vargani' ? (s.varganiAabharTitle || 'वर्गणी आभार') : (type === 'mahaprasad' ? (s.mahaprasadNimantranTitle || 'महाप्रसाद निमंत्रण') : (type === 'visarjan' ? (s.visarjanSohalaTitle || 'गणपती विसर्जन सोहळा') : (type === 'custom' ? (s.customEventTitle || 'विशेष कार्यक्रम व सूचना') : (s.aagmanSohalaTitle || 'आगमन सोहळा'))));
             let customText = '';
             if (type === 'vargani') {
-                customText = s.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!\n\nआपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
+                customText = s.varganiAabharText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आपणास सस्नेह निमंत्रण!
+
+आपण दिलेल्या अमूल्य वर्गणीबद्दल आणि सहकार्याबद्दल मंडळ आपले मनःपूर्वक आभारी आहे.
+
+🌺 गणपती बाप्पा मोरया! 🌺';
             } else if (type === 'aagman') {
-                customText = s.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nबाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
+                customText = s.aagmanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त बाप्पाच्या आगमन सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.
+
+बाप्पाच्या आगमनाचा आनंद द्विगुणित करण्यासाठी आपली उपस्थिती प्रार्थनीय आहे.
+
+📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर
+
+🌺 गणपती बाप्पा मोरया!
+🌺 मंगलमूर्ती मोरया! 🌺';
             } else if (type === 'visarjan') {
-                customText = s.visarjanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवातील गणपती विसर्जन मिरवणूक सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण!\n\nबाप्पाच्या निरोप समारंभात सामील होऊन विसर्जनाच्या जयघोषात सहभागी व्हावे ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n\n🌺 गणपती बाप्पा मोरया! पुढच्या वर्षी लवकर या! 🌺';
+                customText = s.visarjanSohalaText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवातील गणपती विसर्जन मिरवणूक सोहळ्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण!
+
+बाप्पाच्या निरोप समारंभात सामील होऊन विसर्जनाच्या जयघोषात सहभागी व्हावे ही नम्र विनंती.
+
+📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर
+
+🌺 गणपती बाप्पा मोरया! पुढच्या वर्षी लवकर या! 🌺';
             } else if (type === 'custom') {
-                customText = s.customEventText || 'श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या वतीने सर्व भाविकांना कळविण्यात येते की मंडळाच्या गणेशोत्सवामध्ये आयोजित विशेष धार्मिक कार्यक्रम व विविध उपक्रमात सर्वांनी आवर्जून सहभागी व्हावे.\n\nआपले सहकार्य आणि उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया! 🌺';
+                customText = s.customEventText || 'श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या वतीने सर्व भाविकांना कळविण्यात येते की मंडळाच्या गणेशोत्सवामध्ये आयोजित विशेष धार्मिक कार्यक्रम व विविध उपक्रमात सर्वांनी आवर्जून सहभागी व्हावे.
+
+आपले सहकार्य आणि उपस्थिती प्रार्थनीय आहे.
+
+🌺 गणपती बाप्पा मोरया! 🌺';
             } else {
-                customText = s.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.\n\nआपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.\n\n📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर\n🗓️ दिनांक: 18/8/2026\n🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता\n\nआपली उपस्थिती प्रार्थनीय आहे.\n\n🌺 गणपती बाप्पा मोरया!\n🌺 मंगलमूर्ती मोरया! 🌺';
+                customText = s.mahaprasadNimantranText || 'श्री गणरायाच्या कृपेने आयोजित श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर यांच्या गणेशोत्सवानिमित्त आयोजित महाप्रसादाचा लाभ घेण्यासाठी आपण व आपल्या संपूर्ण परिवारास सस्नेह निमंत्रण.
+
+आपली उपस्थिती हीच आमच्यासाठी आशीर्वाद व उत्सवाची खरी शोभा आहे. आपण आवर्जून उपस्थित राहून श्री गणरायाचे दर्शन घ्यावे व महाप्रसादाचा लाभ घ्यावा, ही नम्र विनंती.
+
+📍 स्थळ: श्री शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर
+🗓️ दिनांक: 18/8/2026
+🕔 वेळ: संध्याकाळी ठीक 7.30 वाजता
+
+आपली उपस्थिती प्रार्थनीय आहे.
+
+🌺 गणपती बाप्पा मोरया!
+🌺 मंगलमूर्ती मोरया! 🌺';
             }
 
-            let shareTextBase = customText.trim() + `\n\n- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर \n\n🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com\n\n===================\nउत्सव कार्यकारिणी\n===================\n`;
+            shareTextBase = customText.trim() + `
+
+- शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
+
+🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com
+
+===================
+उत्सव कार्यकारिणी
+===================
+`;
             if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
                 let orderedData = [...window.currentCommitteeData];
-            orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
+                orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
                 orderedData.forEach(m => {
                     let d = m.designation || '';
                     if (!d) {
@@ -4286,76 +4326,65 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                         else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
                         else d = 'कार्यकारी सदस्य';
                     }
-                    shareTextBase += (m.name || '') + ' - ' + d + '\n';
+                    shareTextBase += (m.name || '') + ' - ' + d + '
+';
                 });
             } else {
-                shareTextBase += 'तेजस फटांगरे - अध्यक्ष\nधीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख\nआदित्य मते - सचिव / डेकोरेशन प्रमुख\nसार्थक माताडे - सहसचिव / सहसमन्वयक\nधनंजय रणाते - खजिनदार / समन्वयक\nओंकार वर्पे - सहखजिनदार\nतेजस देशमुख - सोशल मीडिया प्रमुख\nतेजस वर्पे - प्रसिद्धी प्रमुख\nवैभव सांगळे - कार्यकारी सदस्य\nनिलेश कदम - कार्यकारी सदस्य\nशुभम पेटकर - कार्यकारी सदस्य\n';
+                shareTextBase += 'तेजस फटांगरे - अध्यक्ष
+धीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख
+आदित्य मते - सचिव / डेकोरेशन प्रमुख
+सार्थक माताडे - सहसचिव / सहसमन्वयक
+धनंजय रणाते - खजिनदार / समन्वयक
+ओंकार वर्पे - सहखजिनदार
+तेजस देशमुख - सोशल मीडिया प्रमुख
+तेजस वर्पे - प्रसिद्धी प्रमुख
+वैभव सांगळे - कार्यकारी सदस्य
+निलेश कदम - कार्यकारी सदस्य
+शुभम पेटकर - कार्यकारी सदस्य
+';
             }
-            
-            const shareData = {
-                title: orgName + ' - ' + titleStr,
-                text: shareTextBase.trim(),
-                files: [file]
-            };
 
+            // Copy text caption immediately to clipboard
+            try { await navigator.clipboard.writeText(shareTextBase); } catch(e) {}
+
+            // Pre-open WhatsApp target window on user click before async delay to avoid popup blocker
+            shareWin = window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
+
+            const canvas = await captureCustomPoster(type, true);
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
+            const blob = dataURItoBlob(dataUrl);
+            const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : (type === 'visarjan' ? 'Ganpati_Visarjan.png' : (type === 'custom' ? 'Vishesh_Karyakram.png' : 'Aagman_Sohala.png')));
+            const file = new File([blob], filename, { type: 'image/png' });
+
+            // Auto download poster image for sharing
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Native Web Share API attempt on Mobile
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share(shareData);
-            } else {
-                // Download fallback and lightbox preview
-                const link = document.createElement('a');
-                link.download = filename;
-                link.href = dataUrl;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                openLightbox(dataUrl);
-                if (isInAppBrowser()) {
-                    alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
-                } else {
-                    alert('तुमच्या डिव्हाइसवर डायरेक्ट इमेज शेअरिंग उपलब्ध नाही. इमेज डाउनलोड झाली आहे व स्क्रीनवर उघडली आहे! तुम्ही या फोटोवर लॉंग-प्रेस करून थेट Share करू शकता.');
+                try {
+                    if (shareWin && !shareWin.closed) shareWin.close();
+                    await navigator.share({
+                        title: orgName + ' - ' + titleStr,
+                        text: shareTextBase.trim(),
+                        files: [file]
+                    });
+                } catch(se) {
+                    console.log('Native share closed/cancelled:', se);
                 }
             }
         } catch (shareErr) {
-            console.log('Share action was cancelled or failed:', shareErr);
-            if (shareErr.name !== 'AbortError' && !String(shareErr).includes('AbortError') && !String(shareErr).toLowerCase().includes('cancel') && !String(shareErr).toLowerCase().includes('abort')) {
-                const filename = type === 'vargani' ? 'Vargani_Aabhar.png' : (type === 'mahaprasad' ? 'Mahaprasad_Nimantran.png' : 'Aagman_Sohala.png');
-                if (dataUrl) {
-                    const link = document.createElement('a');
-                    link.download = filename;
-                    link.href = dataUrl;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    openLightbox(dataUrl);
-                    if (isInAppBrowser()) {
-                        alert('तुम्ही सध्या WhatsApp किंवा इन-ॲप ब्राउझरमध्ये आहात. स्क्रीनवर आलेला फोटो लॉंग-प्रेस (दाबून धरा) आणि थेट Share Image किंवा Save Image करा!');
-                    } else {
-                        alert('डायरेक्ट शेअरिंगऐवजी पोस्टर स्क्रीनवर उघडले आहे आणि डाउनलोडही झाले आहे! फोटोवर लॉंग-प्रेस करून तुम्ही थेट Share करू शकता.');
-                    }
-                } else if (shareErr.name === 'SecurityError' || (shareErr.message && shareErr.message.includes('Tainted'))) {
-                    alert('सिक्युरिटी एरर: क्रॉस-डोमेन फोटो लोड होण्यात अडचण आली. कृपया पेज रीफ्रेश करा आणि पुन्हा प्रयत्न करा.');
-                } else {
-                    alert('शेअर करताना त्रुटी आली: ' + (shareErr.message || shareErr));
-                }
+            console.error('Share action failed:', shareErr);
+            if (!shareWin || shareWin.closed) {
+                window.location.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase);
             }
         } finally {
+            isCustomShareInProgress = false;
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
-        }
-    }
-
-    function openLightbox(src) {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightboxImg');
-        if (lightbox && lightboxImg) {
-            lightboxImg.src = src;
-            lightbox.style.display = 'flex';
-        }
-    }
-
-    function closeLightbox() {
-        const lightbox = document.getElementById('lightbox');
-        if (lightbox) {
-            lightbox.style.display = 'none';
         }
     }
 
