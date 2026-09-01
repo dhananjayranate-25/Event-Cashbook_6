@@ -220,6 +220,52 @@ window.closeLightbox = function() {
         }
     };
     </script>
+
+    <style>
+    @media (min-width: 769px) {
+        #mobileMenuBtn, .hamburger {
+            display: none !important;
+        }
+    }
+    @media (max-width: 768px) {
+        #mobileMenuBtn, .hamburger {
+            display: flex !important;
+        }
+        .nav-links {
+            display: none !important;
+        }
+        .nav-links.active {
+            display: flex !important;
+            flex-direction: column !important;
+            position: fixed !important;
+            top: 45px !important;
+            right: 10px !important;
+            left: 10px !important;
+            background: linear-gradient(145deg, rgba(25, 5, 35, 0.98), rgba(10, 2, 16, 0.99)) !important;
+            border: 2px solid #ffd700 !important;
+            border-radius: 16px !important;
+            padding: 15px !important;
+            z-index: 999999 !important;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.95), 0 0 25px rgba(255,215,0,0.5) !important;
+            backdrop-filter: blur(20px) !important;
+        }
+        .nav-links.active a {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 12px 16px !important;
+            margin: 4px 0 !important;
+            color: #ffffff !important;
+            font-weight: 700 !important;
+            font-size: 15px !important;
+            text-decoration: none !important;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2) !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+    }
+    </style>
+
     <style>
     @media (max-width: 768px) {
         .nav-links {
@@ -273,7 +319,7 @@ window.closeLightbox = function() {
             <div class="main-banner" style="padding: 0;">
                 <div id="displayEstYear" style="background-color: #ff8c00; color: white; text-align: center; font-size: clamp(12px, 3vw, 16px); font-weight: bold; padding: 6px 15px; margin: 0; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; box-sizing: border-box;">
                     <span>स्थापना - २०१९ वर्ष - ८ वे</span>
-                    <div class="hamburger" id="mobileMenuBtn" onclick="toggleMobileMenu(event)" ontouchstart="toggleMobileMenu(event)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; cursor: pointer; gap: 4px; padding: 10px; z-index: 99999; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
+                    <div class="hamburger" id="mobileMenuBtn" onclick="toggleMobileMenu(event)" ontouchstart="toggleMobileMenu(event)" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); display: none; flex-direction: column; cursor: pointer; gap: 4px; padding: 10px; z-index: 99999; touch-action: manipulation; -webkit-tap-highlight-color: transparent;">
                         <div style="width: 24px; height: 3px; background-color: white; border-radius: 2px; pointer-events: none;"></div>
                         <div style="width: 24px; height: 3px; background-color: white; border-radius: 2px; pointer-events: none;"></div>
                         <div style="width: 24px; height: 3px; background-color: white; border-radius: 2px; pointer-events: none;"></div>
