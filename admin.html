@@ -2767,10 +2767,15 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('👤 देणगीदाराचे नाव :', cardX + 35, cardY + 62);
                 ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 32px "Noto Sans Devanagari", sans-serif';
                 
                 let displayName = data.donorName;
-                if (displayName.length > 28) displayName = displayName.substring(0, 26) + '...';
+                if (displayName.length > 30) {
+                    ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+                } else if (displayName.length > 22) {
+                    ctx.font = 'bold 27px "Noto Sans Devanagari", sans-serif';
+                } else {
+                    ctx.font = 'bold 32px "Noto Sans Devanagari", sans-serif';
+                }
                 ctx.fillText(displayName, cardX + 320, cardY + 62);
 
                 // Row Divider
@@ -2810,8 +2815,8 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
 
                 // 5. Thank You Messages
                 ctx.textAlign = 'center';
-                ctx.fillStyle = '#f1f5f9';
-                ctx.font = '24px "Noto Sans Devanagari", sans-serif';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 24px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText(`वरील रक्कम गणेशोत्सव ${data.year} साठी देणगी म्हणून प्राप्त झाली आहे.`, 540, 835);
 
                 ctx.fillStyle = '#ffd700';
@@ -2819,8 +2824,8 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                 ctx.fillText('आपल्या अमूल्य सहकार्याबद्दल श्री शिवसृष्टी सार्वजनिक उत्सव मंडळातर्फे', 540, 878);
                 ctx.fillText('मनःपूर्वक आभार! 🙏🌸', 540, 914);
 
-                ctx.fillStyle = '#e2e8f0';
-                ctx.font = '23px "Noto Sans Devanagari", sans-serif';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
                 ctx.fillText('आपले सहकार्य असेच निरंतर लाभत राहो, ही नम्र अपेक्षा.', 540, 954);
 
                 // 6. Bottom Divider Line
@@ -2851,14 +2856,26 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
                             itemX = 540;
                         }
 
-                        // Member Name
+                        // Member Name (Dynamic font scaling for long names)
                         ctx.fillStyle = '#ffffff';
-                        ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+                        if (mem.name.length > 18) {
+                            ctx.font = 'bold 19px "Noto Sans Devanagari", sans-serif';
+                        } else if (mem.name.length > 13) {
+                            ctx.font = 'bold 21px "Noto Sans Devanagari", sans-serif';
+                        } else {
+                            ctx.font = 'bold 23px "Noto Sans Devanagari", sans-serif';
+                        }
                         ctx.fillText(mem.name, itemX, currentY);
 
-                        // Member Designation
+                        // Member Designation (Dynamic font scaling for long designations)
                         ctx.fillStyle = '#cbd5e1';
-                        ctx.font = '20px "Noto Sans Devanagari", sans-serif';
+                        if (mem.designation.length > 18) {
+                            ctx.font = '17px "Noto Sans Devanagari", sans-serif';
+                        } else if (mem.designation.length > 13) {
+                            ctx.font = '18px "Noto Sans Devanagari", sans-serif';
+                        } else {
+                            ctx.font = '20px "Noto Sans Devanagari", sans-serif';
+                        }
                         ctx.fillText(mem.designation, itemX, currentY + 26);
                     });
                 }
