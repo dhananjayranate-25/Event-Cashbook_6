@@ -2962,9 +2962,9 @@ const regNoElem = document.getElementById('displayRegNo');
                             else d = 'सदस्य';
                         }
                         
-                        committeeHtml += '<div style="text-align:center; flex: 0 0 160px; max-width:160px; padding: 0 5px;">' +
-                            '<div style="font-weight:700; font-size:15px; color:#1a1a2e; margin-bottom:2px;">' + (m.name || '') + '</div>' +
-                            '<div style="font-weight:600; font-size:12px; color:#5a2010;">' + d + '</div>' +
+                        committeeHtml += '<div style="text-align:center; flex: 0 0 170px; max-width:170px; padding: 8px 6px; margin: 4px; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(184, 134, 11, 0.4); border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">' +
+                            '<div style="font-weight:700; font-size:14px; color:#1a1a2e; margin-bottom:3px;">' + (m.name || '') + '</div>' +
+                            '<div style="font-weight:600; font-size:12px; color:#b8860b;">' + d + '</div>' +
                         '</div>';
                     });
                     
@@ -3611,53 +3611,53 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         } else {
             dynamicMembersHTML = `
                   <!-- Row 1: 4 Names -->
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस फटांगरे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">अध्यक्ष</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">तेजस फटांगरे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">अध्यक्ष</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">धीरज झावरे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">धीरज झावरे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">आदित्य मते</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सचिव / डेकोरेशन प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">आदित्य मते</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सचिव / डेकोरेशन प्रमुख</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">सार्थक माताडे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सहसचिव / सहसमन्वयक</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">सार्थक माताडे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सहसचिव / सहसमन्वयक</span>
                   </div>
 
                   <!-- Row 2: 4 Names -->
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">धनंजय रणाते</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">खजिनदार / समन्वयक</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">धनंजय रणाते</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">खजिनदार / समन्वयक</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">ओंकार वर्पे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सहखजिनदार</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">ओंकार वर्पे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सहखजिनदार</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस देशमुख</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सोशल मीडिया प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">तेजस देशमुख</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सोशल मीडिया प्रमुख</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस वर्पे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">प्रसिद्धी प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">तेजस वर्पे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">प्रसिद्धी प्रमुख</span>
                   </div>
 
                   <!-- Row 3: 3 Names -->
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">वैभव सांगळे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">वैभव सांगळे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">कार्यकारी सदस्य</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">निलेश कदम</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">निलेश कदम</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">कार्यकारी सदस्य</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">शुभम पेटकर</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">शुभम पेटकर</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">कार्यकारी सदस्य</span>
                   </div>
             `;
         }
@@ -3931,53 +3931,53 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         } else {
             dynamicMembersHTML = `
                   <!-- Row 1: 4 Names -->
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस फटांगरे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">अध्यक्ष</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">तेजस फटांगरे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">अध्यक्ष</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">धीरज झावरे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">धीरज झावरे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">आदित्य मते</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सचिव / डेकोरेशन प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">आदित्य मते</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सचिव / डेकोरेशन प्रमुख</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">सार्थक माताडे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सहसचिव / सहसमन्वयक</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">सार्थक माताडे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सहसचिव / सहसमन्वयक</span>
                   </div>
 
                   <!-- Row 2: 4 Names -->
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">धनंजय रणाते</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">खजिनदार / समन्वयक</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">धनंजय रणाते</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">खजिनदार / समन्वयक</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">ओंकार वर्पे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सहखजिनदार</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">ओंकार वर्पे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सहखजिनदार</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस देशमुख</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">सोशल मीडिया प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">तेजस देशमुख</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">सोशल मीडिया प्रमुख</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">तेजस वर्पे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">प्रसिद्धी प्रमुख</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">तेजस वर्पे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">प्रसिद्धी प्रमुख</span>
                   </div>
 
                   <!-- Row 3: 3 Names -->
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">वैभव सांगळे</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">वैभव सांगळे</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">कार्यकारी सदस्य</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">निलेश कदम</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">निलेश कदम</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">कार्यकारी सदस्य</span>
                   </div>
-                  <div style="width: 25%; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 5px;">
-                      <span style="font-weight: bold; font-size: 26px; color: #fff; line-height: 1.1; font-family: 'Mukta', sans-serif;">शुभम पेटकर</span>
-                      <span style="color: #ffd700; font-size: 17px; margin-top: 5px; font-family: 'Poppins', sans-serif; line-height: 1.2;">कार्यकारी सदस्य</span>
+                  <div style="width: 23%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 10px 8px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                      <span style="font-weight: bold; font-size: 22px; color: #fff; line-height: 1.2; font-family: 'Mukta', sans-serif;">शुभम पेटकर</span>
+                      <span style="color: #ffd700; font-size: 16px; margin-top: 4px; font-family: 'Poppins', sans-serif; font-weight: 600;">कार्यकारी सदस्य</span>
                   </div>
             `;
         }
