@@ -3574,8 +3574,9 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
               </div>`;
         clone.insertAdjacentHTML('beforeend', posterTitleHtml);
 
-        // 2B. Donation Appeal Description Block inside Poster Image Canvas
-        const appealRawText = (window.appSettings && window.appSettings.donationAppDescText) ? window.appSettings.donationAppDescText : (typeof DEFAULT_DONATION_APPEAL_TEXT !== 'undefined' ? DEFAULT_DONATION_APPEAL_TEXT : '');
+        // 2B. Donation Appeal Description Block inside Poster Image Canvas (Uses donationPosterText or donationAppDescText or default)
+        const s = window.appSettings || {};
+        const appealRawText = (s.donationPosterText || s.donationAppDescText) ? (s.donationPosterText || s.donationAppDescText) : (typeof DEFAULT_DONATION_APPEAL_TEXT !== 'undefined' ? DEFAULT_DONATION_APPEAL_TEXT : '');
         if (appealRawText) {
             const appealParas = appealRawText.trim().split('\n\n');
             let appealHtml = '<div style="margin: 10px auto 20px auto; max-width: 820px; width: 92%; padding: 18px 22px; background: linear-gradient(145deg, rgba(30, 8, 42, 0.85), rgba(15, 2, 22, 0.95)); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 16px; text-align: center; position: relative; z-index: 10; box-shadow: 0 8px 25px rgba(0,0,0,0.4);">';
