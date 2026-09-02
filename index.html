@@ -3500,12 +3500,19 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
         
         const clone = document.createElement('div');
-        clone.style.position = 'fixed';
-        clone.style.left = '0';
+        clone.style.position = 'absolute';
+        clone.style.left = '-9999px';
         clone.style.top = '0';
-        clone.style.opacity = '0.01';
-        clone.style.pointerEvents = 'none';
-        clone.style.zIndex = '-9999';
+        clone.style.width = '900px';
+        clone.style.maxWidth = '900px';
+        clone.style.opacity = '1';
+        clone.style.background = 'radial-gradient(circle at center, #3e0000 0%, #1a0000 100%)';
+        clone.style.overflow = 'hidden';
+        clone.style.border = '1px solid #3e0000';
+        clone.style.padding = '30px';
+        clone.style.display = 'flex';
+        clone.style.flexDirection = 'column';
+        clone.style.alignItems = 'center';
         clone.style.width = '900px';
         clone.style.maxWidth = '900px';
         clone.style.background = 'radial-gradient(circle at center, #3e0000 0%, #1a0000 100%)';
