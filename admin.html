@@ -1985,12 +1985,13 @@ const fdtg = document.getElementById('festivalDateTarget'); if(fdtg) fdtg.value 
                     });
                 }
                 
-                // Immediately refresh and sync settingsCache in localStorage
+                // Immediately refresh and sync settingsCache in localStorage and window.appSettings
                 try {
                     const freshRes = await fetch('/api/settings?_=' + Date.now(), { cache: 'no-store' });
                     const freshData = await freshRes.json();
                     if (freshData.success) {
                         localStorage.setItem('settingsCache', JSON.stringify(freshData.data));
+                        window.appSettings = freshData.data;
                     }
                 } catch(cacheErr) {}
 
@@ -2766,20 +2767,44 @@ ${commTextList}`;
             ctx.lineWidth = 2;
             ctx.strokeRect(35, 35, logicalW - 70, logicalH - 70);
 
-            // Header Banner Image
+            // Header Banner Image (Dynamically uses uploaded header photo)
             let headerImgSrc = 'logo/pdf_header_banner_opt.jpg';
             try {
-                if (typeof appSettings !== 'undefined' && appSettings) {
-                    const h = appSettings.posterHeaderImage || appSettings.topHeaderBannerImage || appSettings.websiteHeaderImage;
-                    if (h) headerImgSrc = (h.startsWith('data:') || h.startsWith('http')) ? h : ('/' + h);
+                let s = (typeof appSettings !== 'undefined' && appSettings) ? appSettings : null;
+                if (!s && typeof window !== 'undefined' && window.appSettings) s = window.appSettings;
+                if (!s) {
+                    const stored = localStorage.getItem('settingsCache');
+                    if (stored) s = JSON.parse(stored);
+                }
+                if (s) {
+                    const h = s.posterHeaderImage || s.topHeaderBannerImage || s.websiteHeaderImage || s.headerBannerImage;
+                    if (h) {
+                        headerImgSrc = (h.startsWith('data:') || h.startsWith('http')) ? h : (h.startsWith('/') ? h.substring(1) : h);
+                    }
                 }
             } catch(e) {}
 
+            let finalHeaderSrc = headerImgSrc;
+            if (!headerImgSrc.startsWith('data:') && !headerImgSrc.startsWith('http')) {
+                try {
+                    const res = await fetch(headerImgSrc);
+                    if (res.ok) {
+                        const blob = await res.blob();
+                        finalHeaderSrc = await new Promise((resolve) => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.onerror = () => resolve(headerImgSrc);
+                            reader.readAsDataURL(blob);
+                        });
+                    }
+                } catch(e) {}
+            }
+
             const img = new Image();
-            img.crossOrigin = 'anonymous';
+            if (finalHeaderSrc.startsWith('http')) img.crossOrigin = 'anonymous';
             img.onload = () => drawContent();
             img.onerror = () => drawContent();
-            img.src = headerImgSrc;
+            img.src = finalHeaderSrc;
 
             function drawContent() {
                 if (img.complete && img.naturalWidth > 0) {

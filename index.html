@@ -3521,11 +3521,20 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         mandalPoster.style.boxShadow = '0 4px 15px rgba(255, 215, 0, 0.45)';
         mandalPoster.style.boxSizing = 'border-box';
 
-        let headerUrl = 'logo/Receipt.jpeg';
-        const customHeader = (window.appSettings && (window.appSettings.posterHeaderImage || window.appSettings.topHeaderBannerImage || window.appSettings.headerBannerImage)) || null;
-        if (customHeader) {
-            headerUrl = (customHeader.startsWith('data:image') || customHeader.startsWith('http')) ? customHeader : ('uploads/' + customHeader);
-        }
+        let headerUrl = 'logo/pdf_header_banner_opt.jpg';
+        try {
+            let s = window.appSettings || (typeof appSettings !== 'undefined' ? appSettings : null);
+            if (!s) {
+                const stored = localStorage.getItem('settingsCache');
+                if (stored) s = JSON.parse(stored);
+            }
+            if (s) {
+                const h = s.posterHeaderImage || s.topHeaderBannerImage || s.websiteHeaderImage || s.headerBannerImage;
+                if (h) {
+                    headerUrl = (h.startsWith('data:') || h.startsWith('http')) ? h : (h.startsWith('uploads/') ? h : (h.startsWith('/') ? h.substring(1) : 'uploads/' + h));
+                }
+            }
+        } catch(e) {}
         const headerBase64 = await fetchImageAsBase64(headerUrl);
 
         await new Promise((resolve) => {
