@@ -2477,8 +2477,10 @@ const regNoElem = document.getElementById('displayRegNo');
             if (result.success && Array.isArray(result.data)) {
                 window.currentCommitteeData = result.data;
                 localStorage.setItem('committeeCache', JSON.stringify(result.data));
-                window.currentCommitteeData = result.data;
                 renderCommittee(result.data);
+                cachedCustomCanvases = {};
+                cachedDonationCanvas = null;
+                window.donationPosterBlobCache = null;
             }
         } catch(e) {
     console.error('Failed to load committee from API', e);
@@ -4109,12 +4111,12 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             `;
         }
 
-        committeeListBlockCustom.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 30px; padding: 2px 0; position: relative; z-index: 10; gap: 14px; white-space: nowrap; width: 100%;">
-                  <div style="flex: 1; max-width: 130px; height: 2px; background: linear-gradient(90deg, transparent, #fbbf24, #e879f9, #fbbf24, transparent);"></div>
-                  <div style="color: #fbbf24; font-size: 16px; opacity: 0.8;">✦</div>
+        committeeListBlockCustom.innerHTML = `              <div style="display: flex; justify-content: center; align-items: center; margin: 35px 0 20px 0; padding: 2px 0; position: relative; z-index: 10; gap: 12px; white-space: nowrap; width: 100%;">
+                  <div style="flex: 1; max-width: 140px; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
+                  <div style="color: #ffd700; font-size: 20px;">✧</div>
                   <div style="color: #fbbf24; font-size: 34px; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-shadow: 0 0 15px rgba(251, 191, 36, 0.45); margin: 0; line-height: 1.2; letter-spacing: 0.5px;">उत्सव कार्यकारिणी</div>
-                  <div style="color: #fbbf24; font-size: 16px; opacity: 0.8;">✦</div>
-                  <div style="flex: 1; max-width: 130px; height: 2px; background: linear-gradient(90deg, transparent, #fbbf24, #e879f9, #fbbf24, transparent);"></div>
+                  <div style="color: #ffd700; font-size: 20px;">✧</div>
+                  <div style="flex: 1; max-width: 140px; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
               </div>
               <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 0; padding: 0 35px;">
                   ${dynamicMembersHTML}
@@ -4433,6 +4435,12 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
     // Immediately pre-cache all 5 poster canvases on page load so 1st click triggers WhatsApp share instantly (0ms)
     async function precacheAllPostersImmediate() {
         try {
+            if (!window.currentCommitteeData || window.currentCommitteeData.length === 0) {
+                try {
+                    const c = localStorage.getItem('committeeCache');
+                    if (c) window.currentCommitteeData = JSON.parse(c);
+                } catch(ce) {}
+            }
             if (typeof html2canvas === 'undefined') {
                 await loadPDFLibraries();
             }
