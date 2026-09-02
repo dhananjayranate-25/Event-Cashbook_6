@@ -525,8 +525,34 @@
     <!-- Footer -->
     <footer class="new-site-footer-v6" id="siteFooter" style="display: block; margin-top: auto !important; width: 100%;">
         <div class="footer-v6-content">
-            <!-- Left: Mandal Name Photo -->
+            <!-- Left: Mandal Name Photo & Ganeshotsav Countdown Timer -->
             <div class="footer-v6-col brand-col">
+                <div class="footer-countdown-container" style="margin-bottom: 25px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.15); background: transparent; width: 100%; box-sizing: border-box;">
+                    <!-- Title Inside the Box (Header) -->
+                    <div style="background: transparent; padding: 10px 4px; text-align: center; border-bottom: 1px solid #e2e8f0; width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center;">
+                        <div id="countdownMainTitle" style="color: #000000; font-size: clamp(0.82rem, 3.8vw, 1.15rem); margin: 0; font-weight: bold; font-family: 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.2px; white-space: nowrap; text-align: center;">गणेशोत्सव 14 सप्टेंबर ते 26 सप्टेंबर २०२६</div>
+                    </div>
+                    
+                    <!-- Timer Section (Transparent background) -->
+                    <div id="countdownTimerDisplay" style="display: flex; width: 100%; background: transparent;">
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 12px 2px; border-right: 1px solid #e2e8f0;">
+                            <div id="cd-days" style="color: #000; font-size: clamp(1.5rem, 5.5vw, 2.3rem); font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
+                            <div style="color: #64748b; font-size: clamp(0.75rem, 2.6vw, 0.95rem); font-weight: 500; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 5px; white-space: nowrap;">दिवस</div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 12px 2px; border-right: 1px solid #e2e8f0;">
+                            <div id="cd-hours" style="color: #000; font-size: clamp(1.5rem, 5.5vw, 2.3rem); font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
+                            <div style="color: #64748b; font-size: clamp(0.75rem, 2.6vw, 0.95rem); font-weight: 500; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 5px; white-space: nowrap;">तास</div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 12px 2px; border-right: 1px solid #e2e8f0;">
+                            <div id="cd-mins" style="color: #000; font-size: clamp(1.5rem, 5.5vw, 2.3rem); font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
+                            <div style="color: #64748b; font-size: clamp(0.75rem, 2.6vw, 0.95rem); font-weight: 500; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 5px; white-space: nowrap;">मिनिटे</div>
+                        </div>
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding: 12px 2px;">
+                            <div id="cd-secs" style="color: #000; font-size: clamp(1.5rem, 5.5vw, 2.3rem); font-weight: 900; font-family: 'Poppins', sans-serif; line-height: 1;">00</div>
+                            <div style="color: #64748b; font-size: clamp(0.75rem, 2.6vw, 0.95rem); font-weight: 500; font-family: 'Noto Sans Devanagari', sans-serif; margin-top: 5px; white-space: nowrap;">सेकंद</div>
+                        </div>
+                    </div>
+                </div>
                 <img src="logo/footer_mandal_name.jpg" alt="Shivsrushti Mandal Name" class="footer-mandal-name-img">
             </div>
 
@@ -778,6 +804,72 @@
         const u = window.currentDonateUPI || 'dhananjayranate@ybl';
         copyToClipboard(u.trim(), 'UPI ID कॉपी झाला! (' + u + ')');
     }
+</script>
+<script>
+function initCountdown() {
+    let festivalDate = new Date('2026-09-14T00:00:00').getTime();
+    let isDateSet = false;
+    
+    const showCelebration = () => {
+        const display = document.getElementById('countdownTimerDisplay');
+        if (display && !display.hasAttribute('data-celebrated')) {
+            display.setAttribute('data-celebrated', 'true');
+            display.innerHTML = '<h3 style="color: #ff7e5f; font-size: 1.4rem; width: 100%; font-weight: bold; text-shadow: 1px 1px 0px rgba(0,0,0,0.1); animation: pulse 1s infinite alternate;">✨ उत्सवाला सुरुवात झाली आहे! मंगलमूर्ती मोरया! ✨</h3>';
+            if (!document.getElementById('pulseAnimStyle')) {
+                const style = document.createElement('style');
+                style.id = 'pulseAnimStyle';
+                style.innerHTML = '@keyframes pulse { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.05); opacity: 1; text-shadow: 0 0 20px #ff8c00; } }';
+                document.head.appendChild(style);
+            }
+        }
+    };
+
+    const updateTimer = () => {
+        if (window.appSettings && window.appSettings.festivalDateTarget && !isDateSet) {
+            festivalDate = new Date(window.appSettings.festivalDateTarget + 'T00:00:00').getTime();
+            isDateSet = true;
+        }
+    
+        const now = new Date().getTime();
+        const distance = festivalDate - now;
+
+        if (distance <= 0) {
+            showCelebration();
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        const dEl = document.getElementById('cd-days');
+        const hEl = document.getElementById('cd-hours');
+        const mEl = document.getElementById('cd-mins');
+        const sEl = document.getElementById('cd-secs');
+
+        if (dEl) dEl.innerText = days;
+        if (hEl) hEl.innerText = hours;
+        if (mEl) mEl.innerText = minutes;
+        if (sEl) sEl.innerText = seconds;
+    };
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+}
+
+// Fetch settings for festivalDateText & target
+fetch('/api/settings').then(res => res.json()).then(res => {
+    if (res && res.success && res.data) {
+        window.appSettings = res.data;
+        if (res.data.festivalDateText) {
+            const titleEl = document.getElementById('countdownMainTitle');
+            if (titleEl) titleEl.innerText = res.data.festivalDateText;
+        }
+    }
+}).catch(e => {}).finally(() => {
+    initCountdown();
+});
 </script>
 </body>
 </html>
