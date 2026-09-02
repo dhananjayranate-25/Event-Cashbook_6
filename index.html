@@ -4238,44 +4238,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
 - शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
 
-🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com
-
-===================
-उत्सव कार्यकारिणी
-===================
-`;
-            if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
-                let orderedData = [...window.currentCommitteeData];
-                orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
-                orderedData.forEach(m => {
-                    let d = m.designation || '';
-                    if (!d) {
-                        if (m.role === 'president') d = 'अध्यक्ष';
-                        else if (m.role === 'vicePresident') d = 'उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख';
-                        else if (m.role === 'secretary') d = 'सचिव / डेकोरेशन प्रमुख';
-                        else if (m.role === 'jointSecretary') d = 'सहसचिव / सहसमन्वयक';
-                        else if (m.role === 'treasurer') d = 'खजिनदार / समन्वयक';
-                        else if (m.role === 'jointTreasurer') d = 'सहखजिनदार';
-                        else if (m.role === 'socialMediaHead') d = 'सोशल मीडिया प्रमुख';
-                        else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
-                        else d = 'कार्यकारी सदस्य';
-                    }
-                    shareTextBase += (m.name || '') + ' - ' + d + '\n';
-                });
-            } else {
-                shareTextBase += `तेजस फटांगरे - अध्यक्ष
-धीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख
-आदित्य मते - सचिव / डेकोरेशन प्रमुख
-सार्थक माताडे - सहसचिव / सहसमन्वयक
-धनंजय रणाते - खजिनदार / समन्वयक
-ओंकार वर्पे - सहखजिनदार
-तेजस देशमुख - सोशल मीडिया प्रमुख
-तेजस वर्पे - प्रसिद्धी प्रमुख
-वैभव सांगळे - कार्यकारी सदस्य
-निलेश कदम - कार्यकारी सदस्य
-शुभम पेटकर - कार्यकारी सदस्य
-`;
-            }
+🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com`;
 
             let file, dataUrl;
             if (window.donationPosterBlobCache) {
@@ -4400,44 +4363,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
 - शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर 
 
-🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com
-
-===================
-उत्सव कार्यकारिणी
-===================
-`;
-            if (window.currentCommitteeData && window.currentCommitteeData.length > 0) {
-                let orderedData = [...window.currentCommitteeData];
-                orderedData.sort((a, b) => (Number(a.order) || 99) - (Number(b.order) || 99));
-                orderedData.forEach(m => {
-                    let d = m.designation || '';
-                    if (!d) {
-                        if (m.role === 'president') d = 'अध्यक्ष';
-                        else if (m.role === 'vicePresident') d = 'उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख';
-                        else if (m.role === 'secretary') d = 'सचिव / डेकोरेशन प्रमुख';
-                        else if (m.role === 'jointSecretary') d = 'सहसचिव / सहसमन्वयक';
-                        else if (m.role === 'treasurer') d = 'खजिनदार / समन्वयक';
-                        else if (m.role === 'jointTreasurer') d = 'सहखजिनदार';
-                        else if (m.role === 'socialMediaHead') d = 'सोशल मीडिया प्रमुख';
-                        else if (m.role === 'publicityHead') d = 'प्रसिद्धी प्रमुख';
-                        else d = 'कार्यकारी सदस्य';
-                    }
-                    shareTextBase += (m.name || '') + ' - ' + d + '\n';
-                });
-            } else {
-                shareTextBase += `तेजस फटांगरे - अध्यक्ष
-धीरज झावरे - उपाध्यक्ष / मनोरंजन व स्पर्धा प्रमुख
-आदित्य मते - सचिव / डेकोरेशन प्रमुख
-सार्थक माताडे - सहसचिव / सहसमन्वयक
-धनंजय रणाते - खजिनदार / समन्वयक
-ओंकार वर्पे - सहखजिनदार
-तेजस देशमुख - सोशल मीडिया प्रमुख
-तेजस वर्पे - प्रसिद्धी प्रमुख
-वैभव सांगळे - कार्यकारी सदस्य
-निलेश कदम - कार्यकारी सदस्य
-शुभम पेटकर - कार्यकारी सदस्य
-`;
-            }
+🌐अधिक माहितीसाठी अधिकृत संकेतस्थळ : https://shivsrushti-utsav-mandal.onrender.com`;
 
             const canvas = await captureCustomPoster(type, false);
             const dataUrl = canvas.toDataURL('image/png', 1.0);
