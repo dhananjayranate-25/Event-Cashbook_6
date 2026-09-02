@@ -219,6 +219,38 @@ window.closeLightbox = function() {
             navLinks.classList.toggle('active');
         }
     };
+
+    window.closeMobileMenu = function() {
+        const navLinks = document.getElementById('navLinks');
+        if (navLinks && navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+        }
+    };
+
+    // Auto-close mobile menu on touch/click outside or screen scroll
+    document.addEventListener('click', function(e) {
+        const navLinks = document.getElementById('navLinks');
+        const btn = document.getElementById('mobileMenuBtn');
+        if (navLinks && navLinks.classList.contains('active')) {
+            if (!navLinks.contains(e.target) && (!btn || !btn.contains(e.target))) {
+                window.closeMobileMenu();
+            }
+        }
+    });
+
+    document.addEventListener('touchstart', function(e) {
+        const navLinks = document.getElementById('navLinks');
+        const btn = document.getElementById('mobileMenuBtn');
+        if (navLinks && navLinks.classList.contains('active')) {
+            if (!navLinks.contains(e.target) && (!btn || !btn.contains(e.target))) {
+                window.closeMobileMenu();
+            }
+        }
+    }, { passive: true });
+
+    window.addEventListener('scroll', function() {
+        window.closeMobileMenu();
+    }, { passive: true });
     </script>
 
     
