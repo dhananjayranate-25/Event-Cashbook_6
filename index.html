@@ -3565,14 +3565,35 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
         // 2. Donation Title with Inline Lines
         const posterTitleHtml = `
-            <div style="display: flex; justify-content: center; align-items: center; margin: 20px 0; padding: 2px 0; position: relative; z-index: 10; gap: 10px; white-space: nowrap;">
+            <div style="display: flex; justify-content: center; align-items: center; margin: 20px 0 15px 0; padding: 2px 0; position: relative; z-index: 10; gap: 10px; white-space: nowrap;">
                   <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to right, transparent, #ffd700);"></div>
                   <div style="color: #ffd700; font-size: 20px;">✧</div>
                   <div style="color: #fbbf24; font-size: 34px; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-shadow: 0 0 15px rgba(251, 191, 36, 0.45); margin: 0; line-height: 1.2; letter-spacing: 0.5px;">देणगी / वर्गणी आवाहन</div>
                   <div style="color: #ffd700; font-size: 20px;">✧</div>
-                  <div style="width: 120px; flex-shrink: 0; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
+                  <div style="color: #120px; flex-shrink: 0; height: 2px; background: linear-gradient(to left, transparent, #ffd700);"></div>
               </div>`;
         clone.insertAdjacentHTML('beforeend', posterTitleHtml);
+
+        // 2B. Donation Appeal Description Block inside Poster Image Canvas
+        const appealRawText = (window.appSettings && window.appSettings.donationAppDescText) ? window.appSettings.donationAppDescText : (typeof DEFAULT_DONATION_APPEAL_TEXT !== 'undefined' ? DEFAULT_DONATION_APPEAL_TEXT : '');
+        if (appealRawText) {
+            const appealParas = appealRawText.trim().split('\n\n');
+            let appealHtml = '<div style="margin: 10px auto 20px auto; max-width: 820px; width: 92%; padding: 18px 22px; background: linear-gradient(145deg, rgba(30, 8, 42, 0.85), rgba(15, 2, 22, 0.95)); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 16px; text-align: center; position: relative; z-index: 10; box-shadow: 0 8px 25px rgba(0,0,0,0.4);">';
+            appealParas.forEach((p, idx) => {
+                const cleanP = p.trim().replace(/\n/g, '<br>');
+                if (idx === 0) {
+                    appealHtml += `<p style="color: #ffeb3b; font-weight: 700; font-size: 20px; margin-bottom: 12px; font-family: 'Noto Sans Devanagari', sans-serif;">${cleanP}</p>`;
+                } else if (cleanP.includes('आपला सहभाग') || cleanP.includes('आपले सहकार्य')) {
+                    appealHtml += `<p style="color: #ffcc00; font-weight: 700; font-size: 19px; margin: 10px 0; font-family: 'Noto Sans Devanagari', sans-serif;">${cleanP}</p>`;
+                } else if (cleanP.includes('किमान ₹')) {
+                    appealHtml += `<div style="margin: 10px 0;"><span style="color: #34d399; font-weight: 700; font-size: 19px; background: rgba(52, 211, 153, 0.15); padding: 8px 18px; border-radius: 20px; display: inline-block; border: 1px dashed rgba(52, 211, 153, 0.4); font-family: 'Noto Sans Devanagari', sans-serif;">${cleanP}</span></div>`;
+                } else {
+                    appealHtml += `<p style="color: #f3f4f6; font-size: 17px; margin-bottom: 10px; line-height: 1.75; font-family: 'Noto Sans Devanagari', sans-serif;">${cleanP}</p>`;
+                }
+            });
+            appealHtml += '</div>';
+            clone.insertAdjacentHTML('beforeend', appealHtml);
+        }
 
         // Committee Members Block removed as requested
         // 6. QR and Bank Details Two-Column Layout
