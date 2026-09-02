@@ -341,6 +341,7 @@ window.closeLightbox = function() {
         
         <script>
             document.addEventListener('DOMContentLoaded', () => {
+        renderDonationAppDesc();
                 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
                 const navLinks = document.getElementById('navLinks');
                 
@@ -709,6 +710,8 @@ window.closeLightbox = function() {
                         <h2>देणगी</h2>
                         <div class="header-line"></div>
                     </div>
+                    
+                    <div id="donationAppDescDisplay" style="margin: 15px auto 25px auto; max-width: 850px; padding: 20px 22px; background: linear-gradient(145deg, rgba(30, 8, 42, 0.85), rgba(15, 2, 22, 0.95)); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 20px rgba(255, 215, 0, 0.08); text-align: center;"></div>
                     
                     <div class="donation-content-wrapper">
                         <!-- QR Code Section -->
