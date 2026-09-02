@@ -1203,7 +1203,7 @@
                                 <td style="padding: 10px 12px; color: #fbbf24; font-weight: bold;">₹${runningBal.toLocaleString('en-IN')}</td>
                                 <td style="padding: 10px 12px; text-align: center;">
                                     <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: center;">
-                                        <button onclick="openAdminReceiptModal('${e.id || e._id}', '${escName}', ${cin || cout}, '${e.date || ''}', '${e.mode || 'Cash'}', '${yr}')" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;" title="डिजिटल देणगी पावती / Share Receipt"><i class="fas fa-share-alt"></i></button>
+                                        <button onclick="openAdminReceiptModal('${e.id || e._id}', '${escName}', ${cin || cout}, '${e.date || ''}', '${e.mode || 'Cash'}', '${yr}', '${e.receiptNo || (idx + 1)}')" style="background: rgba(16, 185, 129, 0.2); border: 1px solid #10b981; color: #34d399; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;" title="डिजिटल देणगी पावती / Share Receipt"><i class="fas fa-share-alt"></i></button>
                                         <button onclick="openEditEntryModal('${e.id || e._id}', '${escName}', '${e.date || ''}', '${e.mode || 'Cash'}', ${cin}, ${cout}, '${yr}')" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fbbf24; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;" title="बदला / Rename (Edit)"><i class="fas fa-edit"></i></button>
                                         <button onclick="deleteAdminEntry('${e.id || e._id}', '${yr}')" style="background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #f87171; padding: 5px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.2s;" title="हटवा (Delete)"><i class="fas fa-trash"></i></button>
                                     </div>
@@ -2585,7 +2585,15 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             if (modal) modal.style.display = 'none';
         };
 
-        window.openAdminReceiptModal = async function(id, donorName, amount, dateRaw, modeRaw, yrStr) {
+                function toMarathiDigits(val) {
+            if (val === null || val === undefined || val === '') return '१';
+            const str = String(val).trim();
+            if (!str) return '१';
+            const digits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+            return str.replace(/\d/g, d => digits[parseInt(d, 10)]);
+        }
+
+        window.openAdminReceiptModal = async function(id, donorName, amount, dateRaw, modeRaw, yrStr, receiptNoRaw) {
             const modal = document.getElementById('adminReceiptModal');
             if (!modal) return;
 
@@ -2611,13 +2619,18 @@ body { font-family: "Poppins", "Noto Sans Devanagari", sans-serif; background: #
             const modeFormatted = (modeRaw === 'Online' || modeRaw === 'ऑनलाइन') ? 'ऑनलाइन (Online)' : 'कॅश (Cash)';
             const amountFormatted = (parseFloat(amount) || 0).toLocaleString('en-IN');
 
+            const recNo = receiptNoRaw || id || '1';
+            const marathiRecNo = toMarathiDigits(recNo);
+
             currentAdminReceiptData = {
                 donorName: donorName || 'देणगीदार',
                 amount: amountFormatted,
                 date: dateFormatted,
                 mode: modeFormatted,
                 rawMode: modeRaw,
-                year: year
+                year: year,
+                receiptNo: recNo,
+                marathiReceiptNo: marathiRecNo
             };
 
             // Build dynamic Utsav Committee list text for WhatsApp caption (Matching screenshot format)
@@ -2681,7 +2694,7 @@ ${commTextList}`;
                 .replace(/\[रक्कम\]/g, amountFormatted)
                 .replace(/\[माध्यम\]/g, modeFormatted)
                 .replace(/\[दिनांक\]/g, dateFormatted)
-                .replace(/\[वर्ष\]/g, year)
+                .replace(/\[वर्ष\]/g, year).replace(/\[पावती_क्र\]/g, marathiRecNo)
                 .replace(/\[कार्याकारिणी\]/g, commTextList);
 
             // Append Utsav Committee section & Website link automatically at end matching screenshot structure
@@ -2848,7 +2861,17 @@ ${commTextList}`;
 
                 ctx.fillStyle = '#ffffff';
                 ctx.font = 'bold 29px "Noto Sans Devanagari", sans-serif';
+                ctx.textAlign = 'center';
                 ctx.fillText('🧾 देणगी पावती', 540, 409);
+
+                // Unique Separate Marathi Receipt Number on Top Right Side
+                const rNo = (data && data.marathiReceiptNo) ? data.marathiReceiptNo : toMarathiDigits(data ? data.receiptNo : '1');
+                const rLabel = `पावती क्र. : ${rNo}`;
+
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#ffeb3b';
+                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText(rLabel, 980, 409);
 
                 // 4. Donor Details Box (Compact Vertical Spacing)
                 const cardX = 80;
