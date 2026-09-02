@@ -2694,7 +2694,7 @@ ${commTextList}`;
                 .replace(/\[रक्कम\]/g, amountFormatted)
                 .replace(/\[माध्यम\]/g, modeFormatted)
                 .replace(/\[दिनांक\]/g, dateFormatted)
-                .replace(/\[वर्ष\]/g, year).replace(/\[पावती_क्र\]/g, marathiRecNo)
+                .replace(/\[वर्ष\]/g, year).replace(/\[पावती_क्र\]/g, recNo)
                 .replace(/\[कार्याकारिणी\]/g, commTextList);
 
             // Append Utsav Committee section & Website link automatically at end matching screenshot structure
@@ -2864,14 +2864,14 @@ ${commTextList}`;
                 ctx.textAlign = 'center';
                 ctx.fillText('🧾 देणगी पावती', 540, 409);
 
-                // Unique Separate Marathi Receipt Number on Top Right Side
-                const rNo = (data && data.marathiReceiptNo) ? data.marathiReceiptNo : toMarathiDigits(data ? data.receiptNo : '1');
+                // Separate Receipt Number on Top Right Side (Smaller 20px Font & English Digits: e.g. पावती क्र. : 1)
+                const rNo = (data && data.receiptNo) ? data.receiptNo : '1';
                 const rLabel = `पावती क्र. : ${rNo}`;
 
                 ctx.textAlign = 'right';
                 ctx.fillStyle = '#ffeb3b';
-                ctx.font = 'bold 26px "Noto Sans Devanagari", sans-serif';
-                ctx.fillText(rLabel, 980, 409);
+                ctx.font = '600 20px "Noto Sans Devanagari", sans-serif';
+                ctx.fillText(rLabel, 980, 407);
 
                 // 4. Donor Details Box (Compact Vertical Spacing)
                 const cardX = 80;
