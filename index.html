@@ -2387,12 +2387,19 @@ const regNoElem = document.getElementById('displayRegNo');
             }
             if (settings.aartiPdfPath && aartiPdfLink) {
                 let pUrl = settings.aartiPdfPath || '';
-            if (pUrl && !pUrl.startsWith('http') && !pUrl.startsWith('data:') && !pUrl.startsWith('/')) {
-                pUrl = '/' + pUrl;
+            if (pUrl) {
+                if (pUrl.includes('cloudinary.com')) {
+                    if (pUrl.includes('/image/upload/') && !pUrl.includes('fl_inline') && !pUrl.includes('fl_attachment')) {
+                        pUrl = pUrl.replace('/image/upload/', '/image/upload/fl_inline/');
+                    }
+                } else if (!pUrl.startsWith('http') && !pUrl.startsWith('data:') && !pUrl.startsWith('/')) {
+                    pUrl = '/' + pUrl;
+                }
             }
             if (aartiPdfLink) {
                 aartiPdfLink.href = pUrl || '#';
                 aartiPdfLink.target = '_blank';
+                aartiPdfLink.rel = 'noopener noreferrer';
             }
             }
         };
