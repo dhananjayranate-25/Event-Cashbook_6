@@ -5858,3 +5858,18 @@ img {
         font-size: 13px !important;
     }
 }
+
+/* Ultra-Fast Mobile & iOS/Android Smooth Performance Optimizations */
+html, body {
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: manipulation !important;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+.glass-panel, .utsav-poster-card, .btn, .album-card, .nav-links {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
