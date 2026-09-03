@@ -3876,7 +3876,7 @@ async function handleCreateAlbum(e) {
             status.innerText = "Album created successfully!";
             status.style.color = "#4caf50";
             document.getElementById('addAlbumForm').reset();
-            if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[albumId]; }
+            loadAdminAlbums();
             setTimeout(() => { status.innerText = ""; }, 3000);
         }
     } catch (err) {
@@ -3981,7 +3981,7 @@ async function handleUploadPhotos(e, albumId) {
             status.style.color = "#4caf50";
             status.innerText = `सर्व ${total} फोटो यशस्वीरित्या अपलोड झाले!`;
             input.value = "";
-            if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[albumId]; }
+            loadAdminAlbums();
             setTimeout(() => { status.innerText = ""; status.style.color = "#ffeb3b"; }, 3000);
         } else {
             throw new Error(data.error || 'Upload failed');
@@ -4012,7 +4012,7 @@ async function handleUploadPhotos(e, albumId) {
                 status.style.color = "#4caf50";
                 status.innerText = `सर्व ${total} फोटो यशस्वीरित्या अपलोड झाले!`;
                 input.value = "";
-                if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[albumId]; }
+                loadAdminAlbums();
                 setTimeout(() => { status.innerText = ""; status.style.color = "#ffeb3b"; }, 3000);
             } else {
                 throw new Error(data2.error || 'Base64 upload failed');
@@ -4029,7 +4029,7 @@ async function deletePhoto(albumId, filename) {
     if(!confirm("Delete this photo?")) return;
     try {
         await fetch(`/api/gallery/album/${albumId}/photo/${filename}`, { method: 'DELETE' });
-        if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[albumId]; }
+        loadAdminAlbums();
     } catch (e) { console.error(e); }
 }
 
@@ -4527,7 +4527,10 @@ async function deleteNiyojan(id) {
                 } else if (activeTab === 'tab-niyojan' && typeof loadNiyojanAdmin === 'function') {
                     await loadNiyojanAdmin();
                 } else if (activeTab === 'tab-gallery' && typeof loadAdminAlbums === 'function') {
-                    await loadAdminAlbums();
+                    const isSelecting = Object.values(window.selectedAlbumFiles || {}).some(arr => arr && arr.length > 0);
+                    if (!isSelecting) {
+                        await loadAdminAlbums();
+                    }
                 } else if (activeTab === 'tab-committee' && typeof loadCommitteeMembers === 'function') {
                     await loadCommitteeMembers();
                 }
