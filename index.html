@@ -2387,17 +2387,19 @@ const regNoElem = document.getElementById('displayRegNo');
             }
             if (settings.aartiPdfPath && aartiPdfLink) {
                 let pUrl = settings.aartiPdfPath || '';
+            let finalLink = '#';
             if (pUrl) {
-                if (pUrl.includes('cloudinary.com')) {
-                    if (pUrl.includes('/image/upload/') && !pUrl.includes('fl_inline') && !pUrl.includes('fl_attachment')) {
-                        pUrl = pUrl.replace('/image/upload/', '/image/upload/fl_inline/');
-                    }
-                } else if (!pUrl.startsWith('http') && !pUrl.startsWith('data:') && !pUrl.startsWith('/')) {
-                    pUrl = '/' + pUrl;
+                let cleanUrl = String(pUrl).replace('/image/upload/fl_inline/', '/image/upload/').trim();
+                if (cleanUrl.startsWith('http')) {
+                    // Use Google Docs Viewer for Cloudinary or external PDFs to ensure 100% smooth rendering
+                    finalLink = 'https://drive.google.com/viewerng/viewer?embedded=true&url=' + encodeURIComponent(cleanUrl);
+                } else {
+                    if (!cleanUrl.startsWith('/')) cleanUrl = '/' + cleanUrl;
+                    finalLink = cleanUrl;
                 }
             }
             if (aartiPdfLink) {
-                aartiPdfLink.href = pUrl || '#';
+                aartiPdfLink.href = finalLink;
                 aartiPdfLink.target = '_blank';
                 aartiPdfLink.rel = 'noopener noreferrer';
             }
