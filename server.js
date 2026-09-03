@@ -588,27 +588,48 @@ app.delete('/api/gallery/album/:id', async (req, res) => {
     }
 });
 
-// Upload photos to album
-app.post('/api/gallery/album/:id/photos', uploadCloudinary.array('photos', 20), async (req, res) => {
-    try {
-        console.log(`Gallery Upload request received for album ${req.params.id}. Files count:`, req.files ? req.files.length : 0);
-        const album = await GalleryAlbum.findById(req.params.id);
-        if (!album) return res.status(404).json({ success: false, error: 'Album not found' });
-        
-        
-        const newPhotos = [];
-        for (const file of req.files) {
-            const dataUri = file.path;
-            const photo = new GalleryPhoto({ albumId: album._id, photoData: dataUri });
-            await photo.save();
-            newPhotos.push(photo);
-        }
-        
-        
-        res.json({ success: true, album });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+// Disk storage fallback for Gallery Photos
+const galleryDiskStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = path.join(__dirname, 'uploads');
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname) || '.jpg';
+        cb(null, 'gallery_' + Date.now() + '_' + Math.floor(Math.random() * 10000) + ext);
     }
+});
+const uploadGalleryLocal = multer({ storage: galleryDiskStorage, limits: { fileSize: 50 * 1024 * 1024 } });
+
+// Upload photos to album with 100% reliable local disk + Cloudinary support
+app.post('/api/gallery/album/:id/photos', (req, res) => {
+    uploadGalleryLocal.array('photos', 20)(req, res, async (err) => {
+        if (err) {
+            console.error('Gallery photo upload multer error:', err);
+            return res.status(500).json({ success: false, error: err.message });
+        }
+        try {
+            const album = await GalleryAlbum.findById(req.params.id);
+            if (!album) return res.status(404).json({ success: false, error: 'अल्बम सापडला नाही.' });
+            
+            if (!req.files || req.files.length === 0) {
+                return res.status(400).json({ success: false, error: 'कृपया किमान १ फोटो निवडा.' });
+            }
+            
+            const newPhotos = [];
+            for (const file of req.files) {
+                const relPath = '/uploads/' + file.filename;
+                const photo = new GalleryPhoto({ albumId: album._id, photoData: relPath });
+                await photo.save();
+                newPhotos.push(photo);
+            }
+            res.json({ success: true, album, newPhotos });
+        } catch (error) {
+            console.error('Gallery photo upload save error:', error);
+            res.status(500).json({ success: false, error: error.message });
+        }
+    });
 });
 
 // Delete specific photo from album

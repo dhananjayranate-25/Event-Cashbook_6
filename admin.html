@@ -3816,6 +3816,18 @@ async function loadAdminAlbums() {
         const data = await res.json();
         if (data.success) {
             if (data.albums.length === 0) {
+                // Auto-create default album if none exists
+                try {
+                    const autoRes = await fetch('/api/gallery/album', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ title: 'गणेशोत्सव छायाचित्रे', order: 1 })
+                    });
+                    const autoData = await autoRes.json();
+                    if (autoData.success) {
+                        return loadAdminAlbums();
+                    }
+                } catch(e) {}
                 container.innerHTML = '<p style="color:white;text-align:center;">कोणतेही अल्बम नाहीत. नवीन अल्बम तयार करा.</p>';
                 return;
             }
