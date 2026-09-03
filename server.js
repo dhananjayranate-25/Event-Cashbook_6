@@ -633,6 +633,29 @@ app.post('/api/gallery/album/:id/photos', (req, res) => {
 });
 
 // Delete specific photo from album
+
+// Upload photos to album via Base64 JSON payload
+app.post('/api/gallery/album/:id/photos-base64', express.json({ limit: '50mb' }), async (req, res) => {
+    try {
+        const album = await GalleryAlbum.findById(req.params.id);
+        if (!album) return res.status(404).json({ success: false, error: 'अल्बम सापडला नाही.' });
+        
+        const photos = req.body.photos || [];
+        if (photos.length === 0) return res.status(400).json({ success: false, error: 'फोटोज सापडले नाहीत.' });
+        
+        const newPhotos = [];
+        for (const dataUri of photos) {
+            const photo = new GalleryPhoto({ albumId: album._id, photoData: dataUri });
+            await photo.save();
+            newPhotos.push(photo);
+        }
+        res.json({ success: true, album, newPhotos });
+    } catch (error) {
+        console.error('Base64 photo upload error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 app.delete('/api/gallery/album/:id/photo/:photoId', async (req, res) => {
     try {
         await GalleryPhoto.findByIdAndDelete(req.params.photoId);

@@ -3902,54 +3902,73 @@ async function handleUploadPhotos(e, albumId) {
     const input = document.getElementById('photos_' + albumId);
     const status = document.getElementById('uploadStatus_' + albumId);
     
-    if (input.files.length === 0) return;
+    if (!input || input.files.length === 0) {
+        alert('कृपया किमान १ फोटो निवडा.');
+        return;
+    }
     
     const total = input.files.length;
-    let successCount = 0;
-    
-    status.innerText = `Uploading 0 of ${total}...`;
+    status.innerText = `${total} फोटो अपलोड होत आहेत... कृपया प्रतीक्षा करा...`;
     status.style.color = "#ffeb3b";
     
+    const formData = new FormData();
     for (let i = 0; i < total; i++) {
-        const formData = new FormData();
         formData.append('photos', input.files[i]);
+    }
+    
+    try {
+        const res = await fetch('/api/gallery/album/' + albumId + '/photos', {
+            method: 'POST',
+            body: formData
+        });
         
+        const data = await res.json();
+        if (data.success) {
+            status.style.color = "#4caf50";
+            status.innerText = `सर्व ${total} फोटो यशस्वीरित्या अपलोड झाले!`;
+            input.value = "";
+            loadAdminAlbums();
+            setTimeout(() => { status.innerText = ""; status.style.color = "#ffeb3b"; }, 3000);
+        } else {
+            throw new Error(data.error || 'Upload failed');
+        }
+    } catch (err) {
+        console.warn("FormData upload failed, trying Base64 fallback...", err);
+        // Fallback to Base64 upload
         try {
-            status.innerText = `Uploading ${i + 1} of ${total}...`;
-            const res = await fetch('/api/gallery/album/' + albumId + '/photos', {
+            status.innerText = "प्रक्रिया सुरू आहे... फोटो तयार होत आहेत...";
+            const base64Photos = [];
+            for (let i = 0; i < total; i++) {
+                const file = input.files[i];
+                const b64 = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(file);
+                });
+                base64Photos.push(b64);
+            }
+            
+            const res2 = await fetch('/api/gallery/album/' + albumId + '/photos-base64', {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ photos: base64Photos })
             });
-            
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error(text || res.statusText);
-            }
-            
-            const data = await res.json();
-            if (data.success) {
-                successCount++;
+            const data2 = await res2.json();
+            if (data2.success) {
+                status.style.color = "#4caf50";
+                status.innerText = `सर्व ${total} फोटो यशस्वीरित्या अपलोड झाले!`;
+                input.value = "";
+                loadAdminAlbums();
+                setTimeout(() => { status.innerText = ""; status.style.color = "#ffeb3b"; }, 3000);
             } else {
-                console.error("Upload failed for file", i, data.error);
+                throw new Error(data2.error || 'Base64 upload failed');
             }
-        } catch (err) {
-            console.error("Error uploading file", i, err);
+        } catch (fallbackErr) {
+            console.error("Gallery upload error:", fallbackErr);
             status.style.color = "#ff5252";
-            status.innerText = `Error on photo ${i + 1}. Stopping.`;
-            break;
+            status.innerText = "चूक: " + fallbackErr.message;
         }
     }
-    
-    if (successCount === total) {
-        status.style.color = "#4caf50";
-        status.innerText = "All photos uploaded successfully!";
-    } else if (successCount > 0) {
-        status.innerText = `Uploaded ${successCount} of ${total} photos.`;
-    }
-    
-    setTimeout(() => { status.innerText = ""; status.style.color = "#ffeb3b"; }, 3000);
-    input.value = ""; // clear input
-    loadAdminAlbums();
 }
 
 async function deletePhoto(albumId, filename) {
