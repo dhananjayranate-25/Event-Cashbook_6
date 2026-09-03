@@ -3731,13 +3731,13 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             appealParas.forEach((p, idx) => {
                 const cleanP = p.trim().replace(/\n/g, '<br>');
                 if (idx === 0) {
-                    appealHtml += `<p style="color: #ffd700; font-weight: 800; font-size: 24px; margin-bottom: 12px; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">${cleanP}</p>`;
+                    appealHtml += `<p style="color: #ffd700; font-weight: 800; font-size: 28px; margin-bottom: 14px; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">${cleanP}</p>`;
                 } else if (cleanP.includes('आपला सहभाग') || cleanP.includes('आपले सहकार्य')) {
-                    appealHtml += `<p style="color: #ffeb3b; font-weight: 800; font-size: 22px; margin: 12px 0; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 0 10px rgba(255,235,59,0.5);">${cleanP}</p>`;
+                    appealHtml += `<p style="color: #ffeb3b; font-weight: 800; font-size: 26px; margin: 14px 0; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 0 10px rgba(255,235,59,0.5);">${cleanP}</p>`;
                 } else if (cleanP.includes('किमान ₹')) {
-                    appealHtml += `<div style="margin: 12px 0;"><span style="color: #ffeb3b; font-weight: 800; font-size: 22px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.25)); padding: 10px 24px; border-radius: 25px; display: inline-block; border: 5px double #ffd700; font-family: 'Noto Sans Devanagari', sans-serif; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">${cleanP}</span></div>`;
+                    appealHtml += `<div style="margin: 14px 0;"><span style="color: #ffeb3b; font-weight: 800; font-size: 26px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.25)); padding: 12px 28px; border-radius: 25px; display: inline-block; border: 5px double #ffd700; font-family: 'Noto Sans Devanagari', sans-serif; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">${cleanP}</span></div>`;
                 } else {
-                    appealHtml += `<p style="color: #ffffff; font-weight: 600; font-size: 21px; margin-bottom: 12px; line-height: 1.75; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${cleanP}</p>`;
+                    appealHtml += `<p style="color: #ffffff; font-weight: 700; font-size: 25px; margin-bottom: 14px; line-height: 1.75; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${cleanP}</p>`;
                 }
             });
             appealHtml += '</div>';
