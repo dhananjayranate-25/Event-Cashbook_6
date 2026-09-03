@@ -163,9 +163,16 @@
 
         .gallery-responsive-grid {
             display: grid;
-            gap: 22px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
             width: 100%;
             box-sizing: border-box;
+        }
+        @media (max-width: 600px) {
+            .gallery-responsive-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 20px;
+            }
         }
         .album-card {
             background: rgba(255, 255, 255, 0.05);
@@ -728,13 +735,13 @@
         return albums.map(album => {
             const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
             return `
-                <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                    <div style="width: 100%; padding-top: 75%; position: relative;">
-                        <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
+                <div class="album-card" onclick="openAlbum('${album._id}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                    <div style="width: 100%; height: 240px; position: relative; overflow: hidden; background:#000;">
+                        <img src="${coverPhoto}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
-                    <div style="padding: 15px; text-align: center;">
-                        <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;">${album.title}</h3>
-                        <p style="color: #ccc; margin: 0; font-size: 0.9rem;">${album.photosCount || 0} photos</p>
+                    <div style="padding: 18px 15px; text-align: center; background: rgba(0,0,0,0.3);">
+                        <h3 style="color: #ffd700; margin: 0 0 6px 0; font-size: 1.45rem; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.6);">${album.title}</h3>
+                        <p style="color: #cbd5e1; margin: 0; font-size: 1.05rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;"><span>📷</span> ${album.photosCount || 0} छायाचित्रे (Photos)</p>
                     </div>
                 </div>
             `;
@@ -746,9 +753,9 @@
             return '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">या अल्बममध्ये कोणतेही फोटो नाहीत.</p>';
         }
         return photos.map(photo => `
-            <div class="album-card photo-card" onclick="openLightbox('${photo.photoData}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                <div style="width: 100%; padding-top: 75%; position: relative;">
-                    <img src="${photo.photoData}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high" loading="eager">
+            <div class="album-card photo-card" onclick="openLightbox('${photo.photoData}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.35); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                <div style="width: 100%; height: 260px; position: relative; overflow: hidden; background:#000;">
+                    <img src="${photo.photoData}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" loading="eager" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                 </div>
             </div>
         `).join('');
