@@ -5873,3 +5873,16 @@ html, body {
     transform: translateZ(0);
     backface-visibility: hidden;
 }
+
+/* Fast Instant Touch Response for Mobile Menu Links */
+.nav-links a {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    cursor: pointer !important;
+    user-select: none !important;
+}
+.nav-links a:active {
+    opacity: 0.75 !important;
+    transform: scale(0.98) !important;
+    transition: transform 0.05s ease, opacity 0.05s ease !important;
+}

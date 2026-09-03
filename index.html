@@ -448,21 +448,16 @@ window.closeLightbox = function() {
                         navLinks.classList.toggle('active');
                     });
                     
-                    // Close menu when clicking a link
+                    // Ultra-fast 0ms instant touch response for mobile menu links
                     const links = navLinks.querySelectorAll('a');
+                    const closeMenuInstant = () => {
+                        navLinks.classList.remove('active');
+                    };
                     links.forEach(link => {
-                        link.addEventListener('click', () => {
-                            navLinks.classList.remove('active');
-                        });
+                        link.addEventListener('click', closeMenuInstant);
+                        link.addEventListener('touchstart', closeMenuInstant, { passive: true });
+                        link.addEventListener('pointerdown', closeMenuInstant, { passive: true });
                     });
-                    
-                    // Fix: also close login link
-                    const loginLink = document.getElementById('nav-login');
-                    if(loginLink) {
-                        loginLink.addEventListener('click', () => {
-                            navLinks.classList.remove('active');
-                        });
-                    }
                 }
             });
         </script>
