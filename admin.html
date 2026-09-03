@@ -2893,11 +2893,19 @@ https://shivsrushti-utsav-mandal.onrender.com`;
                     ctx.drawImage(img, 50, 45, 980, 220);
                     ctx.restore();
 
+                    // Double Golden Border around Header Image
                     ctx.strokeStyle = '#ffd700';
-                    ctx.lineWidth = 3;
+                    ctx.lineWidth = 4;
                     ctx.beginPath();
                     if (ctx.roundRect) ctx.roundRect(50, 45, 980, 220, 12);
                     else ctx.rect(50, 45, 980, 220);
+                    ctx.stroke();
+
+                    ctx.strokeStyle = '#ffd700';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    if (ctx.roundRect) ctx.roundRect(54, 49, 972, 212, 10);
+                    else ctx.rect(54, 49, 972, 212);
                     ctx.stroke();
                 }
 
