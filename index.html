@@ -617,7 +617,7 @@ window.closeLightbox = function() {
                 background-size: 200% 100%;
                 animation: badgeShimmer 3.5s infinite linear;
                 color: #fffb00;
-                border: 2px solid #ffd700;
+                border: 5px double #ffd700;
                 padding: 11px 32px;
                 border-radius: 50px;
                 font-size: 1.1rem;
@@ -3727,7 +3727,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         const appealRawText = (s.donationPosterText || s.donationAppDescText) ? (s.donationPosterText || s.donationAppDescText) : (typeof DEFAULT_DONATION_APPEAL_TEXT !== 'undefined' ? DEFAULT_DONATION_APPEAL_TEXT : '');
         if (appealRawText) {
             const appealParas = appealRawText.trim().split('\n\n');
-            let appealHtml = '<div style="margin: 12px auto 20px auto; max-width: 840px; width: 94%; padding: 22px 28px; background: linear-gradient(145deg, rgba(20, 4, 30, 0.94), rgba(10, 1, 16, 0.98)); border: 2px solid #ffd700; border-radius: 18px; text-align: center; position: relative; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">';
+            let appealHtml = '<div style="margin: 12px auto 20px auto; max-width: 840px; width: 94%; padding: 22px 28px; background: linear-gradient(145deg, rgba(20, 4, 30, 0.94), rgba(10, 1, 16, 0.98)); border: 5px double #ffd700; border-radius: 18px; text-align: center; position: relative; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">';
             appealParas.forEach((p, idx) => {
                 const cleanP = p.trim().replace(/\n/g, '<br>');
                 if (idx === 0) {
@@ -3735,7 +3735,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 } else if (cleanP.includes('आपला सहभाग') || cleanP.includes('आपले सहकार्य')) {
                     appealHtml += `<p style="color: #ffeb3b; font-weight: 800; font-size: 22px; margin: 12px 0; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 0 10px rgba(255,235,59,0.5);">${cleanP}</p>`;
                 } else if (cleanP.includes('किमान ₹')) {
-                    appealHtml += `<div style="margin: 12px 0;"><span style="color: #ffeb3b; font-weight: 800; font-size: 22px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.25)); padding: 10px 24px; border-radius: 25px; display: inline-block; border: 2px solid #ffd700; font-family: 'Noto Sans Devanagari', sans-serif; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">${cleanP}</span></div>`;
+                    appealHtml += `<div style="margin: 12px 0;"><span style="color: #ffeb3b; font-weight: 800; font-size: 22px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.25)); padding: 10px 24px; border-radius: 25px; display: inline-block; border: 5px double #ffd700; font-family: 'Noto Sans Devanagari', sans-serif; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">${cleanP}</span></div>`;
                 } else {
                     appealHtml += `<p style="color: #ffffff; font-weight: 600; font-size: 21px; margin-bottom: 12px; line-height: 1.75; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${cleanP}</p>`;
                 }
@@ -3800,7 +3800,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         donationBox.style.alignItems = 'center';
         donationBox.style.justifyContent = 'center';
         donationBox.style.gap = '35px';
-        donationBox.style.border = '5px double white';
+        donationBox.style.border = '5px double #ffd700';
         donationBox.style.borderRadius = '16px';
         donationBox.style.padding = '22px 32px';
         donationBox.style.margin = '0 auto';
@@ -4060,7 +4060,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
           const textContainerWrapper = document.createElement('div');
         textContainerWrapper.style.width = '90%';
           textContainerWrapper.style.margin = '0 auto';
-        textContainerWrapper.style.border = '5px double white';
+        textContainerWrapper.style.border = '5px double #ffd700';
         textContainerWrapper.style.borderRadius = '15px';
         textContainerWrapper.style.padding = '40px';
         textContainerWrapper.style.background = 'rgba(70, 0, 0, 0.6)';
