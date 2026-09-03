@@ -3156,9 +3156,9 @@ const regNoElem = document.getElementById('displayRegNo');
                             else d = 'सदस्य';
                         }
                         
-                        committeeHtml += '<div style="text-align:center; flex: 0 0 156px; max-width:156px; padding: 8px 6px; margin: 4px; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(184, 134, 11, 0.4); border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">' +
-                            '<div style="font-weight:700; font-size:14px; color:#1a1a2e; margin-bottom:3px;">' + (m.name || '') + '</div>' +
-                            '<div style="font-weight:600; font-size:12px; color:#b8860b;">' + d + '</div>' +
+                        committeeHtml += '<div style="text-align:center; flex: 0 0 162px; max-width:162px; padding: 10px 8px; margin: 5px; background: linear-gradient(145deg, #2b0838, #13021c); border: 1.5px solid #ffd700; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">' +
+                            '<div style="font-weight:800; font-size:15px; color:#ffffff; margin-bottom:4px; font-family:'Noto Sans Devanagari', sans-serif;">' + (m.name || '') + '</div>' +
+                            '<div style="font-weight:700; font-size:13px; color:#ffd700; font-family:'Noto Sans Devanagari', sans-serif;">' + d + '</div>' +
                         '</div>';
                     });
                     
@@ -3581,9 +3581,9 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                     else d = 'कार्यकारी सदस्य';
                 }
                 html += `
-                <div style="width: 22%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 12px 6px; margin: 6px 1%; background: rgba(255, 215, 0, 0.08); border: 1.5px solid rgba(255, 215, 0, 0.38); border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
-                    <span style="font-weight: bold; font-size: 22px; color: #ffffff; line-height: 1.2; font-family: 'Mukta', 'Noto Sans Devanagari', sans-serif;">${m.name || ''}</span>
-                    <span style="color: #ffd700; font-size: 15px; margin-top: 4px; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; font-weight: 600;">${d}</span>
+                <div style="width: 22%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 12px 6px; margin: 6px 1%; background: linear-gradient(145deg, rgba(38, 12, 54, 0.92), rgba(18, 4, 26, 0.96)); border: 1.5px solid #ffd700; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">
+                    <span style="font-weight: 800; font-size: 22px; color: #ffffff; line-height: 1.2; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">${m.name || ''}</span>
+                    <span style="color: #ffd700; font-size: 15px; margin-top: 4px; font-family: 'Noto Sans Devanagari', sans-serif; font-weight: 700;">${d}</span>
                 </div>`;
             });
             html += '</div>';
