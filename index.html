@@ -3621,7 +3621,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         clone.style.flexDirection = 'column';
         clone.style.alignItems = 'center';
         
-        // Outer Primary Golden Page Frame
+        // Outer Primary Golden Page Frame with Smooth Royal Curves
         const outerFrame = document.createElement('div');
         outerFrame.style.position = 'absolute';
         outerFrame.style.top = '8px';
@@ -3629,13 +3629,13 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         outerFrame.style.right = '8px';
         outerFrame.style.bottom = '8px';
         outerFrame.style.border = '4px solid #ffd700';
-        outerFrame.style.borderRadius = '10px';
-        outerFrame.style.boxShadow = 'inset 0 0 20px rgba(255, 215, 0, 0.35)';
+        outerFrame.style.borderRadius = '22px';
+        outerFrame.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.35)';
         outerFrame.style.zIndex = '1';
         outerFrame.style.pointerEvents = 'none';
         clone.appendChild(outerFrame);
 
-        // Inner Saffron Accent Frame
+        // Inner Saffron Accent Frame with Matching Smooth Curves
         const innerBorder = document.createElement('div');
         innerBorder.style.position = 'absolute';
         innerBorder.style.top = '15px';
@@ -3643,23 +3643,23 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         innerBorder.style.right = '15px';
         innerBorder.style.bottom = '15px';
         innerBorder.style.border = '2px solid #ff8c00';
-        innerBorder.style.borderRadius = '6px';
+        innerBorder.style.borderRadius = '16px';
         innerBorder.style.zIndex = '1';
         innerBorder.style.pointerEvents = 'none';
         clone.appendChild(innerBorder);
 
-        // Add 4 Royal Gold Corner Ornaments
+        // Add 4 Royal Curved Corner Accents
         const createCorner = (top, right, bottom, left) => {
             const c = document.createElement('div');
             c.style.position = 'absolute';
-            c.style.width = '35px';
-            c.style.height = '35px';
+            c.style.width = '38px';
+            c.style.height = '38px';
             c.style.border = '4px solid #ffd700';
             c.style.zIndex = '2';
-            if(top) { c.style.top = '12px'; c.style.borderBottom = 'none'; }
-            if(bottom) { c.style.bottom = '12px'; c.style.borderTop = 'none'; }
-            if(left) { c.style.left = '12px'; c.style.borderRight = 'none'; }
-            if(right) { c.style.right = '12px'; c.style.borderLeft = 'none'; }
+            if(top && left) { c.style.top = '10px'; c.style.left = '10px'; c.style.borderBottom = 'none'; c.style.borderRight = 'none'; c.style.borderTopLeftRadius = '20px'; }
+            if(top && right) { c.style.top = '10px'; c.style.right = '10px'; c.style.borderBottom = 'none'; c.style.borderLeft = 'none'; c.style.borderTopRightRadius = '20px'; }
+            if(bottom && left) { c.style.bottom = '10px'; c.style.left = '10px'; c.style.borderTop = 'none'; c.style.borderRight = 'none'; c.style.borderBottomLeftRadius = '20px'; }
+            if(bottom && right) { c.style.bottom = '10px'; c.style.right = '10px'; c.style.borderTop = 'none'; c.style.borderLeft = 'none'; c.style.borderBottomRightRadius = '20px'; }
             return c;
         };
         clone.appendChild(createCorner(true, false, false, true));
@@ -3950,7 +3950,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         clone.style.flexDirection = 'column';
         clone.style.alignItems = 'center';
         
-        // Outer Primary Golden Page Frame
+        // Outer Primary Golden Page Frame with Smooth Royal Curves
         const outerFrame = document.createElement('div');
         outerFrame.style.position = 'absolute';
         outerFrame.style.top = '8px';
@@ -3958,13 +3958,13 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         outerFrame.style.right = '8px';
         outerFrame.style.bottom = '8px';
         outerFrame.style.border = '4px solid #ffd700';
-        outerFrame.style.borderRadius = '10px';
-        outerFrame.style.boxShadow = 'inset 0 0 20px rgba(255, 215, 0, 0.35)';
+        outerFrame.style.borderRadius = '22px';
+        outerFrame.style.boxShadow = '0 0 20px rgba(255, 215, 0, 0.4), inset 0 0 20px rgba(255, 215, 0, 0.35)';
         outerFrame.style.zIndex = '1';
         outerFrame.style.pointerEvents = 'none';
         clone.appendChild(outerFrame);
 
-        // Inner Saffron Accent Frame
+        // Inner Saffron Accent Frame with Matching Smooth Curves
         const innerBorder = document.createElement('div');
         innerBorder.style.position = 'absolute';
         innerBorder.style.top = '15px';
@@ -3972,23 +3972,23 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         innerBorder.style.right = '15px';
         innerBorder.style.bottom = '15px';
         innerBorder.style.border = '2px solid #ff8c00';
-        innerBorder.style.borderRadius = '6px';
+        innerBorder.style.borderRadius = '16px';
         innerBorder.style.zIndex = '1';
         innerBorder.style.pointerEvents = 'none';
         clone.appendChild(innerBorder);
 
-        // Add 4 Royal Gold Corner Ornaments
+        // Add 4 Royal Curved Corner Accents
         const createCorner = (top, right, bottom, left) => {
             const c = document.createElement('div');
             c.style.position = 'absolute';
-            c.style.width = '35px';
-            c.style.height = '35px';
+            c.style.width = '38px';
+            c.style.height = '38px';
             c.style.border = '4px solid #ffd700';
             c.style.zIndex = '2';
-            if(top) { c.style.top = '12px'; c.style.borderBottom = 'none'; }
-            if(bottom) { c.style.bottom = '12px'; c.style.borderTop = 'none'; }
-            if(left) { c.style.left = '12px'; c.style.borderRight = 'none'; }
-            if(right) { c.style.right = '12px'; c.style.borderLeft = 'none'; }
+            if(top && left) { c.style.top = '10px'; c.style.left = '10px'; c.style.borderBottom = 'none'; c.style.borderRight = 'none'; c.style.borderTopLeftRadius = '20px'; }
+            if(top && right) { c.style.top = '10px'; c.style.right = '10px'; c.style.borderBottom = 'none'; c.style.borderLeft = 'none'; c.style.borderTopRightRadius = '20px'; }
+            if(bottom && left) { c.style.bottom = '10px'; c.style.left = '10px'; c.style.borderTop = 'none'; c.style.borderRight = 'none'; c.style.borderBottomLeftRadius = '20px'; }
+            if(bottom && right) { c.style.bottom = '10px'; c.style.right = '10px'; c.style.borderTop = 'none'; c.style.borderLeft = 'none'; c.style.borderBottomRightRadius = '20px'; }
             return c;
         };
         clone.appendChild(createCorner(true, false, false, true));

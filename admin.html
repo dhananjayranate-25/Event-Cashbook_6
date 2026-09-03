@@ -2835,27 +2835,20 @@ https://shivsrushti-utsav-mandal.onrender.com`;
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, logicalW, logicalH);
 
-            // Royal Double Golden Page Borders
+            // Royal Double Golden Curved Page Borders
             ctx.strokeStyle = '#ffd700';
             ctx.lineWidth = 5;
-            ctx.strokeRect(20, 20, logicalW - 40, logicalH - 40);
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(20, 20, logicalW - 40, logicalH - 40, 22);
+            else ctx.rect(20, 20, logicalW - 40, logicalH - 40);
+            ctx.stroke();
 
             ctx.strokeStyle = '#ff8c00';
             ctx.lineWidth = 2.5;
-            ctx.strokeRect(28, 28, logicalW - 56, logicalH - 56);
-
-            // 4 Corner Flourish Accents
-            const cornerLen = 40;
-            ctx.strokeStyle = '#ffd700';
-            ctx.lineWidth = 5;
-            // TL
-            ctx.beginPath(); ctx.moveTo(20, 20 + cornerLen); ctx.lineTo(20, 20); ctx.lineTo(20 + cornerLen, 20); ctx.stroke();
-            // TR
-            ctx.beginPath(); ctx.moveTo(logicalW - 20 - cornerLen, 20); ctx.lineTo(logicalW - 20, 20); ctx.lineTo(logicalW - 20, 20 + cornerLen); ctx.stroke();
-            // BL
-            ctx.beginPath(); ctx.moveTo(20, logicalH - 20 - cornerLen); ctx.lineTo(20, logicalH - 20); ctx.lineTo(20 + cornerLen, logicalH - 20); ctx.stroke();
-            // BR
-            ctx.beginPath(); ctx.moveTo(logicalW - 20 - cornerLen, logicalH - 20); ctx.lineTo(logicalW - 20, logicalH - 20); ctx.lineTo(logicalW - 20, logicalH - 20 - cornerLen); ctx.stroke();
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(28, 28, logicalW - 56, logicalH - 56, 16);
+            else ctx.rect(28, 28, logicalW - 56, logicalH - 56);
+            ctx.stroke();
 
             // Header Banner Image (Dynamically uses uploaded header photo)
             let headerImgSrc = 'logo/pdf_header_banner_opt.jpg';
