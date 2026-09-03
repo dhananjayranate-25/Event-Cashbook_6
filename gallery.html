@@ -1,6 +1,53 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
+    <script>
+    // ==========================================
+    // Unified Reusable Manual WhatsApp Sharing Helper
+    // Architecture: User Clicks -> Opens Native Share or WhatsApp Deep Link -> User selects Recipient & Manually sends
+    // ==========================================
+    window.shareToWhatsApp = async function(options) {
+        if (!options) return { success: false, reason: 'No options provided' };
+        const text = options.text || '';
+        const file = options.file || null;
+        const phone = options.phone || '';
+        const title = options.title || 'शेअर करा';
+
+        // 1. Mobile Native Share API (Shares BOTH Image File & Text Caption if supported by browser/device)
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({
+                    title: title,
+                    text: text.trim(),
+                    files: [file]
+                });
+                return { success: true, mode: 'native_share' };
+            } catch (err) {
+                console.log('Native share sheet closed or cancelled:', err);
+            }
+        }
+
+        // 2. Fallback: Standard User-Initiated WhatsApp Deep Link
+        let url = '';
+        const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
+        if (cleanPhone) {
+            const p = cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone;
+            url = 'https://api.whatsapp.com/send?phone=' + p + '&text=' + encodeURIComponent(text.trim());
+        } else {
+            url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text.trim());
+        }
+
+        try {
+            const win = window.open(url, '_blank', 'noopener,noreferrer');
+            if (!win) {
+                window.location.href = url;
+            }
+        } catch(e) {
+            window.location.href = url;
+        }
+        return { success: true, mode: 'deep_link' };
+    };
+</script>
     <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">

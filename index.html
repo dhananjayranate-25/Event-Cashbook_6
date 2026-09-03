@@ -1,6 +1,53 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
+    <script>
+    // ==========================================
+    // Unified Reusable Manual WhatsApp Sharing Helper
+    // Architecture: User Clicks -> Opens Native Share or WhatsApp Deep Link -> User selects Recipient & Manually sends
+    // ==========================================
+    window.shareToWhatsApp = async function(options) {
+        if (!options) return { success: false, reason: 'No options provided' };
+        const text = options.text || '';
+        const file = options.file || null;
+        const phone = options.phone || '';
+        const title = options.title || 'शेअर करा';
+
+        // 1. Mobile Native Share API (Shares BOTH Image File & Text Caption if supported by browser/device)
+        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+                await navigator.share({
+                    title: title,
+                    text: text.trim(),
+                    files: [file]
+                });
+                return { success: true, mode: 'native_share' };
+            } catch (err) {
+                console.log('Native share sheet closed or cancelled:', err);
+            }
+        }
+
+        // 2. Fallback: Standard User-Initiated WhatsApp Deep Link
+        let url = '';
+        const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
+        if (cleanPhone) {
+            const p = cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone;
+            url = 'https://api.whatsapp.com/send?phone=' + p + '&text=' + encodeURIComponent(text.trim());
+        } else {
+            url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text.trim());
+        }
+
+        try {
+            const win = window.open(url, '_blank', 'noopener,noreferrer');
+            if (!win) {
+                window.location.href = url;
+            }
+        } catch(e) {
+            window.location.href = url;
+        }
+        return { success: true, mode: 'deep_link' };
+    };
+</script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff8c00">
     <meta charset="UTF-8">
@@ -4191,22 +4238,12 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
             isDonationShareInProgress = false;
 
-            // Direct Mobile Native Share API (Shares BOTH Banner Image File AND Message Text directly into WhatsApp without downloading file)
-            if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        title: orgName + ' - देणगी',
-                        text: shareTextBase.trim(),
-                        files: [file]
-                    });
-                    return;
-                } catch(se) {
-                    console.log('Native share closed/cancelled:', se);
-                }
-            }
-
-            // PC / Web Fallback Mode
-            window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
+            // Use Unified Manual WhatsApp Sharing Architecture
+            await window.shareToWhatsApp({
+                title: orgName + ' - देणगी',
+                text: shareTextBase,
+                file: file
+            });
         } catch (shareErr) {
             console.error('Share action failed:', shareErr);
             if (!shareWin || shareWin.closed) {
@@ -4309,22 +4346,12 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
             isCustomShareInProgress = false;
 
-            // Direct Mobile Native Share API (Shares BOTH Banner Image File AND Message Text directly into WhatsApp without downloading file)
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        title: orgName + ' - ' + titleStr,
-                        text: shareTextBase.trim(),
-                        files: [file]
-                    });
-                    return;
-                } catch(se) {
-                    console.log('Native share closed/cancelled:', se);
-                }
-            }
-
-            // PC / Web Fallback Mode
-            window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(shareTextBase), '_blank');
+            // Use Unified Manual WhatsApp Sharing Architecture
+            await window.shareToWhatsApp({
+                title: orgName + ' - ' + titleStr,
+                text: shareTextBase,
+                file: file
+            });
         } catch (shareErr) {
             console.error('Share action failed:', shareErr);
             if (!shareWin || shareWin.closed) {
