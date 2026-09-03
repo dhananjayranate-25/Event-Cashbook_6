@@ -1063,20 +1063,26 @@ fetch('/api/settings').then(res => res.json()).then(res => {
 <script>
     function openAartiPdfModal(rawUrl) {
         if (!rawUrl || rawUrl === '#') {
-            alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची PDF फाईल अपलोड करा.');
+            alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची फाईल अपलोड करा.');
             return;
         }
         let cleanUrl = String(rawUrl).trim();
         if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('data:') && !cleanUrl.startsWith('/')) {
-            cleanUrl = '/' + cleanUrl;
+            cleanUrl = window.location.origin + (cleanUrl.startsWith('/') ? cleanUrl : ('/' + cleanUrl));
         }
         
         const modal = document.getElementById('aartiPdfModal');
         const iframe = document.getElementById('aartiPdfIframe');
         const directLink = document.getElementById('aartiPdfDirectLink');
         
+        // If it's a Word document (.doc / .docx), use Google Docs Embed Viewer to view on screen
+        let viewUrl = cleanUrl;
+        if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
+            viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
+        }
+        
         if (directLink) directLink.href = cleanUrl;
-        if (iframe) iframe.src = cleanUrl;
+        if (iframe) iframe.src = viewUrl;
         if (modal) modal.style.display = 'flex';
     }
 
