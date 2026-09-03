@@ -3816,19 +3816,7 @@ async function loadAdminAlbums() {
         const data = await res.json();
         if (data.success) {
             if (data.albums.length === 0) {
-                // Auto-create default album if none exists
-                try {
-                    const autoRes = await fetch('/api/gallery/album', {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ title: 'गणेशोत्सव छायाचित्रे', order: 1 })
-                    });
-                    const autoData = await autoRes.json();
-                    if (autoData.success) {
-                        return loadAdminAlbums();
-                    }
-                } catch(e) {}
-                container.innerHTML = '<p style="color:white;text-align:center;">कोणतेही अल्बम नाहीत. नवीन अल्बम तयार करा.</p>';
+                container.innerHTML = '<p style="color:white;text-align:center;padding:20px;">कोणतेही अल्बम नाहीत. नवीन फोटो अपलोड करण्यासाठी वरून नवीन अल्बम तयार करा.</p>';
                 return;
             }
             container.innerHTML = data.albums.map(album => `
@@ -4004,7 +3992,7 @@ async function handleUploadPhotos(e, albumId) {
             status.innerText = "प्रक्रिया सुरू आहे... फोटो तयार होत आहेत...";
             const base64Photos = [];
             for (let i = 0; i < total; i++) {
-                const file = input.files[i];
+                const file = filesToUpload[i];
                 const b64 = await new Promise((resolve) => {
                     const reader = new FileReader();
                     reader.onload = (e) => resolve(e.target.result);
