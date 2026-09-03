@@ -6,6 +6,9 @@
     // Unified Reusable Manual WhatsApp Sharing Helper
     // Architecture: User Clicks -> Opens Native Share or WhatsApp Deep Link -> User selects Recipient & Manually sends
     // ==========================================
+    // Unified Reusable Manual WhatsApp Sharing Helper
+    // Architecture: User Clicks -> Opens Native Share (Image+Text on Mobile) OR Downloads Image + Opens WhatsApp Deep Link (Desktop) -> User selects Recipient & Manually sends
+    // ==========================================
     window.shareToWhatsApp = async function(options) {
         if (!options) return { success: false, reason: 'No options provided' };
         const text = options.text || '';
@@ -13,7 +16,7 @@
         const phone = options.phone || '';
         const title = options.title || 'शेअर करा';
 
-        // 1. Mobile Native Share API (Shares BOTH Image File & Text Caption if supported by browser/device)
+        // 1. Mobile Native Share API (Shares BOTH Image File & Text Caption directly into WhatsApp on Mobile Devices)
         if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
             try {
                 await navigator.share({
@@ -27,7 +30,23 @@
             }
         }
 
-        // 2. Fallback: Standard User-Initiated WhatsApp Deep Link
+        // 2. Desktop/Browser Fallback: Auto-download Poster Photo File so user has image ready for WhatsApp
+        if (file) {
+            try {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(file);
+                a.download = file.name || 'Poster.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+                if (typeof showMarathiToast === 'function') {
+                    showMarathiToast('पोस्टर डाऊनलोड झाले आहे! व्हॉट्सॲपवर फोटो व मेसेज पाठवा.');
+                }
+            } catch(de) {}
+        }
+
+        // 3. Fallback: Standard User-Initiated WhatsApp Deep Link
         let url = '';
         const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
         if (cleanPhone) {
