@@ -3621,36 +3621,51 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         clone.style.flexDirection = 'column';
         clone.style.alignItems = 'center';
         
-        // Add 4 premium corner accents
-        const createCorner = (top, right, bottom, left) => {
-            const c = document.createElement('div');
-            c.style.position = 'absolute';
-            c.style.width = '30px';
-            c.style.height = '30px';
-            c.style.border = '3px solid #ff8c00';
-            c.style.zIndex = '0';
-            if(top) { c.style.top = '10px'; c.style.borderBottom = 'none'; }
-            if(bottom) { c.style.bottom = '10px'; c.style.borderTop = 'none'; }
-            if(left) { c.style.left = '10px'; c.style.borderRight = 'none'; }
-            if(right) { c.style.right = '10px'; c.style.borderLeft = 'none'; }
-            return c;
-        };
-        clone.appendChild(createCorner(true, false, false, true));
-        clone.appendChild(createCorner(true, true, false, false));
-        clone.appendChild(createCorner(false, false, true, true));
-        clone.appendChild(createCorner(false, true, true, false));
+        // Outer Primary Golden Page Frame
+        const outerFrame = document.createElement('div');
+        outerFrame.style.position = 'absolute';
+        outerFrame.style.top = '8px';
+        outerFrame.style.left = '8px';
+        outerFrame.style.right = '8px';
+        outerFrame.style.bottom = '8px';
+        outerFrame.style.border = '4px solid #ffd700';
+        outerFrame.style.borderRadius = '10px';
+        outerFrame.style.boxShadow = 'inset 0 0 20px rgba(255, 215, 0, 0.35)';
+        outerFrame.style.zIndex = '1';
+        outerFrame.style.pointerEvents = 'none';
+        clone.appendChild(outerFrame);
 
-        // Inner glowing border
+        // Inner Saffron Accent Frame
         const innerBorder = document.createElement('div');
         innerBorder.style.position = 'absolute';
         innerBorder.style.top = '15px';
         innerBorder.style.left = '15px';
         innerBorder.style.right = '15px';
         innerBorder.style.bottom = '15px';
-        innerBorder.style.border = '1px solid rgba(255, 215, 0, 0.2)';
-        innerBorder.style.zIndex = '0';
+        innerBorder.style.border = '2px solid #ff8c00';
+        innerBorder.style.borderRadius = '6px';
+        innerBorder.style.zIndex = '1';
         innerBorder.style.pointerEvents = 'none';
         clone.appendChild(innerBorder);
+
+        // Add 4 Royal Gold Corner Ornaments
+        const createCorner = (top, right, bottom, left) => {
+            const c = document.createElement('div');
+            c.style.position = 'absolute';
+            c.style.width = '35px';
+            c.style.height = '35px';
+            c.style.border = '4px solid #ffd700';
+            c.style.zIndex = '2';
+            if(top) { c.style.top = '12px'; c.style.borderBottom = 'none'; }
+            if(bottom) { c.style.bottom = '12px'; c.style.borderTop = 'none'; }
+            if(left) { c.style.left = '12px'; c.style.borderRight = 'none'; }
+            if(right) { c.style.right = '12px'; c.style.borderLeft = 'none'; }
+            return c;
+        };
+        clone.appendChild(createCorner(true, false, false, true));
+        clone.appendChild(createCorner(true, true, false, false));
+        clone.appendChild(createCorner(false, false, true, true));
+        clone.appendChild(createCorner(false, true, true, false));
         
         document.body.appendChild(clone);
 
@@ -3935,36 +3950,51 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         clone.style.flexDirection = 'column';
         clone.style.alignItems = 'center';
         
-        // Add 4 premium corner accents
-        const createCorner = (top, right, bottom, left) => {
-            const c = document.createElement('div');
-            c.style.position = 'absolute';
-            c.style.width = '30px';
-            c.style.height = '30px';
-            c.style.border = '3px solid #ff8c00';
-            c.style.zIndex = '0';
-            if(top) { c.style.top = '10px'; c.style.borderBottom = 'none'; }
-            if(bottom) { c.style.bottom = '10px'; c.style.borderTop = 'none'; }
-            if(left) { c.style.left = '10px'; c.style.borderRight = 'none'; }
-            if(right) { c.style.right = '10px'; c.style.borderLeft = 'none'; }
-            return c;
-        };
-        clone.appendChild(createCorner(true, false, false, true));
-        clone.appendChild(createCorner(true, true, false, false));
-        clone.appendChild(createCorner(false, false, true, true));
-        clone.appendChild(createCorner(false, true, true, false));
+        // Outer Primary Golden Page Frame
+        const outerFrame = document.createElement('div');
+        outerFrame.style.position = 'absolute';
+        outerFrame.style.top = '8px';
+        outerFrame.style.left = '8px';
+        outerFrame.style.right = '8px';
+        outerFrame.style.bottom = '8px';
+        outerFrame.style.border = '4px solid #ffd700';
+        outerFrame.style.borderRadius = '10px';
+        outerFrame.style.boxShadow = 'inset 0 0 20px rgba(255, 215, 0, 0.35)';
+        outerFrame.style.zIndex = '1';
+        outerFrame.style.pointerEvents = 'none';
+        clone.appendChild(outerFrame);
 
-        // Inner glowing border
+        // Inner Saffron Accent Frame
         const innerBorder = document.createElement('div');
         innerBorder.style.position = 'absolute';
         innerBorder.style.top = '15px';
         innerBorder.style.left = '15px';
         innerBorder.style.right = '15px';
         innerBorder.style.bottom = '15px';
-        innerBorder.style.border = '1px solid rgba(255, 215, 0, 0.2)';
-        innerBorder.style.zIndex = '0';
+        innerBorder.style.border = '2px solid #ff8c00';
+        innerBorder.style.borderRadius = '6px';
+        innerBorder.style.zIndex = '1';
         innerBorder.style.pointerEvents = 'none';
         clone.appendChild(innerBorder);
+
+        // Add 4 Royal Gold Corner Ornaments
+        const createCorner = (top, right, bottom, left) => {
+            const c = document.createElement('div');
+            c.style.position = 'absolute';
+            c.style.width = '35px';
+            c.style.height = '35px';
+            c.style.border = '4px solid #ffd700';
+            c.style.zIndex = '2';
+            if(top) { c.style.top = '12px'; c.style.borderBottom = 'none'; }
+            if(bottom) { c.style.bottom = '12px'; c.style.borderTop = 'none'; }
+            if(left) { c.style.left = '12px'; c.style.borderRight = 'none'; }
+            if(right) { c.style.right = '12px'; c.style.borderLeft = 'none'; }
+            return c;
+        };
+        clone.appendChild(createCorner(true, false, false, true));
+        clone.appendChild(createCorner(true, true, false, false));
+        clone.appendChild(createCorner(false, false, true, true));
+        clone.appendChild(createCorner(false, true, true, false));
         
         document.body.appendChild(clone);
 
