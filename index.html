@@ -2399,10 +2399,26 @@ const regNoElem = document.getElementById('displayRegNo');
                 }
             }
             if (aartiPdfLink) {
+                aartiPdfLink.href = pUrl || '#';
+                aartiPdfLink.target = '_blank';
+                aartiPdfLink.rel = 'noopener noreferrer';
                 aartiPdfLink.onclick = function(e) {
-                    e.preventDefault();
-                    openAartiPdfModal(pUrl);
-                    return false;
+                    if (!pUrl || pUrl === '#') {
+                        e.preventDefault();
+                        alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची PDF फाईल अपलोड करा.');
+                        return false;
+                    }
+                    let cleanUrl = String(pUrl).trim();
+                    if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('data:') && !cleanUrl.startsWith('/')) {
+                        cleanUrl = '/' + cleanUrl;
+                    }
+                    // Direct open in new tab
+                    try {
+                        window.open(cleanUrl, '_blank');
+                    } catch(err) {
+                        openAartiPdfModal(cleanUrl);
+                    }
+                    return true;
                 };
                 aartiPdfLink.href = finalLink;
                 aartiPdfLink.target = '_blank';
