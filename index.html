@@ -1601,7 +1601,7 @@ window.closeLightbox = function() {
             donSec.style.setProperty('display', (showDonation && isDonateTab) ? 'block' : 'none', 'important');
         }
         const donNav = document.getElementById('nav-donate');
-        if (donNav) donNav.style.setProperty('display', showDonation ? 'inline-flex' : 'none', 'important');
+        if (donNav) donNav.style.setProperty('display', 'inline-flex', 'important');
 
         const anyPosterVisible = showVargani || showMahaprasad || showAagman || showVisarjan || showCustomEvent;
         const showcaseBox = document.getElementById('posterShowcaseContainer');
