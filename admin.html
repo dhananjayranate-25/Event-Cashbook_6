@@ -3825,7 +3825,7 @@ async function loadAdminAlbums() {
                     });
                     const autoData = await autoRes.json();
                     if (autoData.success) {
-                        return if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[albumId]; }
+                        return loadAdminAlbums();
                     }
                 } catch(e) {}
                 container.innerHTML = '<p style="color:white;text-align:center;">कोणतेही अल्बम नाहीत. नवीन अल्बम तयार करा.</p>';
