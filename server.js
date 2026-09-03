@@ -126,7 +126,7 @@ mongoose.connect(MONGODB_URI)
 
 const niyojanSchema = new mongoose.Schema({
     date: { type: String, required: true },
-    time: { type: String, required: true },
+    time: { type: String, default: '' },
     title: { type: String, required: true },
     description: { type: String },
     addedBy: { type: String },

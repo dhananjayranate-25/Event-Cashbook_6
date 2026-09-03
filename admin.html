@@ -3430,8 +3430,8 @@ https://shivsrushti-utsav-mandal.onrender.com`;
                                 <div class="input-focus-line"></div>
                             </div>
                             <div class="form-group floating-label">
-                                <input type="time" id="niyojanTime" required>
-                                <label for="niyojanTime">वेळ</label>
+                                <input type="time" id="niyojanTime">
+                                <label for="niyojanTime">वेळ (पर्यायी)</label>
                                 <div class="input-focus-line"></div>
                             </div>
                             <div class="form-group floating-label" style="grid-column: 1 / -1;">
@@ -4233,8 +4233,8 @@ async function addNiyojan(e) {
     const tmVal = document.getElementById('niyojanTime') ? document.getElementById('niyojanTime').value : '';
     const ttVal = document.getElementById('niyojanTitle') ? document.getElementById('niyojanTitle').value : '';
     const descVal = document.getElementById('niyojanDescription') ? document.getElementById('niyojanDescription').value : '';
-    if (!dtVal || !dtVal.trim() || !tmVal || !tmVal.trim() || !ttVal || !ttVal.trim()) {
-        alert('कृपया तारीख, वेळ आणि कार्यक्रमाचे नाव भरणे आवश्यक आहे.');
+    if (!dtVal || !dtVal.trim() || !ttVal || !ttVal.trim()) {
+        alert('कृपया तारीख आणि कार्यक्रमाचे नाव भरणे आवश्यक आहे.');
         return false;
     }
 
