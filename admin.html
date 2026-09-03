@@ -1612,45 +1612,63 @@
         };
 
         window.deleteCustomYearPanel = async function() {
-            if (currentAdminSelectedYear === 'all') {
-                alert('कृपया डिलीट करण्यासाठी विशिष्ट वर्ष निवडा (Please select a specific year tab first)!');
-                return;
+            let yearToDelete = currentAdminSelectedYear;
+            if (!yearToDelete || yearToDelete === 'all') {
+                const availableYears = (adminCustomYearPanels && adminCustomYearPanels.length > 0) ? adminCustomYearPanels.join(', ') : '2026';
+                const choice = prompt('कृपया डिलीट करण्यासाठी वर्ष प्रविष्ट करा (उदा: ' + availableYears + '):', adminCustomYearPanels[0] || '2026');
+                if (!choice) return;
+                yearToDelete = String(choice).trim();
             }
-            const year = currentAdminSelectedYear;
-            if (!confirm(`Are you sure you want to delete Year ${year} panel?`)) return;
+            if (!confirm('सन ' + yearToDelete + ' चा पॅनेल आणि सर्व व्यवहार कायमचे डिलीट करायचे का?')) return;
 
-            adminCustomYearPanels = adminCustomYearPanels.filter(y => String(y) !== String(year));
+            try {
+                // Delete cashbook entries for that year
+                await fetch('/api/cashbook/year/' + yearToDelete, { method: 'DELETE' });
+            } catch(e) {}
+
+            adminCustomYearPanels = (adminCustomYearPanels || []).filter(y => String(y) !== String(yearToDelete));
             try { localStorage.setItem('adminCustomYearPanels', JSON.stringify(adminCustomYearPanels)); } catch(le) {}
+            
             try {
                 await fetch('/api/settings', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ key: 'customYearPanels', value: adminCustomYearPanels })
                 });
-                alert(`Year ${year} Panel Deleted!`);
+                alert('सन ' + yearToDelete + ' चे पॅनेल यशस्वीरित्या हटवले!');
                 currentAdminSelectedYear = 'all';
                 await loadYearsForAdmin();
             } catch(e) {
                 console.error('Error deleting year panel:', e);
-                alert('Failed to delete year panel.');
+                alert('पॅनेल हटवताना त्रुटी आली.');
             }
         };
 
         window.deleteAllPanels = async function() {
-            if (!confirm('Are you sure you want to delete ALL custom year panels?')) return;
+            if (!confirm('सर्व वर्षांचे पॅनेल्स आणि सर्व व्यवहार कायमचे डिलीट करायचे का?')) return;
+            
+            const panelsToDelete = [...(adminCustomYearPanels || [])];
+            for (const yr of panelsToDelete) {
+                try {
+                    await fetch('/api/cashbook/year/' + yr, { method: 'DELETE' });
+                } catch(e) {}
+            }
+
             adminCustomYearPanels = [];
+            try { localStorage.removeItem('adminCustomYearPanels'); } catch(le) {}
+            
             try {
                 await fetch('/api/settings', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ key: 'customYearPanels', value: [] })
                 });
-                alert('All custom year panels deleted!');
+                alert('सर्व वर्षांचे पॅनेल्स यशस्वीरित्या हटवले!');
                 currentAdminSelectedYear = 'all';
                 await loadYearsForAdmin();
             } catch(e) {
                 console.error('Error deleting all panels:', e);
-                alert('Failed to delete panels.');
+                alert('पॅनेल्स हटवताना त्रुटी आली.');
             }
         };
 
