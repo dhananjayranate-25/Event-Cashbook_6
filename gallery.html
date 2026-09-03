@@ -1068,21 +1068,26 @@ fetch('/api/settings').then(res => res.json()).then(res => {
     </div>
 </div>
 <script>
-    function openAartiPdfModal(rawUrl) {
-        if (!rawUrl || rawUrl === '#') {
+function openAartiPdfModal(rawUrl) {
+        if (!rawUrl || rawUrl === '#' || rawUrl === 'null' || rawUrl === 'undefined') {
             alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची फाईल अपलोड करा.');
             return;
         }
         let cleanUrl = String(rawUrl).trim();
-        if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('data:') && !cleanUrl.startsWith('/')) {
+        if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('data:')) {
             cleanUrl = window.location.origin + (cleanUrl.startsWith('/') ? cleanUrl : ('/' + cleanUrl));
+        }
+        
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        if (isMobile) {
+            window.open(cleanUrl, '_blank');
+            return;
         }
         
         const modal = document.getElementById('aartiPdfModal');
         const iframe = document.getElementById('aartiPdfIframe');
         const directLink = document.getElementById('aartiPdfDirectLink');
         
-        // If it's a Word document (.doc / .docx), use Google Docs Embed Viewer to view on screen
         let viewUrl = cleanUrl;
         if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
             viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
