@@ -3569,7 +3569,7 @@ https://shivsrushti-utsav-mandal.onrender.com`;
                 loadAartiData();
             }
             if (tabId === 'tab-gallery' && typeof loadAdminAlbums === 'function') {
-                if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[albumId]; }
+                loadAdminAlbums();
             }
             if (tabId === 'tab-niyojan' && typeof loadNiyojanAdmin === 'function') {
                 loadNiyojanAdmin();
@@ -3889,7 +3889,8 @@ async function deleteAlbum(id) {
     if(!confirm("Are you sure you want to delete this album and ALL its photos?")) return;
     try {
         await fetch('/api/gallery/album/' + id, { method: 'DELETE' });
-        if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[albumId]; }
+        if (window.selectedAlbumFiles) { delete window.selectedAlbumFiles[id]; }
+        loadAdminAlbums();
     } catch (e) { console.error(e); }
 }
 
