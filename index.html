@@ -2386,7 +2386,14 @@ const regNoElem = document.getElementById('displayRegNo');
                 aartiAudioPlayer.src = settings.aartiAudioPath;
             }
             if (settings.aartiPdfPath && aartiPdfLink) {
-                aartiPdfLink.href = settings.aartiPdfPath;
+                let pUrl = settings.aartiPdfPath || '';
+            if (pUrl && !pUrl.startsWith('http') && !pUrl.startsWith('data:') && !pUrl.startsWith('/')) {
+                pUrl = '/' + pUrl;
+            }
+            if (aartiPdfLink) {
+                aartiPdfLink.href = pUrl || '#';
+                aartiPdfLink.target = '_blank';
+            }
             }
         };
 

@@ -78,7 +78,15 @@ if (!fs.existsSync(UPLOAD_DIR)) {
     fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 }
 
-app.use('/uploads', express.static(UPLOAD_DIR, { maxAge: '7d' }));
+app.use('/uploads', express.static(UPLOAD_DIR, {
+    maxAge: '7d',
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.pdf')) {
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'inline');
+        }
+    }
+}));
 app.use(express.static(path.join(__dirname), { 
     maxAge: '1h',
     setHeaders: (res, filePath) => {
@@ -421,23 +429,42 @@ app.post('/api/settings', async (req, res) => {
 });
 
 // Upload Aarti Media Endpoint
-app.post('/api/settings/aarti-media', uploadCloudinary.fields([{ name: 'aarti_audio', maxCount: 1 }, { name: 'aarti_pdf', maxCount: 1 }]), async (req, res) => {
-    try {
-        if (req.files['aarti_audio']) {
-            const f = req.files['aarti_audio'][0];
-            const dataUri = f.path;
-            await AppSetting.findOneAndUpdate({ key: 'aartiAudioPath' }, { value: dataUri }, { upsert: true });
-        }
-        if (req.files['aarti_pdf']) {
-            const f = req.files['aarti_pdf'][0];
-            const dataUri = f.path;
-            await AppSetting.findOneAndUpdate({ key: 'aartiPdfPath' }, { value: dataUri }, { upsert: true });
-        }
-        res.json({ success: true, message: 'Media uploaded successfully' });
-    } catch (error) {
-        console.error('Error uploading aarti media:', error);
-        res.status(500).json({ success: false, error: error.message });
+const aartiDiskStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = path.join(__dirname, 'uploads');
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname) || (file.mimetype.includes('pdf') ? '.pdf' : '.mp3');
+        cb(null, file.fieldname + '_' + Date.now() + ext);
     }
+});
+const uploadAartiLocal = multer({ storage: aartiDiskStorage, limits: { fileSize: 50 * 1024 * 1024 } });
+
+app.post('/api/settings/aarti-media', (req, res) => {
+    uploadAartiLocal.fields([{ name: 'aarti_audio', maxCount: 1 }, { name: 'aarti_pdf', maxCount: 1 }])(req, res, async (err) => {
+        if (err) {
+            console.error('Aarti media upload error:', err);
+            return res.status(500).json({ success: false, error: err.message });
+        }
+        try {
+            if (req.files && req.files['aarti_audio']) {
+                const f = req.files['aarti_audio'][0];
+                const relPath = 'uploads/' + f.filename;
+                await AppSetting.findOneAndUpdate({ key: 'aartiAudioPath' }, { value: relPath }, { upsert: true });
+            }
+            if (req.files && req.files['aarti_pdf']) {
+                const f = req.files['aarti_pdf'][0];
+                const relPath = 'uploads/' + f.filename;
+                await AppSetting.findOneAndUpdate({ key: 'aartiPdfPath' }, { value: relPath }, { upsert: true });
+            }
+            res.json({ success: true, message: 'Media uploaded successfully' });
+        } catch (error) {
+            console.error('Error saving aarti media setting:', error);
+            res.status(500).json({ success: false, error: error.message });
+        }
+    });
 });
 
 // Storage Usage Endpoint
