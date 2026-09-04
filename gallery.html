@@ -761,15 +761,41 @@
         `).join('');
     }
 
+    async function prefetchAlbumPhotos(albums) {
+        if (!albums || albums.length === 0) return;
+        for (const album of albums) {
+            try {
+                const key = 'gallery_photos_' + album._id;
+                const cached = localStorage.getItem(key) || sessionStorage.getItem(key);
+                if (!cached) {
+                    const res = await fetch(`/api/gallery/album/${album._id}/photos`);
+                    const data = await res.json();
+                    if (data.success && data.photos) {
+                        try {
+                            localStorage.setItem(key, JSON.stringify(data.photos));
+                            sessionStorage.setItem(key, JSON.stringify(data.photos));
+                        } catch(e) {}
+                    }
+                }
+            } catch(e) {}
+        }
+    }
+
     async function loadGalleryAlbums() {
         const grid = document.getElementById('albumsGrid');
         if(!grid) return;
         
-        if (!currentViewingAlbumId && grid.children.length === 0) {
+        // Instant 0ms cache rendering from localStorage
+        try {
+            if (galleryAlbumsCache.length === 0) {
+                const stored = localStorage.getItem('gallery_albums_cache');
+                if (stored) galleryAlbumsCache = JSON.parse(stored);
+            }
+        } catch(e) {}
+
+        if (!currentViewingAlbumId) {
             if (galleryAlbumsCache.length > 0) {
                 grid.innerHTML = renderAlbumsHTML(galleryAlbumsCache);
-            } else {
-                grid.innerHTML = '<div style="height: 50px;"></div>';
             }
         }
         
@@ -788,6 +814,9 @@
                 } else {
                     grid.style.setProperty('display', 'none', 'important');
                 }
+
+                // Background prefetch photos so clicking an album opens INSTANTLY in 0ms!
+                prefetchAlbumPhotos(galleryAlbumsCache);
             } else {
                 if (!currentViewingAlbumId && grid.children.length === 0) {
                     grid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">माहिती लोड करण्यात त्रुटी: ' + (data.error || 'अज्ञात त्रुटी') + '</p>';
@@ -828,14 +857,29 @@
 
         const photosGrid = document.getElementById('photosGrid');
         
-        // Clear stale session cache to force live fresh photos
-        try { sessionStorage.removeItem('gallery_photos_' + albumId); } catch(e) {}
         const isMobile = window.innerWidth <= 600;
         const isTablet = window.innerWidth > 600 && window.innerWidth <= 992;
         const cols = isMobile ? 'repeat(2, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)');
         photosGrid.style.setProperty('display', 'grid', 'important');
         photosGrid.style.setProperty('grid-template-columns', cols, 'important');
-        photosGrid.innerHTML = '<p style="text-align:center; color:#ffd700; width:100%; grid-column:1/-1;">फोटो लोड होत आहेत... कृपया प्रतीक्षा करा...</p>';
+
+        // Check instant cache FIRST (0ms delay!)
+        let hasCache = false;
+        try {
+            const cacheKey = 'gallery_photos_' + albumId;
+            const cached = localStorage.getItem(cacheKey) || sessionStorage.getItem(cacheKey);
+            if (cached) {
+                const photos = JSON.parse(cached);
+                if (photos && photos.length > 0) {
+                    photosGrid.innerHTML = renderPhotosHTML(photos);
+                    hasCache = true;
+                }
+            }
+        } catch(e) {}
+
+        if (!hasCache) {
+            photosGrid.innerHTML = '<p style="text-align:center; color:#ffd700; width:100%; grid-column:1/-1;">फोटो लोड होत आहेत... कृपया प्रतीक्षा करा...</p>';
+        }
         
         try {
             const res = await fetch(`/api/gallery/album/${albumId}/photos`);
@@ -843,15 +887,19 @@
             
             if (data.success) {
                 try {
-                    sessionStorage.setItem('gallery_photos_' + albumId, JSON.stringify(data.photos));
+                    const cacheKey = 'gallery_photos_' + albumId;
+                    localStorage.setItem(cacheKey, JSON.stringify(data.photos));
+                    sessionStorage.setItem(cacheKey, JSON.stringify(data.photos));
                 } catch(e) {}
                 photosGrid.innerHTML = renderPhotosHTML(data.photos);
-            } else {
+            } else if (!hasCache) {
                 photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी: ' + (data.error || 'अज्ञात त्रुटी') + '</p>';
             }
         } catch(e) {
             console.error(e);
-            photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी आली.</p>';
+            if (!hasCache) {
+                photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी आली.</p>';
+            }
         }
     }
 
