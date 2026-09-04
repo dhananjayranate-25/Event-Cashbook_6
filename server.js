@@ -545,7 +545,12 @@ app.get('/api/gallery', async (req, res) => {
                 GalleryPhoto.findOne({ albumId: album._id }, { photoData: 1 }).lean()
             ]);
             album.photosCount = dbPhotosCount;
-            album.coverPhoto = firstPhoto ? firstPhoto.photoData : '';
+            let cover = firstPhoto ? firstPhoto.photoData : 'logo/logo.jpeg';
+            // Cap coverPhoto payload size to prevent huge multi-megabyte JSON transfers on album listing
+            if (cover && cover.startsWith('data:image') && cover.length > 40000) {
+                cover = 'logo/logo.jpeg';
+            }
+            album.coverPhoto = cover;
             album.photos = []; // Empty to save bandwidth
         }));
         serverGalleryCache = { success: true, albums };
