@@ -430,11 +430,49 @@
                 const navLinks = document.getElementById('navLinks');
                 
                 if (mobileMenuBtn && navLinks) {
-                    mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenuBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
                         navLinks.classList.toggle('active');
                     });
                     
-                    loadGalleryAlbums();
+                    const links = navLinks.querySelectorAll('a');
+                    links.forEach(link => {
+                        let touchHandled = false;
+                        const triggerAction = (e) => {
+                            navLinks.classList.remove('active');
+                            const href = link.getAttribute('href');
+                            if (href && href !== 'javascript:void(0)' && !href.startsWith('#')) {
+                                if (e && e.cancelable) e.preventDefault();
+                                window.location.href = href;
+                            } else {
+                                const onclickAttr = link.getAttribute('onclick');
+                                if (onclickAttr) {
+                                    if (e && e.cancelable) e.preventDefault();
+                                    try {
+                                        new Function(onclickAttr).call(link);
+                                    } catch(err) {
+                                        link.click();
+                                    }
+                                }
+                            }
+                        };
+
+                        link.addEventListener('touchstart', (e) => {
+                            touchHandled = true;
+                            triggerAction(e);
+                        }, { passive: false });
+
+                        link.addEventListener('click', (e) => {
+                            if (touchHandled) {
+                                touchHandled = false;
+                                return;
+                            }
+                            triggerAction(e);
+                        });
+                    });
+                }
+                
+                loadGalleryAlbums();
         
     async function loadFooterQR() {
         try {
