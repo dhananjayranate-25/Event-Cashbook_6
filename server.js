@@ -555,8 +555,20 @@ app.get('/api/gallery/admin', async (req, res) => {
 app.get('/api/gallery/album/:id/photos', async (req, res) => {
     try {
         const dbPhotos = await GalleryPhoto.find({ albumId: req.params.id }).lean();
-        const photos = dbPhotos.map(p => ({ _id: p._id, photoData: p.photoData }));
-        res.json({ success: true, photos });
+        const validPhotos = [];
+        for (const p of dbPhotos) {
+            if (!p.photoData) continue;
+            if (p.photoData.startsWith('/uploads/')) {
+                const localFilePath = path.join(__dirname, p.photoData.replace(/^\//, ''));
+                if (!fs.existsSync(localFilePath)) {
+                    // Clean up dead local file path from MongoDB
+                    try { await GalleryPhoto.findByIdAndDelete(p._id); } catch(de) {}
+                    continue;
+                }
+            }
+            validPhotos.push({ _id: p._id, photoData: p.photoData });
+        }
+        res.json({ success: true, photos: validPhotos });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }
@@ -619,15 +631,24 @@ app.post('/api/gallery/album/:id/photos', (req, res) => {
             
             const newPhotos = [];
             for (const file of req.files) {
-                let photoUrl = '/uploads/' + file.filename;
+                let photoUrl = '';
                 try {
-                    if (typeof cloudinary !== 'undefined' && cloudinary.uploader) {
+                    if (typeof cloudinary !== 'undefined' && cloudinary.uploader && process.env.CLOUDINARY_URL) {
                         const cRes = await cloudinary.uploader.upload(file.path, { folder: 'gallery' });
                         if (cRes && cRes.secure_url) photoUrl = cRes.secure_url;
                     }
-                } catch(ce) {
-                    console.warn('Cloudinary gallery upload fallback to local path:', ce.message);
+                } catch(ce) {}
+                
+                if (!photoUrl) {
+                    try {
+                        const buf = fs.readFileSync(file.path);
+                        const mime = file.mimetype || 'image/jpeg';
+                        photoUrl = `data:${mime};base64,${buf.toString('base64')}`;
+                    } catch(fe) {
+                        photoUrl = '/uploads/' + file.filename;
+                    }
                 }
+                
                 const photo = new GalleryPhoto({ albumId: album._id, photoData: photoUrl });
                 await photo.save();
                 newPhotos.push(photo);
