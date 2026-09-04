@@ -605,7 +605,7 @@
                     
                     <!-- Albums Grid (Default View) -->
                     <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
-                        <div style="height: 50px;"></div>
+                        <p style="text-align: center; color: #ffd700; width: 100%; grid-column: 1 / -1; font-weight: bold; font-size: 1rem; padding: 20px 0;">अल्बम लोड होत आहेत... कृपया प्रतीक्षा करा...</p>
                     </div>
                     <script>
                         (function() {
@@ -777,8 +777,10 @@
     let currentViewingAlbumId = null;
 
     try {
-        localStorage.removeItem('gallery_albums_cache');
-        galleryAlbumsCache = [];
+        const storedAlbums = localStorage.getItem('gallery_albums_cache');
+        if (storedAlbums) {
+            galleryAlbumsCache = JSON.parse(storedAlbums);
+        }
     } catch(e) {}
 
     function renderAlbumsHTML(albums) {
