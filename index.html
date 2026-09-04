@@ -3299,6 +3299,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                     const perPage = getPDFsPerPage();
                     const to = Math.min(perPage, uploadedPDFsData.length);
                     grid.innerHTML = renderPDFCards(0, to) + renderPagination();
+                    prefetchPDFBuffers(uploadedPDFsData);
                 }
             }
         } catch(e) {}
@@ -3314,6 +3315,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                 const perPage = getPDFsPerPage();
                 const to = Math.min(perPage, uploadedPDFsData.length);
                 grid.innerHTML = renderPDFCards(0, to) + renderPagination();
+                prefetchPDFBuffers(uploadedPDFsData);
             } else {
                 if (!uploadedPDFsData || uploadedPDFsData.length === 0) {
                     grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
@@ -3509,8 +3511,20 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
     }
 
     let cachedLogo = '';
+    const pdfBufferCache = new Map();
 
-    
+    function prefetchPDFBuffers(pdfs) {
+        if (!pdfs || !Array.isArray(pdfs)) return;
+        pdfs.forEach(pdf => {
+            if (pdf.filename && !pdfBufferCache.has(pdf.filename)) {
+                fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + pdf.filename)
+                    .then(res => res.ok ? res.arrayBuffer() : null)
+                    .then(buf => { if (buf) pdfBufferCache.set(pdf.filename, buf); })
+                    .catch(e => {});
+            }
+        });
+    }
+
     async function loadPDFLibraries() {
         if (window.jsPDF && window.html2canvas && window.PDFLib) return true;
         
@@ -3556,17 +3570,22 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             iframe.contentDocument.close();
             const imgs = iframe.contentDocument.querySelectorAll('img');
             await Promise.all([...imgs].map(img => new Promise(r => {
-                if (img.complete) r(); else { img.onload = r; img.onerror = r; setTimeout(r, 2000); }
+                if (img.complete) r(); else { img.onload = r; img.onerror = r; setTimeout(r, 1000); }
             })));
             try { await iframe.contentDocument.fonts.ready; } catch(e) {}
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise(r => setTimeout(r, 100));
             const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 2.5, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true, logging: false
+                scale: 2.0, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true, logging: false
             });
             document.body.removeChild(iframe);
             
-            const resp = await fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + filename);
-            const uploadBytes = await resp.arrayBuffer();
+            let uploadBytes;
+            if (pdfBufferCache.has(filename)) {
+                uploadBytes = pdfBufferCache.get(filename).slice(0);
+            } else {
+                const resp = await fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + filename);
+                uploadBytes = await resp.arrayBuffer();
+            }
             
             const { PDFDocument } = window.PDFLib;
             const mergedPdf = await PDFDocument.create();
@@ -3611,6 +3630,69 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         const originalText = btn ? btn.innerHTML : 'अहवाल पहा';
         if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
         const win = window.open('about:blank', '_blank');
+        if (win) {
+            try {
+                win.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="mr">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>अहवाल उघडत आहे... | शिवसृष्टी बॉईज</title>
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <style>
+                            body {
+                                margin: 0;
+                                padding: 0;
+                                height: 100vh;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                align-items: center;
+                                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+                                color: #ffffff;
+                                font-family: system-ui, -apple-system, sans-serif;
+                                text-align: center;
+                            }
+                            .loader-box {
+                                background: rgba(255, 255, 255, 0.05);
+                                backdrop-filter: blur(10px);
+                                padding: 30px 40px;
+                                border-radius: 16px;
+                                border: 1px solid rgba(255, 255, 255, 0.1);
+                                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                            }
+                            .spinner {
+                                width: 44px;
+                                height: 44px;
+                                border: 4px solid rgba(255, 153, 0, 0.2);
+                                border-left-color: #ff9900;
+                                border-radius: 50%;
+                                animation: spin 0.8s linear infinite;
+                                margin-bottom: 18px;
+                            }
+                            @keyframes spin {
+                                0% { transform: rotate(0deg); }
+                                100% { transform: rotate(360deg); }
+                            }
+                            h3 { margin: 0 0 6px 0; font-size: 19px; color: #ff9900; font-weight: 600; }
+                            p { margin: 0; color: #94a3b8; font-size: 14px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="loader-box">
+                            <div class="spinner"></div>
+                            <h3>🚩 शिवसृष्टी बॉईज अहवाल तयार होत आहे...</h3>
+                            <p>कृपया काही क्षण थांबा, अहवाल लोड होत आहे...</p>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+            } catch(e) {}
+        }
         try {
             await generateAndOpenMergedPDF(filename, year, false, subtitle, tagline, orgName, win);
         } catch(e) {
