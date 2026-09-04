@@ -161,17 +161,23 @@
             }
         }
 
-        .gallery-responsive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 28px;
-            width: 100%;
-            box-sizing: border-box;
+        #photosGrid, #albumsGrid, .gallery-responsive-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)) !important;
+            gap: 25px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        @media (min-width: 1024px) {
+            #photosGrid, #albumsGrid, .gallery-responsive-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+                gap: 28px !important;
+            }
         }
         @media (max-width: 600px) {
-            .gallery-responsive-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-                gap: 20px;
+            #photosGrid, #albumsGrid, .gallery-responsive-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+                gap: 15px !important;
             }
         }
         .album-card {
@@ -579,7 +585,7 @@
                             </div>
                             <h3 id="currentAlbumTitle" style="color: #ffeb3b; margin: 0; font-size: 1.35rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-align: center; width: 100%; word-break: break-word; letter-spacing: 0.5px;"></h3>
                         </div>
-                        <div id="photosGrid" class="gallery-responsive-grid">
+                        <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)) !important; gap: 25px !important; width: 100% !important;">
                             <!-- Photos will be injected here -->
                         </div>
                     </div>
