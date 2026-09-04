@@ -75,7 +75,7 @@
     <link rel="apple-touch-icon" href="logo/logo.jpeg">
     <title>Ganpati Vargani Cashbook - Shivsrushti</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1788500254&old2=1788500046&old=1788499721">
+    <link rel="stylesheet" href="style.css?v=1788500449&fix_photos_grid=1788500254&old2=1788500046&old=1788499721">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     // Auto-wrap tables for mobile responsiveness
     document.addEventListener('DOMContentLoaded', function() {
@@ -572,7 +572,7 @@
                             </div>
                             <h3 id="currentAlbumTitle" style="color: #ffeb3b; margin: 0; font-size: 1.35rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-align: center; width: 100%; word-break: break-word; letter-spacing: 0.5px;"></h3>
                         </div>
-                        <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important; gap: 20px !important; width: 100% !important;">
+                        <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
                             <!-- Photos will be injected here -->
                         </div>
                     </div>
@@ -813,6 +813,8 @@
         
         // Clear stale session cache to force live fresh photos
         try { sessionStorage.removeItem('gallery_photos_' + albumId); } catch(e) {}
+        photosGrid.style.setProperty('display', 'grid', 'important');
+        photosGrid.style.setProperty('grid-template-columns', 'repeat(4, 1fr)', 'important');
         photosGrid.innerHTML = '<p style="text-align:center; color:#ffd700; width:100%; grid-column:1/-1;">फोटो लोड होत आहेत... कृपया प्रतीक्षा करा...</p>';
         
         try {

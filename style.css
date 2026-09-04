@@ -5912,7 +5912,7 @@ html, body {
     }
 }
 
-/* Explicit Forced Side-By-Side Multi-Column Grid Rules */
+/* Explicit Forced Side-By-Side Multi-Column Grid Rules for Both Albums and Photos */
 #photosGrid, #albumsGrid, .gallery-responsive-grid {
     display: grid !important;
     grid-template-columns: repeat(4, 1fr) !important;
