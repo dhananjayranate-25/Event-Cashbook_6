@@ -5931,4 +5931,16 @@ html, body {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 10px !important;
     }
+    .album-card .card-img-wrapper {
+        height: 125px !important;
+    }
+    .album-card h3 {
+        font-size: 0.95rem !important;
+    }
+    .album-card p {
+        font-size: 0.78rem !important;
+    }
+    .album-card .card-info-wrapper {
+        padding: 8px 5px !important;
+    }
 }
