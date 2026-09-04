@@ -79,11 +79,13 @@ if (!fs.existsSync(UPLOAD_DIR)) {
 }
 
 app.use('/uploads', express.static(UPLOAD_DIR, {
-    maxAge: '7d',
+    maxAge: '30d',
     setHeaders: (res, filePath) => {
         if (filePath.endsWith('.pdf')) {
             res.setHeader('Content-Type', 'application/pdf');
             res.setHeader('Content-Disposition', 'inline');
+        } else if (filePath.match(/\.(jpg|jpeg|png|webp|gif)$/i)) {
+            res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
         }
     }
 }));
