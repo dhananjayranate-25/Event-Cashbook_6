@@ -75,7 +75,7 @@
     <link rel="apple-touch-icon" href="logo/logo.jpeg">
     <title>Ganpati Vargani Cashbook - Shivsrushti</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1787853042234">
+    <link rel="stylesheet" href="style.css?v=1788499721">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     // Auto-wrap tables for mobile responsiveness
     document.addEventListener('DOMContentLoaded', function() {
@@ -163,21 +163,15 @@
 
         #photosGrid, #albumsGrid, .gallery-responsive-grid {
             display: grid !important;
-            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
-            gap: 20px !important;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+            gap: 18px !important;
             width: 100% !important;
             box-sizing: border-box !important;
         }
-        @media (min-width: 1024px) {
-            #photosGrid, #albumsGrid, .gallery-responsive-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
-                gap: 24px !important;
-            }
-        }
         @media (max-width: 600px) {
             #photosGrid, #albumsGrid, .gallery-responsive-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-                gap: 12px !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
             }
         }
         .album-card {
@@ -544,7 +538,7 @@
                     </div>
                     
                     <!-- Albums Grid (Default View) -->
-                    <div id="albumsGrid" class="gallery-responsive-grid">
+                    <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important; gap: 18px !important; width: 100% !important; box-sizing: border-box !important;">
                         <div style="height: 50px;"></div>
                     </div>
                     <script>
@@ -556,20 +550,7 @@
                                     if (albums && albums.length > 0) {
                                         const grid = document.getElementById('albumsGrid');
                                         if (grid) {
-                                            grid.innerHTML = albums.map(album => {
-                                                const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
-                                                return `
-                                                    <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                                                        <div style="width: 100%; padding-top: 75%; position: relative;">
-                                                            <img src="${coverPhoto}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
-                                                        </div>
-                                                        <div style="padding: 15px; text-align: center;">
-                                                            <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;">${album.title}</h3>
-                                                            <p style="color: #ccc; margin: 0; font-size: 0.9rem;">${album.photosCount || 0} photos</p>
-                                                        </div>
-                                                    </div>
-                                                `;
-                                            }).join('');
+                                            grid.innerHTML = renderAlbumsHTML(albums);
                                         }
                                     }
                                 }

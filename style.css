@@ -5915,13 +5915,14 @@ html, body {
 /* Explicit Side-By-Side Grid Rules for Gallery Albums and Photos */
 #photosGrid, #albumsGrid, .gallery-responsive-grid {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
-    gap: 20px !important;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+    gap: 18px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
 }
 @media (max-width: 600px) {
     #photosGrid, #albumsGrid, .gallery-responsive-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-        gap: 12px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
     }
 }
