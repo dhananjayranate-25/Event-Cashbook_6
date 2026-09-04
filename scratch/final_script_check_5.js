@@ -6,7 +6,7 @@
     let appSettings = {};
 
     function getPDFSettings(year) {
-        const defaults = { orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'Ganpati Festival Cashbook', headerOrgName: '', headerSubtitle: '' };
+        const defaults = { orgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ संगमनेर 🚩', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'Ganpati Festival Cashbook', headerOrgName: '', headerSubtitle: '' };
         try {
             const key = year ? 'pdfCustomSettings_' + year : 'pdfCustomSettings';
             const stored = appSettings[key] || {};
@@ -815,7 +815,7 @@ body{font-family:'Poppins','Noto Sans Devanagari',sans-serif;background:#f5f0eb;
       <div class="cover-logo-ring2"></div>
       <img src="${logoSrc}" alt="Logo" class="cover-logo" onerror="this.style.display='none'">
     </div>
-    <div class="cover-mandal-name">${s.orgName === 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩' ? '<div style="font-size:1.4em; color:#ffd700; text-shadow:0 0 25px rgba(255,140,0,1); line-height:1.2; margin-bottom:12px;">शिवसृष्टी</div><div style="font-size:0.9em; color:#ffcc00; margin-bottom:5px;">सार्वजनिक उत्सव मंडळ</div><div style="font-size:0.9em; color:#ffcc00;"><span style="color:transparent;user-select:none;">🚩 </span>संगमनेर 🚩</div>' : s.orgName}</div>
+    <div class="cover-mandal-name">${s.orgName === 'शिवसृष्टी हिंदू तरुण मित्र मंडळ संगमनेर 🚩' ? '<div style="font-size:1.4em; color:#ffd700; text-shadow:0 0 25px rgba(255,140,0,1); line-height:1.2; margin-bottom:12px;">शिवसृष्टी</div><div style="font-size:0.9em; color:#ffcc00; margin-bottom:5px;">सार्वजनिक उत्सव मंडळ</div><div style="font-size:0.9em; color:#ffcc00;"><span style="color:transparent;user-select:none;">🚩 </span>संगमनेर 🚩</div>' : s.orgName}</div>
     <div class="cover-divider"></div>
     <div class="cover-subtitle">${s.subtitle}</div>
     <div class="cover-tagline">${s.tagline}</div>

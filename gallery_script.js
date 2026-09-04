@@ -55,7 +55,7 @@
     let appSettings = {};
 
     function getPDFSettings(year) {
-        const defaults = { orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'वर्ष : आठवे', headerOrgName: '', headerSubtitle: '' };
+        const defaults = { orgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'वर्ष : आठवे', headerOrgName: '', headerSubtitle: '' };
         try {
             const key = year ? 'pdfCustomSettings_' + year : 'pdfCustomSettings';
             const stored = appSettings[key] || {};
@@ -917,7 +917,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
         const slice = uploadedPDFsData.slice(from, to);
         return slice.map((pdf, idx) => {
             const s = getPDFSettings(pdf.year);
-            const pOrg = (pdf.orgName || s.orgName || "शिवसृष्टी सार्वजनिक उत्सव मंडळ").replace(/संगमनेर.*$/, "").trim() || "शिवसृष्टी सार्वजनिक उत्सव मंडळ";
+            const pOrg = (pdf.orgName || s.orgName || "शिवसृष्टी हिंदू तरुण मित्र मंडळ").replace(/संगमनेर.*$/, "").trim() || "शिवसृष्टी हिंदू तरुण मित्र मंडळ";
             const pSub = pdf.subtitle || s.subtitle;
             const pTag = pdf.tagline || s.tagline;
             const escSub = (pdf.subtitle || '').replace(/'/g, "\\'");

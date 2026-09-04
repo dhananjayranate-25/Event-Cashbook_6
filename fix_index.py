@@ -11,7 +11,7 @@ content = content.replace(
 og_tags = '''
 <!-- OpenGraph Meta Tags for WhatsApp/Facebook Previews -->
 <meta property="og:title" content="Shivsrushti Boyz - Ganpati Vargani Cashbook">
-<meta property="og:description" content="शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर - गणपती वर्गणी आणि कॅशबुक">
+<meta property="og:description" content="शिवसृष्टी हिंदू तरुण मित्र मंडळ संगमनेर - गणपती वर्गणी आणि कॅशबुक">
 <meta property="og:image" content="https://shivsrushti-boyz.onrender.com/logo/logo.jpeg">
 <meta property="og:url" content="https://shivsrushti-boyz.onrender.com/">
 <meta property="og:type" content="website">

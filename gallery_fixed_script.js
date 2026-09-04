@@ -55,7 +55,7 @@
     let appSettings = {};
 
     function getPDFSettings(year) {
-        const defaults = { orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'वर्ष : आठवे', headerOrgName: '', headerSubtitle: '' };
+        const defaults = { orgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'वर्ष : आठवे', headerOrgName: '', headerSubtitle: '' };
         try {
             const key = year ? 'pdfCustomSettings_' + year : 'pdfCustomSettings';
             const stored = appSettings[key] || {};

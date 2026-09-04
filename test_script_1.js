@@ -6,7 +6,7 @@
     let appSettings = {};
 
     function getPDFSettings(year) {
-        const defaults = { orgName: 'शिवसृष्टी सार्वजनिक उत्सव मंडळ संगमनेर 🚩', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'Ganpati Festival Cashbook', headerOrgName: '', headerSubtitle: '' };
+        const defaults = { orgName: 'शिवसृष्टी हिंदू तरुण मित्र मंडळ संगमनेर 🚩', subtitle: 'गणेश उत्सव कॅशबुक', tagline: 'Ganpati Festival Cashbook', headerOrgName: '', headerSubtitle: '' };
         try {
             const key = year ? 'pdfCustomSettings_' + year : 'pdfCustomSettings';
             const stored = appSettings[key] || {};
