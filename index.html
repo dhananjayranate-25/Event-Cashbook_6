@@ -4297,17 +4297,9 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         
         const customParas = customText.trim().split('\n\n');
         let customContentHtml = '';
-        customParas.forEach((p, idx) => {
+        customParas.forEach((p) => {
             const cleanP = p.trim().replace(/\n/g, '<br>');
-            if (idx === 0) {
-                customContentHtml += `<p style="color: #ffd700; font-weight: 800; font-size: 28px; margin-bottom: 8px; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 2px 8px rgba(0,0,0,0.8);">${cleanP}</p>`;
-            } else if (cleanP.includes('📍') || cleanP.includes('🗓️') || cleanP.includes('🕔') || cleanP.includes('किमान ₹')) {
-                customContentHtml += `<div style="margin: 8px 0;"><span style="color: #ffeb3b; font-weight: 800; font-size: 26px; background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.25)); padding: 8px 24px; border-radius: 25px; display: inline-block; border: 5px double #ffd700; font-family: 'Noto Sans Devanagari', sans-serif; box-shadow: 0 4px 15px rgba(0,0,0,0.4);">${cleanP}</span></div>`;
-            } else if (cleanP.includes('आपला सहभाग') || cleanP.includes('आपले सहकार्य') || cleanP.includes('आपले योगदान') || cleanP.includes('गणपती बाप्पा मोरया') || cleanP.includes('मंगलमूर्ती मोरया') || cleanP.includes('पुढच्या वर्षी लवकर या') || cleanP.includes('उपस्थिती प्रार्थनीय')) {
-                customContentHtml += `<p style="color: #ffeb3b; font-weight: 800; font-size: 26px; margin: 8px 0; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 0 10px rgba(255,235,59,0.5);">${cleanP}</p>`;
-            } else {
-                customContentHtml += `<p style="color: #ffffff; font-weight: 700; font-size: 25px; margin-bottom: 8px; line-height: 1.45; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${cleanP}</p>`;
-            }
+            customContentHtml += `<p style="color: #ffffff; font-weight: 700; font-size: 26px; margin-bottom: 10px; line-height: 1.5; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${cleanP}</p>`;
         });
 
         // Add corner accents to the content box
