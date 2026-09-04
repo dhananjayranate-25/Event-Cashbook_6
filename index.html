@@ -3285,6 +3285,15 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
         const prevContainer = document.getElementById('previousYearsContainer');
         if (prevContainer) prevContainer.classList.add('visible');
 
+        const preWarmPDFs = (pdfs) => {
+            if (!pdfs || !Array.isArray(pdfs)) return;
+            pdfs.forEach(pdf => {
+                const s = getPDFSettings(pdf.year);
+                const url = `/api/merged-pdf/${encodeURIComponent(pdf.filename)}/${encodeURIComponent(pdf.year)}?subtitle=${encodeURIComponent(pdf.subtitle || s.subtitle || '')}&tagline=${encodeURIComponent(pdf.tagline || s.tagline || '')}&orgName=${encodeURIComponent(pdf.orgName || s.orgName || '')}`;
+                fetch(url).catch(e => {});
+            });
+        };
+
         // Instant 0ms cache restore
         try {
             const cachedPDFs = localStorage.getItem('cached_uploaded_pdfs');
@@ -3295,6 +3304,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                     const perPage = getPDFsPerPage();
                     const to = Math.min(perPage, uploadedPDFsData.length);
                     grid.innerHTML = renderPDFCards(0, to) + renderPagination();
+                    preWarmPDFs(uploadedPDFsData);
                 }
             }
         } catch(e) {}
@@ -3310,6 +3320,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                 const perPage = getPDFsPerPage();
                 const to = Math.min(perPage, uploadedPDFsData.length);
                 grid.innerHTML = renderPDFCards(0, to) + renderPagination();
+                preWarmPDFs(uploadedPDFsData);
             } else {
                 if (!uploadedPDFsData || uploadedPDFsData.length === 0) {
                     grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
@@ -3594,20 +3605,22 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
-    async function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
-        const originalText = btn ? btn.innerHTML : 'अहवाल पहा';
-        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
-        await new Promise(r => setTimeout(r, 50));
-        await generateAndOpenMergedPDF(filename, year, false, subtitle, tagline, orgName);
-        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+    function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+        if (!filename) return;
+        const url = `/api/merged-pdf/${encodeURIComponent(filename)}/${encodeURIComponent(year)}?subtitle=${encodeURIComponent(subtitle || '')}&tagline=${encodeURIComponent(tagline || '')}&orgName=${encodeURIComponent(orgName || '')}`;
+        window.open(url, '_blank');
     }
 
-    async function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
-        const originalText = btn ? btn.innerHTML : 'अहवाल डाउनलोड करा';
-        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
-        await new Promise(r => setTimeout(r, 50));
-        await generateAndOpenMergedPDF(filename, year, true, subtitle, tagline, orgName);
-        if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+    function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+        if (!filename) return;
+        const url = `/api/merged-pdf/${encodeURIComponent(filename)}/${encodeURIComponent(year)}?download=true&subtitle=${encodeURIComponent(subtitle || '')}&tagline=${encodeURIComponent(tagline || '')}&orgName=${encodeURIComponent(orgName || '')}`;
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Ganpati_Cashbook_${year}.pdf`;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
     </script>
     <!-- Lightbox Modal for Gallery -->

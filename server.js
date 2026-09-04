@@ -1809,6 +1809,8 @@ app.get('/api/merged-pdf/:filename/:year', async (req, res) => {
         const subtitle = req.query.subtitle || '';
         const tagline = req.query.tagline || '';
         const orgName = req.query.orgName || '';
+        const isDownload = req.query.download === 'true' || req.query.download === '1';
+        const disposition = isDownload ? 'attachment' : 'inline';
         const cacheKey = `${filename}_${year}_${subtitle}_${tagline}_${orgName}`;
         const cacheFilename = Buffer.from(cacheKey).toString('base64') + '.pdf';
         const cachePath = path.join(MERGE_CACHE_DIR, cacheFilename);
@@ -1816,7 +1818,7 @@ app.get('/api/merged-pdf/:filename/:year', async (req, res) => {
         if (fs.existsSync(cachePath)) {
             const cachedBytes = fs.readFileSync(cachePath);
             res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader('Content-Disposition', 'inline; filename="Ganpati_Cashbook_' + year + '.pdf"');
+            res.setHeader('Content-Disposition', `${disposition}; filename="Ganpati_Cashbook_${year}.pdf"`);
             return res.send(Buffer.from(cachedBytes));
         }
 
@@ -1824,7 +1826,7 @@ app.get('/api/merged-pdf/:filename/:year', async (req, res) => {
         fs.writeFileSync(cachePath, Buffer.from(mergedBytes));
 
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'inline; filename="Ganpati_Cashbook_' + year + '.pdf"');
+        res.setHeader('Content-Disposition', `${disposition}; filename="Ganpati_Cashbook_${year}.pdf"`);
         res.send(Buffer.from(mergedBytes));
     } catch (error) {
         console.error('Merge error:', error.message);
