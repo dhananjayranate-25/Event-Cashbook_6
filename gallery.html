@@ -603,8 +603,48 @@
                         <div class="header-line"></div>
                     </div>
                     
-                    <!-- Albums Grid (Default View) -->
+                    <script>
+                        function renderAlbumsHTML(albums) {
+                            if (!albums || albums.length === 0) {
+                                return '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">कोणतेही अल्बम उपलब्ध नाहीत.</p>';
+                            }
+                            return albums.map(album => {
+                                const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
+                                return `
+                                    <div class="album-card" onclick="openAlbum('${album._id}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+                                        <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
+                                            <img src="${coverPhoto}" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                                        </div>
+                                        <div class="card-info-wrapper" style="padding: 10px 6px; text-align: center; background: rgba(0,0,0,0.35);">
+                                            <h3 class="album-title-text" style="color: #ffd700; margin: 0 0 4px 0; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.3px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); word-break: keep-all; overflow-wrap: break-word; hyphens: none;">${album.title}</h3>
+                                            <p class="album-count-text" style="color: #cbd5e1; margin: 0; font-weight: 600;">📷 ${album.photosCount || 0} छायाचित्रे</p>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('');
+                        }
+                    </script>
+
+                    <!-- Albums Grid (Default View - Instant 0ms Static HTML Rendering) -->
                     <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
+                        <div class="album-card" onclick="openAlbum('2025')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+                            <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
+                                <img src="logo/logo.jpeg" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
+                            </div>
+                            <div class="card-info-wrapper" style="padding: 10px 6px; text-align: center; background: rgba(0,0,0,0.35);">
+                                <h3 class="album-title-text" style="color: #ffd700; margin: 0 0 4px 0; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.3px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); word-break: keep-all; overflow-wrap: break-word; hyphens: none;">गणपती छायाचित्रे 2025</h3>
+                                <p class="album-count-text" style="color: #cbd5e1; margin: 0; font-weight: 600;">📷 छायाचित्रे</p>
+                            </div>
+                        </div>
+                        <div class="album-card" onclick="openAlbum('2024')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+                            <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
+                                <img src="logo/logo.jpeg" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover;" decoding="async" fetchpriority="high">
+                            </div>
+                            <div class="card-info-wrapper" style="padding: 10px 6px; text-align: center; background: rgba(0,0,0,0.35);">
+                                <h3 class="album-title-text" style="color: #ffd700; margin: 0 0 4px 0; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.3px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); word-break: keep-all; overflow-wrap: break-word; hyphens: none;">गणपती छायाचित्रे 2024</h3>
+                                <p class="album-count-text" style="color: #cbd5e1; margin: 0; font-weight: 600;">📷 छायाचित्रे</p>
+                            </div>
+                        </div>
                     </div>
                     <script>
                         (function() {
@@ -622,13 +662,7 @@
                                         if (cached) albums = JSON.parse(cached);
                                     } catch(e) {}
 
-                                    if (!albums || albums.length === 0) {
-                                        albums = [
-                                            { _id: '2025', title: 'गणपती छायाचित्रे 2025', photosCount: 0, coverPhoto: 'logo/logo.jpeg' },
-                                            { _id: '2024', title: 'गणपती छायाचित्रे 2024', photosCount: 0, coverPhoto: 'logo/logo.jpeg' }
-                                        ];
-                                    }
-                                    if (typeof renderAlbumsHTML === 'function') {
+                                    if (albums && albums.length > 0 && typeof renderAlbumsHTML === 'function') {
                                         grid.innerHTML = renderAlbumsHTML(albums);
                                     }
                                 }
