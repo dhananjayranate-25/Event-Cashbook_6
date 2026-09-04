@@ -75,7 +75,7 @@
     <link rel="apple-touch-icon" href="logo/logo.jpeg">
     <title>Ganpati Vargani Cashbook - Shivsrushti</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@300;400;500;600;700;900&family=Yatra+One&family=Amita:wght@700&family=Eczar:wght@800&family=Khand:wght@800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=1788500046&old=1788499721">
+    <link rel="stylesheet" href="style.css?v=1788500254&old2=1788500046&old=1788499721">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
     // Auto-wrap tables for mobile responsiveness
     document.addEventListener('DOMContentLoaded', function() {
@@ -163,15 +163,21 @@
 
         #photosGrid, #albumsGrid, .gallery-responsive-grid {
             display: grid !important;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+            grid-template-columns: repeat(4, 1fr) !important;
             gap: 20px !important;
             width: 100% !important;
             box-sizing: border-box !important;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 992px) {
             #photosGrid, #albumsGrid, .gallery-responsive-grid {
-                grid-template-columns: 1fr !important;
-                gap: 14px !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 15px !important;
+            }
+        }
+        @media (max-width: 600px) {
+            #photosGrid, #albumsGrid, .gallery-responsive-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
             }
         }
         .album-card {
@@ -538,7 +544,7 @@
                     </div>
                     
                     <!-- Albums Grid (Default View) -->
-                    <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
+                    <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
                         <div style="height: 50px;"></div>
                     </div>
                     <script>
@@ -720,14 +726,13 @@
         return albums.map(album => {
             const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
             return `
-                <div class="album-card horizontal-album-card" onclick="openAlbum('${album._id}')" style="display: flex !important; flex-direction: row !important; align-items: center !important; background: linear-gradient(135deg, rgba(38, 12, 50, 0.95), rgba(16, 4, 24, 0.98)); border: 2px solid rgba(255, 215, 0, 0.45); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.6); width: 100%; box-sizing: border-box;">
-                    <div style="width: 135px; min-width: 135px; height: 125px; position: relative; overflow: hidden; background: #000; border-right: 2px solid rgba(255,215,0,0.35);">
-                        <img src="${coverPhoto}" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" decoding="async" fetchpriority="high" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                <div class="album-card" onclick="openAlbum('${album._id}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.5); display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+                    <div style="width: 100%; height: 180px; position: relative; overflow: hidden; background:#000;">
+                        <img src="${coverPhoto}" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
-                    <div style="padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; gap: 6px; flex: 1; min-width: 0;">
-                        <h3 style="color: #ffd700; margin: 0; font-size: 1.3rem; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${album.title}</h3>
-                        <p style="color: #cbd5e1; margin: 0; font-size: 0.95rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;"><span>📷</span> ${album.photosCount || 0} छायाचित्रे (Photos)</p>
-                        <span style="color: #ff8c00; font-size: 0.88rem; font-weight: bold; display: inline-flex; align-items: center; gap: 5px; margin-top: 2px;">अल्बम उघडा <i class="fas fa-arrow-right"></i></span>
+                    <div style="padding: 12px 10px; text-align: center; background: rgba(0,0,0,0.35);">
+                        <h3 style="color: #ffd700; margin: 0 0 4px 0; font-size: 1.15rem; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.3px; text-shadow: 0 2px 4px rgba(0,0,0,0.6);">${album.title}</h3>
+                        <p style="color: #cbd5e1; margin: 0; font-size: 0.9rem; font-weight: 600;">📷 ${album.photosCount || 0} छायाचित्रे</p>
                     </div>
                 </div>
             `;
@@ -739,13 +744,9 @@
             return '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">या अल्बममध्ये कोणतेही फोटो नाहीत.</p>';
         }
         return photos.map(photo => `
-            <div class="album-card photo-card horizontal-photo-card" onclick="openLightbox('${photo.photoData}')" style="display: flex !important; flex-direction: row !important; align-items: center !important; background: linear-gradient(135deg, rgba(38, 12, 50, 0.95), rgba(16, 4, 24, 0.98)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 8px 24px rgba(0,0,0,0.6); width: 100%; box-sizing: border-box;">
-                <div style="width: 135px; min-width: 135px; height: 125px; position: relative; overflow: hidden; background: #000; border-right: 2px solid rgba(255,215,0,0.35);">
-                    <img src="${photo.photoData}" onerror="this.src='logo/logo.jpeg'; this.onerror=null;" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" decoding="async" fetchpriority="high" loading="eager" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
-                </div>
-                <div style="padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; gap: 6px; flex: 1; min-width: 0;">
-                    <span style="color: #ffd700; font-size: 1.1rem; font-weight: bold;"><i class="fas fa-search-plus"></i> फोटो मोठा पहा</span>
-                    <span style="color: #cbd5e1; font-size: 0.88rem;">झूम किंवा डाऊनलोड करण्यासाठी क्लिक करा</span>
+            <div class="album-card photo-card" onclick="openLightbox('${photo.photoData}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.35); border-radius: 16px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.5); width: 100%; box-sizing: border-box;">
+                <div style="width: 100%; height: 180px; position: relative; overflow: hidden; background:#000;">
+                    <img src="${photo.photoData}" onerror="this.src='logo/logo.jpeg'; this.onerror=null;" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" loading="eager" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                 </div>
             </div>
         `).join('');

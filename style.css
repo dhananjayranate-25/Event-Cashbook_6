@@ -5912,22 +5912,23 @@ html, body {
     }
 }
 
-/* Horizontal Card Layout Rules for Gallery */
+/* Explicit Forced Side-By-Side Multi-Column Grid Rules */
 #photosGrid, #albumsGrid, .gallery-responsive-grid {
     display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+    grid-template-columns: repeat(4, 1fr) !important;
     gap: 20px !important;
     width: 100% !important;
     box-sizing: border-box !important;
 }
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     #photosGrid, #albumsGrid, .gallery-responsive-grid {
-        grid-template-columns: 1fr !important;
-        gap: 14px !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 15px !important;
     }
 }
-.horizontal-album-card:hover, .horizontal-photo-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.8), 0 0 20px rgba(255,215,0,0.4) !important;
-    border-color: #ffd700 !important;
+@media (max-width: 600px) {
+    #photosGrid, #albumsGrid, .gallery-responsive-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
 }
