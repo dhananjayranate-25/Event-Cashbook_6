@@ -378,7 +378,13 @@ app.get('/api/settings', async (req, res) => {
         const settings = await AppSetting.find({});
         const settingsMap = {};
         settings.forEach(s => {
-            settingsMap[s.key] = s.value;
+            let val = s.value;
+            if (typeof val === 'string') {
+                val = val.replace(/शिवसृष्टी सार्वजनिक उत्सव मंडळ, संगमनेर/g, 'शिवसृष्टी हिंदू तरुण मित्र मंडळ, संगमनेर')
+                         .replace(/शिवसृष्टी सार्वजनिक उत्सव मंडळ/g, 'शिवसृष्टी हिंदू तरुण मित्र मंडळ')
+                         .replace(/सार्वजनिक उत्सव मंडळ/g, 'हिंदू तरुण मित्र मंडळ');
+            }
+            settingsMap[s.key] = val;
         });
         res.json({ success: true, data: settingsMap });
     } catch (error) {
