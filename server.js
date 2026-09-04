@@ -548,13 +548,18 @@ app.get('/api/gallery', async (req, res) => {
         await Promise.all(albums.map(async (album) => {
             const [dbPhotosCount, firstPhoto] = await Promise.all([
                 GalleryPhoto.countDocuments({ albumId: album._id }),
-                GalleryPhoto.findOne({ albumId: album._id }, { photoData: 1 }).lean()
+                GalleryPhoto.findOne({ albumId: album._id }, { photoData: 1 }).sort({ _id: 1 }).lean()
             ]);
             album.photosCount = dbPhotosCount;
-            let cover = firstPhoto ? firstPhoto.photoData : 'logo/logo.jpeg';
-            // Cap coverPhoto payload size to prevent huge multi-megabyte JSON transfers on album listing
-            if (cover && cover.startsWith('data:image') && cover.length > 40000) {
-                cover = 'logo/logo.jpeg';
+            let cover = 'logo/logo.jpeg';
+            if (firstPhoto && firstPhoto.photoData) {
+                if (firstPhoto.photoData.startsWith('/uploads/') || firstPhoto.photoData.startsWith('http')) {
+                    cover = firstPhoto.photoData;
+                } else if (firstPhoto.photoData.startsWith('data:image')) {
+                    cover = `/api/gallery/photo/${firstPhoto._id}/raw`;
+                } else {
+                    cover = firstPhoto.photoData;
+                }
             }
             album.coverPhoto = cover;
             album.photos = []; // Empty to save bandwidth
@@ -564,6 +569,33 @@ app.get('/api/gallery', async (req, res) => {
         res.json(serverGalleryCache);
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Serve raw image buffer for a photo (used for album covers when stored as base64)
+app.get('/api/gallery/photo/:id/raw', async (req, res) => {
+    try {
+        const photo = await GalleryPhoto.findById(req.params.id, { photoData: 1 }).lean();
+        if (!photo || !photo.photoData) {
+            return res.redirect('/logo/logo.jpeg');
+        }
+        const data = photo.photoData;
+        if (data.startsWith('data:image')) {
+            const matches = data.match(/^data:(image\/[a-zA-Z+]+);base64,(.+)$/);
+            if (matches) {
+                const mimeType = matches[1];
+                const buffer = Buffer.from(matches[2], 'base64');
+                res.setHeader('Content-Type', mimeType);
+                res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=604800');
+                return res.send(buffer);
+            }
+        }
+        if (data.startsWith('/uploads/') || data.startsWith('http')) {
+            return res.redirect(data);
+        }
+        res.redirect('/logo/logo.jpeg');
+    } catch (e) {
+        res.redirect('/logo/logo.jpeg');
     }
 });
 

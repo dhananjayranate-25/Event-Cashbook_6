@@ -251,7 +251,8 @@
                 }
                 
                 grid.innerHTML = galleryAlbumsCache.map(album => {
-                    const coverPhoto = album.photos.length > 0 ? '/' + album.photos[0] : 'logo/logo.jpeg';
+                    const coverPhoto = album.coverPhoto || (album.photos && album.photos.length > 0 ? (album.photos[0].photoData || album.photos[0]) : 'logo/logo.jpeg');
+                    const photoCount = album.photosCount !== undefined ? album.photosCount : (album.photos ? album.photos.length : 0);
                     return `
                         <div class="album-card" onclick="openAlbum('${album._id}')" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;">
                             <div style="width: 100%; padding-top: 75%; position: relative;">
@@ -259,7 +260,7 @@
                             </div>
                             <div style="padding: 15px; text-align: center;">
                                 <h3 style="color: #ffeb3b; margin: 0 0 5px 0; font-size: 1.2rem;">${album.title}</h3>
-                                <p style="color: #ccc; margin: 0; font-size: 0.9rem;">${album.photos.length} photos</p>
+                                <p style="color: #ccc; margin: 0; font-size: 0.9rem;">${photoCount} photos</p>
                             </div>
                         </div>
                     `;
