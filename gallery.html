@@ -709,10 +709,8 @@
     let currentViewingAlbumId = null;
 
     try {
-        const cached = localStorage.getItem('gallery_albums_cache');
-        if (cached) {
-            galleryAlbumsCache = JSON.parse(cached);
-        }
+        localStorage.removeItem('gallery_albums_cache');
+        galleryAlbumsCache = [];
     } catch(e) {}
 
     function renderAlbumsHTML(albums) {
@@ -807,22 +805,9 @@
 
         const photosGrid = document.getElementById('photosGrid');
         
-        // Fast instant render from cache if visited before
-        let hasCache = false;
-        try {
-            const cachedPhotos = sessionStorage.getItem('gallery_photos_' + albumId);
-            if (cachedPhotos) {
-                const photos = JSON.parse(cachedPhotos);
-                if (photos && photos.length > 0) {
-                    photosGrid.innerHTML = renderPhotosHTML(photos);
-                    hasCache = true;
-                }
-            }
-        } catch(e) {}
-
-        if (!hasCache) {
-            photosGrid.innerHTML = '<div style="height: 50px;"></div>';
-        }
+        // Clear stale session cache to force live fresh photos
+        try { sessionStorage.removeItem('gallery_photos_' + albumId); } catch(e) {}
+        photosGrid.innerHTML = '<p style="text-align:center; color:#ffd700; width:100%; grid-column:1/-1;">फोटो लोड होत आहेत... कृपया प्रतीक्षा करा...</p>';
         
         try {
             const res = await fetch(`/api/gallery/album/${albumId}/photos`);
@@ -853,8 +838,8 @@
             photosView.style.display = 'none';
         }
         if (albumsGrid) {
-            albumsGrid.style.removeProperty('display');
-            albumsGrid.style.display = 'grid';
+            albumsGrid.style.setProperty('display', 'grid', 'important');
+            albumsGrid.style.setProperty('grid-template-columns', 'repeat(auto-fit, minmax(180px, 1fr))', 'important');
         }
     }
 
