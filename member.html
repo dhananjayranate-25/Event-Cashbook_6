@@ -726,11 +726,11 @@ table {
                     <form onsubmit="addNiyojan(event)">
                             <div class="form-grid">
                                 <div class="form-group floating-label">
-                                    <input type="date" id="NiyojanDate" placeholder=" " required>
+                                    <input type="date" id="NiyojanDate" placeholder=" ">
                                     <label for="NiyojanDate">तारीख</label>
                                 </div>
                                 <div class="form-group floating-label">
-                                    <input type="time" id="NiyojanTime" placeholder=" " required>
+                                    <input type="time" id="NiyojanTime" placeholder=" ">
                                     <label for="NiyojanTime">वेळ</label>
                                 </div>
                                 <div class="form-group floating-label" style="grid-column: 1 / -1;">
@@ -759,7 +759,7 @@ table {
                                 <label for="AartiName">नाव</label>
                             </div>
                             <div class="form-group floating-label">
-                                <input type="date" id="AartiDate" placeholder=" " required>
+                                <input type="date" id="AartiDate" placeholder=" ">
                                 <label for="AartiDate">तारीख</label>
                             </div>
                             <div class="form-group floating-label select-group">
@@ -868,12 +868,12 @@ table {
                 <input type="hidden" id="editNiyojanId">
                 <div class="modal-grid-2">
                     <div>
-                        <label>तारीख *</label>
-                        <input type="date" id="editNiyojanDate" required onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
+                        <label>तारीख</label>
+                        <input type="date" id="editNiyojanDate" onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
                     </div>
                     <div>
-                        <label>वेळ *</label>
-                        <input type="text" id="editNiyojanTime" placeholder="उदा. सायं. ७:०० वा." required>
+                        <label>वेळ</label>
+                        <input type="text" id="editNiyojanTime" placeholder="उदा. सायं. ७:०० वा.">
                     </div>
                 </div>
                 <div>
@@ -936,8 +936,8 @@ table {
                 </div>
                 <div class="modal-grid-2">
                     <div>
-                        <label>तारीख *</label>
-                        <input type="date" id="editAartiDate" required onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
+                        <label>तारीख</label>
+                        <input type="date" id="editAartiDate" onclick="if(this.showPicker) this.showPicker()" style="color-scheme: dark;">
                     </div>
                     <div>
                         <label>वेळ (सकाळ/संध्याकाळ) *</label>

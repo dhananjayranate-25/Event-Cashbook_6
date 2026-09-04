@@ -135,7 +135,7 @@ mongoose.connect(MONGODB_URI)
 
 
 const niyojanSchema = new mongoose.Schema({
-    date: { type: String, required: true },
+    date: { type: String, default: '' },
     time: { type: String, default: '' },
     title: { type: String, required: true },
     description: { type: String },
@@ -146,7 +146,7 @@ const Niyojan = mongoose.model('Niyojan', niyojanSchema);
 
 const entrySchema = new mongoose.Schema({
     name: { type: String, required: true },
-    date: { type: String, required: true },
+    date: { type: String, default: '' },
     mode: { type: String, required: true, enum: ['Online', 'Cash'] },
     cash_in: { type: Number, default: 0 },
     cash_out: { type: Number, default: 0 },
@@ -196,8 +196,8 @@ const Counter = mongoose.model('Counter', counterSchema);
 
 const aartiSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    timeOfDay: { type: String, required: true }, // "सकाळ" or "संध्याकाळ"
-    date: { type: String, required: true }, // e.g. "2026-09-07"
+    timeOfDay: { type: String, default: '' }, // "सकाळ" or "संध्याकाळ"
+    date: { type: String, default: '' }, // e.g. "2026-09-07"
     phone: { type: String },
     pujaDetails: { type: String },
     addedBy: { type: String },
@@ -849,14 +849,15 @@ app.post('/api/change-password', async (req, res) => {
 app.post('/api/entries', async (req, res) => {
     try {
         const { name, date, mode, cashIn, cashOut, cash_in, cash_out } = req.body;
-        if (!name || !date || !mode) {
-            return res.status(400).json({ success: false, error: 'All fields are required' });
+        if (!name || !mode) {
+            return res.status(400).json({ success: false, error: 'Name and mode are required' });
         }
+        const entryDate = date || new Date().toISOString().split('T')[0];
         const valIn = Number(cashIn !== undefined ? cashIn : (cash_in !== undefined ? cash_in : 0)) || 0;
         const valOut = Number(cashOut !== undefined ? cashOut : (cash_out !== undefined ? cash_out : 0)) || 0;
         const newEntry = new Entry({
             name: name.trim(),
-            date,
+            date: entryDate,
             mode,
             cash_in: valIn,
             cash_out: valOut
@@ -891,14 +892,15 @@ app.delete('/api/entries/:id', async (req, res) => {
 app.put('/api/entries/:id', async (req, res) => {
     try {
         const { name, date, mode, cashIn, cashOut, cash_in, cash_out } = req.body;
-        if (!name || !date || !mode) return res.status(400).json({ success: false, error: 'All fields are required' });
+        if (!name || !mode) return res.status(400).json({ success: false, error: 'Name and mode are required' });
+        const entryDate = date || new Date().toISOString().split('T')[0];
         
         const valIn = Number(cashIn !== undefined ? cashIn : (cash_in !== undefined ? cash_in : 0)) || 0;
         const valOut = Number(cashOut !== undefined ? cashOut : (cash_out !== undefined ? cash_out : 0)) || 0;
 
         const entry = await Entry.findByIdAndUpdate(
             req.params.id,
-            { name: name.trim(), date, mode, cash_in: valIn, cash_out: valOut },
+            { name: name.trim(), date: entryDate, mode, cash_in: valIn, cash_out: valOut },
             { new: true }
         );
         if (!entry) return res.status(404).json({ success: false, error: 'Entry not found' });

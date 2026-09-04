@@ -670,8 +670,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label style="color:white; display:block; margin-bottom:5px;">तारीख *</label>
-                        <input type="date" id="aartiDate" required="" style="width:100%; padding:10px; border-radius:8px; border:none; outline:none;">
+                        <label style="color:white; display:block; margin-bottom:5px;">तारीख</label>
+                        <input type="date" id="aartiDate" style="width:100%; padding:10px; border-radius:8px; border:none; outline:none;">
                     </div>
                     
                     <div class="form-group">
@@ -3279,7 +3279,7 @@ https://shivsrushti-utsav-mandal.onrender.com`;
                         <label for="editName">Name</label>
                     </div>
                     <div class="form-group floating-label">
-                        <input type="date" id="editDate" required="">
+                        <input type="date" id="editDate">
                         <label for="editDate">Date</label>
                     </div>
                     <div class="form-group floating-label select-group">
@@ -3450,7 +3450,7 @@ https://shivsrushti-utsav-mandal.onrender.com`;
                     <form id="niyojanForm" onsubmit="addNiyojan(event); return false;">
                         <div class="form-grid">
                             <div class="form-group floating-label">
-                                <input type="date" id="niyojanDate" required>
+                                <input type="date" id="niyojanDate">
                                 <label for="niyojanDate">तारीख</label>
                                 <div class="input-focus-line"></div>
                             </div>
@@ -4456,7 +4456,7 @@ async function deleteNiyojan(id) {
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div>
                         <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख (Date)</label>
-                        <input type="date" id="editEntryDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
+                        <input type="date" id="editEntryDate" onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
                     </div>
                     <div>
                         <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">माध्यम (Mode)</label>
@@ -4507,11 +4507,11 @@ async function deleteNiyojan(id) {
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख *</label>
-                        <input type="date" id="editAartiDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख</label>
+                        <input type="date" id="editAartiDate" onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
                     </div>
                     <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ *</label>
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ</label>
                         <select id="editAartiTime" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box;">
                             <option value="सकाळ">सकाळ</option>
                             <option value="संध्याकाळ">संध्याकाळ</option>
@@ -4549,12 +4549,12 @@ async function deleteNiyojan(id) {
                 <input type="hidden" id="editNiyojanId">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                     <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख *</label>
-                        <input type="date" id="editNiyojanDate" required onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">तारीख</label>
+                        <input type="date" id="editNiyojanDate" onclick="if(this.showPicker) this.showPicker()" style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; cursor: pointer; color-scheme: dark;">
                     </div>
                     <div>
-                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ *</label>
-                        <input type="text" id="editNiyojanTime" placeholder="उदा. सायं. ७:०० वा." required style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;">
+                        <label style="font-size: 13px; color: #cbd5e1; display: block; margin-bottom: 5px;">वेळ</label>
+                        <input type="text" id="editNiyojanTime" placeholder="उदा. सायं. ७:०० वा." style="width: 100%; padding: 10px 12px; border-radius: 8px; background: #1a0526; border: 1px solid #64748b; color: #fff; box-sizing: border-box; font-size: 14px;">
                     </div>
                 </div>
                 <div>
