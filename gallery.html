@@ -1306,18 +1306,12 @@ function openAartiPdfModal(rawUrl) {
             cleanUrl = window.location.origin + (cleanUrl.startsWith('/') ? cleanUrl : ('/' + cleanUrl));
         }
         
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-        if (isMobile) {
-            window.open(cleanUrl, '_blank');
-            return;
-        }
-        
         const modal = document.getElementById('aartiPdfModal');
         const iframe = document.getElementById('aartiPdfIframe');
         const directLink = document.getElementById('aartiPdfDirectLink');
         
         let viewUrl = cleanUrl;
-        if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
+        if (cleanUrl.startsWith('http')) {
             viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
         }
         
