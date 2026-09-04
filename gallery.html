@@ -544,7 +544,7 @@
             <!-- Gallery Section -->
             <div id="gallerySection" style="display: flex; flex-direction: column; flex: 1; margin-top: 20px; min-height: 50vh;" class="animate-fade-up">
                 <div style="width: 100%; margin-bottom: 15px; padding: 0 15px; text-align: left; box-sizing: border-box;">
-                    <button onclick="window.location.href='index.html#home'; return false;" style="background: linear-gradient(135deg, #ff8c00, #e52e71); color: white; border: none; padding: 8px 18px; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
+                    <button id="galleryMainBackBtn" onclick="handleGalleryBackBtn()" style="background: linear-gradient(135deg, #ff8c00, #e52e71); color: white; border: none; padding: 8px 18px; border-radius: 25px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3); display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s ease;">
                         <span style="font-size: 18px;">⬅</span> मागे जा
                     </button>
                 </div>
@@ -579,9 +579,6 @@
                     <!-- Single Album Photos View (Hidden by Default) -->
                     <div id="photosView" style="display: none;">
                         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; position: relative;">
-                            <div style="width: 100%; display: flex; justify-content: flex-start;">
-                                <button onclick="backToAlbums()" class="btn btn-primary ripple" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 15px; border-radius: 8px;"><i class="fas fa-arrow-left"></i> मागे जा</button>
-                            </div>
                             <h3 id="currentAlbumTitle" style="color: #ffeb3b; margin: 0; font-size: 1.35rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-align: center; width: 100%; word-break: break-word; letter-spacing: 0.5px;"></h3>
                         </div>
                         <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
@@ -804,6 +801,14 @@
         }
     }
 
+    function handleGalleryBackBtn() {
+        if (currentViewingAlbumId) {
+            backToAlbums();
+        } else {
+            window.location.href = 'index.html#home';
+        }
+    }
+
     async function openAlbum(albumId) {
         const album = galleryAlbumsCache.find(a => a._id === albumId);
         if (!album) return;
@@ -825,8 +830,11 @@
         
         // Clear stale session cache to force live fresh photos
         try { sessionStorage.removeItem('gallery_photos_' + albumId); } catch(e) {}
+        const isMobile = window.innerWidth <= 600;
+        const isTablet = window.innerWidth > 600 && window.innerWidth <= 992;
+        const cols = isMobile ? 'repeat(2, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)');
         photosGrid.style.setProperty('display', 'grid', 'important');
-        photosGrid.style.setProperty('grid-template-columns', 'repeat(4, 1fr)', 'important');
+        photosGrid.style.setProperty('grid-template-columns', cols, 'important');
         photosGrid.innerHTML = '<p style="text-align:center; color:#ffd700; width:100%; grid-column:1/-1;">फोटो लोड होत आहेत... कृपया प्रतीक्षा करा...</p>';
         
         try {
@@ -838,14 +846,12 @@
                     sessionStorage.setItem('gallery_photos_' + albumId, JSON.stringify(data.photos));
                 } catch(e) {}
                 photosGrid.innerHTML = renderPhotosHTML(data.photos);
-            } else if (!hasCache) {
-                photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी: ' + data.error + '</p>';
+            } else {
+                photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी: ' + (data.error || 'अज्ञात त्रुटी') + '</p>';
             }
         } catch(e) {
             console.error(e);
-            if (!hasCache) {
-                photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी आली.</p>';
-            }
+            photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी आली.</p>';
         }
     }
 
