@@ -4264,30 +4264,78 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
 
     
+    function convertDataUrlToPngBlob(dataUrl) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => {
+                try {
+                    const cvs = document.createElement('canvas');
+                    cvs.width = img.naturalWidth || img.width || 800;
+                    cvs.height = img.naturalHeight || img.height || 600;
+                    const ctx = cvs.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    if (cvs.toBlob) {
+                        cvs.toBlob((blob) => {
+                            if (blob) {
+                                const pngDataUrl = cvs.toDataURL('image/png', 1.0);
+                                resolve({ blob, dataUrl: pngDataUrl });
+                            } else {
+                                const pngDataUrl = cvs.toDataURL('image/png', 1.0);
+                                resolve({ blob: dataURItoBlob(pngDataUrl), dataUrl: pngDataUrl });
+                            }
+                        }, 'image/png');
+                    } else {
+                        const pngDataUrl = cvs.toDataURL('image/png', 1.0);
+                        resolve({ blob: dataURItoBlob(pngDataUrl), dataUrl: pngDataUrl });
+                    }
+                } catch(e) {
+                    resolve(null);
+                }
+            };
+            img.onerror = () => resolve(null);
+            img.src = dataUrl;
+        });
+    }
+
     async function getPosterBlobAndDataUrl(customImageSource, captureFallbackFn) {
         if (customImageSource && typeof customImageSource === 'string') {
+            let rawDataUrl = null;
             if (customImageSource.startsWith('data:image')) {
-                const blob = dataURItoBlob(customImageSource);
-                return { blob, dataUrl: customImageSource };
-            } else if (customImageSource.startsWith('http') || customImageSource.startsWith('uploads/') || customImageSource.startsWith('logo/')) {
+                rawDataUrl = customImageSource;
+            } else if (customImageSource.startsWith('http') || customImageSource.startsWith('uploads/') || customImageSource.startsWith('logo/') || customImageSource.startsWith('/')) {
                 try {
                     const res = await fetch(customImageSource, { mode: 'cors' });
                     if (res.ok) {
-                        const blob = await res.blob();
-                        const dataUrl = await new Promise((resolve) => {
+                        const b = await res.blob();
+                        rawDataUrl = await new Promise((resolve) => {
                             const reader = new FileReader();
                             reader.onloadend = () => resolve(reader.result);
-                            reader.onerror = () => resolve(customImageSource);
-                            reader.readAsDataURL(blob);
+                            reader.onerror = () => resolve(null);
+                            reader.readAsDataURL(b);
                         });
-                        return { blob, dataUrl };
                     }
                 } catch(e) {
                     console.warn('Direct fetch failed, falling back to capture', e);
                 }
             }
+
+            if (rawDataUrl) {
+                try {
+                    const pngRes = await convertDataUrlToPngBlob(rawDataUrl);
+                    if (pngRes) return pngRes;
+                } catch(e) {}
+                const blob = dataURItoBlob(rawDataUrl);
+                return { blob, dataUrl: rawDataUrl };
+            }
         }
+
         const canvas = await captureFallbackFn();
+        if (canvas && canvas.toBlob) {
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            const dataUrl = canvas.toDataURL('image/png', 1.0);
+            return { blob: blob || dataURItoBlob(dataUrl), dataUrl };
+        }
         const dataUrl = canvas.toDataURL('image/png', 1.0);
         const blob = dataURItoBlob(dataUrl);
         return { blob, dataUrl };
@@ -4308,8 +4356,10 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 blob = res.blob;
                 dataUrl = res.dataUrl;
             }
+            const mimeType = blob ? (blob.type || 'image/png') : 'image/png';
+            const ext = (mimeType === 'image/jpeg' || mimeType === 'image/jpg') ? '.jpg' : '.png';
             const link = document.createElement('a');
-            link.download = 'Donation_Poster.png';
+            link.download = 'Donation_Poster' + ext;
             link.href = URL.createObjectURL(blob);
             document.body.appendChild(link);
             link.click();
