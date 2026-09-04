@@ -605,7 +605,6 @@
                     
                     <!-- Albums Grid (Default View) -->
                     <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
-                        <p style="text-align: center; color: #ffd700; width: 100%; grid-column: 1 / -1; font-weight: bold; font-size: 1rem; padding: 20px 0;">अल्बम लोड होत आहेत... कृपया प्रतीक्षा करा...</p>
                     </div>
                     <script>
                         (function() {
@@ -617,12 +616,20 @@
                                     const cols = isMobile ? 'repeat(2, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)');
                                     grid.style.setProperty('grid-template-columns', cols, 'important');
 
-                                    const cached = localStorage.getItem('gallery_albums_cache');
-                                    if (cached) {
-                                        const albums = JSON.parse(cached);
-                                        if (albums && albums.length > 0) {
-                                            grid.innerHTML = renderAlbumsHTML(albums);
-                                        }
+                                    let albums = null;
+                                    try {
+                                        const cached = localStorage.getItem('gallery_albums_cache');
+                                        if (cached) albums = JSON.parse(cached);
+                                    } catch(e) {}
+
+                                    if (!albums || albums.length === 0) {
+                                        albums = [
+                                            { _id: '2025', title: 'गणपती छायाचित्रे 2025', photosCount: 0, coverPhoto: 'logo/logo.jpeg' },
+                                            { _id: '2024', title: 'गणपती छायाचित्रे 2024', photosCount: 0, coverPhoto: 'logo/logo.jpeg' }
+                                        ];
+                                    }
+                                    if (typeof renderAlbumsHTML === 'function') {
+                                        grid.innerHTML = renderAlbumsHTML(albums);
                                     }
                                 }
                             } catch(e) {}
@@ -773,13 +780,18 @@
     </footer>
 
 <script>
-    let galleryAlbumsCache = [];
+    const DEFAULT_ALBUMS = [
+        { _id: '2025', title: 'गणपती छायाचित्रे 2025', photosCount: 0, coverPhoto: 'logo/logo.jpeg' },
+        { _id: '2024', title: 'गणपती छायाचित्रे 2024', photosCount: 0, coverPhoto: 'logo/logo.jpeg' }
+    ];
+    let galleryAlbumsCache = DEFAULT_ALBUMS;
     let currentViewingAlbumId = null;
 
     try {
         const storedAlbums = localStorage.getItem('gallery_albums_cache');
         if (storedAlbums) {
-            galleryAlbumsCache = JSON.parse(storedAlbums);
+            const parsed = JSON.parse(storedAlbums);
+            if (parsed && parsed.length > 0) galleryAlbumsCache = parsed;
         }
     } catch(e) {}
 
