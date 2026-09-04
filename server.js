@@ -1829,7 +1829,7 @@ async function generateMergedPdf(filename, year, subtitle, tagline, orgName) {
     page.drawCircle({ x: cx - 105, y: 112, size: 2, color: saffron });
     page.drawCircle({ x: cx + 105, y: 112, size: 2, color: saffron });
 
-    page.drawText('Developed by | Dhananjay Ranate', {
+    page.drawText('Website Developed By Dhananjay Ranate', {
         x: cx - 80, y: 75, size: 9,
         color: lightGold
     });
