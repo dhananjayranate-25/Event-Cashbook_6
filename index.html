@@ -3285,14 +3285,9 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
         const prevContainer = document.getElementById('previousYearsContainer');
         if (prevContainer) prevContainer.classList.add('visible');
 
-        const preWarmPDFs = (pdfs) => {
-            if (!pdfs || !Array.isArray(pdfs)) return;
-            pdfs.forEach(pdf => {
-                const s = getPDFSettings(pdf.year);
-                const url = `/api/merged-pdf/${encodeURIComponent(pdf.filename)}/${encodeURIComponent(pdf.year)}?subtitle=${encodeURIComponent(pdf.subtitle || s.subtitle || '')}&tagline=${encodeURIComponent(pdf.tagline || s.tagline || '')}&orgName=${encodeURIComponent(pdf.orgName || s.orgName || '')}`;
-                fetch(url).catch(e => {});
-            });
-        };
+        // Preload PDF libraries and logo in background
+        loadPDFLibraries().catch(e => {});
+        loadLogoForCover().then(logo => { if (logo) cachedLogo = logo; }).catch(e => {});
 
         // Instant 0ms cache restore
         try {
@@ -3304,7 +3299,6 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                     const perPage = getPDFsPerPage();
                     const to = Math.min(perPage, uploadedPDFsData.length);
                     grid.innerHTML = renderPDFCards(0, to) + renderPagination();
-                    preWarmPDFs(uploadedPDFsData);
                 }
             }
         } catch(e) {}
@@ -3320,7 +3314,6 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                 const perPage = getPDFsPerPage();
                 const to = Math.min(perPage, uploadedPDFsData.length);
                 grid.innerHTML = renderPDFCards(0, to) + renderPagination();
-                preWarmPDFs(uploadedPDFsData);
             } else {
                 if (!uploadedPDFsData || uploadedPDFsData.length === 0) {
                     grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
@@ -3351,6 +3344,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
     // then merges it with uploaded PDF content via pdf-lib.
 
     function loadLogoForCover() {
+        if (cachedLogo) return Promise.resolve(cachedLogo);
         return new Promise((resolve) => {
             const img = new Image();
             img.crossOrigin = 'anonymous';
@@ -3362,7 +3356,9 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
-                resolve(canvas.toDataURL('image/jpeg', 0.96));
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.96);
+                cachedLogo = dataUrl;
+                resolve(dataUrl);
             };
             img.onerror = () => resolve('');
             img.src = 'logo/pdf_logo.jpeg?v=' + Date.now();
@@ -3542,7 +3538,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         });
     }
 
-    async function generateAndOpenMergedPDF(filename, year, download, pdfSubtitle, pdfTagline, pdfOrgName) {
+    async function generateAndOpenMergedPDF(filename, year, download, pdfSubtitle, pdfTagline, pdfOrgName, targetWindow = null) {
         await loadPDFLibraries();
         window.jsPDF = window.jspdf.jsPDF;
         try {
@@ -3597,30 +3593,42 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 document.body.removeChild(a);
                 setTimeout(() => URL.revokeObjectURL(url), 10000);
             } else {
-                window.open(url, '_blank');
+                if (targetWindow && !targetWindow.closed) {
+                    targetWindow.location.href = url;
+                } else {
+                    window.open(url, '_blank');
+                }
             }
         } catch (error) {
+            if (targetWindow && !targetWindow.closed) targetWindow.close();
             console.error('PDF merge error:', error);
             alert('अहवाल तयार करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.');
         }
     }
 
-    function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+    async function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         if (!filename) return;
-        const url = `/api/merged-pdf/${encodeURIComponent(filename)}/${encodeURIComponent(year)}?subtitle=${encodeURIComponent(subtitle || '')}&tagline=${encodeURIComponent(tagline || '')}&orgName=${encodeURIComponent(orgName || '')}`;
-        window.open(url, '_blank');
+        const originalText = btn ? btn.innerHTML : 'अहवाल पहा';
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
+        const win = window.open('about:blank', '_blank');
+        try {
+            await generateAndOpenMergedPDF(filename, year, false, subtitle, tagline, orgName, win);
+        } catch(e) {
+            if (win && !win.closed) win.close();
+        } finally {
+            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+        }
     }
 
-    function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+    async function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         if (!filename) return;
-        const url = `/api/merged-pdf/${encodeURIComponent(filename)}/${encodeURIComponent(year)}?download=true&subtitle=${encodeURIComponent(subtitle || '')}&tagline=${encodeURIComponent(tagline || '')}&orgName=${encodeURIComponent(orgName || '')}`;
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Ganpati_Cashbook_${year}.pdf`;
-        a.target = '_blank';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        const originalText = btn ? btn.innerHTML : 'अहवाल डाउनलोड करा';
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
+        try {
+            await generateAndOpenMergedPDF(filename, year, true, subtitle, tagline, orgName);
+        } finally {
+            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+        }
     }
     </script>
     <!-- Lightbox Modal for Gallery -->
