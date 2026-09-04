@@ -9,26 +9,42 @@
     // ==========================================
     window.shareToWhatsApp = async function(options) {
         if (!options) return { success: false, reason: 'No options provided' };
-        const text = options.text || '';
+        const text = (options.text || '').trim();
         const file = options.file || null;
         const phone = options.phone || '';
         const title = options.title || 'शेअर करा';
 
         // 1. Mobile Native Share API (Shares BOTH Image File & Text Caption directly into WhatsApp on Mobile Devices)
-        if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        if (file && navigator.canShare) {
+            const shareData = {
+                files: [file],
+                text: text
+            };
+            if (title) shareData.title = title;
+
+            let canShareData = false;
             try {
-                await navigator.share({
-                    title: title,
-                    text: text.trim(),
-                    files: [file]
-                });
-                return { success: true, mode: 'native_share' };
-            } catch (err) {
-                console.log('Native share sheet closed or cancelled:', err);
+                canShareData = navigator.canShare(shareData);
+            } catch(e) {
+                try { canShareData = navigator.canShare({ files: [file] }); } catch(e2) {}
+            }
+
+            if (canShareData) {
+                try {
+                    await navigator.share(shareData);
+                    return { success: true, mode: 'native_share' };
+                } catch (err) {
+                    console.log('Native share error or cancelled:', err);
+                    if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) {
+                        // User closed native share or cancelled - do NOT auto-download poster or open duplicate deep link
+                        return { success: false, reason: err.name };
+                    }
+                }
             }
         }
 
-        // 2. Desktop/Browser Fallback: Auto-download Poster Photo File so user has image ready for WhatsApp
+        // 2. Desktop/Browser Fallback (ONLY for Desktop browsers where Native Share is unsupported):
+        // Auto-download Poster Photo File so user has image ready for WhatsApp, then open WhatsApp web link
         if (file) {
             try {
                 const a = document.createElement('a');
@@ -49,9 +65,9 @@
         const cleanPhone = phone ? phone.replace(/[^0-9]/g, '') : '';
         if (cleanPhone) {
             const p = cleanPhone.startsWith('91') ? cleanPhone : '91' + cleanPhone;
-            url = 'https://api.whatsapp.com/send?phone=' + p + '&text=' + encodeURIComponent(text.trim());
+            url = 'https://api.whatsapp.com/send?phone=' + p + '&text=' + encodeURIComponent(text);
         } else {
-            url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text.trim());
+            url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
         }
 
         try {
