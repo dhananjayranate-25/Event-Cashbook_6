@@ -3625,92 +3625,21 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
-    async function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+    function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         if (!filename) return;
-        const originalText = btn ? btn.innerHTML : 'अहवाल पहा';
-        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
-        const win = window.open('about:blank', '_blank');
-        if (win) {
-            try {
-                win.document.write(`
-                    <!DOCTYPE html>
-                    <html lang="mr">
-                    <head>
-                        <meta charset="UTF-8">
-                        <title>अहवाल उघडत आहे... | शिवसृष्टी बॉईज</title>
-                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <style>
-                            body {
-                                margin: 0;
-                                padding: 0;
-                                height: 100vh;
-                                display: flex;
-                                flex-direction: column;
-                                justify-content: center;
-                                align-items: center;
-                                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-                                color: #ffffff;
-                                font-family: system-ui, -apple-system, sans-serif;
-                                text-align: center;
-                            }
-                            .loader-box {
-                                background: rgba(255, 255, 255, 0.05);
-                                backdrop-filter: blur(10px);
-                                padding: 30px 40px;
-                                border-radius: 16px;
-                                border: 1px solid rgba(255, 255, 255, 0.1);
-                                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                            }
-                            .spinner {
-                                width: 44px;
-                                height: 44px;
-                                border: 4px solid rgba(255, 153, 0, 0.2);
-                                border-left-color: #ff9900;
-                                border-radius: 50%;
-                                animation: spin 0.8s linear infinite;
-                                margin-bottom: 18px;
-                            }
-                            @keyframes spin {
-                                0% { transform: rotate(0deg); }
-                                100% { transform: rotate(360deg); }
-                            }
-                            h3 { margin: 0 0 6px 0; font-size: 19px; color: #ff9900; font-weight: 600; }
-                            p { margin: 0; color: #94a3b8; font-size: 14px; }
-                        </style>
-                    </head>
-                    <body>
-                        <div class="loader-box">
-                            <div class="spinner"></div>
-                            <h3>🚩 शिवसृष्टी बॉईज अहवाल तयार होत आहे...</h3>
-                            <p>कृपया काही क्षण थांबा, अहवाल लोड होत आहे...</p>
-                        </div>
-                    </body>
-                    </html>
-                `);
-                win.document.close();
-            } catch(e) {}
-        }
-        try {
-            await generateAndOpenMergedPDF(filename, year, false, subtitle, tagline, orgName, win);
-        } catch(e) {
-            if (win && !win.closed) win.close();
-        } finally {
-            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
-        }
+        const url = (typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + encodeURIComponent(filename);
+        window.open(url, '_blank');
     }
 
-    async function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+    function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         if (!filename) return;
-        const originalText = btn ? btn.innerHTML : 'अहवाल डाउनलोड करा';
-        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
-        try {
-            await generateAndOpenMergedPDF(filename, year, true, subtitle, tagline, orgName);
-        } finally {
-            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
-        }
+        const url = (typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + encodeURIComponent(filename) + '?download=true';
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Ganpati_Cashbook_${year}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     }
     </script>
     <!-- Lightbox Modal for Gallery -->

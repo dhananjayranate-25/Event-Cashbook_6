@@ -1544,12 +1544,26 @@ app.get('/api/uploaded-pdfs', async (req, res) => {
 
 app.get('/api/cashbook/view/:filename', async (req, res) => {
     try {
-        const pdf = await UploadedPDF.findOne({ filename: req.params.filename });
-        if (!pdf || !pdf.pdfData) return res.status(404).send('PDF not found');
-        const buffer = Buffer.from(pdf.pdfData, 'base64');
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', `inline; filename="${pdf.originalName || pdf.filename}"`);
-        res.send(buffer);
+        const { filename } = req.params;
+        const isDownload = req.query.download === 'true';
+        const disposition = isDownload ? 'attachment' : 'inline';
+        
+        const pdf = await UploadedPDF.findOne({ filename });
+        if (pdf && pdf.pdfData) {
+            const buffer = Buffer.from(pdf.pdfData, 'base64');
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `${disposition}; filename="${encodeURIComponent(pdf.originalName || filename)}"`);
+            return res.send(buffer);
+        }
+        
+        const filePath = path.join(UPLOAD_DIR, filename);
+        if (fs.existsSync(filePath)) {
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `${disposition}; filename="${encodeURIComponent(filename)}"`);
+            return res.sendFile(filePath);
+        }
+        
+        return res.status(404).send('PDF not found');
     } catch (e) {
         res.status(500).send('Error loading PDF');
     }
