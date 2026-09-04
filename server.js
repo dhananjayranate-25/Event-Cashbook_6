@@ -1629,7 +1629,14 @@ app.put('/api/uploaded-pdfs/:filename/visibility', async (req, res) => {
 });
 
 const MERGE_CACHE_DIR = path.join(__dirname, 'merged-cache');
-if (!fs.existsSync(MERGE_CACHE_DIR)) {
+if (fs.existsSync(MERGE_CACHE_DIR)) {
+    try {
+        const files = fs.readdirSync(MERGE_CACHE_DIR);
+        for (const file of files) {
+            fs.unlinkSync(path.join(MERGE_CACHE_DIR, file));
+        }
+    } catch(e) {}
+} else {
     fs.mkdirSync(MERGE_CACHE_DIR, { recursive: true });
 }
 
@@ -1741,7 +1748,9 @@ async function generateMergedPdf(filename, year, subtitle, tagline, orgName) {
         x: nameBoxX + nameBoxWidth - 5, y: nameY, width: 5, height: nameBoxHeight, color: red
     });
 
-    const orgText = (orgName && /^[\x00-\x7F\s]+$/.test(orgName)) ? orgName : 'Shivsrushti Hindu Tarun Mitra Mandal 🚩';
+    const cleanAscii = (str) => (str ? str.replace(/[^\x20-\x7E]/g, '').trim() : '');
+    const cleanOrg = cleanAscii(orgName);
+    const orgText = cleanOrg || 'Shivsrushti Sarvajanik Utsav Mandal';
     page.drawText(orgText, {
         x: cx - 70, y: nameY + 15, size: 20,
         color: gold
@@ -1752,8 +1761,10 @@ async function generateMergedPdf(filename, year, subtitle, tagline, orgName) {
     page.drawRectangle({ x: cx - 70, y: div1Y - 3, width: 140, height: 1, color: gold });
 
     const festY = nameY - 50;
-    const bookText = (subtitle && /^[\x00-\x7F\s]+$/.test(subtitle)) ? subtitle : 'GANPATI FESTIVAL CASHBOOK';
-    const tagText = (tagline && /^[\x00-\x7F\s]+$/.test(tagline)) ? tagline : 'Ganpati Festival Cashbook';
+    const cleanSub = cleanAscii(subtitle);
+    const bookText = cleanSub || 'GANPATI FESTIVAL CASHBOOK';
+    const cleanTag = cleanAscii(tagline);
+    const tagText = cleanTag || 'Ganpati Festival Cashbook';
     page.drawText(bookText, {
         x: cx - 100, y: festY + 18, size: 18,
         color: saffron
