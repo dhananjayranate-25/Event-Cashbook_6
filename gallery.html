@@ -1311,7 +1311,7 @@ function openAartiPdfModal(rawUrl) {
         const directLink = document.getElementById('aartiPdfDirectLink');
         
         let viewUrl = cleanUrl;
-        if (cleanUrl.startsWith('http')) {
+        if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
             viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
         }
         

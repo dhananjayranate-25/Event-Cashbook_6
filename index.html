@@ -2431,13 +2431,10 @@ const regNoElem = document.getElementById('displayRegNo');
             let finalLink = '#';
             if (pUrl) {
                 let cleanUrl = String(pUrl).replace('/image/upload/fl_inline/', '/image/upload/').trim();
-                if (cleanUrl.startsWith('http')) {
-                    // Use Google Docs Viewer for Cloudinary or external PDFs to ensure 100% smooth rendering
-                    finalLink = 'https://drive.google.com/viewerng/viewer?embedded=true&url=' + encodeURIComponent(cleanUrl);
-                } else {
-                    if (!cleanUrl.startsWith('/')) cleanUrl = '/' + cleanUrl;
-                    finalLink = cleanUrl;
+                if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('/')) {
+                    cleanUrl = '/' + cleanUrl;
                 }
+                finalLink = cleanUrl;
             }
             if (aartiPdfLink) {
                 aartiPdfLink.href = pUrl || '#';
@@ -3512,7 +3509,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         const directLink = document.getElementById('aartiPdfDirectLink');
         
         let viewUrl = cleanUrl;
-        if (cleanUrl.startsWith('http')) {
+        if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
             viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
         }
         
@@ -4808,7 +4805,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         const directLink = document.getElementById('aartiPdfDirectLink');
         
         let viewUrl = cleanUrl;
-        if (cleanUrl.startsWith('http')) {
+        if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
             viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
         }
         
