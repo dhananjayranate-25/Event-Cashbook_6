@@ -3940,17 +3940,9 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         if (appealRawText) {
             const appealParas = appealRawText.trim().split('\n\n');
             let appealHtml = '<div style="margin: 12px auto 20px auto; max-width: 840px; width: 94%; padding: 22px 28px; background: linear-gradient(145deg, rgba(20, 4, 30, 0.94), rgba(10, 1, 16, 0.98)); border: 5px double #ffd700; border-radius: 18px; text-align: center; position: relative; z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.6);">';
-            appealParas.forEach((p, idx) => {
-                const lines = p.trim().split('\n');
-                const lineHtmls = lines.map(line => {
-                    const isYellow = /स्थळ|दिनांक|वेळ|📍|🗓️|🕔|किमान|आपला सहभाग|आपले सहकार्य|आपले योगदान|गणेशाय नमः|हर हर महादेव/i.test(line);
-                    const textColor = isYellow ? '#ffeb3b' : '#ffffff';
-                    const textShadow = isYellow ? '0 0 10px rgba(255,235,59,0.4)' : '0 1px 4px rgba(0,0,0,0.9)';
-                    const fontWeight = isYellow ? '800' : '700';
-                    return `<span style="color: ${textColor}; font-weight: ${fontWeight}; text-shadow: ${textShadow}; display: inline-block;">${line}</span>`;
-                }).join('<br>');
-
-                appealHtml += `<p style="margin-bottom: 8px; font-size: 26px; line-height: 1.5; font-family: 'Noto Sans Devanagari', sans-serif;">${lineHtmls}</p>`;
+            appealParas.forEach((p) => {
+                const cleanP = p.trim().replace(/\n/g, '<br>');
+                appealHtml += `<p style="color: #ffffff; font-weight: 700; font-size: 26px; margin-bottom: 8px; line-height: 1.5; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${cleanP}</p>`;
             });
             appealHtml += '</div>';
             clone.insertAdjacentHTML('beforeend', appealHtml);
@@ -4298,16 +4290,8 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         const customParas = customText.trim().split('\n\n');
         let customContentHtml = '';
         customParas.forEach((p) => {
-            const lines = p.trim().split('\n');
-            const lineHtmls = lines.map(line => {
-                const isYellow = /स्थळ|दिनांक|वेळ|📍|🗓️|🕔|किमान/i.test(line);
-                const textColor = isYellow ? '#ffeb3b' : '#ffffff';
-                const textShadow = isYellow ? '0 0 10px rgba(255,235,59,0.4)' : '0 1px 4px rgba(0,0,0,0.9)';
-                const fontWeight = isYellow ? '800' : '700';
-                return `<span style="color: ${textColor}; font-weight: ${fontWeight}; text-shadow: ${textShadow}; display: inline-block;">${line}</span>`;
-            }).join('<br>');
-
-            customContentHtml += `<p style="margin-bottom: 12px; font-size: 26px; line-height: 1.5; font-family: 'Noto Sans Devanagari', sans-serif;">${lineHtmls}</p>`;
+            const cleanP = p.trim().replace(/\n/g, '<br>');
+            customContentHtml += `<p style="color: #ffffff; font-weight: 700; font-size: 26px; margin-bottom: 12px; line-height: 1.5; font-family: 'Noto Sans Devanagari', sans-serif; text-shadow: 0 1px 4px rgba(0,0,0,0.9);">${cleanP}</p>`;
         });
 
         // Add corner accents to the content box
