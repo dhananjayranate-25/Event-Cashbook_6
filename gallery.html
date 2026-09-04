@@ -471,8 +471,6 @@
                         });
                     });
                 }
-                
-                loadGalleryAlbums();
         
     async function loadFooterQR() {
         try {
@@ -814,6 +812,9 @@
     </footer>
 
 <script>
+    // Memory RAM cache initialized globally
+    window.galleryPhotosMemoryCache = window.galleryPhotosMemoryCache || {};
+
     const DEFAULT_ALBUMS = [
         { _id: '2025', title: 'गणपती छायाचित्रे 2025', photosCount: 0, coverPhoto: 'logo/logo.jpeg' },
         { _id: '2024', title: 'गणपती छायाचित्रे 2024', photosCount: 0, coverPhoto: 'logo/logo.jpeg' }
@@ -829,14 +830,23 @@
         }
     } catch(e) {}
 
+    // Cloudinary thumbnail URL optimizer (converts heavy Cloudinary images into fast 600px WebP thumbnails)
+    function getThumbnailUrl(url) {
+        if (!url) return 'logo/logo.jpeg';
+        if (typeof url === 'string' && url.includes('res.cloudinary.com') && url.includes('/upload/') && !url.includes('/upload/f_auto')) {
+            return url.replace('/upload/', '/upload/f_auto,q_auto,w_600,c_limit/');
+        }
+        return url;
+    }
+
     function renderAlbumsHTML(albums) {
         if (!albums || albums.length === 0) {
             return '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">कोणतेही अल्बम उपलब्ध नाहीत.</p>';
         }
         return albums.map(album => {
-            const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
+            const coverPhoto = getThumbnailUrl(album.coverPhoto || 'logo/logo.jpeg');
             return `
-                <div class="album-card" onclick="openAlbum('${album._id}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+                <div class="album-card" onclick="openAlbum('${album._id}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); display: flex; flex-direction: column; width: 100%; box-sizing: border-box; touch-action: manipulation;">
                     <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
                         <img src="${coverPhoto}" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
@@ -853,37 +863,64 @@
         if (!photos || photos.length === 0) {
             return '<p style="text-align: center; color: white; width: 100%; grid-column: 1 / -1;">या अल्बममध्ये कोणतेही फोटो नाहीत.</p>';
         }
-        return photos.map(photo => `
-            <div class="album-card photo-card" onclick="openLightbox('${photo.photoData}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.35); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); width: 100%; box-sizing: border-box;">
-                <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
-                    <img src="${photo.photoData}" onerror="this.src='logo/logo.jpeg'; this.onerror=null;" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" loading="eager" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+        return photos.map(photo => {
+            const fullSrc = photo.photoData || 'logo/logo.jpeg';
+            const thumbSrc = getThumbnailUrl(fullSrc);
+            const escapedFullSrc = fullSrc.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            return `
+                <div class="album-card photo-card" onclick="openLightbox('${escapedFullSrc}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.35); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); width: 100%; box-sizing: border-box; touch-action: manipulation;">
+                    <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
+                        <img src="${thumbSrc}" onerror="this.src='logo/logo.jpeg'; this.onerror=null;" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" loading="eager" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
-    async function prefetchAlbumPhotos(albums) {
-        if (!albums || albums.length === 0) return;
-        for (const album of albums) {
-            try {
-                const key = 'gallery_photos_' + album._id;
-                const cached = window.galleryPhotosMemoryCache[album._id] || localStorage.getItem(key) || sessionStorage.getItem(key);
-                if (!cached) {
-                    const res = await fetch(`/api/gallery/album/${album._id}/photos`);
-                    const data = await res.json();
-                    if (data.success && data.photos) {
-                        window.galleryPhotosMemoryCache[album._id] = data.photos;
+    // Parallel Background Prefetch for 0ms instant photo display
+    function prefetchAlbumPhotos(albums) {
+        if (!albums || !Array.isArray(albums) || albums.length === 0) return;
+        albums.forEach(album => {
+            if (!album || !album._id) return;
+            const albumId = album._id;
+            const key = 'gallery_photos_' + albumId;
+
+            // 1. Populate RAM from localStorage/sessionStorage immediately
+            if (!window.galleryPhotosMemoryCache[albumId]) {
+                try {
+                    const cachedStr = localStorage.getItem(key) || sessionStorage.getItem(key);
+                    if (cachedStr) {
+                        window.galleryPhotosMemoryCache[albumId] = JSON.parse(cachedStr);
+                    }
+                } catch(e) {}
+            }
+
+            // 2. Launch background fetch to ensure RAM & Storage have freshest server photos
+            fetch(`/api/gallery/album/${albumId}/photos`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && Array.isArray(data.photos)) {
+                        window.galleryPhotosMemoryCache[albumId] = data.photos;
                         try {
                             localStorage.setItem(key, JSON.stringify(data.photos));
                             sessionStorage.setItem(key, JSON.stringify(data.photos));
                         } catch(e) {}
+
+                        // If user is currently viewing this album, update photos grid smoothly
+                        if (currentViewingAlbumId === albumId) {
+                            const photosGrid = document.getElementById('photosGrid');
+                            if (photosGrid) {
+                                photosGrid.innerHTML = renderPhotosHTML(data.photos);
+                            }
+                        }
                     }
-                } else if (typeof cached === 'string') {
-                    try { window.galleryPhotosMemoryCache[album._id] = JSON.parse(cached); } catch(e) {}
-                }
-            } catch(e) {}
-        }
+                })
+                .catch(e => console.error('Prefetch error for album:', albumId, e));
+        });
     }
+
+    // Trigger immediate prefetch for default albums as soon as script evaluates!
+    prefetchAlbumPhotos(DEFAULT_ALBUMS);
 
     async function loadGalleryAlbums() {
         const grid = document.getElementById('albumsGrid');
@@ -941,7 +978,12 @@
     }
 
     async function openAlbum(albumId) {
-        const album = galleryAlbumsCache.find(a => a._id === albumId) || { title: 'गणपती छायाचित्रे' };
+        window.galleryPhotosMemoryCache = window.galleryPhotosMemoryCache || {};
+        
+        const album = galleryAlbumsCache.find(a => a._id === albumId) || { 
+            _id: albumId,
+            title: albumId === '2025' ? 'गणपती छायाचित्रे 2025' : (albumId === '2024' ? 'गणपती छायाचित्रे 2024' : 'गणपती छायाचित्रे') 
+        };
 
         currentViewingAlbumId = albumId;
         const albumsGrid = document.getElementById('albumsGrid');
@@ -954,9 +996,13 @@
             photosView.style.display = 'block';
         }
 
-        document.getElementById('currentAlbumTitle').innerText = album.title;
+        const titleElem = document.getElementById('currentAlbumTitle');
+        if (titleElem) {
+            titleElem.innerText = album.title;
+        }
 
         const photosGrid = document.getElementById('photosGrid');
+        if (!photosGrid) return;
         
         const isMobile = window.innerWidth <= 600;
         const isTablet = window.innerWidth > 600 && window.innerWidth <= 992;
@@ -965,8 +1011,10 @@
         photosGrid.style.setProperty('grid-template-columns', cols, 'important');
 
         let hasCache = false;
+        const cacheKey = 'gallery_photos_' + albumId;
+        
+        // Instant 0ms render from RAM memory cache or localStorage
         try {
-            const cacheKey = 'gallery_photos_' + albumId;
             let photos = window.galleryPhotosMemoryCache[albumId];
             if (!photos) {
                 const cachedStr = localStorage.getItem(cacheKey) || sessionStorage.getItem(cacheKey);
@@ -975,32 +1023,40 @@
                     window.galleryPhotosMemoryCache[albumId] = photos;
                 }
             }
-            if (photos && photos.length >= 0) {
+            if (photos && Array.isArray(photos) && photos.length > 0) {
                 photosGrid.innerHTML = renderPhotosHTML(photos);
                 hasCache = true;
             }
-        } catch(e) {}
+        } catch(e) {
+            console.error('Error reading photo cache:', e);
+        }
 
+        // Show temporary text ONLY if there is zero cache
         if (!hasCache) {
             photosGrid.innerHTML = '<p style="text-align:center; color:#ffd700; width:100%; grid-column:1/-1;">फोटो लोड होत आहेत... कृपया प्रतीक्षा करा...</p>';
         }
         
+        // Fetch fresh photos in background / foreground
         try {
             const res = await fetch(`/api/gallery/album/${albumId}/photos`);
             const data = await res.json();
             
-            if (data.success) {
+            if (data.success && Array.isArray(data.photos)) {
+                window.galleryPhotosMemoryCache[albumId] = data.photos;
                 try {
-                    const cacheKey = 'gallery_photos_' + albumId;
                     localStorage.setItem(cacheKey, JSON.stringify(data.photos));
                     sessionStorage.setItem(cacheKey, JSON.stringify(data.photos));
                 } catch(e) {}
-                photosGrid.innerHTML = renderPhotosHTML(data.photos);
+                
+                // Re-render only if current album view is still this album
+                if (currentViewingAlbumId === albumId) {
+                    photosGrid.innerHTML = renderPhotosHTML(data.photos);
+                }
             } else if (!hasCache) {
                 photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी: ' + (data.error || 'अज्ञात त्रुटी') + '</p>';
             }
         } catch(e) {
-            console.error(e);
+            console.error('Error fetching album photos:', e);
             if (!hasCache) {
                 photosGrid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">फोटो लोड करण्यात त्रुटी आली.</p>';
             }
@@ -1034,6 +1090,9 @@
     function closeLightbox() {
         document.getElementById('lightbox').style.display = 'none';
     }
+
+    // Initialize gallery albums on load
+    loadGalleryAlbums();
 </script>
 
     <!-- Lightbox Modal for Gallery -->
