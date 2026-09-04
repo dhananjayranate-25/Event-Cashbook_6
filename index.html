@@ -3300,6 +3300,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                     const to = Math.min(perPage, uploadedPDFsData.length);
                     grid.innerHTML = renderPDFCards(0, to) + renderPagination();
                     prefetchPDFBuffers(uploadedPDFsData);
+                    preGenerateAllMergedPDFs(uploadedPDFsData);
                 }
             }
         } catch(e) {}
@@ -3316,6 +3317,7 @@ return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" c
                 const to = Math.min(perPage, uploadedPDFsData.length);
                 grid.innerHTML = renderPDFCards(0, to) + renderPagination();
                 prefetchPDFBuffers(uploadedPDFsData);
+                preGenerateAllMergedPDFs(uploadedPDFsData);
             } else {
                 if (!uploadedPDFsData || uploadedPDFsData.length === 0) {
                     grid.innerHTML = '<div class="year-selector-container" style="justify-content:center; padding: 35px 20px; text-align:center; width:100%; box-sizing:border-box; grid-column: 1 / -1; margin: 0 auto; animation: none !important; transform: none !important;"><p style="font-weight:600; color:#ffffff !important; font-size: 16px; margin: 0; width: 100%;">सदर माहिती अद्ययावत करण्यात येत असून, लवकरच उपलब्ध करून देण्यात येईल..!!!</p></div>';
@@ -3512,6 +3514,7 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
 
     let cachedLogo = '';
     const pdfBufferCache = new Map();
+    const mergedPDFBlobCache = new Map();
 
     function prefetchPDFBuffers(pdfs) {
         if (!pdfs || !Array.isArray(pdfs)) return;
@@ -3523,6 +3526,24 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                     .catch(e => {});
             }
         });
+    }
+
+    async function preGenerateAllMergedPDFs(pdfs) {
+        if (!pdfs || !Array.isArray(pdfs)) return;
+        for (const pdf of pdfs) {
+            if (pdf.filename && !mergedPDFBlobCache.has(pdf.filename)) {
+                try {
+                    const s = getPDFSettings(pdf.year);
+                    await getOrGenerateMergedPDF(
+                        pdf.filename,
+                        pdf.year,
+                        pdf.subtitle || s.subtitle || '',
+                        pdf.tagline || s.tagline || '',
+                        pdf.orgName || s.orgName || ''
+                    );
+                } catch(e) {}
+            }
+        }
     }
 
     async function loadPDFLibraries() {
@@ -3552,57 +3573,66 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         });
     }
 
-    async function generateAndOpenMergedPDF(filename, year, download, pdfSubtitle, pdfTagline, pdfOrgName, targetWindow = null) {
+    async function getOrGenerateMergedPDF(filename, year, pdfSubtitle, pdfTagline, pdfOrgName) {
+        if (mergedPDFBlobCache.has(filename)) {
+            return mergedPDFBlobCache.get(filename);
+        }
         await loadPDFLibraries();
         window.jsPDF = window.jspdf.jsPDF;
+        
+        const logoDataURL = await loadLogoForCover();
+        const coverHTML = createCoverHTML(year, logoDataURL, pdfSubtitle, pdfTagline, pdfOrgName);
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'absolute';
+        iframe.style.left = '-9999px';
+        iframe.style.top = '-9999px';
+        iframe.style.width = '794px';
+        iframe.style.height = '1123px';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+        iframe.contentDocument.write(coverHTML);
+        iframe.contentDocument.close();
+        const imgs = iframe.contentDocument.querySelectorAll('img');
+        await Promise.all([...imgs].map(img => new Promise(r => {
+            if (img.complete) r(); else { img.onload = r; img.onerror = r; setTimeout(r, 1000); }
+        })));
+        try { await iframe.contentDocument.fonts.ready; } catch(e) {}
+        await new Promise(r => setTimeout(r, 100));
+        const canvas = await html2canvas(iframe.contentDocument.body, {
+            scale: 2.0, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true, logging: false
+        });
+        document.body.removeChild(iframe);
+        
+        let uploadBytes;
+        if (pdfBufferCache.has(filename)) {
+            uploadBytes = pdfBufferCache.get(filename).slice(0);
+        } else {
+            const resp = await fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + filename);
+            uploadBytes = await resp.arrayBuffer();
+        }
+        
+        const { PDFDocument } = window.PDFLib;
+        const mergedPdf = await PDFDocument.create();
+        
+        const coverPage = mergedPdf.addPage([595.28, 841.89]);
+        const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.96));
+        coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
+        
+        const existingPdf = await PDFDocument.load(uploadBytes);
+        const indices = existingPdf.getPageIndices();
+        const uPgs = await mergedPdf.copyPages(existingPdf, indices);
+        uPgs.forEach(p => mergedPdf.addPage(p));
+        
+        const mergedBytes = await mergedPdf.save({ useObjectStreams: false });
+        const blob = new Blob([mergedBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        mergedPDFBlobCache.set(filename, url);
+        return url;
+    }
+
+    async function generateAndOpenMergedPDF(filename, year, download, pdfSubtitle, pdfTagline, pdfOrgName, targetWindow = null) {
         try {
-            const logoDataURL = await loadLogoForCover();
-            const coverHTML = createCoverHTML(year, logoDataURL, pdfSubtitle, pdfTagline, pdfOrgName);
-            const iframe = document.createElement('iframe');
-            iframe.style.position = 'absolute';
-            iframe.style.left = '-9999px';
-            iframe.style.top = '-9999px';
-            iframe.style.width = '794px';
-            iframe.style.height = '1123px';
-            iframe.style.border = 'none';
-            document.body.appendChild(iframe);
-            iframe.contentDocument.write(coverHTML);
-            iframe.contentDocument.close();
-            const imgs = iframe.contentDocument.querySelectorAll('img');
-            await Promise.all([...imgs].map(img => new Promise(r => {
-                if (img.complete) r(); else { img.onload = r; img.onerror = r; setTimeout(r, 1000); }
-            })));
-            try { await iframe.contentDocument.fonts.ready; } catch(e) {}
-            await new Promise(r => setTimeout(r, 100));
-            const canvas = await html2canvas(iframe.contentDocument.body, {
-                scale: 2.0, windowWidth: 794, width: 794, useCORS: true, backgroundColor: '#ffffff', allowTaint: true, logging: false
-            });
-            document.body.removeChild(iframe);
-            
-            let uploadBytes;
-            if (pdfBufferCache.has(filename)) {
-                uploadBytes = pdfBufferCache.get(filename).slice(0);
-            } else {
-                const resp = await fetch((typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + filename);
-                uploadBytes = await resp.arrayBuffer();
-            }
-            
-            const { PDFDocument } = window.PDFLib;
-            const mergedPdf = await PDFDocument.create();
-            
-            const coverPage = mergedPdf.addPage([595.28, 841.89]);
-            const coverImage = await mergedPdf.embedJpg(canvas.toDataURL('image/jpeg', 0.96));
-            coverPage.drawImage(coverImage, { x: 0, y: 0, width: 595.28, height: 841.89 });
-            
-            const existingPdf = await PDFDocument.load(uploadBytes);
-            const indices = existingPdf.getPageIndices();
-            const uPgs = await mergedPdf.copyPages(existingPdf, indices);
-            uPgs.forEach(p => mergedPdf.addPage(p));
-            
-            const mergedBytes = await mergedPdf.save({ useObjectStreams: false });
-            const blob = new Blob([mergedBytes], { type: 'application/pdf' });
-            const url = URL.createObjectURL(blob);
-            
+            const url = await getOrGenerateMergedPDF(filename, year, pdfSubtitle, pdfTagline, pdfOrgName);
             if (download) {
                 const a = document.createElement('a');
                 a.href = url;
@@ -3610,7 +3640,6 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-                setTimeout(() => URL.revokeObjectURL(url), 10000);
             } else {
                 if (targetWindow && !targetWindow.closed) {
                     targetWindow.location.href = url;
@@ -3625,21 +3654,42 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
         }
     }
 
-    function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+    async function viewPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         if (!filename) return;
-        const url = (typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + encodeURIComponent(filename);
-        window.open(url, '_blank');
+        if (mergedPDFBlobCache.has(filename)) {
+            window.open(mergedPDFBlobCache.get(filename), '_blank');
+            return;
+        }
+        const originalText = btn ? btn.innerHTML : 'अहवाल पहा';
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
+        const win = window.open('about:blank', '_blank');
+        try {
+            await generateAndOpenMergedPDF(filename, year, false, subtitle, tagline, orgName, win);
+        } catch(e) {
+            if (win && !win.closed) win.close();
+        } finally {
+            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+        }
     }
 
-    function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
+    async function downloadPDFHome(filename, year, subtitle, tagline, orgName, btn) {
         if (!filename) return;
-        const url = (typeof API_URL !== 'undefined' ? API_URL : '') + '/api/cashbook/view/' + encodeURIComponent(filename) + '?download=true';
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Ganpati_Cashbook_${year}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        if (mergedPDFBlobCache.has(filename)) {
+            const a = document.createElement('a');
+            a.href = mergedPDFBlobCache.get(filename);
+            a.download = `Ganpati_Cashbook_${year}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            return;
+        }
+        const originalText = btn ? btn.innerHTML : 'अहवाल डाउनलोड करा';
+        if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> कृपया थांबा...'; btn.disabled = true; }
+        try {
+            await generateAndOpenMergedPDF(filename, year, true, subtitle, tagline, orgName);
+        } finally {
+            if (btn) { btn.innerHTML = originalText; btn.disabled = false; }
+        }
     }
     </script>
     <!-- Lightbox Modal for Gallery -->
