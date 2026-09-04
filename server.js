@@ -1524,13 +1524,20 @@ app.get('/api/uploaded-pdfs', async (req, res) => {
     try {
         const finalPdfs = await UploadedPDF.find({}).sort({ year: -1, uploadedAt: -1 });
         const pdfList = finalPdfs.map(p => {
+            let rawOrg = p.orgName || 'शिवसृष्टी हिंदू तरुण मित्र मंडळ';
+            rawOrg = rawOrg.replace(/शिवसृष्टी सार्वजनिक (नवरात्री )?उत्सव मंडळ/g, 'शिवसृष्टी हिंदू तरुण मित्र मंडळ')
+                           .replace(/शिवसृष्टी सार्वजनिक उत्सव मंडळ/g, 'शिवसृष्टी हिंदू तरुण मित्र मंडळ')
+                           .replace(/सार्वजनिक (नवरात्री )?उत्सव मंडळ/g, 'हिंदू तरुण मित्र मंडळ');
+            if (!rawOrg.includes('हिंदू तरुण मित्र')) {
+                rawOrg = 'शिवसृष्टी हिंदू तरुण मित्र मंडळ';
+            }
             return {
                 filename: p.filename,
                 year: p.year,
                 displayName: p.originalName || p.filename,
                 subtitle: p.subtitle || '',
                 tagline: p.tagline || '',
-                orgName: p.orgName || '',
+                orgName: rawOrg,
                 showOnHome: p.showOnHome !== false,
                 uploadedAt: p.uploadedAt ? new Date(p.uploadedAt).toLocaleDateString('en-IN', {
                     day: '2-digit', month: 'short', year: 'numeric',

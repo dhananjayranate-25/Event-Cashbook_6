@@ -889,12 +889,19 @@ return '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cashbook ' + yea
         const slice = uploadedPDFsData.slice(from, to);
         return slice.map((pdf, idx) => {
             const s = getPDFSettings(pdf.year);
-            const pOrg = pdf.orgName || s.orgName;
+            let rawOrg = (pdf.orgName || s.orgName || "शिवसृष्टी हिंदू तरुण मित्र मंडळ");
+            rawOrg = rawOrg.replace(/शिवसृष्टी सार्वजनिक (नवरात्री )?उत्सव मंडळ/g, 'शिवसृष्टी हिंदू तरुण मित्र मंडळ')
+                           .replace(/शिवसृष्टी सार्वजनिक उत्सव मंडळ/g, 'शिवसृष्टी हिंदू तरुण मित्र मंडळ')
+                           .replace(/सार्वजनिक (नवरात्री )?उत्सव मंडळ/g, 'हिंदू तरुण मित्र मंडळ');
+            if (!rawOrg.includes('हिंदू तरुण मित्र')) {
+                rawOrg = "शिवसृष्टी हिंदू तरुण मित्र मंडळ";
+            }
+            const pOrg = rawOrg.replace(/संगमनेर.*$/, "").trim() || "शिवसृष्टी हिंदू तरुण मित्र मंडळ";
             const pSub = pdf.subtitle || s.subtitle;
             const pTag = pdf.tagline || s.tagline;
             const escSub = (pdf.subtitle || '').replace(/'/g, "\\'");
             const escTag = (pdf.tagline || '').replace(/'/g, "\\'");
-            const escOrg = (pdf.orgName || '').replace(/'/g, "\\'");
+            const escOrg = (rawOrg || '').replace(/'/g, "\\'");
             return `
             <div class="pdf-card-home" style="animation-delay: ${idx * 0.1}s">
                 <div class="pdf-card-cover-mini">
