@@ -619,8 +619,16 @@ app.post('/api/gallery/album/:id/photos', (req, res) => {
             
             const newPhotos = [];
             for (const file of req.files) {
-                const relPath = '/uploads/' + file.filename;
-                const photo = new GalleryPhoto({ albumId: album._id, photoData: relPath });
+                let photoUrl = '/uploads/' + file.filename;
+                try {
+                    if (typeof cloudinary !== 'undefined' && cloudinary.uploader) {
+                        const cRes = await cloudinary.uploader.upload(file.path, { folder: 'gallery' });
+                        if (cRes && cRes.secure_url) photoUrl = cRes.secure_url;
+                    }
+                } catch(ce) {
+                    console.warn('Cloudinary gallery upload fallback to local path:', ce.message);
+                }
+                const photo = new GalleryPhoto({ albumId: album._id, photoData: photoUrl });
                 await photo.save();
                 newPhotos.push(photo);
             }
