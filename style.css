@@ -5929,18 +5929,28 @@ html, body {
 @media (max-width: 600px) {
     #photosGrid, #albumsGrid, .gallery-responsive-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
+        gap: 12px !important;
+        padding: 0 2px !important;
+    }
+    .album-card {
+        border-radius: 12px !important;
     }
     .album-card .card-img-wrapper {
-        height: 125px !important;
+        height: 120px !important;
     }
-    .album-card h3 {
-        font-size: 0.95rem !important;
+    .album-card h3, .album-title-text {
+        font-size: 0.85rem !important;
+        line-height: 1.25 !important;
+        word-break: keep-all !important;
+        overflow-wrap: break-word !important;
+        hyphens: none !important;
+        padding: 0 2px !important;
     }
-    .album-card p {
-        font-size: 0.78rem !important;
+    .album-card p, .album-count-text {
+        font-size: 0.75rem !important;
+        margin-top: 2px !important;
     }
     .album-card .card-info-wrapper {
-        padding: 8px 5px !important;
+        padding: 8px 4px !important;
     }
 }

@@ -177,19 +177,29 @@
         @media (max-width: 600px) {
             #photosGrid, #albumsGrid, .gallery-responsive-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px !important;
+                gap: 12px !important;
+                padding: 0 2px !important;
+            }
+            .album-card {
+                border-radius: 12px !important;
             }
             .album-card .card-img-wrapper {
-                height: 125px !important;
+                height: 120px !important;
             }
-            .album-card h3 {
-                font-size: 0.95rem !important;
+            .album-card h3, .album-title-text {
+                font-size: 0.85rem !important;
+                line-height: 1.25 !important;
+                word-break: keep-all !important;
+                overflow-wrap: break-word !important;
+                hyphens: none !important;
+                padding: 0 2px !important;
             }
-            .album-card p {
-                font-size: 0.78rem !important;
+            .album-card p, .album-count-text {
+                font-size: 0.75rem !important;
+                margin-top: 2px !important;
             }
             .album-card .card-info-wrapper {
-                padding: 8px 5px !important;
+                padding: 8px 4px !important;
             }
         }
         .album-card {
@@ -736,12 +746,12 @@
             const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
             return `
                 <div class="album-card" onclick="openAlbum('${album._id}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
-                    <div class="card-img-wrapper" style="width: 100%; height: 180px; position: relative; overflow: hidden; background:#000;">
+                    <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
                         <img src="${coverPhoto}" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
-                    <div class="card-info-wrapper" style="padding: 12px 10px; text-align: center; background: rgba(0,0,0,0.35);">
-                        <h3 style="color: #ffd700; margin: 0 0 4px 0; font-size: 1.15rem; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.3px; text-shadow: 0 2px 4px rgba(0,0,0,0.6);">${album.title}</h3>
-                        <p style="color: #cbd5e1; margin: 0; font-size: 0.9rem; font-weight: 600;">📷 ${album.photosCount || 0} छायाचित्रे</p>
+                    <div class="card-info-wrapper" style="padding: 10px 6px; text-align: center; background: rgba(0,0,0,0.35);">
+                        <h3 class="album-title-text" style="color: #ffd700; margin: 0 0 4px 0; font-weight: 800; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; letter-spacing: 0.3px; text-shadow: 0 2px 4px rgba(0,0,0,0.6); word-break: keep-all; overflow-wrap: break-word; hyphens: none;">${album.title}</h3>
+                        <p class="album-count-text" style="color: #cbd5e1; margin: 0; font-weight: 600;">📷 ${album.photosCount || 0} छायाचित्रे</p>
                     </div>
                 </div>
             `;
@@ -754,7 +764,7 @@
         }
         return photos.map(photo => `
             <div class="album-card photo-card" onclick="openLightbox('${photo.photoData}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.35); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease; box-shadow: 0 6px 16px rgba(0,0,0,0.5); width: 100%; box-sizing: border-box;">
-                <div class="card-img-wrapper" style="width: 100%; height: 180px; position: relative; overflow: hidden; background:#000;">
+                <div class="card-img-wrapper" style="width: 100%; position: relative; overflow: hidden; background:#000;">
                     <img src="${photo.photoData}" onerror="this.src='logo/logo.jpeg'; this.onerror=null;" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" loading="eager" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                 </div>
             </div>
