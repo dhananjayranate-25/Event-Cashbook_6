@@ -163,21 +163,21 @@
 
         #photosGrid, #albumsGrid, .gallery-responsive-grid {
             display: grid !important;
-            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)) !important;
-            gap: 25px !important;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important;
+            gap: 20px !important;
             width: 100% !important;
             box-sizing: border-box !important;
         }
         @media (min-width: 1024px) {
             #photosGrid, #albumsGrid, .gallery-responsive-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
-                gap: 28px !important;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+                gap: 24px !important;
             }
         }
         @media (max-width: 600px) {
             #photosGrid, #albumsGrid, .gallery-responsive-grid {
-                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
-                gap: 15px !important;
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+                gap: 12px !important;
             }
         }
         .album-card {
@@ -585,7 +585,7 @@
                             </div>
                             <h3 id="currentAlbumTitle" style="color: #ffeb3b; margin: 0; font-size: 1.35rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-align: center; width: 100%; word-break: break-word; letter-spacing: 0.5px;"></h3>
                         </div>
-                        <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)) !important; gap: 25px !important; width: 100% !important;">
+                        <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)) !important; gap: 20px !important; width: 100% !important;">
                             <!-- Photos will be injected here -->
                         </div>
                     </div>
@@ -742,7 +742,7 @@
             const coverPhoto = album.coverPhoto || 'logo/logo.jpeg';
             return `
                 <div class="album-card" onclick="openAlbum('${album._id}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.4); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-                    <div style="width: 100%; height: 240px; position: relative; overflow: hidden; background:#000;">
+                    <div style="width: 100%; height: 190px; position: relative; overflow: hidden; background:#000;">
                         <img src="${coverPhoto}" onerror="this.onerror=null; this.src='logo/logo.jpeg';" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
                     <div style="padding: 18px 15px; text-align: center; background: rgba(0,0,0,0.3);">
@@ -760,7 +760,7 @@
         }
         return photos.map(photo => `
             <div class="album-card photo-card" onclick="openLightbox('${photo.photoData}')" style="background: linear-gradient(145deg, rgba(35, 10, 45, 0.9), rgba(15, 3, 22, 0.95)); border: 2px solid rgba(255, 215, 0, 0.35); border-radius: 18px; overflow: hidden; cursor: pointer; transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-                <div style="width: 100%; height: 260px; position: relative; overflow: hidden; background:#000;">
+                <div style="width: 100%; height: 190px; position: relative; overflow: hidden; background:#000;">
                     <img src="${photo.photoData}" onerror="this.src='logo/logo.jpeg'; this.onerror=null;" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" decoding="async" fetchpriority="high" loading="eager" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                 </div>
             </div>
