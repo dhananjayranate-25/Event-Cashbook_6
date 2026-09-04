@@ -5886,3 +5886,28 @@ html, body {
     transform: scale(0.98) !important;
     transition: transform 0.05s ease, opacity 0.05s ease !important;
 }
+
+/* ==========================================
+   MOBILE HIGH-PERFORMANCE ZERO-LAG OVERRIDES
+   ========================================== */
+@media (max-width: 768px) {
+    *, *::before, *::after {
+        -webkit-tap-highlight-color: transparent !important;
+        touch-action: manipulation;
+    }
+    /* Disable GPU-heavy backdrop blur on mobile for 60fps-120fps silky smooth rendering */
+    .glass-panel, .utsav-poster-card, .utsav-card, .committee-member, .donation-card, 
+    .pdf-card-home, .about-photo-card, .about-details-card, .year-section, 
+    .custom-header, .custom-navbar, .nav-links, .modal-content, .admin-card {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        transform: translateZ(0);
+    }
+    /* Fast GPU Composite layers */
+    #heroSectionContainer, #mainTabContainer, #visibleYearsContainer, 
+    #previousYearsContainer, #donationSection, #committeeSection, 
+    #aartiSection, #contactSection, #niyojanSection {
+        transform: translateZ(0);
+        will-change: display, opacity;
+    }
+}
