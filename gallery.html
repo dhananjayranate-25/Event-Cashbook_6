@@ -566,18 +566,23 @@
                     </div>
                     
                     <!-- Albums Grid (Default View) -->
-                    <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
+                    <div id="albumsGrid" class="gallery-responsive-grid" style="display: grid !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
                         <div style="height: 50px;"></div>
                     </div>
                     <script>
                         (function() {
                             try {
-                                const cached = localStorage.getItem('gallery_albums_cache');
-                                if (cached) {
-                                    const albums = JSON.parse(cached);
-                                    if (albums && albums.length > 0) {
-                                        const grid = document.getElementById('albumsGrid');
-                                        if (grid) {
+                                const grid = document.getElementById('albumsGrid');
+                                if (grid) {
+                                    const isMobile = window.innerWidth <= 600;
+                                    const isTablet = window.innerWidth > 600 && window.innerWidth <= 992;
+                                    const cols = isMobile ? 'repeat(2, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)');
+                                    grid.style.setProperty('grid-template-columns', cols, 'important');
+
+                                    const cached = localStorage.getItem('gallery_albums_cache');
+                                    if (cached) {
+                                        const albums = JSON.parse(cached);
+                                        if (albums && albums.length > 0) {
                                             grid.innerHTML = renderAlbumsHTML(albums);
                                         }
                                     }
@@ -591,7 +596,7 @@
                         <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 20px; position: relative;">
                             <h3 id="currentAlbumTitle" style="color: #ffeb3b; margin: 0; font-size: 1.35rem; font-weight: 700; font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; text-align: center; width: 100%; word-break: break-word; letter-spacing: 0.5px;"></h3>
                         </div>
-                        <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
+                        <div id="photosGrid" class="gallery-responsive-grid" style="display: grid !important; gap: 20px !important; width: 100% !important; box-sizing: border-box !important;">
                             <!-- Photos will be injected here -->
                         </div>
                     </div>
@@ -795,6 +800,11 @@
         const grid = document.getElementById('albumsGrid');
         if(!grid) return;
         
+        const isMobile = window.innerWidth <= 600;
+        const isTablet = window.innerWidth > 600 && window.innerWidth <= 992;
+        const cols = isMobile ? 'repeat(2, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)');
+        grid.style.setProperty('grid-template-columns', cols, 'important');
+
         // Instant 0ms cache rendering from localStorage
         try {
             if (galleryAlbumsCache.length === 0) {
@@ -820,6 +830,7 @@
                 } catch(e) {}
                 
                 if (!currentViewingAlbumId) {
+                    grid.style.setProperty('grid-template-columns', cols, 'important');
                     grid.innerHTML = renderAlbumsHTML(galleryAlbumsCache);
                 } else {
                     grid.style.setProperty('display', 'none', 'important');
