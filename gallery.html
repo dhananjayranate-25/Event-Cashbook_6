@@ -833,16 +833,19 @@
         for (const album of albums) {
             try {
                 const key = 'gallery_photos_' + album._id;
-                const cached = localStorage.getItem(key) || sessionStorage.getItem(key);
+                const cached = window.galleryPhotosMemoryCache[album._id] || localStorage.getItem(key) || sessionStorage.getItem(key);
                 if (!cached) {
                     const res = await fetch(`/api/gallery/album/${album._id}/photos`);
                     const data = await res.json();
                     if (data.success && data.photos) {
+                        window.galleryPhotosMemoryCache[album._id] = data.photos;
                         try {
                             localStorage.setItem(key, JSON.stringify(data.photos));
                             sessionStorage.setItem(key, JSON.stringify(data.photos));
                         } catch(e) {}
                     }
+                } else if (typeof cached === 'string') {
+                    try { window.galleryPhotosMemoryCache[album._id] = JSON.parse(cached); } catch(e) {}
                 }
             } catch(e) {}
         }
@@ -857,26 +860,26 @@
         const cols = isMobile ? 'repeat(2, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)');
         grid.style.setProperty('grid-template-columns', cols, 'important');
 
-        // Instant 0ms cache rendering from localStorage
         try {
-            if (galleryAlbumsCache.length === 0) {
-                const stored = localStorage.getItem('gallery_albums_cache');
-                if (stored) galleryAlbumsCache = JSON.parse(stored);
+            const stored = localStorage.getItem('gallery_albums_cache');
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                if (parsed && parsed.length > 0) galleryAlbumsCache = parsed;
             }
         } catch(e) {}
 
         if (!currentViewingAlbumId) {
-            if (galleryAlbumsCache.length > 0) {
-                grid.innerHTML = renderAlbumsHTML(galleryAlbumsCache);
-            }
+            grid.innerHTML = renderAlbumsHTML(galleryAlbumsCache);
         }
+
+        prefetchAlbumPhotos(galleryAlbumsCache);
         
         try {
             const res = await fetch('/api/gallery');
             if (!res.ok) throw new Error('Server returned ' + res.status);
             const data = await res.json();
-            if (data.success) {
-                galleryAlbumsCache = data.albums || [];
+            if (data.success && data.albums) {
+                galleryAlbumsCache = data.albums;
                 try {
                     localStorage.setItem('gallery_albums_cache', JSON.stringify(galleryAlbumsCache));
                 } catch(e) {}
@@ -888,18 +891,10 @@
                     grid.style.setProperty('display', 'none', 'important');
                 }
 
-                // Background prefetch photos so clicking an album opens INSTANTLY in 0ms!
                 prefetchAlbumPhotos(galleryAlbumsCache);
-            } else {
-                if (!currentViewingAlbumId && grid.children.length === 0) {
-                    grid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">माहिती लोड करण्यात त्रुटी: ' + (data.error || 'अज्ञात त्रुटी') + '</p>';
-                }
             }
         } catch (e) {
             console.error('Gallery API Error:', e);
-            if (!currentViewingAlbumId && grid.children.length === 0) {
-                grid.innerHTML = '<p style="text-align: center; color: #ff5252; width: 100%; grid-column: 1 / -1;">माहिती लोड करण्यात त्रुटी आली. कृपया इंटरनेट तपासा.</p>';
-            }
         }
     }
 
@@ -912,8 +907,7 @@
     }
 
     async function openAlbum(albumId) {
-        const album = galleryAlbumsCache.find(a => a._id === albumId);
-        if (!album) return;
+        const album = galleryAlbumsCache.find(a => a._id === albumId) || { title: 'गणपती छायाचित्रे' };
 
         currentViewingAlbumId = albumId;
         const albumsGrid = document.getElementById('albumsGrid');
@@ -936,17 +930,20 @@
         photosGrid.style.setProperty('display', 'grid', 'important');
         photosGrid.style.setProperty('grid-template-columns', cols, 'important');
 
-        // Check instant cache FIRST (0ms delay!)
         let hasCache = false;
         try {
             const cacheKey = 'gallery_photos_' + albumId;
-            const cached = localStorage.getItem(cacheKey) || sessionStorage.getItem(cacheKey);
-            if (cached) {
-                const photos = JSON.parse(cached);
-                if (photos && photos.length > 0) {
-                    photosGrid.innerHTML = renderPhotosHTML(photos);
-                    hasCache = true;
+            let photos = window.galleryPhotosMemoryCache[albumId];
+            if (!photos) {
+                const cachedStr = localStorage.getItem(cacheKey) || sessionStorage.getItem(cacheKey);
+                if (cachedStr) {
+                    photos = JSON.parse(cachedStr);
+                    window.galleryPhotosMemoryCache[albumId] = photos;
                 }
+            }
+            if (photos && photos.length >= 0) {
+                photosGrid.innerHTML = renderPhotosHTML(photos);
+                hasCache = true;
             }
         } catch(e) {}
 
