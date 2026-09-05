@@ -117,6 +117,28 @@
         if (iframe) iframe.src = 'about:blank';
         if (modal) modal.style.display = 'none';
     };
+
+    window.handleAartiPdfClick = function(e, elem) {
+        if (e) {
+            try { e.preventDefault(); e.stopPropagation(); } catch(err) {}
+        }
+        let pdfUrl = (elem && (elem.getAttribute('data-pdf-url') || elem.getAttribute('href'))) || '';
+        if (!pdfUrl || pdfUrl === '#' || pdfUrl.endsWith('#')) {
+            try {
+                const cache = localStorage.getItem('settingsCache');
+                if (cache) {
+                    const s = JSON.parse(cache);
+                    if (s.aartiPdfPath) pdfUrl = s.aartiPdfPath;
+                }
+            } catch(err) {}
+        }
+        if (!pdfUrl || pdfUrl === '#' || pdfUrl.endsWith('#')) {
+            alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची फाईल अपलोड करा.');
+            return false;
+        }
+        window.openAartiPdfModal(pdfUrl);
+        return false;
+    };
 </script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ff8c00">
@@ -966,7 +988,7 @@ window.closeLightbox = function() {
                         
                         <!-- PDF Download Button will be injected here -->
                         <div id="aartiPdfWrapper" style="display:block;">
-                            <a id="aartiPdfLink" href="#" target="_blank" class="donate-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; padding: 10px 25px; border-radius: 50px; background: linear-gradient(135deg, #d4af37, #f3e5ab); color: #800000; font-weight: bold;">
+                            <a id="aartiPdfLink" href="#" onclick="handleAartiPdfClick(event, this); return false;" class="donate-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; padding: 10px 25px; border-radius: 50px; background: linear-gradient(135deg, #d4af37, #f3e5ab); color: #800000; font-weight: bold;">
                                 <i class="fas fa-book-open"></i> आरती पुस्तक
                             </a>
                         </div>
