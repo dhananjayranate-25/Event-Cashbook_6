@@ -410,6 +410,31 @@ app.get('/api/settings', async (req, res) => {
             }
             settingsMap[s.key] = val;
         });
+
+        // Fallback for Aarti Media if not explicitly saved in DB yet
+        if (!settingsMap.aartiPdfPath) {
+            try {
+                const files = fs.readdirSync(UPLOAD_DIR);
+                const pdfFile = files.filter(f => f.startsWith('aarti_pdf_') && (f.endsWith('.pdf') || f.endsWith('.docx'))).sort().pop();
+                if (pdfFile) {
+                    settingsMap.aartiPdfPath = 'uploads/' + pdfFile;
+                } else {
+                    settingsMap.aartiPdfPath = 'uploads/aarti_pdf_1788441686273.pdf';
+                }
+            } catch(fe) {
+                settingsMap.aartiPdfPath = 'uploads/aarti_pdf_1788441686273.pdf';
+            }
+        }
+        if (!settingsMap.aartiAudioPath) {
+            try {
+                const files = fs.readdirSync(UPLOAD_DIR);
+                const audioFile = files.filter(f => f.startsWith('aarti_aarti_audio_') || f.startsWith('aarti_audio_')).sort().pop();
+                if (audioFile) {
+                    settingsMap.aartiAudioPath = 'uploads/' + audioFile;
+                }
+            } catch(fe) {}
+        }
+
         res.json({ success: true, data: settingsMap });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
