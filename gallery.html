@@ -83,57 +83,6 @@
         return { success: true, mode: 'deep_link' };
     };
 
-    window.openAartiPdfModal = function(rawUrl) {
-        let pdfUrl = rawUrl || window.aartiPdfGlobalUrl || '';
-        if (!pdfUrl || pdfUrl === '#' || pdfUrl === 'null' || pdfUrl === 'undefined' || pdfUrl.endsWith('#')) {
-            try {
-                const cache = localStorage.getItem('settingsCache');
-                if (cache) {
-                    const s = JSON.parse(cache);
-                    if (s.aartiPdfPath) pdfUrl = s.aartiPdfPath;
-                }
-            } catch(err) {}
-        }
-        
-        if (!pdfUrl || pdfUrl === '#' || pdfUrl === 'null' || pdfUrl === 'undefined' || pdfUrl.endsWith('#')) {
-            alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची फाईल अपलोड करा.');
-            return;
-        }
-        
-        let cleanUrl = String(pdfUrl).trim();
-        if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('data:')) {
-            cleanUrl = window.location.origin + (cleanUrl.startsWith('/') ? cleanUrl : ('/' + cleanUrl));
-        }
-        
-        const modal = document.getElementById('aartiPdfModal');
-        const iframe = document.getElementById('aartiPdfIframe');
-        const directLink = document.getElementById('aartiPdfDirectLink');
-        
-        let viewUrl = cleanUrl;
-        if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
-            viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
-        }
-        
-        if (directLink) directLink.href = cleanUrl;
-        if (iframe) iframe.src = viewUrl;
-        if (modal) modal.style.display = 'flex';
-    };
-
-    window.closeAartiPdfModal = function() {
-        const modal = document.getElementById('aartiPdfModal');
-        const iframe = document.getElementById('aartiPdfIframe');
-        if (iframe) iframe.src = 'about:blank';
-        if (modal) modal.style.display = 'none';
-    };
-
-    window.handleAartiPdfClick = function(e, elem) {
-        if (e) {
-            try { e.preventDefault(); e.stopPropagation(); } catch(err) {}
-        }
-        let pdfUrl = (elem && (elem.getAttribute('data-pdf-url') || elem.getAttribute('href'))) || '';
-        window.openAartiPdfModal(pdfUrl);
-        return false;
-    };
 </script>
     <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -632,22 +581,7 @@
                         <h2>महाआरती नियोजन</h2>
                         <div class="header-line"></div>
                     </div>
-                    
-                    <!-- Aarti Media Container (Dynamic) -->
-                    <div id="aartiMediaContainer" style="display:flex; align-items:center; justify-content:center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap;">
-                        <!-- Audio Player will be injected here -->
-                        <div id="aartiAudioWrapper" style="display:flex; background: rgba(0,0,0,0.4); padding: 10px 20px; border-radius: 50px; border: 1px solid rgba(212, 175, 55, 0.5); align-items: center; gap: 10px;">
-                            <i class="fas fa-music" style="color: #d4af37; font-size: 1.2rem;"></i>
-                            <audio id="aartiAudioPlayer" controls style="height: 35px; outline: none; border-radius: 50px;"></audio>
-                        </div>
-                        
-                        <!-- PDF Download Button will be injected here -->
-                        <div id="aartiPdfWrapper" style="display:block;">
-                            <a id="aartiPdfLink" href="#" onclick="handleAartiPdfClick(event, this); return false;" class="donate-btn" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px; padding: 10px 25px; border-radius: 50px; background: linear-gradient(135deg, #d4af37, #f3e5ab); color: #800000; font-weight: bold;">
-                                <i class="fas fa-book-open"></i> आरती पुस्तक
-                            </a>
-                        </div>
-                    </div>
+
                     <div class="aarti-grid" id="aartiGrid">
                         <!-- Aarti items will be populated here -->
                         <p style="text-align: center; color: white; width: 100%;">लोड होत आहे...</p>
@@ -1354,64 +1288,6 @@ fetch('/api/settings').then(res => res.json()).then(res => {
 });
 </script>
 
-<!-- In-App Aarti PDF Viewer Modal -->
-<div id="aartiPdfModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:999999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter:blur(10px); padding:15px; box-sizing:border-box;">
-    <div style="width:100%; max-width:900px; background:#1a0520; border:2px solid #ffd700; border-radius:16px; display:flex; flex-direction:column; height:90vh; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.9); position:relative;">
-        <!-- Modal Header -->
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 20px; background:linear-gradient(135deg, #2a0835, #120218); border-bottom:1.5px solid rgba(255,215,0,0.4);">
-            <div style="color:#ffd700; font-size:18px; font-weight:bold; font-family:'Noto Sans Devanagari', sans-serif; display:flex; align-items:center; gap:8px;">
-                <span>📖</span> श्री आरती पुस्तक
-            </div>
-            <button onclick="closeAartiPdfModal()" style="background:#ff3333; color:white; border:none; padding:6px 14px; border-radius:20px; font-size:14px; font-weight:bold; cursor:pointer; transition:all 0.2s;">✕ बंद करा</button>
-        </div>
-        <!-- Modal Content / Iframe -->
-        <div style="flex:1; width:100%; background:#111; position:relative; overflow:hidden;">
-            <iframe id="aartiPdfIframe" style="width:100%; height:100%; border:none;" src="about:blank"></iframe>
-        </div>
-        <!-- Modal Footer -->
-        <div style="padding:12px 20px; background:#120218; border-top:1px solid rgba(255,215,0,0.3); display:flex; justify-content:center; align-items:center; gap:15px; flex-wrap:wrap;">
-            <a id="aartiPdfDirectLink" href="#" target="_blank" rel="noopener noreferrer" style="background:linear-gradient(135deg, #ff8c00, #e52e71); color:white; text-decoration:none; padding:10px 22px; border-radius:25px; font-weight:bold; font-size:14px; display:inline-flex; align-items:center; gap:6px;">
-                <i class="fas fa-external-link-alt"></i> नवीन टॅबमध्ये उघडा / डाऊनलोड करा
-            </a>
-        </div>
-    </div>
-</div>
-<script>
-function openAartiPdfModal(rawUrl) {
-        if (!rawUrl || rawUrl === '#' || rawUrl === 'null' || rawUrl === 'undefined') {
-            alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची फाईल अपलोड करा.');
-            return;
-        }
-        let cleanUrl = String(rawUrl).trim();
-        if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('data:')) {
-            cleanUrl = window.location.origin + (cleanUrl.startsWith('/') ? cleanUrl : ('/' + cleanUrl));
-        }
-        
-        const modal = document.getElementById('aartiPdfModal');
-        const iframe = document.getElementById('aartiPdfIframe');
-        const directLink = document.getElementById('aartiPdfDirectLink');
-        
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        let viewUrl = cleanUrl;
-        if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
-            viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
-        } else if (isMobile && cleanUrl.startsWith('http') && !cleanUrl.includes('gview')) {
-            viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
-        }
-        
-        if (directLink) directLink.href = cleanUrl;
-        if (iframe) iframe.src = viewUrl;
-        if (modal) modal.style.display = 'flex';
-    }
-
-    function closeAartiPdfModal() {
-        const modal = document.getElementById('aartiPdfModal');
-        const iframe = document.getElementById('aartiPdfIframe');
-        if (iframe) iframe.src = 'about:blank';
-        if (modal) modal.style.display = 'none';
-    }
-</script>
 
 </body>
 </html>

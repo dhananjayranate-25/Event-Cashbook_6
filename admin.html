@@ -656,26 +656,6 @@
         </div>
         <div id="tab-aarti" class="admin-tab-content" style="display: none;">
             
-            <!-- Aarti Media Upload Section -->
-            <div class="admin-card" style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-top:20px; margin-bottom:20px;">
-                <h2 style="color: #ffeb3b; text-align:center; margin-bottom: 20px;"><i class="fas fa-music"></i> महाआरती मीडिया (ऑडिओ आणि PDF)</h2>
-                <form id="uploadAartiMediaForm" onsubmit="handleUploadAartiMedia(event)" class="form-grid" style="align-items: end;">
-                    <div class="form-group">
-                        <label style="color:white; display:block; margin-bottom:5px;">आरती ऑडिओ (MP3/WAV)</label>
-                        <input type="file" id="aartiAudioFile" accept="audio/*" style="width:100%; padding:10px; background: rgba(0,0,0,0.5); color:white; border-radius:8px; border:none; outline:none;">
-                    </div>
-                    <div class="form-group">
-                        <label style="color:white; display:block; margin-bottom:5px;">आरती पुस्तक (PDF)</label>
-                        <input type="file" id="aartiPdfFile" accept="application/pdf,.doc,.docx" style="width:100%; padding:10px; background: rgba(0,0,0,0.5); color:white; border-radius:8px; border:none; outline:none;">
-                    </div>
-                    <div style="grid-column: 1 / -1; display:flex; gap: 10px; align-items:center;">
-                        <button type="submit" class="admin-btn">
-                            <i class="fas fa-upload"></i> सेव्ह करा
-                        </button>
-                        <div id="aartiMediaStatus" style="font-size:14px;"></div>
-                    </div>
-                </form>
-            </div>
 
             <div class="admin-card" style="padding: 20px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin-top:20px;">
                 <h2 style="color: #ffeb3b; text-align:center; margin-bottom: 20px;"><i class="fas fa-om"></i> महाआरती बुकिंग व्यवस्थापन</h2>
@@ -4115,46 +4095,6 @@ async function deletePhoto(albumId, filename) {
     } catch (e) { console.error(e); }
 }
 
-// ==========================================
-// AARTI MEDIA
-// ==========================================
-async function handleUploadAartiMedia(e) {
-    e.preventDefault();
-    const statusDiv = document.getElementById('aartiMediaStatus');
-    const audioFile = document.getElementById('aartiAudioFile').files[0];
-    const pdfFile = document.getElementById('aartiPdfFile').files[0];
-
-    if (!audioFile && !pdfFile) {
-        statusDiv.style.color = '#ff5252';
-        statusDiv.innerText = 'कृपया किमान एक फाइल (ऑडिओ किंवा PDF) निवडा.';
-        return;
-    }
-
-    statusDiv.style.color = '#ffeb3b';
-    statusDiv.innerText = 'अपलोड होत आहे... कृपया प्रतीक्षा करा...';
-
-    const formData = new FormData();
-    if (audioFile) formData.append('aarti_audio', audioFile);
-    if (pdfFile) formData.append('aarti_pdf', pdfFile);
-
-    try {
-        const res = await fetch('/api/settings/aarti-media', {
-            method: 'POST',
-            body: formData
-        });
-        const data = await res.json();
-        if (data.success) {
-            statusDiv.style.color = '#4caf50';
-            statusDiv.innerText = 'मीडिया यशस्वीरित्या सेव्ह झाला!';
-            setTimeout(() => { statusDiv.innerText = ''; }, 3000);
-        } else {
-            throw new Error(data.error);
-        }
-    } catch (err) {
-        statusDiv.style.color = '#ff5252';
-        statusDiv.innerText = 'चूक: ' + err.message;
-    }
-}
 async function handleAddAarti(e) {
     if (e && e.preventDefault) e.preventDefault();
     if (e && e.stopPropagation) e.stopPropagation();
