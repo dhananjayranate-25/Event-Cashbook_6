@@ -8,12 +8,25 @@ const compression = require('compression');
 const multer = require('multer');
 const { PDFDocument, rgb } = require('pdf-lib');
 
+process.on('uncaughtException', (err) => {
+    console.error('CRITICAL: Uncaught Exception detected:', err.stack || err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('CRITICAL: Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 const app = express();
 const PORT = process.env.PORT || 3003;
 
 app.use(cors());
 app.use(compression());
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '15mb' }));
+
+// Lightweight Health Check Endpoint for Render Zero-Downtime Verification
+app.get(['/health', '/api/health'], (req, res) => {
+    const dbState = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+    res.status(200).json({ status: 'OK', uptime: Math.floor(process.uptime()), dbState });
+});
 
 // ===== HIGH-SPEED IN-MEMORY CACHE FOR INSTANT MULTITASKING & READS =====
 const apiCacheStore = new Map();
@@ -129,9 +142,20 @@ if (!MONGODB_URI) {
     process.exit(1);
 }
 
-mongoose.connect(MONGODB_URI)
+mongoose.connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    maxPoolSize: 10
+})
     .then(() => console.log('MongoDB connected successfully to Atlas'))
     .catch(err => console.error('MongoDB connection error:', err));
+
+mongoose.connection.on('disconnected', () => {
+    console.warn('MongoDB connection lost. Reconnecting...');
+});
+mongoose.connection.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+});
 
 
 const niyojanSchema = new mongoose.Schema({
@@ -335,7 +359,7 @@ app.post('/api/year-visibility', async (req, res) => {
         await YearVisibility.findOneAndUpdate(
             { year: year.toString() },
             { isVisible },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         );
         res.json({ success: true });
     } catch (error) {
@@ -417,7 +441,7 @@ app.post('/api/settings', async (req, res) => {
                     await AppSetting.findOneAndUpdate(
                         { key: item.key },
                         { value: item.value },
-                        { upsert: true, new: true }
+                        { upsert: true, returnDocument: 'after' }
                     );
                 }
             }
@@ -428,7 +452,7 @@ app.post('/api/settings', async (req, res) => {
         await AppSetting.findOneAndUpdate(
             { key },
             { value },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         );
         res.json({ success: true });
     } catch (error) {
@@ -829,7 +853,7 @@ app.post('/api/committee', (req, res, next) => {
         const member = await CommitteeMember.findOneAndUpdate(
             { role },
             updateData,
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         );
         res.json({ success: true, data: member });
     } catch (error) {
@@ -875,7 +899,7 @@ app.post('/api/change-password', async (req, res) => {
         await AppSetting.findOneAndUpdate(
             { key: 'adminPassword' },
             { value: newPassword },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         );
         cachedAdminPassword = newPassword;
         res.json({ success: true });
@@ -939,7 +963,7 @@ app.put('/api/entries/:id', async (req, res) => {
         const entry = await Entry.findByIdAndUpdate(
             req.params.id,
             { name: name.trim(), date: entryDate, mode, cash_in: valIn, cash_out: valOut },
-            { new: true }
+            { returnDocument: 'after' }
         );
         if (!entry) return res.status(404).json({ success: false, error: 'Entry not found' });
         res.json({ success: true, data: entry, message: 'Entry updated successfully' });
@@ -1018,7 +1042,7 @@ app.post('/api/aarti', async (req, res) => {
 
 app.put('/api/aarti/:id', async (req, res) => {
     try {
-        const updatedAarti = await Aarti.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedAarti = await Aarti.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
         res.json({ success: true, ...updatedAarti._doc });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to update aarti' });
@@ -1062,7 +1086,7 @@ app.post('/api/niyojan', async (req, res) => {
 
 app.put('/api/niyojan/:id', async (req, res) => {
     try {
-        const updatedNiyojan = await Niyojan.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const updatedNiyojan = await Niyojan.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
         res.json({ success: true, ...updatedNiyojan._doc });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to update niyojan' });
@@ -1158,7 +1182,7 @@ app.put('/api/portal/expenses/:id', uploadCloudinary.single('photo'), async (req
             updateData.photoData = req.file.path;
         }
         
-        const updatedExpense = await PortalExpense.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        const updatedExpense = await PortalExpense.findByIdAndUpdate(req.params.id, updateData, { returnDocument: 'after' });
         
         const user = await PortalUser.findById(oldExpense.userId);
         if (user) {
@@ -1256,7 +1280,7 @@ app.put('/api/portal/users/:id', async (req, res) => {
         if (password) {
             updateData.password = password;
         }
-        const user = await PortalUser.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        const user = await PortalUser.findByIdAndUpdate(req.params.id, updateData, { returnDocument: 'after' });
         res.json({ success: true, user });
     } catch(err) {
         res.status(500).json({ success: false, message: err.message });
@@ -1348,7 +1372,7 @@ app.post('/api/portal/tasks', uploadCloudinary.single('photo'), async (req, res)
 
 app.delete('/api/portal/tasks/:id/photo', async (req, res) => {
     try {
-        const task = await PortalTask.findByIdAndUpdate(req.params.id, { photoData: null }, { new: true });
+        const task = await PortalTask.findByIdAndUpdate(req.params.id, { photoData: null }, { returnDocument: 'after' });
         res.json({ success: true, task });
     } catch(err) {
         res.status(500).json({ success: false, message: err.message });
@@ -1366,7 +1390,7 @@ app.put('/api/portal/tasks/:id', async (req, res) => {
         if (status) updateData.status = status;
         if (title) updateData.title = title;
         
-        const task = await PortalTask.findByIdAndUpdate(req.params.id, updateData, { new: true });
+        const task = await PortalTask.findByIdAndUpdate(req.params.id, updateData, { returnDocument: 'after' });
         res.json({ success: true, task });
     } catch(err) {
         res.status(500).json({ success: false, message: err.message });
@@ -1429,7 +1453,7 @@ app.post('/api/portal/expenses/:id/photo', uploadCloudinary.single('photo'), asy
     try {
         if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
         const photoData = req.file.path;
-        const expense = await PortalExpense.findByIdAndUpdate(req.params.id, { photoData }, { new: true });
+        const expense = await PortalExpense.findByIdAndUpdate(req.params.id, { photoData }, { returnDocument: 'after' });
         res.json({ success: true, photoData, expense });
     } catch (e) {
         console.error(e);
@@ -1439,7 +1463,7 @@ app.post('/api/portal/expenses/:id/photo', uploadCloudinary.single('photo'), asy
 
 app.delete('/api/portal/expenses/:id/photo', async (req, res) => {
     try {
-        const expense = await PortalExpense.findByIdAndUpdate(req.params.id, { photoData: null }, { new: true });
+        const expense = await PortalExpense.findByIdAndUpdate(req.params.id, { photoData: null }, { returnDocument: 'after' });
         res.json({ success: true, expense });
     } catch(err) {
         res.status(500).json({ success: false, message: err.message });
@@ -1459,7 +1483,7 @@ app.post('/api/users/:id/photo', uploadCloudinary.single('photo'), async (req, r
         
         const photoUrl = req.file.path;
         
-        const user = await PortalUser.findByIdAndUpdate(req.params.id, { photoUrl }, { new: true });
+        const user = await PortalUser.findByIdAndUpdate(req.params.id, { photoUrl }, { returnDocument: 'after' });
         if (!user) return res.status(404).json({ error: 'User not found' });
         
         // Auto update CommitteeMember with flexible name and mobile matching
@@ -1482,7 +1506,7 @@ app.post('/api/users/:id/photo', uploadCloudinary.single('photo'), async (req, r
 
 app.delete('/api/users/:id/photo', async (req, res) => {
     try {
-        const user = await PortalUser.findByIdAndUpdate(req.params.id, { photoUrl: '' }, { new: true });
+        const user = await PortalUser.findByIdAndUpdate(req.params.id, { photoUrl: '' }, { returnDocument: 'after' });
         if (!user) return res.status(404).json({ error: 'User not found' });
         
         const allCommittee = await CommitteeMember.find();
@@ -1543,7 +1567,7 @@ app.post('/api/upload-hero', uploadCloudinary.single('banner'), async (req, res)
         await AppSetting.findOneAndUpdate(
             { key: 'heroBannerImage' },
             { value: dataUri },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         );
         res.json({ success: true, filename: 'database_banner', message: 'Banner updated successfully' });
     } catch (error) {

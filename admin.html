@@ -4597,8 +4597,10 @@ async function deleteNiyojan(id) {
     <script>
     (function initAdminAutoSync() {
         let isSyncing = false;
+        let syncIntervalId = null;
+
         async function syncActiveAdminTab() {
-            if (isSyncing) return;
+            if (isSyncing || document.visibilityState !== 'visible') return;
             isSyncing = true;
             try {
                 const activeTab = sessionStorage.getItem('activeAdminTab') || 'tab-home';
@@ -4618,10 +4620,37 @@ async function deleteNiyojan(id) {
                 }
             } catch(e) {} finally { isSyncing = false; }
         }
-        setInterval(syncActiveAdminTab, 7000);
-        window.addEventListener('focus', syncActiveAdminTab);
+
+        function startPolling() {
+            if (syncIntervalId) clearInterval(syncIntervalId);
+            syncIntervalId = setInterval(syncActiveAdminTab, 30000);
+        }
+
+        function stopPolling() {
+            if (syncIntervalId) {
+                clearInterval(syncIntervalId);
+                syncIntervalId = null;
+            }
+        }
+
+        if (document.visibilityState === 'visible') {
+            startPolling();
+        }
+
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') syncActiveAdminTab();
+            if (document.visibilityState === 'visible') {
+                syncActiveAdminTab();
+                startPolling();
+            } else {
+                stopPolling();
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            if (document.visibilityState === 'visible') {
+                syncActiveAdminTab();
+                if (!syncIntervalId) startPolling();
+            }
         });
     })();
     </script>

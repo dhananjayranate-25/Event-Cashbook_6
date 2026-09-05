@@ -19,7 +19,6 @@
     "multer-storage-cloudinary": "^4.0.0",
     "pdf-lib": "^1.17.1",
     "pg": "^8.13.1",
-    "puppeteer": "^25.3.0",
     "sql.js": "^1.10.3"
   },
   "devDependencies": {

@@ -1190,18 +1190,47 @@
     <script>
     (function() {
         let isSyncing = false;
+        let syncIntervalId = null;
+
         async function syncGalleryData() {
-            if (isSyncing) return;
+            if (isSyncing || document.visibilityState !== 'visible') return;
             isSyncing = true;
             try {
                 if (typeof loadGalleryAlbums === 'function') await loadGalleryAlbums();
                 if (typeof renderVisibleYearSections === 'function') await renderVisibleYearSections();
             } catch(e) {} finally { isSyncing = false; }
         }
-        setInterval(syncGalleryData, 8000);
-        window.addEventListener('focus', syncGalleryData);
+
+        function startPolling() {
+            if (syncIntervalId) clearInterval(syncIntervalId);
+            syncIntervalId = setInterval(syncGalleryData, 30000);
+        }
+
+        function stopPolling() {
+            if (syncIntervalId) {
+                clearInterval(syncIntervalId);
+                syncIntervalId = null;
+            }
+        }
+
+        if (document.visibilityState === 'visible') {
+            startPolling();
+        }
+
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') syncGalleryData();
+            if (document.visibilityState === 'visible') {
+                syncGalleryData();
+                startPolling();
+            } else {
+                stopPolling();
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            if (document.visibilityState === 'visible') {
+                syncGalleryData();
+                if (!syncIntervalId) startPolling();
+            }
         });
     })();
     </script>

@@ -4741,8 +4741,10 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
     <script>
     (function initLiveAutoSync() {
         let isSyncing = false;
+        let syncIntervalId = null;
+
         async function syncAllHomeData() {
-            if (isSyncing) return;
+            if (isSyncing || document.visibilityState !== 'visible') return;
             isSyncing = true;
             try {
                 if (typeof renderVisibleYearSections === 'function') await renderVisibleYearSections();
@@ -4758,10 +4760,36 @@ body { font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif; background: #
             }
         }
 
-        setInterval(syncAllHomeData, 6000);
-        window.addEventListener('focus', syncAllHomeData);
+        function startPolling() {
+            if (syncIntervalId) clearInterval(syncIntervalId);
+            syncIntervalId = setInterval(syncAllHomeData, 30000);
+        }
+
+        function stopPolling() {
+            if (syncIntervalId) {
+                clearInterval(syncIntervalId);
+                syncIntervalId = null;
+            }
+        }
+
+        if (document.visibilityState === 'visible') {
+            startPolling();
+        }
+
         document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') syncAllHomeData();
+            if (document.visibilityState === 'visible') {
+                syncAllHomeData();
+                startPolling();
+            } else {
+                stopPolling();
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            if (document.visibilityState === 'visible') {
+                syncAllHomeData();
+                if (!syncIntervalId) startPolling();
+            }
         });
     })();
     </script>
