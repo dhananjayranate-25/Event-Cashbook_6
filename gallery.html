@@ -84,11 +84,23 @@
     };
 
     window.openAartiPdfModal = function(rawUrl) {
-        if (!rawUrl || rawUrl === '#' || rawUrl === 'null' || rawUrl === 'undefined') {
+        let pdfUrl = rawUrl || window.aartiPdfGlobalUrl || '';
+        if (!pdfUrl || pdfUrl === '#' || pdfUrl === 'null' || pdfUrl === 'undefined' || pdfUrl.endsWith('#')) {
+            try {
+                const cache = localStorage.getItem('settingsCache');
+                if (cache) {
+                    const s = JSON.parse(cache);
+                    if (s.aartiPdfPath) pdfUrl = s.aartiPdfPath;
+                }
+            } catch(err) {}
+        }
+        
+        if (!pdfUrl || pdfUrl === '#' || pdfUrl === 'null' || pdfUrl === 'undefined' || pdfUrl.endsWith('#')) {
             alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची फाईल अपलोड करा.');
             return;
         }
-        let cleanUrl = String(rawUrl).trim();
+        
+        let cleanUrl = String(pdfUrl).trim();
         if (!cleanUrl.startsWith('http') && !cleanUrl.startsWith('data:')) {
             cleanUrl = window.location.origin + (cleanUrl.startsWith('/') ? cleanUrl : ('/' + cleanUrl));
         }
@@ -97,12 +109,8 @@
         const iframe = document.getElementById('aartiPdfIframe');
         const directLink = document.getElementById('aartiPdfDirectLink');
         
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
         let viewUrl = cleanUrl;
         if (cleanUrl.endsWith('.doc') || cleanUrl.endsWith('.docx')) {
-            viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
-        } else if (isMobile && cleanUrl.startsWith('http') && !cleanUrl.includes('gview')) {
             viewUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(cleanUrl);
         }
         
@@ -123,19 +131,6 @@
             try { e.preventDefault(); e.stopPropagation(); } catch(err) {}
         }
         let pdfUrl = (elem && (elem.getAttribute('data-pdf-url') || elem.getAttribute('href'))) || '';
-        if (!pdfUrl || pdfUrl === '#' || pdfUrl.endsWith('#')) {
-            try {
-                const cache = localStorage.getItem('settingsCache');
-                if (cache) {
-                    const s = JSON.parse(cache);
-                    if (s.aartiPdfPath) pdfUrl = s.aartiPdfPath;
-                }
-            } catch(err) {}
-        }
-        if (!pdfUrl || pdfUrl === '#' || pdfUrl.endsWith('#')) {
-            alert('कृपया आधी ॲडमिन पॅनेलमधून आरती पुस्तकाची फाईल अपलोड करा.');
-            return false;
-        }
         window.openAartiPdfModal(pdfUrl);
         return false;
     };
